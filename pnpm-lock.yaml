@@ -10,7 +10,7 @@ importers:
     dependencies:
       svelte:
         specifier: ^5
-        version: 5.2.5
+        version: 5.2.7
     devDependencies:
       '@eslint/js':
         specifier: ^9.15.0
@@ -23,7 +23,7 @@ importers:
         version: 12.1.1(eslint@9.15.0)
       eslint-plugin-svelte:
         specifier: ^2.46.0
-        version: 2.46.0(eslint@9.15.0)(svelte@5.2.5)
+        version: 2.46.0(eslint@9.15.0)(svelte@5.2.7)
       eslint-plugin-unicorn:
         specifier: ^56.0.1
         version: 56.0.1(eslint@9.15.0)
@@ -36,12 +36,9 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
-      prettier-plugin-css-order:
-        specifier: ^2.1.2
-        version: 2.1.2(postcss@8.4.49)(prettier@3.3.3)
       prettier-plugin-svelte:
-        specifier: ^3.2.8
-        version: 3.2.8(prettier@3.3.3)(svelte@5.2.5)
+        specifier: ^3.3.1
+        version: 3.3.1(prettier@3.3.3)(svelte@5.2.7)
       sherif:
         specifier: ^1.0.1
         version: 1.0.2
@@ -63,16 +60,16 @@ importers:
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^4.0.0
-        version: 4.0.1(svelte@5.2.5)(vite@5.4.11)
+        version: 4.0.1(svelte@5.2.7)(vite@5.4.11)
       '@tsconfig/svelte':
         specifier: ^5.0.4
         version: 5.0.4
       svelte:
-        specifier: ^5.2.5
-        version: 5.2.5
+        specifier: ^5.2.7
+        version: 5.2.7
       svelte-check:
         specifier: ^4.0.5
-        version: 4.0.9(picomatch@4.0.2)(svelte@5.2.5)(typescript@5.6.3)
+        version: 4.0.9(picomatch@4.0.2)(svelte@5.2.7)(typescript@5.6.3)
       tslib:
         specifier: ^2.8.0
         version: 2.8.1
@@ -871,12 +868,6 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
-  css-declaration-sorter@7.2.0:
-    resolution: {integrity: sha512-h70rUM+3PNFuaBDTLe8wF/cdWu+dOZmb7pJt8Z2sedYbAcQVQV/tEchueg3GWxwqS0cxtbxmaHEdkNACqcvsow==}
-    engines: {node: ^14 || ^16 || >=18}
-    peerDependencies:
-      postcss: ^8.0.9
-
   cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
@@ -1390,12 +1381,6 @@ packages:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
 
-  postcss-less@6.0.0:
-    resolution: {integrity: sha512-FPX16mQLyEjLzEuuJtxA8X3ejDLNGGEG503d2YGZR5Ask1SpDN8KmZUMpzCvyalWRywAn1n1VOA5dcqfCLo5rg==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      postcss: ^8.3.5
-
   postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
     engines: {node: '>= 10'}
@@ -1432,14 +1417,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier-plugin-css-order@2.1.2:
-    resolution: {integrity: sha512-vomxPjHI6pOMYcBuouSJHxxQClJXaUpU9rsV9IAO2wrSTZILRRlrxAAR8t9UF6wtczLkLfNRFUwM+ZbGXOONUA==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      prettier: 3.x
-
-  prettier-plugin-svelte@3.2.8:
-    resolution: {integrity: sha512-PAHmmU5cGZdnhW4mWhmvxuG2PVbbHIxUuPOdUKvfE+d4Qt2d29iU5VWrPdsaW5YqVEE0nqhlvN4eoKmVMpIF3Q==}
+  prettier-plugin-svelte@3.3.1:
+    resolution: {integrity: sha512-AIKwXYBGm+f0l0DUcQRWjeQj8xm1cVBIZGshvlfiCuesEfueF1TGqz88NP0cr95Ar7Xvt0Ef7h9LFzGdkHr+gA==}
     peerDependencies:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
@@ -1629,8 +1608,8 @@ packages:
       svelte:
         optional: true
 
-  svelte@5.2.5:
-    resolution: {integrity: sha512-D33RkKYF4AFIgM+HrItxFudmWrXOLaua8vW3Mq7bObn7UwRn6zJPZ58bEIlj8wEYfi08n8VVvTk8dCLVHNnikQ==}
+  svelte@5.2.7:
+    resolution: {integrity: sha512-cEhPGuLHiH2+Z8B1FwQgiZJgA39uUmJR4516TKrM5zrp0/cuwJkfhUfcTxhAkznanAF5fXUKzvYR4o+Ksx3ZCQ==}
     engines: {node: '>=18'}
 
   tinybench@2.9.0:
@@ -2165,23 +2144,23 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.27.3':
     optional: true
 
-  '@sveltejs/vite-plugin-svelte-inspector@3.0.1(@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.5)(vite@5.4.11))(svelte@5.2.5)(vite@5.4.11)':
+  '@sveltejs/vite-plugin-svelte-inspector@3.0.1(@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.7)(vite@5.4.11))(svelte@5.2.7)(vite@5.4.11)':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 4.0.1(svelte@5.2.5)(vite@5.4.11)
+      '@sveltejs/vite-plugin-svelte': 4.0.1(svelte@5.2.7)(vite@5.4.11)
       debug: 4.3.7
-      svelte: 5.2.5
+      svelte: 5.2.7
       vite: 5.4.11
     transitivePeerDependencies:
       - supports-color
 
-  '@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.5)(vite@5.4.11)':
+  '@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.7)(vite@5.4.11)':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 3.0.1(@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.5)(vite@5.4.11))(svelte@5.2.5)(vite@5.4.11)
+      '@sveltejs/vite-plugin-svelte-inspector': 3.0.1(@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.7)(vite@5.4.11))(svelte@5.2.7)(vite@5.4.11)
       debug: 4.3.7
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.13
-      svelte: 5.2.5
+      svelte: 5.2.7
       vite: 5.4.11
       vitefu: 1.0.3(vite@5.4.11)
     transitivePeerDependencies:
@@ -2429,10 +2408,6 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  css-declaration-sorter@7.2.0(postcss@8.4.49):
-    dependencies:
-      postcss: 8.4.49
-
   cssesc@3.0.0: {}
 
   debug@4.3.7:
@@ -2531,7 +2506,7 @@ snapshots:
     dependencies:
       eslint: 9.15.0
 
-  eslint-plugin-svelte@2.46.0(eslint@9.15.0)(svelte@5.2.5):
+  eslint-plugin-svelte@2.46.0(eslint@9.15.0)(svelte@5.2.7):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.1(eslint@9.15.0)
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -2544,9 +2519,9 @@ snapshots:
       postcss-safe-parser: 6.0.0(postcss@8.4.49)
       postcss-selector-parser: 6.1.2
       semver: 7.6.3
-      svelte-eslint-parser: 0.43.0(svelte@5.2.5)
+      svelte-eslint-parser: 0.43.0(svelte@5.2.7)
     optionalDependencies:
-      svelte: 5.2.5
+      svelte: 5.2.7
     transitivePeerDependencies:
       - ts-node
 
@@ -2968,10 +2943,6 @@ snapshots:
 
   pluralize@8.0.0: {}
 
-  postcss-less@6.0.0(postcss@8.4.49):
-    dependencies:
-      postcss: 8.4.49
-
   postcss-load-config@3.1.4(postcss@8.4.49):
     dependencies:
       lilconfig: 2.1.0
@@ -3000,19 +2971,10 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-css-order@2.1.2(postcss@8.4.49)(prettier@3.3.3):
-    dependencies:
-      css-declaration-sorter: 7.2.0(postcss@8.4.49)
-      postcss-less: 6.0.0(postcss@8.4.49)
-      postcss-scss: 4.0.9(postcss@8.4.49)
-      prettier: 3.3.3
-    transitivePeerDependencies:
-      - postcss
-
-  prettier-plugin-svelte@3.2.8(prettier@3.3.3)(svelte@5.2.5):
+  prettier-plugin-svelte@3.3.1(prettier@3.3.3)(svelte@5.2.7):
     dependencies:
       prettier: 3.3.3
-      svelte: 5.2.5
+      svelte: 5.2.7
 
   prettier@3.3.3: {}
 
@@ -3176,19 +3138,19 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@4.0.9(picomatch@4.0.2)(svelte@5.2.5)(typescript@5.6.3):
+  svelte-check@4.0.9(picomatch@4.0.2)(svelte@5.2.7)(typescript@5.6.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 4.0.1
       fdir: 6.4.2(picomatch@4.0.2)
       picocolors: 1.1.1
       sade: 1.8.1
-      svelte: 5.2.5
+      svelte: 5.2.7
       typescript: 5.6.3
     transitivePeerDependencies:
       - picomatch
 
-  svelte-eslint-parser@0.43.0(svelte@5.2.5):
+  svelte-eslint-parser@0.43.0(svelte@5.2.7):
     dependencies:
       eslint-scope: 7.2.2
       eslint-visitor-keys: 3.4.3
@@ -3196,9 +3158,9 @@ snapshots:
       postcss: 8.4.49
       postcss-scss: 4.0.9(postcss@8.4.49)
     optionalDependencies:
-      svelte: 5.2.5
+      svelte: 5.2.7
 
-  svelte@5.2.5:
+  svelte@5.2.7:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.0

@@ -9,6 +9,8 @@ const DynamicPost = (() => 'DynamicPost') as Component;
 const DynamicPostComment = (() => 'DynamicPostComment') as Component;
 const UserNotFound = (() => 'UserNotFound') as Component;
 const PageNotFound = (() => 'PageNotFound') as Component;
+const Layout1 = (() => 'Layout1') as Component;
+const Layout2 = (() => 'Layout2') as Component;
 
 describe('matchRoute', () => {
 	describe.each([
@@ -34,13 +36,15 @@ describe('matchRoute', () => {
 					'/:id': {
 						'/': DynamicPost,
 						'/:commentId': DynamicPostComment,
+						layout: Layout2,
 					},
+					layout: Layout1,
 				},
 				'/users/*': UserNotFound,
 				'*': PageNotFound,
 			} satisfies Routes,
 		},
-	])('$mode paths', ({ routes: r }) => {
+	])('$mode paths', ({ mode, routes: r }) => {
 		const routes = r as Routes;
 
 		it('should match the root route', () => {
@@ -65,10 +69,23 @@ describe('matchRoute', () => {
 		});
 
 		it('should match multiple dynamic nested routes and return params', () => {
-			const { match, params } = matchRoute('/posts/bar/buzz', routes);
+			const { match, params } = matchRoute('/posts/bar/baz', routes);
 			expect(match).toEqual(DynamicPostComment);
-			expect(params).toEqual({ id: 'bar', commentId: 'buzz' });
+			expect(params).toEqual({ id: 'bar', commentId: 'baz' });
 		});
+
+		if (mode === 'nested') {
+			it('should match routes with layout', () => {
+				const { layouts: layouts1 } = matchRoute('/', routes);
+				const { layouts: layouts2 } = matchRoute('/posts', routes);
+				const { layouts: layouts3 } = matchRoute('/posts/foo', routes);
+				const { layouts: layouts4 } = matchRoute('/posts/bar/baz', routes);
+				expect(layouts1).toEqual([]);
+				expect(layouts2).toEqual([Layout1]);
+				expect(layouts3).toEqual([Layout1]);
+				expect(layouts4).toEqual([Layout1, Layout2]);
+			});
+		}
 
 		it('should match wildcard nested route', () => {
 			const { match } = matchRoute('/users/notfound', routes);

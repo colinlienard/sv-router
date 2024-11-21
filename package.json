@@ -15,6 +15,9 @@
 	"bugs": {
 		"url": "https://github.com/colinlienard/svelte-path/issues"
 	},
+	"files": [
+		"dist"
+	],
 	"license": "MIT",
 	"type": "module",
 	"exports": {
@@ -24,7 +27,7 @@
 		"types": "./dist/index.d.ts"
 	},
 	"scripts": {
-		"example:basic": "pnpm --filter example-basic dev",
+		"example:basic": "pnpm --filter basic-example dev",
 		"build": "pkgroll --clean-dist",
 		"test": "vitest",
 		"check": "tsc --noEmit && pnpm -r check",
@@ -47,8 +50,7 @@
 		"globals": "^15.12.0",
 		"pkgroll": "^2.5.1",
 		"prettier": "^3.3.3",
-		"prettier-plugin-css-order": "^2.1.2",
-		"prettier-plugin-svelte": "^3.2.8",
+		"prettier-plugin-svelte": "^3.3.1",
 		"sherif": "^1.0.1",
 		"typescript": "^5.6.3",
 		"typescript-eslint": "^8.14.0",

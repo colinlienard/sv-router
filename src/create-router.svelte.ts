@@ -4,6 +4,7 @@ import type { Routes } from './types';
 
 let routes: Routes;
 let routeComponent = $state<Component>();
+let layoutComponents = $state<Component[]>([]);
 let paramsStore = $state({});
 
 export function createRouter(r: Routes) {
@@ -17,7 +18,7 @@ export function createRouter(r: Routes) {
 
 	return {
 		get component() {
-			return routeComponent;
+			return routeComponent; // TODO: implement layouts
 		},
 		typedPathFn(path: string) {
 			return path;
@@ -43,9 +44,10 @@ export function createRouter(r: Routes) {
 }
 
 function onNavigate() {
-	const { match, params } = matchRoute(globalThis.location.pathname, routes);
+	const { match, layouts, params } = matchRoute(globalThis.location.pathname, routes);
 	if (match) {
 		routeComponent = match;
+		layoutComponents = layouts;
 		paramsStore = params;
 	}
 }
