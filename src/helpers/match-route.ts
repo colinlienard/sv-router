@@ -1,5 +1,5 @@
 import type { Component } from 'svelte';
-import type { Routes } from '../types';
+import type { Routes } from '../types.ts';
 
 export function matchRoute(
 	pathname: string,

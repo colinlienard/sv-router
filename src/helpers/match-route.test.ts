@@ -1,6 +1,6 @@
 import type { Component } from 'svelte';
-import type { Routes } from '../types';
-import { matchRoute } from './match-route';
+import type { Routes } from '../types.ts';
+import { matchRoute } from './match-route.ts';
 
 const Home = (() => 'Home') as Component;
 const Posts = (() => 'Posts') as Component;

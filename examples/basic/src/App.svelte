@@ -1,34 +1,9 @@
 <script lang="ts" module>
-	import { createRouter } from 'svelte-path';
-	import Layout from './Layout.svelte';
-	import About from './routes/About.svelte';
-	import DynamicPost from './routes/DynamicPost.svelte';
-	import Home from './routes/Home.svelte';
-	import NotFound from './routes/NotFound.svelte';
-	import Posts from './routes/Posts.svelte';
-	import StaticPost from './routes/StaticPost.svelte';
-
-	let router = createRouter({
-		'/': Home,
-		'/about': About,
-		'/posts': {
-			'/': Posts,
-			'/static': StaticPost,
-			'/:id': DynamicPost,
-			layout: Layout,
-		},
-		'*': NotFound,
-	});
-
-	export const p = router.typedPathFn;
-	export const queryParams = router.queryParams;
-</script>
-
-<script lang="ts">
-	router.setup();
+	import { Router } from 'svelte-path';
+	import { p } from './router';
 </script>
 
 <a href={p('/')}>Home</a>
 <a href={p('/about')}>About</a>
 <a href={p('/posts')}>Posts</a>
-<router.component />
+<Router />

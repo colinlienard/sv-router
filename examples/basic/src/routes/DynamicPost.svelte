@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { queryParams } from '../App.svelte';
+	import { queryParams } from '../router';
 
-	// @ts-expect-error TODO: typesafe queryParams
 	const { id } = queryParams();
 </script>
 

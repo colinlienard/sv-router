@@ -1,7 +1,9 @@
 {
 	"extends": ["../../tsconfig.json"],
 	"compilerOptions": {
-		"customConditions": ["source"]
+		"module": "Preserve",
+		"moduleResolution": "Bundler",
+		"customConditions": ["@svelte-path/source"]
 	},
 	"include": ["src/**/*.ts", "src/**/*.svelte"]
 }
