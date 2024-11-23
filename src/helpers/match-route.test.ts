@@ -1,6 +1,6 @@
 import type { Component } from 'svelte';
 import type { Routes } from '../types.ts';
-import { matchRoute } from './match-route.ts';
+import { matchRoute, sortRoutes } from './match-route.ts';
 
 const Home = (() => 'Home') as Component;
 const Posts = (() => 'Posts') as Component;
@@ -15,7 +15,7 @@ const Layout2 = (() => 'Layout2') as Component;
 describe('matchRoute', () => {
 	describe.each([
 		{
-			mode: 'inline',
+			mode: 'flat',
 			routes: {
 				'/': Home,
 				'/posts': Posts,
@@ -27,7 +27,19 @@ describe('matchRoute', () => {
 			} satisfies Routes,
 		},
 		{
-			mode: 'nested',
+			mode: 'flat unordered',
+			routes: {
+				'/posts/:id/:commentId': DynamicPostComment,
+				'/posts': Posts,
+				'/users/*': UserNotFound,
+				'/posts/foo': StaticPost,
+				'*': PageNotFound,
+				'/posts/:id': DynamicPost,
+				'/': Home,
+			} satisfies Routes,
+		},
+		{
+			mode: 'tree',
 			routes: {
 				'/': Home,
 				'/posts': {
@@ -42,6 +54,24 @@ describe('matchRoute', () => {
 				},
 				'/users/*': UserNotFound,
 				'*': PageNotFound,
+			} satisfies Routes,
+		},
+		{
+			mode: 'tree unordered',
+			routes: {
+				'*': PageNotFound,
+				'/posts': {
+					'/:id': {
+						'/:commentId': DynamicPostComment,
+						'/': DynamicPost,
+						layout: Layout2,
+					},
+					'/': Posts,
+					'/foo': StaticPost,
+					layout: Layout1,
+				},
+				'/users/*': UserNotFound,
+				'/': Home,
 			} satisfies Routes,
 		},
 	])('$mode paths', ({ mode, routes: r }) => {
@@ -102,5 +132,12 @@ describe('matchRoute', () => {
 			const { match } = matchRoute('/notfound', routes);
 			expect(match).toBeUndefined();
 		});
+	});
+});
+
+describe('sortRoutes', () => {
+	it('should sort routes', () => {
+		const result = sortRoutes(['/:id', '*', '/foo', '', '/']);
+		expect(result).toEqual(['', '/', '/foo', '/:id', '*']);
 	});
 });

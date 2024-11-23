@@ -10,14 +10,14 @@ export function matchRoute(
 	params: Record<string, string>;
 } {
 	const pathParts = pathname.split('/');
-	const allRouteParts = Object.keys(routes).map((route) => route.split('/'));
+	const allRouteParts = sortRoutes(Object.keys(routes)).map((route) => route.split('/'));
 
 	let match: Component | undefined;
 	const layouts: Component[] = [];
 	let params: Record<string, string> = {};
 
 	outer: for (const routeParts of allRouteParts) {
-		for (const [index, routePart] of routeParts.entries()) {
+		for (const [index, routePart] of sortRoutes(routeParts).entries()) {
 			const pathPart = pathParts[index];
 			if (routePart.startsWith(':')) {
 				params[routePart.slice(1)] = pathPart;
@@ -57,4 +57,15 @@ export function matchRoute(
 	}
 
 	return { match, layouts, params };
+}
+
+export function sortRoutes(routes: string[]) {
+	return routes.toSorted((a, b) => getRoutePriority(a) - getRoutePriority(b));
+}
+
+function getRoutePriority(route: string): number {
+	if (route === '' || route === '/') return 1;
+	if (route === '*') return 4;
+	if (route.includes(':')) return 3;
+	return 2;
 }
