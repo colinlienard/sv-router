@@ -1,10 +1,10 @@
 import { BROWSER, DEV } from 'esm-env';
-import type { Routes } from './types.ts';
+import type { Path, Routes } from './types/index.ts';
 
 export let routes: Routes;
 export const paramsStore = $state<Record<string, string>>({});
 
-export function createRouter(r: Routes) {
+export function createRouter<T extends Routes>(r: T) {
 	routes = r;
 
 	if (DEV && BROWSER) {
@@ -14,7 +14,7 @@ export function createRouter(r: Routes) {
 	}
 
 	return {
-		typedPathFn(path: string) {
+		typedPathFn(path: Path<T>) {
 			return path;
 		},
 		queryParams() {

@@ -59,7 +59,7 @@ export default [
 			'@typescript-eslint/no-explicit-any': 'off',
 			'@typescript-eslint/no-unused-vars': [
 				'error',
-				{ ignoreRestSiblings: true, argsIgnorePattern: '_' },
+				{ ignoreRestSiblings: true, varsIgnorePattern: 'test_.*', argsIgnorePattern: '_' },
 			],
 			'no-console': ['warn', { allow: ['warn'] }],
 		},

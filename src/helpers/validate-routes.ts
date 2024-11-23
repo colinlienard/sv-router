@@ -1,4 +1,4 @@
-import type { Routes } from '../types.ts';
+import type { Routes } from '../types/index.ts';
 
 export function validateRoutes(routes: Routes) {
 	const paths = getRoutePaths(routes);

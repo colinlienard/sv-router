@@ -45,6 +45,9 @@ importers:
       sherif:
         specifier: ^1.0.1
         version: 1.0.2
+      type-testing:
+        specifier: ^0.2.0
+        version: 0.2.0
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
@@ -1371,6 +1374,10 @@ packages:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
 
+  type-testing@0.2.0:
+    resolution: {integrity: sha512-HAf4o9LjUAh9xEIXZTNm+ak2tjTgK64QhTlT/D8UNedII2/eagdEbtbaVK6920K7+QBrwfvxpjPGlfWVKZ+MZQ==}
+    engines: {node: '>= 20.x'}
+
   typescript-eslint@8.15.0:
     resolution: {integrity: sha512-wY4FRGl0ZI+ZU4Jo/yjdBu0lVTSML58pu6PgGtJmCufvzfV565pUF6iACQt092uFOd49iLOTX/sEVmHtbSrS+w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -2687,6 +2694,8 @@ snapshots:
   type-fest@0.6.0: {}
 
   type-fest@0.8.1: {}
+
+  type-testing@0.2.0: {}
 
   typescript-eslint@8.15.0(eslint@9.15.0)(typescript@5.7.2):
     dependencies:

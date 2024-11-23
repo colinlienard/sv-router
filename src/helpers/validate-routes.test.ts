@@ -1,5 +1,5 @@
 import type { Component } from 'svelte';
-import type { Routes } from '../types.ts';
+import type { Routes } from '../types/index.ts';
 import { getRoutePaths, validateRoutes } from './validate-routes.ts';
 
 const component = (() => ({})) as Component;

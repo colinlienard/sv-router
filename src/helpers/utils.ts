@@ -1,5 +1,5 @@
 import type { Component } from 'svelte';
-import type { LazyRouteComponent, RouteComponent } from '../types.ts';
+import type { LazyRouteComponent, RouteComponent } from '../types/index.ts';
 
 export function resolveRouteComponents(input: RouteComponent<any>[]): Promise<Component[]> {
 	return Promise.all(input.map((c) => resolveRouteComponent(c)));
