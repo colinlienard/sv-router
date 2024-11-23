@@ -1,4 +1,5 @@
 import type { Component } from 'svelte';
+import type { Routes } from '../types.ts';
 import { getRoutePaths, validateRoutes } from './validate-routes.ts';
 
 const component = (() => ({})) as Component;
@@ -17,48 +18,53 @@ describe('validateRoutes', () => {
 			'/posts': {
 				'/': component,
 				'/:id': component,
-				'*': component,
 			},
 			'*': component,
-		});
+		} satisfies Routes);
 		expect(consoleSpy).not.toHaveBeenCalled();
 	});
 
-	it('should raise a warning if wildcard route is misplaced', () => {
+	it('should raise a warning if a wildcard route is at the same level as a dynamic route', () => {
 		validateRoutes({
 			'/': component,
+			'/:id': component,
 			'*': component,
-			'/posts': component,
-		});
-		expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('*'));
+		} satisfies Routes);
+		expect(consoleSpy).toHaveBeenCalledWith(
+			'Router warning: Wildcard route `*` should not be at the same level as dynamic route `/:id`.',
+		);
 	});
 
-	it('should raise a warning if nested wildcard route is misplaced', () => {
-		validateRoutes({
+	it.each([
+		{
 			'/': component,
-			'/about': component,
-			'/posts': component,
 			'/posts/*': component,
 			'/posts/:id': component,
-		});
-		expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('/posts/*'));
-	});
-
-	it('should raise multiple warnings if nested wildcard route are misplaced', () => {
-		validateRoutes({
-			'/': component,
+			'/:id': component,
 			'*': component,
-			'/about': component,
+		} satisfies Routes,
+		{
+			'/': component,
 			'/posts': {
-				'/': component,
 				'*': component,
 				'/:id': component,
 			},
-		});
-		expect(consoleSpy).toHaveBeenCalledTimes(2);
-		expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('/*'));
-		expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('/posts/*'));
-	});
+			'/:id': component,
+			'*': component,
+		} satisfies Routes,
+	])(
+		'should raise multiple warnings if wildcard routes are at the same level as dynamic routes',
+		(routes) => {
+			validateRoutes(routes as unknown as Routes);
+			expect(consoleSpy).toHaveBeenCalledTimes(2);
+			expect(consoleSpy).toHaveBeenCalledWith(
+				'Router warning: Wildcard route `*` should not be at the same level as dynamic route `/:id`.',
+			);
+			expect(consoleSpy).toHaveBeenCalledWith(
+				'Router warning: Wildcard route `/posts/*` should not be at the same level as dynamic route `/posts/:id`.',
+			);
+		},
+	);
 });
 
 describe('getRoutePaths', () => {

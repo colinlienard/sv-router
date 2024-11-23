@@ -4,14 +4,17 @@ export function validateRoutes(routes: Routes) {
 	const paths = getRoutePaths(routes);
 	const wildcardPaths = paths.filter((path) => path.endsWith('*'));
 	for (const wildcardPath of wildcardPaths) {
-		const index = paths.indexOf(wildcardPath);
 		const parentPath = wildcardPath.slice(0, -1);
-		const parentPathIndex = paths.findIndex(
-			(p) => p !== '/' && p.startsWith(parentPath) && !p.endsWith('*'),
+		const dynamicPath = paths.find(
+			(p) =>
+				p !== '/' &&
+				!p.endsWith('*') &&
+				p.startsWith(parentPath === '' ? '/:' : parentPath) &&
+				p.match(/:[^/]*$/g), // Match dynamic paths without slashes after the colon
 		);
-		if (parentPathIndex !== -1 && parentPathIndex > index) {
+		if (dynamicPath) {
 			console.warn(
-				`Router warning at \`${wildcardPath}\`: Wildcard route should be placed at the end of the object.`,
+				`Router warning: Wildcard route \`${wildcardPath}\` should not be at the same level as dynamic route \`${dynamicPath}\`.`,
 			);
 		}
 	}
