@@ -24,7 +24,6 @@ type test_path_expected =
 	| '/about'
 	| '/contact/nested'
 	| '/posts'
-	| '/posts/static'
 	| `/posts/${string}`
 	| `/posts/${string}/${string}`;
 

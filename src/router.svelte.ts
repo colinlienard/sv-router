@@ -44,6 +44,8 @@ export function onGlobalClick(event: Event) {
 	const anchor = (event.target as HTMLElement).closest('a');
 	if (!anchor) return;
 
+	if (anchor.hasAttribute('target') || anchor.hasAttribute('download')) return;
+
 	const url = new URL(anchor.href);
 	const currentOrigin = globalThis.location.origin;
 	if (url.origin !== currentOrigin) return;

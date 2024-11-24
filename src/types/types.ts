@@ -37,7 +37,7 @@ type RecursiveKeys<T extends Routes, Prefix extends string = ''> = {
 		: never;
 }[keyof T];
 
-type CleanPath<T extends string> = RemoveLastSlash<ReplaceParam<T>>;
+type CleanPath<T extends string> = ReplaceParam<RemoveLastSlash<T>>;
 type RemoveLastSlash<T extends string> = T extends '/' ? T : T extends `${infer R}/` ? R : T;
 type ReplaceParam<T extends string> = T extends `${infer R}:${string}/${infer Rest}`
 	? `${R}${string}/${ReplaceParam<Rest>}`
