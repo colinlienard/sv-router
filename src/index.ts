@@ -1,2 +1,2 @@
-export { createRouter } from './create-router.svelte.ts';
 export { default as Router } from './Router.svelte';
+export { createRouter } from './router.svelte.ts';

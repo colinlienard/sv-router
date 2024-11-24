@@ -17,7 +17,9 @@ export type Routes = {
 	layout?: LayoutComponent;
 };
 
-export type Path<T extends Routes> = Prettify<Unify<RecursiveKeys<StripNonRoutes<T>>>>;
+export type Path<T extends Routes> = Prettify<CleanPath<RecursiveKeys<StripNonRoutes<T>>>>;
+
+export type Params<T extends Routes> = Record<ExtractParams<RecursiveKeys<T>>, string>;
 
 type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
@@ -33,12 +35,18 @@ type RecursiveKeys<T extends Routes, Prefix extends string = ''> = {
 			? RecursiveKeys<T[K], `${Prefix}${K}`>
 			: `${Prefix}${K}`
 		: never;
-};
-
-type Unify<T> = {
-	[K in keyof T]: T[K] extends string ? ReplaceColon<RemoveLastSlash<T[K]>> : Unify<T[K]>;
 }[keyof T];
 
+type CleanPath<T extends string> = RemoveLastSlash<ReplaceParam<T>>;
 type RemoveLastSlash<T extends string> = T extends '/' ? T : T extends `${infer R}/` ? R : T;
+type ReplaceParam<T extends string> = T extends `${infer R}:${string}/${infer Rest}`
+	? `${R}${string}/${ReplaceParam<Rest>}`
+	: T extends `${infer R}:${string}`
+		? `${R}${string}`
+		: T;
 
-type ReplaceColon<T extends string> = T extends `${infer R}:${string}` ? `${R}${string}` : T;
+type ExtractParams<T extends string> = T extends `${string}:${infer Param}/${infer Rest}`
+	? Param | ExtractParams<`/${Rest}`>
+	: T extends `${string}:${infer Param}`
+		? Param
+		: never;

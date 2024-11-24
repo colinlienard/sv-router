@@ -1,33 +1,7 @@
 <script lang="ts">
-	import type { Component } from 'svelte';
 	import { on } from 'svelte/events';
-	import { paramsStore, routes } from './create-router.svelte.ts';
-	import { matchRoute } from './helpers/match-route.ts';
-	import { resolveRouteComponents } from './helpers/utils.ts';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
-
-	let componentTree = $state<Component[]>([]);
-
-	function onNavigate() {
-		const { match, layouts, params } = matchRoute(globalThis.location.pathname, routes);
-		resolveRouteComponents(match ? [...layouts, match] : layouts).then((components) => {
-			componentTree = components;
-		});
-		Object.assign(paramsStore, params);
-	}
-
-	function onGlobalClick(event: Event) {
-		const anchor = (event.target as HTMLElement).closest('a');
-		if (!anchor) return;
-
-		const url = new URL(anchor.href);
-		const currentOrigin = globalThis.location.origin;
-		if (url.origin !== currentOrigin) return;
-
-		event.preventDefault();
-		globalThis.history.pushState({}, '', anchor.href);
-		onNavigate();
-	}
+	import { componentTree, onGlobalClick, onNavigate } from './router.svelte.ts';
 
 	onNavigate();
 
