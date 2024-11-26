@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { queryParams } from '../router';
+	import { params } from '../router';
 
-	const { id } = queryParams();
+	const { id } = params();
 </script>
 
 <h1>A post with the slug {id}</h1>

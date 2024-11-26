@@ -1,8 +1,9 @@
 import { BROWSER, DEV } from 'esm-env';
 import type { Component } from 'svelte';
+import { constructPath, type ConstructPathArgs } from './helpers/construct-path.ts';
 import { matchRoute } from './helpers/match-route.ts';
 import { resolveRouteComponents } from './helpers/utils.ts';
-import type { Params, Path, Routes } from './types/types.ts';
+import type { AllParams, Path, Routes } from './types/types.ts';
 
 export let routes: Routes;
 export const componentTree = $state<Component[]>([]);
@@ -18,16 +19,17 @@ export function createRouter<T extends Routes>(r: T) {
 	}
 
 	return {
-		path(path: Path<T>) {
-			return path;
+		path<U extends Path<T>>(...args: ConstructPathArgs<U>) {
+			return constructPath<U>(...args);
 		},
-		goto(path: Path<T>) {
-			globalThis.history.pushState({}, '', path as unknown as string);
+		goto<U extends Path<T>>(...args: ConstructPathArgs<U>) {
+			const path = constructPath<U>(...args);
+			globalThis.history.pushState({}, '', path);
 			onNavigate();
 		},
-		queryParams() {
+		params() {
 			const readonly = $derived(paramsStore);
-			return readonly as Params<T>;
+			return readonly as AllParams<T>;
 		},
 	};
 }

@@ -5,7 +5,7 @@ import NotFound from './routes/NotFound.svelte';
 import Posts from './routes/Posts.svelte';
 import StaticPost from './routes/StaticPost.svelte';
 
-export const { path, goto, queryParams } = createRouter({
+export const { path, goto, params } = createRouter({
 	'/': Home,
 	'/about': () => import('./routes/About.svelte'),
 	'/posts': {
