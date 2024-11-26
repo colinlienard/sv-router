@@ -19,7 +19,7 @@ describe('matchRoute', () => {
 			routes: {
 				'/': Home,
 				'/posts': Posts,
-				'/posts/foo': StaticPost,
+				'/posts/static': StaticPost,
 				'/posts/:id': DynamicPost,
 				'/posts/:id/:commentId': DynamicPostComment,
 				'/users/*': UserNotFound,
@@ -32,7 +32,7 @@ describe('matchRoute', () => {
 				'/posts/:id/:commentId': DynamicPostComment,
 				'/posts': Posts,
 				'/users/*': UserNotFound,
-				'/posts/foo': StaticPost,
+				'/posts/static': StaticPost,
 				'*': PageNotFound,
 				'/posts/:id': DynamicPost,
 				'/': Home,
@@ -44,7 +44,7 @@ describe('matchRoute', () => {
 				'/': Home,
 				'/posts': {
 					'/': Posts,
-					'/foo': StaticPost,
+					'/static': StaticPost,
 					'/:id': {
 						'/': DynamicPost,
 						'/:commentId': DynamicPostComment,
@@ -67,7 +67,7 @@ describe('matchRoute', () => {
 						layout: Layout2,
 					},
 					'/': Posts,
-					'/foo': StaticPost,
+					'/static': StaticPost,
 					layout: Layout1,
 				},
 				'/users/*': UserNotFound,
@@ -87,8 +87,13 @@ describe('matchRoute', () => {
 			expect(match).toEqual(Posts);
 		});
 
+		it('should match a simple route with a trailing slash', () => {
+			const { match } = matchRoute('/posts', routes);
+			expect(match).toEqual(Posts);
+		});
+
 		it('should match a nested route', () => {
-			const { match } = matchRoute('/posts/foo', routes);
+			const { match } = matchRoute('/posts/static', routes);
 			expect(match).toEqual(StaticPost);
 		});
 
@@ -108,7 +113,7 @@ describe('matchRoute', () => {
 			it('should match routes with layout', () => {
 				const { layouts: layouts1 } = matchRoute('/', routes);
 				const { layouts: layouts2 } = matchRoute('/posts', routes);
-				const { layouts: layouts3 } = matchRoute('/posts/foo', routes);
+				const { layouts: layouts3 } = matchRoute('/posts/static', routes);
 				const { layouts: layouts4 } = matchRoute('/posts/bar/baz', routes);
 				expect(layouts1).toEqual([]);
 				expect(layouts2).toEqual([Layout1]);

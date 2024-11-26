@@ -9,6 +9,10 @@ export function matchRoute(
 	layouts: LayoutComponent[];
 	params: Record<string, string>;
 } {
+	// Remove trailing slash
+	if (pathname.length > 1 && pathname.endsWith('/')) {
+		pathname = pathname.slice(0, -1);
+	}
 	const pathParts = pathname.split('/');
 	const allRouteParts = sortRoutes(Object.keys(routes)).map((route) => route.split('/'));
 
