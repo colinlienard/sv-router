@@ -1,4 +1,4 @@
-import { createRouter } from 'svelte-path';
+import { createRouter } from 'sv-router';
 import DynamicPost from './routes/DynamicPost.svelte';
 import Home from './routes/Home.svelte';
 import NotFound from './routes/NotFound.svelte';

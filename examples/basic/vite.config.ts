@@ -4,6 +4,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [svelte()],
 	resolve: {
-		conditions: ['svelte-path/source'],
+		conditions: ['sv-router/source'],
 	},
 });

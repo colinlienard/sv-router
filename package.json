@@ -1,5 +1,5 @@
 {
-	"name": "svelte-path",
+	"name": "sv-router",
 	"version": "0.0.1",
 	"description": "Modern Svelte routing",
 	"keywords": [
@@ -7,19 +7,19 @@
 		"router",
 		"spa"
 	],
-	"homepage": "https://github.com/colinlienard/svelte-path",
+	"homepage": "https://github.com/colinlienard/sv-router",
 	"bugs": {
-		"url": "https://github.com/colinlienard/svelte-path/issues"
+		"url": "https://github.com/colinlienard/sv-router/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/colinlienard/svelte-path.git"
+		"url": "git+https://github.com/colinlienard/sv-router.git"
 	},
 	"license": "MIT",
 	"type": "module",
 	"exports": {
 		".": {
-			"svelte-path/source": "./src/index.ts",
+			"sv-router/source": "./src/index.ts",
 			"import": "./dist/index.js",
 			"svelte": "./dist/index.js",
 			"types": "./dist/index.d.ts"

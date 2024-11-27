@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Router } from 'svelte-path';
+	import { Router } from 'sv-router';
 	import { goto, path } from './router';
 </script>
 

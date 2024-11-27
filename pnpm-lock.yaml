@@ -63,7 +63,7 @@ importers:
 
   examples/basic:
     dependencies:
-      svelte-path:
+      sv-router:
         specifier: workspace:*
         version: link:../..
     devDependencies:

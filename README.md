@@ -1,3 +1,3 @@
-# Svelte Path
+# sv-router
 
-https://www.npmjs.com/package/svelte-path
+https://www.npmjs.com/package/sv-router
