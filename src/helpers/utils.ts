@@ -18,5 +18,5 @@ export function resolveRouteComponent(input: RouteComponent): Promise<Component>
 }
 
 export function isLazyImport(input: unknown): input is LazyRouteComponent {
-	return typeof input === 'function' && !!/\(\)\s=>\simport\(.*\)/g.test(String(input));
+	return typeof input === 'function' && !!/\(\)\s?=>\s?import\(.*\)/g.test(String(input));
 }

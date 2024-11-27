@@ -29,7 +29,7 @@
 		"dist"
 	],
 	"scripts": {
-		"example:basic": "pnpm --filter basic-example dev",
+		"ex:basic": "pnpm --filter basic-example",
 		"build": "svelte-package -i src && rm -rf .svelte-kit",
 		"test": "vitest",
 		"check": "tsc --noEmit && pnpm -r check",
