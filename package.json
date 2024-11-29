@@ -23,6 +23,10 @@
 			"import": "./dist/index.js",
 			"svelte": "./dist/index.js",
 			"types": "./dist/index.d.ts"
+		},
+		"./vite-plugin": {
+			"import": "./dist/vite-plugin/index.js",
+			"types": "./dist/vite-plugin/index.d.ts"
 		}
 	},
 	"files": [
@@ -30,7 +34,9 @@
 	],
 	"scripts": {
 		"ex:basic": "pnpm --filter basic-example",
+		"ex:file-based": "pnpm --filter file-based-example",
 		"build": "svelte-package -i src && rm -rf .svelte-kit",
+		"watch": "svelte-package -i src --watch && rm -rf .svelte-kit",
 		"test": "vitest",
 		"check": "tsc --noEmit && pnpm -r check",
 		"lint": "eslint .",
@@ -46,6 +52,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.15.0",
 		"@sveltejs/package": "^2.3.7",
+		"@types/node": "^22.10.1",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
 		"eslint-plugin-svelte": "^2.46.0",
