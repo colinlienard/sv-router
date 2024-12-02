@@ -1,17 +1,29 @@
 import fs from 'node:fs';
-import path from 'node:path';
 import type { Plugin } from 'vite';
+import { generateRouterCode } from './generate-router-code.ts';
+
+const ROUTES_PATH = 'src/routes/';
+const ROUTER_DIR_PATH = '.sv-router/router.ts';
+const ROUTER_PATH = ROUTER_DIR_PATH + '/router.ts';
 
 export function router(): Plugin {
 	return {
 		name: 'sv-router',
 		async buildStart() {
-			const routesPath = path.resolve(process.cwd(), 'src/routes');
-			const entries = fs.readdirSync(routesPath);
-			for (const entry of entries) {
-				const stat = fs.lstatSync(path.join(routesPath, entry));
-				console.log(entry, stat.isDirectory());
+			writeRouterCode();
+		},
+		async watchChange(file) {
+			if (file.includes(ROUTES_PATH)) {
+				writeRouterCode();
 			}
 		},
 	};
+}
+
+function writeRouterCode() {
+	const routerCode = generateRouterCode(ROUTES_PATH);
+	if (!fs.existsSync(ROUTER_DIR_PATH)) {
+		fs.mkdirSync(ROUTER_DIR_PATH);
+	}
+	fs.writeFileSync(ROUTER_PATH + '/router.ts', routerCode);
 }

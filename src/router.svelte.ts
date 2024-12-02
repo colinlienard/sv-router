@@ -13,7 +13,7 @@ export function createRouter<T extends Routes>(r: T) {
 	routes = r;
 
 	if (DEV && BROWSER) {
-		import('./helpers/validate-routes.ts').then(({ validateRoutes }) => {
+		import('./helpers/validate-routes.js').then(({ validateRoutes }) => {
 			validateRoutes(routes);
 		});
 	}

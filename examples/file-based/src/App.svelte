@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Router } from 'sv-router';
-	import { goto, path } from './router';
+	import { goto, path } from '../.sv-router/router';
 </script>
 
 <a href={path('/')}>Home</a>

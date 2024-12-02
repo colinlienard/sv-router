@@ -1,5 +1,5 @@
 {
-	"extends": ["../../tsconfig.json"],
+	"extends": ["../../tsconfig.json", "sv-router/tsconfig"],
 	"compilerOptions": {
 		"module": "Preserve",
 		"moduleResolution": "Bundler",
