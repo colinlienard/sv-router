@@ -27,8 +27,7 @@
 		"./vite-plugin": {
 			"import": "./dist/vite-plugin/index.js",
 			"types": "./dist/vite-plugin/index.d.ts"
-		},
-		"./tsconfig": "./src/sv-router-tsconfig.json"
+		}
 	},
 	"files": [
 		"dist"

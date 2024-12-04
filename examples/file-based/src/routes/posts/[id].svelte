@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { params } from '../../../.sv-router/router';
+	import { params } from 'sv-router/generated';
 
 	const { id } = params();
 </script>
