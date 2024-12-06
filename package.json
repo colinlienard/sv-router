@@ -29,6 +29,7 @@
 			"types": "./dist/vite-plugin/index.d.ts"
 		}
 	},
+	"bin": "./dist/cli/index.js",
 	"files": [
 		"dist"
 	],
