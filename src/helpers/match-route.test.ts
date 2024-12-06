@@ -52,7 +52,10 @@ describe('matchRoute', () => {
 					},
 					layout: Layout1,
 				},
-				'/users/*': UserNotFound,
+				'/users': {
+					'*': UserNotFound,
+					layout: Layout1,
+				},
 				'*': PageNotFound,
 			} satisfies Routes,
 		},
@@ -70,12 +73,16 @@ describe('matchRoute', () => {
 					'/static': StaticPost,
 					layout: Layout1,
 				},
-				'/users/*': UserNotFound,
+				'/users': {
+					'*': UserNotFound,
+					layout: Layout1,
+				},
 				'/': Home,
 			} satisfies Routes,
 		},
 	])('$mode paths', ({ mode, routes: r }) => {
-		const routes = r as Routes;
+		const routes = r as unknown as Routes;
+		const treeMode = mode.startsWith('tree');
 
 		it('should match the root route', () => {
 			const { match } = matchRoute('/', routes);
@@ -109,7 +116,7 @@ describe('matchRoute', () => {
 			expect(params).toEqual({ id: 'bar', commentId: 'baz' });
 		});
 
-		if (mode === 'nested') {
+		if (treeMode) {
 			it('should match routes with layout', () => {
 				const { layouts: layouts1 } = matchRoute('/', routes);
 				const { layouts: layouts2 } = matchRoute('/posts', routes);
@@ -122,14 +129,20 @@ describe('matchRoute', () => {
 			});
 		}
 
-		it('should match wildcard nested route', () => {
-			const { match } = matchRoute('/users/notfound', routes);
-			expect(match).toEqual(UserNotFound);
+		it('should match wildcard route', () => {
+			const { match, layouts } = matchRoute('/notfound', routes);
+			expect(match).toEqual(PageNotFound);
+			if (treeMode) {
+				expect(layouts).toEqual([]);
+			}
 		});
 
-		it('should match wildcard route', () => {
-			const { match } = matchRoute('/notfound', routes);
-			expect(match).toEqual(PageNotFound);
+		it('should match wildcard nested route', () => {
+			const { match, layouts } = matchRoute('/users/notfound', routes);
+			expect(match).toEqual(UserNotFound);
+			if (treeMode) {
+				expect(layouts).toEqual([Layout1]);
+			}
 		});
 
 		it('should not match any route', () => {

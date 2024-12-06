@@ -31,7 +31,13 @@ export function matchRoute(
 			} else if (routePart !== pathPart) {
 				break;
 			}
+
+			if (index !== routeParts.length - 1) {
+				continue;
+			}
+
 			const routeMatch = routes[routeParts.join('/') as keyof Routes] as RouteComponent | Routes;
+
 			if (
 				typeof routeMatch !== 'function' &&
 				routeMatch?.layout &&
@@ -39,24 +45,23 @@ export function matchRoute(
 			) {
 				layouts.push(routeMatch.layout);
 			}
-			if (index === routeParts.length - 1) {
-				if (typeof routeMatch === 'function') {
-					if (routeParts.length === pathParts.length) {
-						match = routeMatch;
-					} else {
-						continue;
-					}
-				} else if (routeMatch) {
-					const nestedPathname = '/' + pathParts.slice(index + 1).join('/');
-					const result = matchRoute(nestedPathname, routeMatch);
-					if (result) {
-						match = result.match;
-						params = { ...params, ...result.params };
-						layouts.push(...result.layouts);
-					}
+
+			if (typeof routeMatch === 'function') {
+				if (routeParts.length === pathParts.length) {
+					match = routeMatch;
+				} else {
+					continue;
 				}
-				break outer;
+			} else if (routeMatch) {
+				const nestedPathname = '/' + pathParts.slice(index + 1).join('/');
+				const result = matchRoute(nestedPathname, routeMatch);
+				if (result) {
+					match = result.match;
+					params = { ...params, ...result.params };
+					layouts.push(...result.layouts);
+				}
 			}
+			break outer;
 		}
 	}
 
