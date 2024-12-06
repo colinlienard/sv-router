@@ -1,8 +1,7 @@
 import { BROWSER, DEV } from 'esm-env';
 import type { Component } from 'svelte';
-import { constructPath, type ConstructPathArgs } from './helpers/construct-path.ts';
 import { matchRoute } from './helpers/match-route.ts';
-import { resolveRouteComponents } from './helpers/utils.ts';
+import { constructPath, type ConstructPathArgs, resolveRouteComponents } from './helpers/utils.ts';
 import type { AllParams, Path, Routes } from './types/types.ts';
 
 export let routes: Routes;

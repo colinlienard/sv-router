@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin } from 'vite';
-import { generateRouterCode } from './generate-router-code.ts';
+import { generateRouterCode } from '../gen/generate-router-code.ts';
 
-const ROUTES_PATH = 'src/routes/';
-const ROUTER_DIR_PATH = '.sv-router';
-const ROUTER_PATH = ROUTER_DIR_PATH + '/router.ts';
-const TSCONFIG_PATH = ROUTER_DIR_PATH + '/tsconfig.json';
-const GENERATED_CODE_ALIAS = 'sv-router/generated';
+const ROUTES_PATH = 'src/routes';
+const GEN_CODE_DIR_PATH = '.router';
+const ROUTER_PATH = path.join(GEN_CODE_DIR_PATH, '/router.ts');
+const TSCONFIG_PATH = path.join(GEN_CODE_DIR_PATH, '/tsconfig.json');
+const GEN_CODE_ALIAS = 'sv-router/generated';
 
 export function router(): Plugin {
 	return {
@@ -23,9 +23,9 @@ export function router(): Plugin {
 			const replacement = path.resolve(process.cwd(), ROUTER_PATH);
 
 			if (Array.isArray(config.resolve.alias)) {
-				config.resolve.alias.push({ find: GENERATED_CODE_ALIAS, replacement });
+				config.resolve.alias.push({ find: GEN_CODE_ALIAS, replacement });
 			} else {
-				config.resolve.alias[GENERATED_CODE_ALIAS] = replacement;
+				(config.resolve.alias as Record<string, string>)[GEN_CODE_ALIAS] = replacement;
 			}
 		},
 		buildStart() {
@@ -40,22 +40,28 @@ export function router(): Plugin {
 }
 
 function writeRouterCode() {
-	if (!fs.existsSync(ROUTER_DIR_PATH)) {
-		fs.mkdirSync(ROUTER_DIR_PATH);
+	if (!fs.existsSync(GEN_CODE_DIR_PATH)) {
+		fs.mkdirSync(GEN_CODE_DIR_PATH);
 	}
 
 	const routerCode = generateRouterCode(ROUTES_PATH);
-	fs.writeFileSync(ROUTER_PATH, routerCode);
+	writeFileIfDifferent(ROUTER_PATH, routerCode);
 
 	const tsConfig = {
 		compilerOptions: {
 			module: 'Preserve',
 			moduleResolution: 'Bundler',
 			paths: {
-				GENERATED_CODE_ALIAS: ['../' + ROUTER_PATH],
+				[GEN_CODE_ALIAS]: [path.join('..', ROUTER_PATH)],
 			},
 		},
 		include: ['./router.ts'],
 	};
-	fs.writeFileSync(TSCONFIG_PATH, JSON.stringify(tsConfig, undefined, 2));
+	writeFileIfDifferent(TSCONFIG_PATH, JSON.stringify(tsConfig, undefined, 2));
+}
+
+function writeFileIfDifferent(filePath: string, content: string) {
+	if (!fs.existsSync(filePath) || fs.readFileSync(filePath, 'utf8') !== content) {
+		fs.writeFileSync(filePath, content);
+	}
 }

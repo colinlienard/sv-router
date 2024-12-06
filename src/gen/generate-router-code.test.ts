@@ -12,14 +12,14 @@ describe('generateRouterCode', () => {
 		expect(result).toBe(`import { createRouter } from "sv-router";
 
 export const { path, goto, params } = createRouter({
-  "*": () => import("./examples/file-based/src/routes*.svelte"),
-  "/about": () => import("./examples/file-based/src/routesabout.svelte"),
-  "/": () => import("./examples/file-based/src/routesindex.svelte"),
+  "*": () => import("../examples/file-based/src/routes/*.svelte"),
+  "/about": () => import("../examples/file-based/src/routes/about.svelte"),
+  "/": () => import("../examples/file-based/src/routes/index.svelte"),
   "/posts": {
-    "/:id": () => import("./examples/file-based/src/routesposts/[id].svelte"),
-    "layout": () => import("./examples/file-based/src/routesposts/_layout.svelte"),
-    "/": () => import("./examples/file-based/src/routesposts/index.svelte"),
-    "/static": () => import("./examples/file-based/src/routesposts/static.svelte"),
+    "/:id": () => import("../examples/file-based/src/routes/posts/[id].svelte"),
+    "layout": () => import("../examples/file-based/src/routes/posts/_layout.svelte"),
+    "/": () => import("../examples/file-based/src/routes/posts/index.svelte"),
+    "/static": () => import("../examples/file-based/src/routes/posts/static.svelte"),
   }
 });`);
 	});
@@ -78,7 +78,7 @@ describe('createRouterCode', () => {
 				},
 				'*': '*.svelte',
 			},
-			'./routes/',
+			'./routes',
 		);
 		expect(result).toBe(`import { createRouter } from "sv-router";
 

@@ -63,6 +63,10 @@ export function createRouteMap(fileTree: FileTree, prefix = ''): GeneratedRoutes
 }
 
 export function createRouterCode(routes: GeneratedRoutes, routesPath: string) {
+	if (!routesPath.endsWith('/')) {
+		routesPath += '/';
+	}
+
 	const jsonRoutes = JSON.stringify(routes, undefined, 2);
 	const withImports = jsonRoutes.replaceAll(
 		/"(.*)": "(.*)",?/g,
