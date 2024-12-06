@@ -1,4 +1,3 @@
-import path from 'node:path';
 import {
 	buildFileTree,
 	createRouteMap,
@@ -6,20 +5,41 @@ import {
 	generateRouterCode,
 } from './generate-router-code.ts';
 
+vi.mock('node:fs', () => ({
+	default: {
+		readdirSync: (dir: string) => {
+			if (dir.toString().endsWith('posts')) {
+				return [
+					'[id].svelte',
+					'_layout.svelte',
+					'index.svelte',
+					'static.svelte',
+					'text.txt',
+					'noextension',
+				];
+			}
+			return ['*.svelte', 'about.svelte', 'index.svelte', 'posts'];
+		},
+		lstatSync: (dir: string) => ({
+			isDirectory: () => dir.toString().endsWith('posts'),
+		}),
+	},
+}));
+
 describe('generateRouterCode', () => {
 	it('should generate the router code', () => {
-		const result = generateRouterCode('./examples/file-based/src/routes');
+		const result = generateRouterCode('./a/fake/path');
 		expect(result).toBe(`import { createRouter } from "sv-router";
 
 export const { path, goto, params } = createRouter({
-  "*": () => import("../examples/file-based/src/routes/*.svelte"),
-  "/about": () => import("../examples/file-based/src/routes/about.svelte"),
-  "/": () => import("../examples/file-based/src/routes/index.svelte"),
+  "*": () => import("../a/fake/path/*.svelte"),
+  "/about": () => import("../a/fake/path/about.svelte"),
+  "/": () => import("../a/fake/path/index.svelte"),
   "/posts": {
-    "/:id": () => import("../examples/file-based/src/routes/posts/[id].svelte"),
-    "layout": () => import("../examples/file-based/src/routes/posts/_layout.svelte"),
-    "/": () => import("../examples/file-based/src/routes/posts/index.svelte"),
-    "/static": () => import("../examples/file-based/src/routes/posts/static.svelte"),
+    "/:id": () => import("../a/fake/path/posts/[id].svelte"),
+    "layout": () => import("../a/fake/path/posts/_layout.svelte"),
+    "/": () => import("../a/fake/path/posts/index.svelte"),
+    "/static": () => import("../a/fake/path/posts/static.svelte"),
   }
 });`);
 	});
@@ -27,7 +47,7 @@ export const { path, goto, params } = createRouter({
 
 describe('buildFileTree', () => {
 	it('should get the file tree', () => {
-		const result = buildFileTree(path.join(process.cwd(), 'examples/file-based/src/routes'));
+		const result = buildFileTree('a/fake/path');
 		expect(result).toEqual([
 			'*.svelte',
 			'about.svelte',

@@ -22,7 +22,7 @@ export function buildFileTree(routesPath: string): FileTree {
 		const stat = fs.lstatSync(path.join(routesPath, entry));
 		if (stat.isDirectory()) {
 			result.push({ name: entry, tree: buildFileTree(path.join(routesPath, entry)) });
-		} else {
+		} else if (entry.endsWith('.svelte')) {
 			result.push(entry);
 		}
 	}
