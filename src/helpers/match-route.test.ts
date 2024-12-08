@@ -127,6 +127,21 @@ describe('matchRoute', () => {
 				expect(layouts3).toEqual([Layout1]);
 				expect(layouts4).toEqual([Layout1, Layout2]);
 			});
+
+			it.only('should also find root layout', () => {
+				routes['layout'] = Layout1;
+				const { layouts } = matchRoute('/', routes);
+				expect(layouts).toEqual([Layout1]);
+			});
+
+			it.only('should break out of layouts', () => {
+				const NoLayout = (() => 'NoLayout') as Component;
+				// @ts-expect-error a raopjrip
+				routes['/posts']['/(nolayout)'] = NoLayout;
+				const { match, layouts } = matchRoute('/posts/nolayout', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([]);
+			});
 		}
 
 		it('should match wildcard route', () => {

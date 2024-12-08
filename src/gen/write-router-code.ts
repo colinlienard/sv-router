@@ -23,13 +23,21 @@ export function writeRouterCode() {
 		// Write `.router/tsconfig.json` file
 		const tsConfig = {
 			compilerOptions: {
-				module: 'Preserve',
-				moduleResolution: 'Bundler',
+				module: 'preserve',
+				moduleResolution: 'bundler',
 				paths: {
 					[GEN_CODE_ALIAS]: [path.join('..', ROUTER_PATH)],
 				},
 			},
-			include: ['./router.ts'],
+			include: [
+				'../src/**/*.js',
+				'../src/**/*.ts',
+				'../src/**/*.svelte',
+				'../tests/**/*.js',
+				'../tests/**/*.ts',
+				'../tests/**/*.svelte',
+				'./router.ts',
+			],
 		};
 		writeFileIfDifferent(TSCONFIG_PATH, JSON.stringify(tsConfig, undefined, 2));
 
