@@ -1,5 +1,5 @@
 import type { Equal, Expect } from 'type-testing';
-import type { AllParams, Path, PathParams, RouteComponent } from './types.ts';
+import type { AllParams, ConstructPathArgs, Path, PathParams, RouteComponent } from './types.ts';
 
 type TestRoutes = {
 	'/': RouteComponent;
@@ -35,6 +35,18 @@ type test_path_params_expected_0 = Record<'id' | 'commentId', string>;
 type test_path_params_1 = Expect<Equal<test_path_params_result_1, test_path_params_expected_1>>;
 type test_path_params_result_1 = PathParams<'/posts'>;
 type test_path_params_expected_1 = never;
+
+type test_construct_path_0 = Expect<
+	Equal<test_construct_path_result_0, test_construct_path_expected_0>
+>;
+type test_construct_path_result_0 = ConstructPathArgs<'/posts/:id/:commentId'>;
+type test_construct_path_expected_0 = ['/posts/:id/:commentId', Record<'id' | 'commentId', string>];
+
+type test_construct_path_1 = Expect<
+	Equal<test_construct_path_result_1, test_construct_path_expected_1>
+>;
+type test_construct_path_result_1 = ConstructPathArgs<'/posts'>;
+type test_construct_path_expected_1 = ['/posts'];
 
 type test_params = Expect<Equal<test_params_result, test_params_expected>>;
 type test_params_result = AllParams<TestRoutes>;

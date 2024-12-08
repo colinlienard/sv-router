@@ -1,14 +1,14 @@
 import { BROWSER, DEV } from 'esm-env';
 import type { Component } from 'svelte';
 import { matchRoute } from './helpers/match-route.ts';
-import { constructPath, type ConstructPathArgs, resolveRouteComponents } from './helpers/utils.ts';
-import type { AllParams, Path, Routes } from './types/types.ts';
+import { constructPath, resolveRouteComponents } from './helpers/utils.ts';
+import type { AllParams, RouterMethods, Routes } from './types/types.ts';
 
 export let routes: Routes;
 export const componentTree = $state<Component[]>([]);
 export const paramsStore = $state<Record<string, string>>({});
 
-export function createRouter<T extends Routes>(r: T) {
+export function createRouter<T extends Routes>(r: T): RouterMethods<T> {
 	routes = r;
 
 	if (DEV && BROWSER) {
@@ -18,11 +18,9 @@ export function createRouter<T extends Routes>(r: T) {
 	}
 
 	return {
-		path<U extends Path<T>>(...args: ConstructPathArgs<U>) {
-			return constructPath<U>(...args);
-		},
-		goto<U extends Path<T>>(...args: ConstructPathArgs<U>) {
-			const path = constructPath<U>(...args);
+		path: constructPath,
+		goto(...args) {
+			const path = constructPath(args[0], args[1]);
 			globalThis.history.pushState({}, '', path);
 			onNavigate();
 		},
@@ -34,6 +32,9 @@ export function createRouter<T extends Routes>(r: T) {
 }
 
 export function onNavigate() {
+	if (!routes) {
+		throw new Error('Router not initialized. Use createRouter() to initialize the router.');
+	}
 	const { match, layouts, params } = matchRoute(globalThis.location.pathname, routes);
 	resolveRouteComponents(match ? [...layouts, match] : layouts).then((components) => {
 		Object.assign(componentTree, components);

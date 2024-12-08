@@ -1,12 +1,7 @@
 import type { Component } from 'svelte';
-import type { PathParams } from '../types/types.ts';
 import type { LazyRouteComponent, RouteComponent } from '../types/types.ts';
 
-export type ConstructPathArgs<T extends string> =
-	PathParams<T> extends never ? [T] : [T, PathParams<T>];
-
-export function constructPath<T extends string>(...args: ConstructPathArgs<T>): string {
-	const [path, params] = args;
+export function constructPath(path: string, params?: Record<string, string>): string {
 	if (!params) return path;
 
 	let result = path as string;

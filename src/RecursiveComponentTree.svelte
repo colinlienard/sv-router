@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Component } from 'svelte';
+	import { paramsStore } from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
-	import { paramsStore } from './router.svelte.js';
 
 	let { tree }: { tree: Component[] } = $props();
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { on } from 'svelte/events';
+	import { componentTree, onGlobalClick, onNavigate } from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
-	import { componentTree, onGlobalClick, onNavigate } from './router.svelte.js';
 
 	onNavigate();
 

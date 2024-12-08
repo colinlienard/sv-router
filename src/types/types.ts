@@ -1,6 +1,7 @@
 import type { Component, Snippet } from 'svelte';
 
-type BaseProps = Record<string, any>;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+type BaseProps = {};
 
 export type LazyRouteComponent<Props extends BaseProps = BaseProps> = () => Promise<{
 	default: Component<Props>;
@@ -17,7 +18,16 @@ export type Routes = {
 	layout?: LayoutComponent;
 };
 
+export type RouterMethods<T extends Routes> = {
+	path<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
+	goto<U extends Path<T>>(...args: ConstructPathArgs<U>): void;
+	params(): AllParams<T>;
+};
+
 export type Path<T extends Routes> = RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>>>;
+
+export type ConstructPathArgs<T extends string> =
+	PathParams<T> extends never ? [T] : [T, PathParams<T>];
 
 export type PathParams<T extends string> =
 	ExtractParams<T> extends never ? never : Record<ExtractParams<T>, string>;
