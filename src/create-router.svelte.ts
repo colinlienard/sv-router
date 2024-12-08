@@ -33,7 +33,7 @@ export function createRouter<T extends Routes>(r: T): RouterMethods<T> {
 
 export function onNavigate() {
 	if (!routes) {
-		throw new Error('Router not initialized. Use createRouter() to initialize the router.');
+		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
 	const { match, layouts, params } = matchRoute(globalThis.location.pathname, routes);
 	resolveRouteComponents(match ? [...layouts, match] : layouts).then((components) => {
