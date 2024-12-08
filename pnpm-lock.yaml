@@ -45,9 +45,6 @@ importers:
       prettier-plugin-svelte:
         specifier: ^3.3.2
         version: 3.3.2(prettier@3.3.3)(svelte@5.2.7)
-      sherif:
-        specifier: ^1.0.1
-        version: 1.0.2
       type-testing:
         specifier: ^0.2.0
         version: 0.2.0
@@ -1262,40 +1259,6 @@ packages:
   shebang-regex@3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
-
-  sherif-darwin-arm64@1.0.2:
-    resolution: {integrity: sha512-5Qb2iK05Bz4EyMGOCD8d2K5SMZJ1D6zdPD/10iWmkVqzKfac968maVVvS+nkEcN+fcXHn1Bfqm8vx2C1iIbs7A==}
-    cpu: [arm64]
-    os: [darwin]
-
-  sherif-darwin-x64@1.0.2:
-    resolution: {integrity: sha512-Ek0aYSpeOvlRm5krMq35gLUhIdZAsYcDN9czl0eltYxhar32+DFrsG9iDqW3VmRn5E2xuaFvnKS5mVD8xegQlQ==}
-    cpu: [x64]
-    os: [darwin]
-
-  sherif-linux-arm64@1.0.2:
-    resolution: {integrity: sha512-H6AyfUyuZplrwcT4lkg5+Vhdwg7vujguz+JjbPRzDGqRNfunZKdnygP90AvfZp+DOJxmuthpRvXS4FJ3QNXCmg==}
-    cpu: [arm64]
-    os: [linux]
-
-  sherif-linux-x64@1.0.2:
-    resolution: {integrity: sha512-la8JUXRZQkrZbc7YMBc90fqdJ1YImPoL8q7Bofk/ZOFrIrkNgpLB0NRZxgSQTQAwoKyiaxa9o5wSt3T5Hb4H7A==}
-    cpu: [x64]
-    os: [linux]
-
-  sherif-windows-arm64@1.0.2:
-    resolution: {integrity: sha512-XjCIR9mv1oTonubF6MDQ++xiZYonpfitMy4jODTPEgu279J4hADlHGcj4Omy92a9znBCb4jgzEvhug17n8yIAA==}
-    cpu: [arm64]
-    os: [win32]
-
-  sherif-windows-x64@1.0.2:
-    resolution: {integrity: sha512-250bdAyMy8rbN2TCeTDnas87vMIGiMe56CAWHqdDyTRGzb/oBIvS2BTfpHYKCDuK/CuEgC9E8FOBNeu0cqLe+g==}
-    cpu: [x64]
-    os: [win32]
-
-  sherif@1.0.2:
-    resolution: {integrity: sha512-mfu6JOchmVWNhMeObMEjd6pu1Mww4yn9VqX8+OMH7KvcUZRCcrGTETplTGDS64ANALD0Ls99ugr7z6xTXP5qUQ==}
-    hasBin: true
 
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
@@ -2601,33 +2564,6 @@ snapshots:
       shebang-regex: 3.0.0
 
   shebang-regex@3.0.0: {}
-
-  sherif-darwin-arm64@1.0.2:
-    optional: true
-
-  sherif-darwin-x64@1.0.2:
-    optional: true
-
-  sherif-linux-arm64@1.0.2:
-    optional: true
-
-  sherif-linux-x64@1.0.2:
-    optional: true
-
-  sherif-windows-arm64@1.0.2:
-    optional: true
-
-  sherif-windows-x64@1.0.2:
-    optional: true
-
-  sherif@1.0.2:
-    optionalDependencies:
-      sherif-darwin-arm64: 1.0.2
-      sherif-darwin-x64: 1.0.2
-      sherif-linux-arm64: 1.0.2
-      sherif-linux-x64: 1.0.2
-      sherif-windows-arm64: 1.0.2
-      sherif-windows-x64: 1.0.2
 
   siginfo@2.0.0: {}
 

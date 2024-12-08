@@ -43,9 +43,7 @@
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier . --check",
-		"format:fix": "prettier . --write",
-		"sherif": "sherif -r root-package-private-field",
-		"sherif:fix": "sherif  -r root-package-private-field --fix"
+		"format:fix": "prettier . --write"
 	},
 	"dependencies": {
 		"esm-env": "^1.1.4"
@@ -61,7 +59,6 @@
 		"globals": "^15.12.0",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.3.2",
-		"sherif": "^1.0.1",
 		"type-testing": "^0.2.0",
 		"typescript": "^5.7.2",
 		"typescript-eslint": "^8.14.0",
