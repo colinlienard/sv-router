@@ -6,8 +6,7 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"check": "svelte-check --tsconfig ./tsconfig.json",
-		"postinstall": "sv-router"
+		"check": "svelte-check --tsconfig ./tsconfig.json"
 	},
 	"dependencies": {
 		"sv-router": "workspace:*"
