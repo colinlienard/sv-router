@@ -4,12 +4,16 @@
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"esModuleInterop": true,
+		"allowJs": true,
+		"checkJs": true,
 		"strict": true,
+		"outDir": "dist",
 		"skipLibCheck": true,
 		"verbatimModuleSyntax": true,
-		"allowImportingTsExtensions": true,
+		// "allowImportingTsExtensions": true,
 		"rewriteRelativeImportExtensions": true,
 		"types": ["vite/client", "vitest/globals"]
 	},
-	"include": ["src/**/*.ts", "src/**/*.svelte"]
+	// "include": ["src/**/*.ts", "src/**/*.svelte"]
+	"include": ["src2/**/*.js", "src2/**/*.ts", "src2/**/*.svelte"]
 }

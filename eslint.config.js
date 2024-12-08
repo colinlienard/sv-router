@@ -10,12 +10,14 @@ import ts from 'typescript-eslint';
 export default [
 	js.configs.recommended,
 	...ts.configs.recommended,
+	eslintPluginUnicorn.configs['flat/recommended'],
 	...svelte.configs['flat/recommended'],
 	{
 		languageOptions: {
 			globals: {
 				...globals.browser,
 				...globals.node,
+				...globals.svelte,
 			},
 		},
 	},
@@ -27,7 +29,6 @@ export default [
 			},
 		},
 	},
-	eslintPluginUnicorn.configs['flat/recommended'],
 	{
 		rules: {
 			'unicorn/filename-case': [
