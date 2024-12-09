@@ -128,19 +128,23 @@ describe('matchRoute', () => {
 				expect(layouts4).toEqual([Layout1, Layout2]);
 			});
 
-			it.only('should also find root layout', () => {
+			it('should also find root layout', () => {
 				routes['layout'] = Layout1;
 				const { layouts } = matchRoute('/', routes);
 				expect(layouts).toEqual([Layout1]);
 			});
 
-			it.only('should break out of layouts', () => {
+			it('should break out of layouts', () => {
 				const NoLayout = (() => 'NoLayout') as Component;
-				// @ts-expect-error a raopjrip
-				routes['/posts']['/(nolayout)'] = NoLayout;
-				const { match, layouts } = matchRoute('/posts/nolayout', routes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
+				routes['/(nolayout)'] = NoLayout;
+				(routes['/posts'] as Routes)['/(nolayout)'] = NoLayout;
+				const { match: match1, layouts: layouts1 } = matchRoute('/nolayout', routes);
+				const { match: match2, layouts: layouts2 } = matchRoute('/posts/nolayout', routes);
+				expect(match1).toEqual(NoLayout);
+				expect(layouts1).toEqual([]);
+				expect(match2).toEqual(NoLayout);
+				expect(layouts2).toEqual([]);
+				delete routes['/(nolayout)'];
 			});
 		}
 
