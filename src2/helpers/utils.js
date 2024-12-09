@@ -1,21 +1,39 @@
-import type { Component } from 'svelte';
-import type { LazyRouteComponent, RouteComponent } from '../types/types.ts';
+/**
+ * @typedef {import('svelte').Component} Component
+ *
+ * @typedef {import('../index.d.ts').LazyRouteComponent} LazyRouteComponent
+ *
+ * @typedef {import('../index.d.ts').RouteComponent} RouteComponent
+ */
 
-export function constructPath(path: string, params?: Record<string, string>): string {
+/**
+ * @param {string} path
+ * @param {Record<string, string>} [params]
+ * @returns {string}
+ */
+export function constructPath(path, params) {
 	if (!params) return path;
 
-	let result = path as string;
+	let result = path;
 	for (const key in params) {
 		result = result.replace(`:${key}`, params[key]);
 	}
 	return result;
 }
 
-export function resolveRouteComponents(input: RouteComponent<any>[]): Promise<Component[]> {
+/**
+ * @param {RouteComponent[]} input
+ * @returns {Promise<Component[]>}
+ */
+export function resolveRouteComponents(input) {
 	return Promise.all(input.map((c) => resolveRouteComponent(c)));
 }
 
-export function resolveRouteComponent(input: RouteComponent): Promise<Component> {
+/**
+ * @param {RouteComponent} input
+ * @returns {Promise<Component>}
+ */
+export function resolveRouteComponent(input) {
 	return new Promise((resolve) => {
 		if (isLazyImport(input)) {
 			Promise.resolve(input()).then((module) => {
@@ -27,6 +45,10 @@ export function resolveRouteComponent(input: RouteComponent): Promise<Component>
 	});
 }
 
-export function isLazyImport(input: unknown): input is LazyRouteComponent {
+/**
+ * @param {unknown} input
+ * @returns {input is LazyRouteComponent}
+ */
+export function isLazyImport(input) {
 	return typeof input === 'function' && !!/\(\)\s?=>\s?import\(.*\)/g.test(String(input));
 }

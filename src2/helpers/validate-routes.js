@@ -1,6 +1,7 @@
-import type { Routes } from '../types/types.ts';
+/** @typedef {import('../index.d.ts').Routes} Routes */
 
-export function validateRoutes(routes: Routes) {
+/** @param {Routes} routes */
+export function validateRoutes(routes) {
 	const paths = getRoutePaths(routes);
 	const wildcardPaths = paths.filter((path) => path.endsWith('*'));
 	for (const wildcardPath of wildcardPaths) {
@@ -20,8 +21,12 @@ export function validateRoutes(routes: Routes) {
 	}
 }
 
-export function getRoutePaths(routes: Routes): string[] {
-	const paths: string[] = [];
+/**
+ * @param {Routes} routes
+ * @returns {string[]}
+ */
+export function getRoutePaths(routes) {
+	const paths = [];
 	for (const [key, value] of Object.entries(routes)) {
 		if (typeof value === 'object') {
 			paths.push(

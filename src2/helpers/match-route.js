@@ -1,17 +1,21 @@
 /**
  * @typedef {import('svelte').Component} Component
- * @typedef {import('../types/types.ts').LayoutComponent} LayoutComponent
- * @typedef {import('../types/types.ts').RouteComponent} RouteComponent
- * @typedef {import('../types/types.ts').Routes} Routes
+ *
+ * @typedef {import('../index.d.ts').LayoutComponent} LayoutComponent
+ *
+ * @typedef {import('../index.d.ts').RouteComponent} RouteComponent
+ *
+ * @typedef {import('../index.d.ts').Routes} Routes
  */
 
 /**
  * @param {string} pathname
  * @param {Routes} routes
  * @returns {{
- *   match: RouteComponent | undefined;
- *   layouts: LayoutComponent[];
- *   params: Record<string, string>;
+ * 	match: RouteComponent | undefined;
+ * 	layouts: LayoutComponent[];
+ * 	params: Record<string, string>;
+ * 	breakFromLayouts: boolean;
  * }}
  */
 export function matchRoute(pathname, routes) {
@@ -25,17 +29,25 @@ export function matchRoute(pathname, routes) {
 	/** @type {RouteComponent | undefined} */
 	let match;
 	/** @type {LayoutComponent[]} */
-	const layouts = [];
+	let layouts = [];
 	/** @type {Record<string, string>} */
 	let params = {};
+	let breakFromLayouts = false;
 
 	outer: for (const routeParts of allRouteParts) {
-		for (const [index, routePart] of sortRoutes(routeParts).entries()) {
+		for (let [index, routePart] of sortRoutes(routeParts).entries()) {
+			breakFromLayouts = routePart.startsWith('(') && routePart.endsWith(')');
+			if (breakFromLayouts) {
+				routePart = routePart.slice(1, -1);
+			}
+
 			const pathPart = pathParts[index];
 			if (routePart.startsWith(':')) {
 				params[routePart.slice(1)] = pathPart;
 			} else if (routePart === '*') {
-				match = /** @type {RouteComponent} */ (routes[routeParts.join('/')]);
+				match = /** @type {RouteComponent} */ (
+					routes[/** @type {keyof Routes} */ (routeParts.join('/'))]
+				);
 				break outer;
 			} else if (routePart !== pathPart) {
 				break;
@@ -45,15 +57,13 @@ export function matchRoute(pathname, routes) {
 				continue;
 			}
 
-			const routeMatch = /** @type {RouteComponent | Routes} */ (routes[routeParts.join('/')]);
-
-			if (
-				typeof routeMatch !== 'function' &&
-				routeMatch?.layout &&
-				!layouts.includes(routeMatch.layout)
-			) {
-				layouts.push(routeMatch.layout);
+			if (!breakFromLayouts && 'layout' in routes && routes.layout) {
+				layouts.push(routes.layout);
 			}
+
+			const routeMatch = /** @type {RouteComponent} */ (
+				routes[/** @type {keyof Routes} */ (routeParts.join('/'))]
+			);
 
 			if (typeof routeMatch === 'function') {
 				if (routeParts.length === pathParts.length) {
@@ -67,14 +77,18 @@ export function matchRoute(pathname, routes) {
 				if (result) {
 					match = result.match;
 					params = { ...params, ...result.params };
-					layouts.push(...result.layouts);
+					if (result.breakFromLayouts) {
+						layouts = [];
+					} else {
+						layouts.push(...result.layouts);
+					}
 				}
 			}
 			break outer;
 		}
 	}
 
-	return { match, layouts, params };
+	return { match, layouts, params, breakFromLayouts };
 }
 
 /**

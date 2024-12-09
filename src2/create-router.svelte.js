@@ -4,6 +4,7 @@ import { constructPath, resolveRouteComponents } from './helpers/utils.js';
 
 /**
  * @typedef {import('./index.d.ts').Routes} Routes
+ *
  * @typedef {import('svelte').Component} Component
  */
 /**
@@ -57,9 +58,7 @@ export function onNavigate() {
 	Object.assign(paramsStore, params);
 }
 
-/**
- * @param {Event} event
- */
+/** @param {Event} event */
 export function onGlobalClick(event) {
 	const anchor = /** @type {HTMLElement} */ (event.target).closest('a');
 	if (!anchor) return;

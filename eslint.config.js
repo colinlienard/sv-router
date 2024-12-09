@@ -3,6 +3,7 @@ import prettier from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import svelte from 'eslint-plugin-svelte';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
+import espree from 'espree';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
@@ -17,7 +18,6 @@ export default [
 			globals: {
 				...globals.browser,
 				...globals.node,
-				...globals.svelte,
 			},
 		},
 	},
@@ -25,7 +25,10 @@ export default [
 		files: ['**/*.svelte'],
 		languageOptions: {
 			parserOptions: {
-				parser: ts.parser,
+				parser: {
+					ts: ts.parser,
+					js: espree,
+				},
 			},
 		},
 	},
