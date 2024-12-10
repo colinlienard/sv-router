@@ -35,8 +35,6 @@
 	"scripts": {
 		"ex:basic": "pnpm --filter basic-example",
 		"ex:file-based": "pnpm --filter file-based-example",
-		"build": "svelte-package -i src && rm -rf .svelte-kit",
-		"watch": "svelte-package -i src --watch",
 		"test": "vitest",
 		"check": "tsc --noEmit && pnpm -r check",
 		"lint": "eslint .",
@@ -52,7 +50,6 @@
 	"devDependencies": {
 		"@changesets/cli": "^2.27.10",
 		"@eslint/js": "^9.16.0",
-		"@sveltejs/package": "^2.3.7",
 		"@types/node": "^22.10.1",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
