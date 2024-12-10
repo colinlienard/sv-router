@@ -1,9 +1,16 @@
 import path from 'node:path';
-import { GEN_CODE_ALIAS, ROUTER_PATH, ROUTES_PATH } from '../common.js';
+import { genConfig } from '../gen/gen-config.js';
 import { writeRouterCode } from '../gen/write-router-code.js';
 
-/** @returns {import('vite').Plugin} */
-export function router() {
+/**
+ * @param {import('./index.d.ts').RouterOptions | undefined} options
+ * @returns {import('vite').Plugin}
+ */
+export function router(options) {
+	if (options?.path) {
+		genConfig.routesPath = options.path;
+	}
+
 	return {
 		name: 'sv-router',
 		config(config) {
@@ -14,19 +21,20 @@ export function router() {
 				config.resolve.alias = {};
 			}
 
-			const replacement = path.resolve(process.cwd(), ROUTER_PATH);
+			const replacement = path.resolve(process.cwd(), genConfig.routerPath);
 
 			if (Array.isArray(config.resolve.alias)) {
-				config.resolve.alias.push({ find: GEN_CODE_ALIAS, replacement });
+				config.resolve.alias.push({ find: genConfig.genCodeAlias, replacement });
 			} else {
-				/** @type {Record<string, string>} */ (config.resolve.alias)[GEN_CODE_ALIAS] = replacement;
+				/** @type {Record<string, string>} */ (config.resolve.alias)[genConfig.genCodeAlias] =
+					replacement;
 			}
 		},
 		buildStart() {
 			writeRouterCode();
 		},
 		watchChange(file) {
-			if (file.includes(ROUTES_PATH)) {
+			if (file.includes(genConfig.routesPath)) {
 				writeRouterCode();
 			}
 		},

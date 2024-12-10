@@ -1,3 +1,12 @@
 import type { Plugin } from 'vite';
 
-export const router: () => Plugin;
+export type RouterOptions = {
+	/**
+	 * The path to the routes folder.
+	 *
+	 * @default 'src/routes'
+	 */
+	path?: string;
+};
+
+export const router: (options?: RouterOptions) => Plugin;

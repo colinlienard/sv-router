@@ -1,24 +1,18 @@
 /* eslint-disable no-console */
 import fs from 'node:fs';
 import path from 'node:path';
-import {
-	GEN_CODE_ALIAS,
-	GEN_CODE_DIR_PATH,
-	ROUTER_PATH,
-	ROUTES_PATH,
-	TSCONFIG_PATH,
-} from '../common.js';
+import { genConfig } from './gen-config.js';
 import { generateRouterCode } from './generate-router-code.js';
 
 export function writeRouterCode() {
 	try {
-		if (!fs.existsSync(GEN_CODE_DIR_PATH)) {
-			fs.mkdirSync(GEN_CODE_DIR_PATH);
+		if (!fs.existsSync(genConfig.genCodeDirPath)) {
+			fs.mkdirSync(genConfig.genCodeDirPath);
 		}
 
 		// Write `.router/router.ts` file
-		const routerCode = generateRouterCode(ROUTES_PATH);
-		writeFileIfDifferent(ROUTER_PATH, routerCode);
+		const routerCode = generateRouterCode(genConfig.routesPath);
+		writeFileIfDifferent(genConfig.routerPath, routerCode);
 
 		// Write `.router/tsconfig.json` file
 		const tsConfig = {
@@ -26,7 +20,7 @@ export function writeRouterCode() {
 				module: 'preserve',
 				moduleResolution: 'bundler',
 				paths: {
-					[GEN_CODE_ALIAS]: [path.join('..', ROUTER_PATH)],
+					[genConfig.genCodeAlias]: [path.join('..', genConfig.routerPath)],
 				},
 			},
 			include: [
@@ -39,7 +33,7 @@ export function writeRouterCode() {
 				'./router.ts',
 			],
 		};
-		writeFileIfDifferent(TSCONFIG_PATH, JSON.stringify(tsConfig, undefined, 2));
+		writeFileIfDifferent(genConfig.tsconfigPath, JSON.stringify(tsConfig, undefined, 2));
 
 		console.log('✅️ Routes generated');
 	} catch (error) {
