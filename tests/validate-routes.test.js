@@ -1,8 +1,9 @@
-import type { Component } from 'svelte';
-import type { Routes } from '../types/types.ts';
-import { getRoutePaths, validateRoutes } from './validate-routes.ts';
+import { getRoutePaths, validateRoutes } from '../src/helpers/validate-routes.js';
 
-const component = (() => ({})) as Component;
+/** @typedef {import('../src/index.d.ts').Routes} Routes */
+
+/** @type {import('svelte').Component} */
+const component = () => ({});
 
 const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(vi.fn());
 
@@ -20,7 +21,7 @@ describe('validateRoutes', () => {
 				'/:id': component,
 			},
 			'*': component,
-		} satisfies Routes);
+		});
 		expect(consoleSpy).not.toHaveBeenCalled();
 	});
 
@@ -29,7 +30,7 @@ describe('validateRoutes', () => {
 			'/': component,
 			'/:id': component,
 			'*': component,
-		} satisfies Routes);
+		});
 		expect(consoleSpy).toHaveBeenCalledWith(
 			'Router warning: Wildcard route `*` should not be at the same level as dynamic route `/:id`.',
 		);
@@ -42,7 +43,7 @@ describe('validateRoutes', () => {
 			'/posts/:id': component,
 			'/:id': component,
 			'*': component,
-		} satisfies Routes,
+		},
 		{
 			'/': component,
 			'/posts': {
@@ -51,11 +52,11 @@ describe('validateRoutes', () => {
 			},
 			'/:id': component,
 			'*': component,
-		} satisfies Routes,
+		},
 	])(
 		'should raise multiple warnings if wildcard routes are at the same level as dynamic routes',
 		(routes) => {
-			validateRoutes(routes as unknown as Routes);
+			validateRoutes(/** @type {Routes} */ (/** @type {unknown} */ (routes)));
 			expect(consoleSpy).toHaveBeenCalledTimes(2);
 			expect(consoleSpy).toHaveBeenCalledWith(
 				'Router warning: Wildcard route `*` should not be at the same level as dynamic route `/:id`.',

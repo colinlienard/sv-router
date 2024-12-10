@@ -8,12 +8,10 @@
 		"checkJs": true,
 		"strict": true,
 		"outDir": "dist",
-		"skipLibCheck": true,
+		"noEmit": true,
 		"verbatimModuleSyntax": true,
-		// "allowImportingTsExtensions": true,
 		"rewriteRelativeImportExtensions": true,
 		"types": ["vite/client", "vitest/globals"]
 	},
-	// "include": ["src/**/*.ts", "src/**/*.svelte"]
-	"include": ["src2/**/*.js", "src2/**/*.ts", "src2/**/*.svelte"]
+	"include": ["src/**/*.js", "src/**/*.d.ts", "src/**/*.svelte", "tests/**/*.js"]
 }

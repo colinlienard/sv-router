@@ -3,11 +3,12 @@ import {
 	createRouteMap,
 	createRouterCode,
 	generateRouterCode,
-} from './generate-router-code.ts';
+} from '../src/gen/generate-router-code.js';
 
 vi.mock('node:fs', () => ({
 	default: {
-		readdirSync: (dir: string) => {
+		/** @param {string} dir */
+		readdirSync: (dir) => {
 			if (dir.toString().endsWith('posts')) {
 				return [
 					'[id].svelte',
@@ -20,7 +21,8 @@ vi.mock('node:fs', () => ({
 			}
 			return ['*.svelte', 'about.svelte', 'index.svelte', 'posts'];
 		},
-		lstatSync: (dir: string) => ({
+		/** @param {string} dir */
+		lstatSync: (dir) => ({
 			isDirectory: () => dir.toString().endsWith('posts'),
 		}),
 	},

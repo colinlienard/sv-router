@@ -1,9 +1,9 @@
-<script lang="ts">
-	import type { Component } from 'svelte';
+<script>
 	import { paramsStore } from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
 
-	let { tree }: { tree: Component[] } = $props();
+	/** @type {{ tree: import('svelte').Component[] }} */
+	let { tree } = $props();
 
 	const FirstComponent = $derived(tree[0]);
 	const restTree = $derived(tree.slice(1));

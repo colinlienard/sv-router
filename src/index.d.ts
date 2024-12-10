@@ -1,5 +1,8 @@
 import type { Component, Snippet } from 'svelte';
 
+export function createRouter<T extends Routes>(r: T): RouterMethods<T>;
+export const Router: Component;
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type BaseProps = {};
 
@@ -7,7 +10,7 @@ export type LazyRouteComponent<Props extends BaseProps = BaseProps> = () => Prom
 	default: Component<Props>;
 }>;
 
-export type RouteComponent<Props extends BaseProps = BaseProps> =
+export type RouteComponent<Props extends BaseProps = any> =
 	| Component<Props>
 	| LazyRouteComponent<Props>;
 export type LayoutComponent = RouteComponent<{ children: Snippet }>;

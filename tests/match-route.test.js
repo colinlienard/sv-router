@@ -1,16 +1,25 @@
-import type { Component } from 'svelte';
-import type { Routes } from '../types/types.ts';
-import { matchRoute, sortRoutes } from './match-route.ts';
+import { matchRoute, sortRoutes } from '../src/helpers/match-route.js';
 
-const Home = (() => 'Home') as Component;
-const Posts = (() => 'Posts') as Component;
-const StaticPost = (() => 'StaticPost') as Component;
-const DynamicPost = (() => 'DynamicPost') as Component;
-const DynamicPostComment = (() => 'DynamicPostComment') as Component;
-const UserNotFound = (() => 'UserNotFound') as Component;
-const PageNotFound = (() => 'PageNotFound') as Component;
-const Layout1 = (() => 'Layout1') as Component;
-const Layout2 = (() => 'Layout2') as Component;
+/** @typedef {import('../src/index.d.ts').Routes} Routes */
+
+/** @type {import('svelte').Component} */
+const Home = () => 'Home';
+/** @type {import('svelte').Component} */
+const Posts = () => 'Posts';
+/** @type {import('svelte').Component} */
+const StaticPost = () => 'StaticPost';
+/** @type {import('svelte').Component} */
+const DynamicPost = () => 'DynamicPost';
+/** @type {import('svelte').Component} */
+const DynamicPostComment = () => 'DynamicPostComment';
+/** @type {import('svelte').Component} */
+const UserNotFound = () => 'UserNotFound';
+/** @type {import('svelte').Component} */
+const PageNotFound = () => 'PageNotFound';
+/** @type {import('svelte').Component} */
+const Layout1 = () => 'Layout1';
+/** @type {import('svelte').Component} */
+const Layout2 = () => 'Layout2';
 
 describe('matchRoute', () => {
 	describe.each([
@@ -24,7 +33,7 @@ describe('matchRoute', () => {
 				'/posts/:id/:commentId': DynamicPostComment,
 				'/users/*': UserNotFound,
 				'*': PageNotFound,
-			} satisfies Routes,
+			},
 		},
 		{
 			mode: 'flat unordered',
@@ -36,7 +45,7 @@ describe('matchRoute', () => {
 				'*': PageNotFound,
 				'/posts/:id': DynamicPost,
 				'/': Home,
-			} satisfies Routes,
+			},
 		},
 		{
 			mode: 'tree',
@@ -57,7 +66,7 @@ describe('matchRoute', () => {
 					layout: Layout1,
 				},
 				'*': PageNotFound,
-			} satisfies Routes,
+			},
 		},
 		{
 			mode: 'tree unordered',
@@ -78,10 +87,10 @@ describe('matchRoute', () => {
 					layout: Layout1,
 				},
 				'/': Home,
-			} satisfies Routes,
+			},
 		},
 	])('$mode paths', ({ mode, routes: r }) => {
-		const routes = r as unknown as Routes;
+		const routes = /** @type {Routes} */ (/** @type {unknown} */ (r));
 		const treeMode = mode.startsWith('tree');
 
 		it('should match the root route', () => {
@@ -135,9 +144,10 @@ describe('matchRoute', () => {
 			});
 
 			it('should break out of layouts', () => {
-				const NoLayout = (() => 'NoLayout') as Component;
+				/** @type {import('svelte').Component} */
+				const NoLayout = () => 'NoLayout';
 				routes['/(nolayout)'] = NoLayout;
-				(routes['/posts'] as Routes)['/(nolayout)'] = NoLayout;
+				/** @type {Routes} */ (routes['/posts'])['/(nolayout)'] = NoLayout;
 				const { match: match1, layouts: layouts1 } = matchRoute('/nolayout', routes);
 				const { match: match2, layouts: layouts2 } = matchRoute('/posts/nolayout', routes);
 				expect(match1).toEqual(NoLayout);

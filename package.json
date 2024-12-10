@@ -19,19 +19,18 @@
 	"type": "module",
 	"exports": {
 		".": {
-			"sv-router/source": "./src/index.ts",
-			"import": "./dist/index.js",
-			"svelte": "./dist/index.js",
-			"types": "./dist/index.d.ts"
+			"import": "./src/index.js",
+			"svelte": "./src/index.js",
+			"types": "./src/index.d.ts"
 		},
 		"./vite-plugin": {
-			"import": "./dist/vite-plugin/index.js",
-			"types": "./dist/vite-plugin/index.d.ts"
+			"import": "./src/vite-plugin/index.js",
+			"types": "./src/vite-plugin/index.d.ts"
 		}
 	},
-	"bin": "./dist/cli/index.js",
+	"bin": "./src/cli/index.js",
 	"files": [
-		"dist"
+		"src"
 	],
 	"scripts": {
 		"ex:basic": "pnpm --filter basic-example",
