@@ -7,7 +7,6 @@
  * 	readonly genCodeAlias: string;
  * }}
  */
-
 export const genConfig = {
 	routesPath: 'src/routes',
 	genCodeDirPath: '.router',

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import fs from 'node:fs';
 import path from 'node:path';
-import { genConfig } from './gen-config.js';
+import { genConfig } from './config.js';
 import { generateRouterCode } from './generate-router-code.js';
 
 export function writeRouterCode() {

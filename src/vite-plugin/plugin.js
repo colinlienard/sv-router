@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { genConfig } from '../gen/gen-config.js';
+import { genConfig } from '../gen/config.js';
 import { writeRouterCode } from '../gen/write-router-code.js';
 
 /**
