@@ -8,6 +8,7 @@ type TestRoutes = {
 	'/posts': {
 		'/': RouteComponent;
 		'/static': RouteComponent;
+		'/(nolayout)': RouteComponent;
 		'/:id': {
 			'/': RouteComponent;
 			'/:commentId': RouteComponent;
@@ -25,6 +26,7 @@ type test_path_expected =
 	| '/contact/nested'
 	| '/posts'
 	| '/posts/static'
+	| '/posts/nolayout'
 	| `/posts/:id`
 	| `/posts/:id/:commentId`;
 

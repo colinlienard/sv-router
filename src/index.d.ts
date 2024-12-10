@@ -38,7 +38,9 @@ export type RouterMethods<T extends Routes> = {
 	params(): AllParams<T>;
 };
 
-export type Path<T extends Routes> = RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>>>;
+export type Path<T extends Routes> = RemoveParenthesis<
+	RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>>>
+>;
 
 export type ConstructPathArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T, PathParams<T>];
@@ -63,6 +65,10 @@ type RecursiveKeys<T extends Routes, Prefix extends string = ''> = {
 }[keyof T];
 
 type RemoveLastSlash<T extends string> = T extends '/' ? T : T extends `${infer R}/` ? R : T;
+
+type RemoveParenthesis<T extends string> = T extends `${infer A}(${infer B})${infer C}`
+	? RemoveParenthesis<`${A}${B}${C}`>
+	: T;
 
 type ExtractParams<T extends string> = T extends `${string}:${infer Param}/${infer Rest}`
 	? Param | ExtractParams<`/${Rest}`>
