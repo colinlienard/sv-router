@@ -2,12 +2,9 @@ node_modules
 pnpm-lock.yaml
 
 # Output
-.output
-.svelte-kit
+.router
 build
 dist
-temp-*
-generated
 
 # OS
 .DS_Store
