@@ -1,7 +1,5 @@
 import { getRoutePaths, validateRoutes } from '../src/helpers/validate-routes.js';
 
-/** @typedef {import('../src/index.d.ts').Routes} Routes */
-
 /** @type {import('svelte').Component} */
 const component = () => ({});
 
@@ -56,7 +54,9 @@ describe('validateRoutes', () => {
 	])(
 		'should raise multiple warnings if wildcard routes are at the same level as dynamic routes',
 		(routes) => {
-			validateRoutes(/** @type {Routes} */ (/** @type {unknown} */ (routes)));
+			validateRoutes(
+				/** @type {import('../src/index.d.ts').Routes} */ (/** @type {unknown} */ (routes)),
+			);
 			expect(consoleSpy).toHaveBeenCalledTimes(2);
 			expect(consoleSpy).toHaveBeenCalledWith(
 				'Router warning: Wildcard route `*` should not be at the same level as dynamic route `/:id`.',

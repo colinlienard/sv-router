@@ -1,7 +1,5 @@
 import { matchRoute, sortRoutes } from '../src/helpers/match-route.js';
 
-/** @typedef {import('../src/index.d.ts').Routes} Routes */
-
 /** @type {import('svelte').Component} */
 const Home = () => 'Home';
 /** @type {import('svelte').Component} */
@@ -92,7 +90,7 @@ describe('matchRoute', () => {
 			},
 		},
 	])('$mode paths', ({ mode, routes: r }) => {
-		const routes = /** @type {Routes} */ (/** @type {unknown} */ (r));
+		const routes = /** @type {import('../src/index.d.ts').Routes} */ (/** @type {unknown} */ (r));
 		const treeMode = mode.startsWith('tree');
 
 		it('should match the root route', () => {
@@ -147,7 +145,8 @@ describe('matchRoute', () => {
 
 			it('should break out of layouts', () => {
 				routes['/(nolayout)'] = NoLayout;
-				/** @type {Routes} */ (routes['/posts'])['/(nolayout)'] = NoLayout;
+				/** @type {import('../src/index.d.ts').Routes} */ (routes['/posts'])['/(nolayout)'] =
+					NoLayout;
 				const { match: match1, layouts: layouts1 } = matchRoute('/nolayout', routes);
 				const { match: match2, layouts: layouts2 } = matchRoute('/posts/nolayout', routes);
 				expect(match1).toEqual(NoLayout);

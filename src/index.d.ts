@@ -1,5 +1,16 @@
 import type { Component, Snippet } from 'svelte';
 
+/**
+ * Setup a new router instance with the given routes.
+ *
+ * ```js
+ * export const { path, goto, params } = createRouter({
+ *   '/': Home,
+ *   '/about': About,
+ *   ...
+ * });
+ * ```
+ */
 export function createRouter<T extends Routes>(r: T): RouterMethods<T>;
 export const Router: Component;
 

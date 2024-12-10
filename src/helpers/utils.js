@@ -1,12 +1,4 @@
 /**
- * @typedef {import('svelte').Component} Component
- *
- * @typedef {import('../index.d.ts').LazyRouteComponent} LazyRouteComponent
- *
- * @typedef {import('../index.d.ts').RouteComponent} RouteComponent
- */
-
-/**
  * @param {string} path
  * @param {Record<string, string>} [params]
  * @returns {string}
@@ -22,16 +14,16 @@ export function constructPath(path, params) {
 }
 
 /**
- * @param {RouteComponent[]} input
- * @returns {Promise<Component[]>}
+ * @param {import('../index.d.ts').RouteComponent[]} input
+ * @returns {Promise<import('svelte').Component[]>}
  */
 export function resolveRouteComponents(input) {
 	return Promise.all(input.map((c) => resolveRouteComponent(c)));
 }
 
 /**
- * @param {RouteComponent} input
- * @returns {Promise<Component>}
+ * @param {import('../index.d.ts').RouteComponent} input
+ * @returns {Promise<import('svelte').Component>}
  */
 export function resolveRouteComponent(input) {
 	return new Promise((resolve) => {
@@ -47,7 +39,7 @@ export function resolveRouteComponent(input) {
 
 /**
  * @param {unknown} input
- * @returns {input is LazyRouteComponent}
+ * @returns {input is import('../index.d.ts').LazyRouteComponent}
  */
 export function isLazyImport(input) {
 	return typeof input === 'function' && !!/\(\)\s?=>\s?import\(.*\)/g.test(String(input));

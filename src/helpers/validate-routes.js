@@ -1,6 +1,4 @@
-/** @typedef {import('../index.d.ts').Routes} Routes */
-
-/** @param {Routes} routes */
+/** @param {import('../index.d.ts').Routes} routes */
 export function validateRoutes(routes) {
 	const paths = getRoutePaths(routes);
 	const wildcardPaths = paths.filter((path) => path.endsWith('*'));
@@ -22,7 +20,7 @@ export function validateRoutes(routes) {
 }
 
 /**
- * @param {Routes} routes
+ * @param {import('../index.d.ts').Routes} routes
  * @returns {string[]}
  */
 export function getRoutePaths(routes) {

@@ -52,11 +52,6 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Generate routes (remove this once migration to jsdoc is complete)
-        run: |
-          cd examples/file-based
-          pnpm dlx sv-router
-          cd -
       - name: Check
         run: pnpm check
 

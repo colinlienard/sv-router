@@ -2,27 +2,19 @@ import { BROWSER, DEV } from 'esm-env';
 import { matchRoute } from './helpers/match-route.js';
 import { constructPath, resolveRouteComponents } from './helpers/utils.js';
 
-/**
- * @typedef {import('./index.d.ts').Routes} Routes
- *
- * @typedef {import('svelte').Component} Component
- */
-/**
- * @template {Routes} T
- * @typedef {import('./index.d.ts').RouterMethods<T>} RouterMethods
- */
-
-/** @type {Routes} */
+/** @type {import('./index.d.ts').Routes} */
 export let routes;
-/** @type {Component[]} */
+
+/** @type {import('svelte').Component[]} */
 export const componentTree = $state([]);
+
 /** @type {Record<string, string>} */
 export const paramsStore = $state({});
 
 /**
- * @template {Routes} T
+ * @template {import('./index.d.ts').Routes} T
  * @param {T} r
- * @returns {RouterMethods<T>}
+ * @returns {import('./index.d.ts').RouterMethods<T>}
  */
 export function createRouter(r) {
 	routes = r;

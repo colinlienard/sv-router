@@ -1,6 +1,4 @@
 /**
- * @typedef {import('svelte').Component} Component
- *
  * @typedef {import('../index.d.ts').LayoutComponent} LayoutComponent
  *
  * @typedef {import('../index.d.ts').RouteComponent} RouteComponent
@@ -28,10 +26,13 @@ export function matchRoute(pathname, routes) {
 
 	/** @type {RouteComponent | undefined} */
 	let match;
+
 	/** @type {LayoutComponent[]} */
 	let layouts = [];
+
 	/** @type {Record<string, string>} */
 	let params = {};
+
 	let breakFromLayouts = false;
 
 	outer: for (const routeParts of allRouteParts) {

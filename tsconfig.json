@@ -13,5 +13,5 @@
 		"rewriteRelativeImportExtensions": true,
 		"types": ["vite/client", "vitest/globals"]
 	},
-	"include": ["src/**/*.js", "src/**/*.d.ts", "src/**/*.svelte", "tests/**/*.js"]
+	"include": ["src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "tests/**/*.js"]
 }
