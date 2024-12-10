@@ -1,5 +1,11 @@
 import type { Equal, Expect } from 'type-testing';
-import type { AllParams, ConstructPathArgs, Path, PathParams, RouteComponent } from './index.d.ts';
+import type {
+	AllParams,
+	ConstructPathArgs,
+	Path,
+	PathParams,
+	RouteComponent,
+} from '../src/index.d.ts';
 
 type TestRoutes = {
 	'/': RouteComponent;

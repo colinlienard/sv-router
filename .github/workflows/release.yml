@@ -12,19 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Instal pnpm
-        uses: pnpm/action-setup@v4
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-      - name: Install dependencies
-        run: pnpm install
       - name: Create release pull request or publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: pnpm release
+          publish: npx @changesets/cli publish
           title: 'chore: release'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
