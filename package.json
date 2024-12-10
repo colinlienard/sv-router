@@ -1,6 +1,6 @@
 {
 	"name": "sv-router",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Modern Svelte routing",
 	"keywords": [
 		"svelte",
