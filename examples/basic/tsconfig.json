@@ -2,8 +2,7 @@
 	"extends": ["../../tsconfig.json"],
 	"compilerOptions": {
 		"module": "Preserve",
-		"moduleResolution": "Bundler",
-		"customConditions": ["sv-router/source"]
+		"moduleResolution": "Bundler"
 	},
 	"include": ["src/**/*.ts", "src/**/*.svelte"]
 }

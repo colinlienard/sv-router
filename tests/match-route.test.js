@@ -20,6 +20,8 @@ const PageNotFound = () => 'PageNotFound';
 const Layout1 = () => 'Layout1';
 /** @type {import('svelte').Component} */
 const Layout2 = () => 'Layout2';
+/** @type {import('svelte').Component} */
+const NoLayout = () => 'NoLayout';
 
 describe('matchRoute', () => {
 	describe.each([
@@ -144,8 +146,6 @@ describe('matchRoute', () => {
 			});
 
 			it('should break out of layouts', () => {
-				/** @type {import('svelte').Component} */
-				const NoLayout = () => 'NoLayout';
 				routes['/(nolayout)'] = NoLayout;
 				/** @type {Routes} */ (routes['/posts'])['/(nolayout)'] = NoLayout;
 				const { match: match1, layouts: layouts1 } = matchRoute('/nolayout', routes);

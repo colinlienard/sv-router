@@ -3,7 +3,6 @@ import prettier from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import svelte from 'eslint-plugin-svelte';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
-import espree from 'espree';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
@@ -11,13 +10,17 @@ import ts from 'typescript-eslint';
 export default [
 	js.configs.recommended,
 	...ts.configs.recommended,
-	eslintPluginUnicorn.configs['flat/recommended'],
 	...svelte.configs['flat/recommended'],
 	{
 		languageOptions: {
 			globals: {
 				...globals.browser,
 				...globals.node,
+				...globals.jest,
+				$state: false,
+				$derived: false,
+				$props: false,
+				vi: false,
 			},
 		},
 	},
@@ -25,13 +28,11 @@ export default [
 		files: ['**/*.svelte'],
 		languageOptions: {
 			parserOptions: {
-				parser: {
-					ts: ts.parser,
-					js: espree,
-				},
+				parser: ts.parser,
 			},
 		},
 	},
+	eslintPluginUnicorn.configs['flat/recommended'],
 	{
 		rules: {
 			'unicorn/filename-case': [
