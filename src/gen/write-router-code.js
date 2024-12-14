@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import fs from 'node:fs';
-import path from 'node:path';
 import { genConfig } from './config.js';
 import { generateRouterCode } from './generate-router-code.js';
 
@@ -19,8 +18,9 @@ export function writeRouterCode() {
 			compilerOptions: {
 				module: 'preserve',
 				moduleResolution: 'bundler',
+				baseUrl: '..',
 				paths: {
-					[genConfig.genCodeAlias]: [path.join('..', genConfig.routerPath)],
+					[genConfig.genCodeAlias]: [genConfig.routerPath],
 				},
 			},
 			include: [
