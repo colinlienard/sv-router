@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.0.4
+
+### Patch Changes
+
+- 779cae7: Support path option in the cli
+- d3a5c5f: Add a baseUrl in the generated tsconfig
+
 ## 0.0.3
 
 ### Patch Changes
