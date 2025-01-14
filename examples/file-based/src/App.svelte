@@ -5,6 +5,6 @@
 
 <a href={path('/')}>Home</a>
 <a href={path('/about')}>About</a>
-<a href={path('/posts')}>Posts</a>
+<a href={path('/posts')} data-preload>Posts</a>
 <button onclick={() => goto('/posts/:id', { id: 'programmatic' })}>Programmatic</button>
 <Router />

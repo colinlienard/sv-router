@@ -1,5 +1,6 @@
 import { BROWSER, DEV } from 'esm-env';
 import { matchRoute } from './helpers/match-route.js';
+import { preloadOnHover } from './helpers/preload-on-hover.js';
 import { constructPath, resolveRouteComponents } from './helpers/utils.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -24,6 +25,8 @@ export function createRouter(r) {
 			validateRoutes(routes);
 		});
 	}
+
+	preloadOnHover(routes);
 
 	return {
 		path: constructPath,
