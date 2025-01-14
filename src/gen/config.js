@@ -1,6 +1,7 @@
 /**
  * @type {{
  * 	routesPath: string;
+ * 	routesInJs: boolean;
  * 	readonly genCodeDirPath: string;
  * 	readonly routerPath: string;
  * 	readonly tsconfigPath: string;
@@ -9,8 +10,11 @@
  */
 export const genConfig = {
 	routesPath: 'src/routes',
+	routesInJs: false,
 	genCodeDirPath: '.router',
-	routerPath: '.router/router.ts',
+	get routerPath() {
+		return '.router/router.' + (this.routesInJs ? 'js' : 'ts');
+	},
 	tsconfigPath: '.router/tsconfig.json',
 	genCodeAlias: 'sv-router/generated',
 };

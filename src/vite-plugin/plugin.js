@@ -10,6 +10,9 @@ export function router(options) {
 	if (options?.path) {
 		genConfig.routesPath = options.path;
 	}
+	if (options?.routesInJs) {
+		genConfig.routesInJs = options.routesInJs;
+	}
 
 	return {
 		name: 'sv-router',
