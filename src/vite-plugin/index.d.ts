@@ -12,7 +12,7 @@ export type RouterOptions = {
 	 *
 	 * @default false
 	 */
-	routesInJs?: boolean;
+	js?: boolean;
 };
 
 export const router: (options?: RouterOptions) => Plugin;

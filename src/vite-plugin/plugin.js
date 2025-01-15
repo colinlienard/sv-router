@@ -7,12 +7,8 @@ import { writeRouterCode } from '../gen/write-router-code.js';
  * @returns {import('vite').Plugin}
  */
 export function router(options) {
-	if (options?.path) {
-		genConfig.routesPath = options.path;
-	}
-	if (options?.routesInJs) {
-		genConfig.routesInJs = options.routesInJs;
-	}
+	if (options?.path) genConfig.routesPath = options.path;
+	if (options?.js) genConfig.routesInJs = options.js;
 
 	return {
 		name: 'sv-router',
