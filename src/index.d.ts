@@ -51,6 +51,11 @@ export type Path<T extends Routes> = RemoveParenthesis<
 export type ConstructPathArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T, PathParams<T>];
 
+export type PathParams<T extends string> =
+	ExtractParams<T> extends never ? never : Record<ExtractParams<T>, string>;
+
+export type AllParams<T extends Routes> = Partial<Record<ExtractParams<RecursiveKeys<T>>, string>>;
+
 export type NavigateOptions =
 	| {
 			replace?: boolean;
@@ -64,11 +69,6 @@ export type NavigateArgs<T extends string> =
 	PathParams<T> extends never
 		? [T, NavigateOptions]
 		: [T, NavigateOptions & { params: PathParams<T> }];
-
-export type PathParams<T extends string> =
-	ExtractParams<T> extends never ? never : Record<ExtractParams<T>, string>;
-
-export type AllParams<T extends Routes> = Partial<Record<ExtractParams<RecursiveKeys<T>>, string>>;
 
 type StripNonRoutes<T extends Routes> = {
 	[K in keyof T as K extends '*' ? never : K extends 'layout' ? never : K]: T[K] extends Routes
