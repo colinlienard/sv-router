@@ -4,7 +4,7 @@ import type { Component, Snippet } from 'svelte';
  * Setup a new router instance with the given routes.
  *
  * ```js
- * export const { path, goto, params } = createRouter({
+ * export const { path, navigate, params } = createRouter({
  *   '/': Home,
  *   '/about': About,
  *   ...
@@ -33,9 +33,15 @@ export type Routes = {
 };
 
 export type RouterMethods<T extends Routes> = {
-	path<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
-	goto<U extends Path<T>>(...args: ConstructPathArgs<U>): void;
-	params(): AllParams<T>;
+	p<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
+	navigate<U extends Path<T>>(...args: ConstructPathArgs<U>): void;
+	params: AllParams<T>;
+	location: {
+		pathname: string;
+		search: string;
+		state: string;
+		hash: string;
+	};
 };
 
 export type Path<T extends Routes> = RemoveParenthesis<

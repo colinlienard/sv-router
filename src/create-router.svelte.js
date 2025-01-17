@@ -7,10 +7,17 @@ import { constructPath, resolveRouteComponents } from './helpers/utils.js';
 export let routes;
 
 /** @type {import('svelte').Component[]} */
-export const componentTree = $state([]);
+export let componentTree = $state([]);
 
 /** @type {Record<string, string>} */
-export const paramsStore = $state({});
+export let paramsStore = $state({});
+
+let location = $state({
+	pathname: globalThis.location.pathname,
+	search: globalThis.location.search,
+	state: globalThis.history.state,
+	hash: globalThis.location.hash,
+});
 
 /**
  * @template {import('./index.d.ts').Routes} T
@@ -29,15 +36,17 @@ export function createRouter(r) {
 	preloadOnHover(routes);
 
 	return {
-		path: constructPath,
-		goto(...args) {
+		p: constructPath,
+		navigate(...args) {
 			const path = constructPath(args[0], args[1]);
 			globalThis.history.pushState({}, '', path);
 			onNavigate();
 		},
-		params() {
-			const readonly = $derived(paramsStore);
-			return readonly;
+		get params() {
+			return paramsStore;
+		},
+		get location() {
+			return location;
 		},
 	};
 }
@@ -46,10 +55,17 @@ export function onNavigate() {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
+	location = {
+		pathname: globalThis.location.pathname,
+		search: globalThis.location.search,
+		state: globalThis.history.state,
+		hash: globalThis.location.hash,
+	};
 	const { match, layouts, params } = matchRoute(globalThis.location.pathname, routes);
 	resolveRouteComponents(match ? [...layouts, match] : layouts).then((components) => {
 		Object.assign(componentTree, components);
 	});
+	for (const key of Object.keys(paramsStore)) delete paramsStore[key];
 	Object.assign(paramsStore, params);
 }
 
