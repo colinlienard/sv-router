@@ -33,7 +33,7 @@ describe('generateRouterCode', () => {
 		const result = generateRouterCode('./a/fake/path');
 		expect(result).toBe(`import { createRouter } from "sv-router";
 
-export const { path, navigate, params } = createRouter({
+export const { p, navigate, router } = createRouter({
   "*": () => import("../a/fake/path/*.svelte"),
   "/about": () => import("../a/fake/path/about.svelte"),
   "/": () => import("../a/fake/path/index.svelte"),
@@ -104,7 +104,7 @@ describe('createRouterCode', () => {
 		);
 		expect(result).toBe(`import { createRouter } from "sv-router";
 
-export const { path, navigate, params } = createRouter({
+export const { p, navigate, router } = createRouter({
   "/": () => import("./routes/index.svelte"),
   "/about": () => import("./routes/about.svelte"),
   "/posts": {

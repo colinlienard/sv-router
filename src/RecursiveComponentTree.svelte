@@ -1,5 +1,5 @@
 <script>
-	import { paramsStore } from './create-router.svelte.js';
+	import { params } from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
 
 	/** @type {{ tree: import('svelte').Component[] }} */
@@ -9,7 +9,7 @@
 	const restTree = $derived(tree.slice(1));
 </script>
 
-{#key restTree.length > 0 || Object.values(paramsStore)}
+{#key restTree.length > 0 || Object.values(params.value)}
 	<FirstComponent>
 		{#if restTree.length > 0}
 			<RecursiveComponentTree tree={restTree}></RecursiveComponentTree>

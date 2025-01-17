@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { params } from '../router';
-
-	const { id } = params;
+	import { router } from '../router';
 </script>
 
-<h1>A post with the slug {id}</h1>
+<h1>A post with the slug {router.params.id}</h1>

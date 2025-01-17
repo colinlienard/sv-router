@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { params } from 'sv-router/generated';
-
-	const { id } = params;
+	import { router } from 'sv-router/generated';
 </script>
 
-<h1>A post with the slug {id}</h1>
+<h1>A post with the slug {router.params.id}</h1>

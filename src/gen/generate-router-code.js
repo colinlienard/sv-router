@@ -97,6 +97,6 @@ export function createRouterCode(routes, routesPath) {
 	return [
 		'import { createRouter } from "sv-router";',
 		'\n\n',
-		`export const { p, navigate, params, location } = createRouter(${withImports});`,
+		`export const { p, navigate, router } = createRouter(${withImports});`,
 	].join('');
 }

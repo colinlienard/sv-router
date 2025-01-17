@@ -11,7 +11,7 @@ import type { Component, Snippet } from 'svelte';
  * });
  * ```
  */
-export function createRouter<T extends Routes>(r: T): RouterMethods<T>;
+export function createRouter<T extends Routes>(r: T): RouterApi<T>;
 export const Router: Component;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -32,14 +32,14 @@ export type Routes = {
 	layout?: LayoutComponent;
 };
 
-export type RouterMethods<T extends Routes> = {
+export type RouterApi<T extends Routes> = {
 	p<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
 	navigate<U extends Path<T>>(...args: ConstructPathArgs<U>): void;
-	params: AllParams<T>;
-	location: {
+	router: {
+		params: AllParams<T>;
 		pathname: string;
 		search: string;
-		state: string;
+		state: unknown;
 		hash: string;
 	};
 };

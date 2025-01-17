@@ -16,4 +16,4 @@
 	});
 </script>
 
-<RecursiveComponentTree tree={componentTree}></RecursiveComponentTree>
+<RecursiveComponentTree tree={componentTree.value}></RecursiveComponentTree>
