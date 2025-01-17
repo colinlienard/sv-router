@@ -32,9 +32,22 @@ export function createRouter(r) {
 
 	return {
 		p: constructPath,
-		navigate(...args) {
-			const path = constructPath(args[0], args[1]);
-			globalThis.history.pushState({}, '', path);
+		/**
+		 * @param {string} path
+		 * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
+		 */
+		navigate(path, options = {}) {
+			if (options.params) {
+				path = constructPath(path, options.params);
+			}
+			if (options.search) {
+				path += options.search;
+			}
+			if (options.hash) {
+				path += options.hash;
+			}
+			const historyMethod = options.replace ? 'replaceState' : 'pushState';
+			globalThis.history[historyMethod](options.state || {}, '', path);
 			onNavigate();
 		},
 		router: {
@@ -81,7 +94,9 @@ export function onGlobalClick(event) {
 	if (url.origin !== currentOrigin) return;
 
 	event.preventDefault();
-	globalThis.history.pushState({}, '', anchor.href);
+	const { replace, state } = anchor.dataset;
+	const historyMethod = replace === undefined || replace === 'false' ? 'pushState' : 'replaceState';
+	globalThis.history[historyMethod](state || {}, '', anchor.href);
 	onNavigate();
 }
 

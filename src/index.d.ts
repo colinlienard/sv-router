@@ -34,7 +34,7 @@ export type Routes = {
 
 export type RouterApi<T extends Routes> = {
 	p<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
-	navigate<U extends Path<T>>(...args: ConstructPathArgs<U>): void;
+	navigate<U extends Path<T>>(...args: NavigateArgs<U>): void;
 	router: {
 		params: AllParams<T>;
 		pathname: string;
@@ -50,6 +50,20 @@ export type Path<T extends Routes> = RemoveParenthesis<
 
 export type ConstructPathArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T, PathParams<T>];
+
+export type NavigateOptions =
+	| {
+			replace?: boolean;
+			search?: string;
+			state?: string;
+			hash?: `#${string}`;
+	  }
+	| undefined;
+
+export type NavigateArgs<T extends string> =
+	PathParams<T> extends never
+		? [T, NavigateOptions]
+		: [T, NavigateOptions & { params: PathParams<T> }];
 
 export type PathParams<T extends string> =
 	ExtractParams<T> extends never ? never : Record<ExtractParams<T>, string>;
