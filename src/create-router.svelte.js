@@ -1,4 +1,5 @@
 import { BROWSER, DEV } from 'esm-env';
+import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preloadOnHover } from './helpers/preload-on-hover.js';
 import { constructPath, resolveRouteComponents } from './helpers/utils.js';
@@ -12,7 +13,7 @@ export let componentTree = $state({ value: [] });
 /** @type {{ value: Record<string, string> }} */
 export let params = $state({ value: {} });
 
-let location = $state(updatedLocation());
+export let location = $state(updatedLocation());
 
 /**
  * @template {import('./index.d.ts').Routes} T
@@ -50,6 +51,7 @@ export function createRouter(r) {
 			globalThis.history[historyMethod](options.state || {}, '', path);
 			onNavigate();
 		},
+		isActive,
 		route: {
 			get params() {
 				return params.value;
@@ -74,7 +76,7 @@ export function onNavigate() {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
-	location = updatedLocation();
+	Object.assign(location, updatedLocation());
 	const { match, layouts, params: newParams } = matchRoute(globalThis.location.pathname, routes);
 	params.value = newParams || {};
 	resolveRouteComponents(match ? [...layouts, match] : layouts).then((components) => {

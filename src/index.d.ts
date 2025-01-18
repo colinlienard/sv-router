@@ -63,6 +63,12 @@ export type RouterApi<T extends Routes> = {
 	 * @param options The navigation options.
 	 */
 	navigate<U extends Path<T>>(...args: NavigateArgs<U>): void;
+	/**
+	 * Will return `true` if the given path is active.
+	 *
+	 * @param path The path to check.
+	 */
+	isActive(path: Path<T>): boolean;
 	route: {
 		/**
 		 * An object containing the parameters of the current route.

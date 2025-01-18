@@ -56,7 +56,7 @@ describe.each(['flat', 'tree'])('%s', (mode) => {
 			const result = generateRouterCode('./a/fake/path');
 			expect(result).toBe(`import { createRouter } from "sv-router";
 
-export const { p, navigate, route } = createRouter({
+export const { p, navigate, isActive, route } = createRouter({
   "*": () => import("../a/fake/path/*.svelte"),
   "/about": () => import("../a/fake/path/about.svelte"),
   "/": () => import("../a/fake/path/index.svelte"),
@@ -151,7 +151,7 @@ export const { p, navigate, route } = createRouter({
 			);
 			expect(result).toBe(`import { createRouter } from "sv-router";
 
-export const { p, navigate, route } = createRouter({
+export const { p, navigate, isActive, route } = createRouter({
   "/": () => import("./routes/index.svelte"),
   "/about": () => import("./routes/about.svelte"),
   "/posts": {
