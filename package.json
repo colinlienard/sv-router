@@ -33,7 +33,7 @@
 		"src"
 	],
 	"scripts": {
-		"ex:basic": "pnpm --filter basic-example",
+		"ex:config-based": "pnpm --filter config-based-example",
 		"ex:file-based": "pnpm --filter file-based-example",
 		"test": "vitest",
 		"check": "tsc --noEmit && pnpm -r check",

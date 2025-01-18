@@ -64,7 +64,7 @@ importers:
         specifier: ^2.1.8
         version: 2.1.8(@types/node@22.10.1)
 
-  examples/basic:
+  examples/config-based:
     dependencies:
       sv-router:
         specifier: workspace:*
