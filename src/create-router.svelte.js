@@ -50,7 +50,7 @@ export function createRouter(r) {
 			globalThis.history[historyMethod](options.state || {}, '', path);
 			onNavigate();
 		},
-		router: {
+		route: {
 			get params() {
 				return params.value;
 			},

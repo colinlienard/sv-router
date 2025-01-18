@@ -4,7 +4,7 @@ import type { Component, Snippet } from 'svelte';
  * Setup a new router instance with the given routes.
  *
  * ```js
- * export const { path, navigate, params } = createRouter({
+ * export const { p, navigate, route } = createRouter({
  *   '/': Home,
  *   '/about': About,
  *   ...
@@ -33,13 +33,52 @@ export type Routes = {
 };
 
 export type RouterApi<T extends Routes> = {
+	/**
+	 * Construct a path while ensuring type safety.
+	 *
+	 * ```js
+	 * p('/users');
+	 * // With parameters
+	 * p('/users/:id', { id: 1 });
+	 * ```
+	 *
+	 * @param route The route to navigate to.
+	 * @param params The parameters to replace in the route.
+	 */
 	p<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
+	/**
+	 * Navigate programatically to a route.
+	 *
+	 * ```js
+	 * navigate('/users');
+	 * // With parameters
+	 * navigate('/users/:id', {
+	 * 	params: {
+	 * 		id: 1,
+	 * 	},
+	 * });
+	 * ```
+	 *
+	 * @param route The route to navigate to.
+	 * @param options The navigation options.
+	 */
 	navigate<U extends Path<T>>(...args: NavigateArgs<U>): void;
-	router: {
+	route: {
+		/**
+		 * An object containing the parameters of the current route.
+		 *
+		 * For example, given the route `/posts/:slug/comments/:commentId` and the URL
+		 * `http://localhost:5173/posts/hello-world/comments/123`, the `params` object would be `{ slug:
+		 * 'hello-world', commentId: '123' }`.
+		 */
 		params: AllParams<T>;
+		/** The reactive pathname of the URL. */
 		pathname: string;
+		/** The reactive query string part of the URL. */
 		search: string;
+		/** The reactive history state that can be passed to the `navigate` function. */
 		state: unknown;
+		/** The reactive hash part of the URL. */
 		hash: string;
 	};
 };
