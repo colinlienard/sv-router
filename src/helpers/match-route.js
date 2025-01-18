@@ -21,8 +21,8 @@ export function matchRoute(pathname, routes) {
 	if (pathname.length > 1 && pathname.endsWith('/')) {
 		pathname = pathname.slice(0, -1);
 	}
-	const pathParts = pathname.split('/');
-	const allRouteParts = sortRoutes(Object.keys(routes)).map((route) => route.split('/'));
+	const pathParts = pathname.split('/').slice(1);
+	const allRoutes = sortRoutes(Object.keys(routes));
 
 	/** @type {RouteComponent | undefined} */
 	let match;
@@ -35,8 +35,11 @@ export function matchRoute(pathname, routes) {
 
 	let breakFromLayouts = false;
 
-	outer: for (const routeParts of allRouteParts) {
-		for (let [index, routePart] of sortRoutes(routeParts).entries()) {
+	outer: for (const route of allRoutes) {
+		const routeParts = route.split('/');
+		if (routeParts[0] === '') routeParts.shift();
+
+		for (let [index, routePart] of routeParts.entries()) {
 			breakFromLayouts = routePart.startsWith('(') && routePart.endsWith(')');
 			if (breakFromLayouts) {
 				routePart = routePart.slice(1, -1);
@@ -46,9 +49,10 @@ export function matchRoute(pathname, routes) {
 			if (routePart.startsWith(':')) {
 				params[routePart.slice(1)] = pathPart;
 			} else if (routePart === '*') {
-				match = /** @type {RouteComponent} */ (
-					routes[/** @type {keyof Routes} */ (routeParts.join('/'))]
+				const resolvedPath = /** @type {keyof Routes} */ (
+					(index ? '/' : '') + routeParts.join('/')
 				);
+				match = /** @type {RouteComponent} */ (routes[resolvedPath]);
 				break outer;
 			} else if (routePart !== pathPart) {
 				break;
@@ -58,31 +62,31 @@ export function matchRoute(pathname, routes) {
 				continue;
 			}
 
+			const routeMatch = /** @type {RouteComponent} */ (
+				routes[/** @type {keyof Routes} */ ('/' + routeParts.join('/'))]
+			);
+
 			if (!breakFromLayouts && 'layout' in routes && routes.layout) {
 				layouts.push(routes.layout);
 			}
 
-			const routeMatch = /** @type {RouteComponent} */ (
-				routes[/** @type {keyof Routes} */ (routeParts.join('/'))]
-			);
-
 			if (typeof routeMatch === 'function') {
 				if (routeParts.length === pathParts.length) {
 					match = routeMatch;
-				} else {
-					continue;
+					break outer;
 				}
-			} else if (routeMatch) {
-				const nestedPathname = '/' + pathParts.slice(index + 1).join('/');
-				const result = matchRoute(nestedPathname, routeMatch);
-				if (result) {
-					match = result.match;
-					params = { ...params, ...result.params };
-					if (result.breakFromLayouts) {
-						layouts = [];
-					} else {
-						layouts.push(...result.layouts);
-					}
+				continue;
+			}
+
+			const nestedPathname = '/' + pathParts.slice(index + 1).join('/');
+			const result = matchRoute(nestedPathname, routeMatch);
+			if (result) {
+				match = result.match;
+				params = { ...params, ...result.params };
+				if (result.breakFromLayouts) {
+					layouts = [];
+				} else {
+					layouts.push(...result.layouts);
 				}
 			}
 			break outer;

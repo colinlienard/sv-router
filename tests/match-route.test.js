@@ -30,7 +30,7 @@ describe('matchRoute', () => {
 				'/posts': Posts,
 				'/posts/static': StaticPost,
 				'/posts/:id': DynamicPost,
-				'/posts/:id/:commentId': DynamicPostComment,
+				'/posts/:id/comments/:commentId': DynamicPostComment,
 				'/users/*': UserNotFound,
 				'*': PageNotFound,
 			},
@@ -38,7 +38,7 @@ describe('matchRoute', () => {
 		{
 			mode: 'flat unordered',
 			routes: {
-				'/posts/:id/:commentId': DynamicPostComment,
+				'/posts/:id/comments/:commentId': DynamicPostComment,
 				'/posts': Posts,
 				'/users/*': UserNotFound,
 				'/posts/static': StaticPost,
@@ -56,7 +56,9 @@ describe('matchRoute', () => {
 					'/static': StaticPost,
 					'/:id': {
 						'/': DynamicPost,
-						'/:commentId': DynamicPostComment,
+						'/comments': {
+							'/:commentId': DynamicPostComment,
+						},
 						layout: Layout2,
 					},
 					layout: Layout1,
@@ -74,7 +76,9 @@ describe('matchRoute', () => {
 				'*': PageNotFound,
 				'/posts': {
 					'/:id': {
-						'/:commentId': DynamicPostComment,
+						'/comments': {
+							'/:commentId': DynamicPostComment,
+						},
 						'/': DynamicPost,
 						layout: Layout2,
 					},
@@ -120,7 +124,7 @@ describe('matchRoute', () => {
 		});
 
 		it('should match multiple dynamic nested routes and return params', () => {
-			const { match, params } = matchRoute('/posts/bar/baz', routes);
+			const { match, params } = matchRoute('/posts/bar/comments/baz', routes);
 			expect(match).toEqual(DynamicPostComment);
 			expect(params).toEqual({ id: 'bar', commentId: 'baz' });
 		});
@@ -130,7 +134,7 @@ describe('matchRoute', () => {
 				const { layouts: layouts1 } = matchRoute('/', routes);
 				const { layouts: layouts2 } = matchRoute('/posts', routes);
 				const { layouts: layouts3 } = matchRoute('/posts/static', routes);
-				const { layouts: layouts4 } = matchRoute('/posts/bar/baz', routes);
+				const { layouts: layouts4 } = matchRoute('/posts/bar/comments/baz', routes);
 				expect(layouts1).toEqual([]);
 				expect(layouts2).toEqual([Layout1]);
 				expect(layouts3).toEqual([Layout1]);
