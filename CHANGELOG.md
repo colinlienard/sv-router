@@ -1,5 +1,14 @@
 # sv-router
 
+## 0.0.5
+
+### Patch Changes
+
+- 9c1ed5d: Add support for file-based routing flat mode
+- 8f3ede2: API improvements
+- b2a50f6: Add an option to generate routes in a .js file instead of .ts
+- 7fa131f: Add link preloading
+
 ## 0.0.4
 
 ### Patch Changes
