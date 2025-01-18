@@ -28,16 +28,40 @@ export function generateRouterCode(routesPath) {
 export function buildFileTree(routesPath) {
 	const entries = fs.readdirSync(routesPath);
 	/** @type {FileTree} */
-	const result = [];
+	const tree = [];
 	for (const entry of entries) {
 		const stat = fs.lstatSync(path.join(routesPath, entry));
 		if (stat.isDirectory()) {
-			result.push({ name: entry, tree: buildFileTree(path.join(routesPath, entry)) });
-		} else if (entry.endsWith('.svelte')) {
-			result.push(entry);
+			tree.push({ name: entry, tree: buildFileTree(path.join(routesPath, entry)) });
+			continue;
+		}
+		if (!entry.endsWith('.svelte')) continue;
+		handleFlatFilename(tree, entry);
+	}
+	return tree;
+}
+
+/**
+ * @param {FileTree} tree
+ * @param {string} path
+ */
+function handleFlatFilename(tree, path) {
+	const splited = path.split('.');
+	if (splited.length === 2) {
+		tree.push(path);
+		return;
+	}
+	const first = /** @type {string} */ (splited.shift());
+	for (const item of tree) {
+		if (typeof item === 'object' && item.name === first) {
+			handleFlatFilename(item.tree, splited.join('.'));
+			return;
 		}
 	}
-	return result;
+	/** @type {FileTree} */
+	const branch = [];
+	handleFlatFilename(branch, splited.join('.'));
+	tree.push({ name: first, tree: branch });
 }
 
 /**

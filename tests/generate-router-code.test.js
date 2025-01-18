@@ -23,6 +23,7 @@ describe.each(['flat', 'tree'])('%s', (mode) => {
 					'posts.static.svelte',
 					'posts.text.txt',
 					'posts.noextension',
+					'posts.comments.[id].svelte',
 				];
 			}
 			if (dir.toString().endsWith('posts')) {
@@ -33,13 +34,20 @@ describe.each(['flat', 'tree'])('%s', (mode) => {
 					'static.svelte',
 					'text.txt',
 					'noextension',
+					'comments',
 				];
+			}
+			if (dir.toString().endsWith('comments')) {
+				return ['[id].svelte'];
 			}
 			return ['*.svelte', 'about.svelte', 'index.svelte', 'posts'];
 		});
 
 		lstatSync.mockImplementation((dir) => ({
-			isDirectory: () => (mode === 'flat' ? false : dir.toString().endsWith('posts')),
+			isDirectory() {
+				if (mode === 'flat') return false;
+				return dir.toString().endsWith('posts') || dir.toString().endsWith('comments');
+			},
 		}));
 	});
 
@@ -57,6 +65,9 @@ export const { path, goto, params } = createRouter({
     "layout": () => import("../a/fake/path/posts/_layout.svelte"),
     "/": () => import("../a/fake/path/posts/index.svelte"),
     "/static": () => import("../a/fake/path/posts/static.svelte"),
+    "/comments": {
+      "/:id": () => import("../a/fake/path/posts/comments/[id].svelte"),
+    }
   }
 });`);
 		});
@@ -71,7 +82,16 @@ export const { path, goto, params } = createRouter({
 				'index.svelte',
 				{
 					name: 'posts',
-					tree: ['[id].svelte', '_layout.svelte', 'index.svelte', 'static.svelte'],
+					tree: [
+						'[id].svelte',
+						'_layout.svelte',
+						'index.svelte',
+						'static.svelte',
+						{
+							name: 'comments',
+							tree: ['[id].svelte'],
+						},
+					],
 				},
 			]);
 		});
@@ -84,7 +104,16 @@ export const { path, goto, params } = createRouter({
 				'about.svelte',
 				{
 					name: 'posts',
-					tree: ['index.svelte', 'static.svelte', '[id].svelte', '_layout.svelte'],
+					tree: [
+						'index.svelte',
+						'static.svelte',
+						'[id].svelte',
+						'_layout.svelte',
+						{
+							name: 'comments',
+							tree: ['[id].svelte'],
+						},
+					],
 				},
 				'*.svelte',
 			]);
@@ -96,6 +125,9 @@ export const { path, goto, params } = createRouter({
 					'/static': 'posts/static.svelte',
 					'/:id': 'posts/[id].svelte',
 					layout: 'posts/_layout.svelte',
+					'/comments': {
+						'/:id': 'posts/comments/[id].svelte',
+					},
 				},
 				'*': '*.svelte',
 			});
