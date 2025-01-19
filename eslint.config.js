@@ -19,6 +19,7 @@ export default [
 				...globals.jest,
 				$state: false,
 				$derived: false,
+				$effect: false,
 				$props: false,
 				vi: false,
 			},

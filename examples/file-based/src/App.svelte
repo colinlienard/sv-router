@@ -4,7 +4,7 @@
 </script>
 
 <a href={p('/')}>Home</a>
-<a use:isActiveLink={{ className: 'aaa' }} href={p('/about')}>About</a>
+<a use:isActiveLink href={p('/about')}>About</a>
 <a href={p('/posts')} data-preload>Posts</a>
 <button onclick={() => navigate('/posts/:id', { params: { id: 'programmatic' } })}>
 	Programmatic

@@ -1,6 +1,6 @@
 import { location } from './create-router.svelte.js';
 
-/** @type {import('svelte/action').Action<HTMLAnchorElement, { className?: string }>} */
+/** @type {import('./index.d.ts').IsActiveLink} */
 export function isActiveLink(node, { className = 'is-active' } = {}) {
 	if (node.tagName !== 'A') {
 		throw new Error('isActiveLink can only be used on <a> elements');

@@ -13,7 +13,7 @@ import type { Action } from 'svelte/action';
  * ```
  */
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
-export const isActiveLink: Action<HTMLAnchorElement, { className?: string }>;
+export const isActiveLink: IsActiveLink;
 export const Router: Component;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -33,6 +33,8 @@ export type Routes = {
 	'*'?: RouteComponent;
 	layout?: LayoutComponent;
 };
+
+export type IsActiveLink = Action<HTMLAnchorElement, { className?: string } | undefined>;
 
 export type RouterApi<T extends Routes> = {
 	/**
@@ -68,10 +70,13 @@ export type RouterApi<T extends Routes> = {
 	/**
 	 * Will return `true` if the given path is active.
 	 *
+	 * Can be used with params to check the exact path, or without to check for any params in the
+	 * path.
+	 *
 	 * @param path The route to check.
 	 * @param params The optional parameters to replace in the route.
 	 */
-	isActive<U extends Path<T>>(...args: ConstructPathArgs2<U>): boolean;
+	isActive<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
 	route: {
 		/**
 		 * An object containing the parameters of the current route.
@@ -99,7 +104,7 @@ export type Path<T extends Routes> = RemoveParenthesis<
 export type ConstructPathArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T, PathParams<T>];
 
-export type ConstructPathArgs2<T extends string> =
+export type IsActiveArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T] | [T, PathParams<T>];
 
 export type PathParams<T extends string> =
