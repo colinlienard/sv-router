@@ -14,11 +14,11 @@ describe.each(['flat', 'tree'])('%s', (mode) => {
 		readdirSync.mockImplementation((dir) => {
 			if (mode === 'flat') {
 				return [
-					'*.svelte',
+					'[...slug].svelte',
 					'about.svelte',
 					'index.svelte',
 					'posts.[id].svelte',
-					'posts._layout.svelte',
+					'posts.layout.svelte',
 					'posts.index.svelte',
 					'posts.static.svelte',
 					'posts.text.txt',
@@ -29,7 +29,7 @@ describe.each(['flat', 'tree'])('%s', (mode) => {
 			if (dir.toString().endsWith('posts')) {
 				return [
 					'[id].svelte',
-					'_layout.svelte',
+					'layout.svelte',
 					'index.svelte',
 					'static.svelte',
 					'text.txt',
@@ -40,7 +40,7 @@ describe.each(['flat', 'tree'])('%s', (mode) => {
 			if (dir.toString().endsWith('comments')) {
 				return ['[id].svelte'];
 			}
-			return ['*.svelte', 'about.svelte', 'index.svelte', 'posts'];
+			return ['[...slug].svelte', 'about.svelte', 'index.svelte', 'posts'];
 		});
 
 		lstatSync.mockImplementation((dir) => ({
@@ -57,12 +57,12 @@ describe.each(['flat', 'tree'])('%s', (mode) => {
 			expect(result).toBe(`import { createRouter } from "sv-router";
 
 export const { p, navigate, isActive, route } = createRouter({
-  "*": () => import("../a/fake/path/*.svelte"),
+  "*slug": () => import("../a/fake/path/[...slug].svelte"),
   "/about": () => import("../a/fake/path/about.svelte"),
   "/": () => import("../a/fake/path/index.svelte"),
   "/posts": {
     "/:id": () => import("../a/fake/path/posts/[id].svelte"),
-    "layout": () => import("../a/fake/path/posts/_layout.svelte"),
+    "layout": () => import("../a/fake/path/posts/layout.svelte"),
     "/": () => import("../a/fake/path/posts/index.svelte"),
     "/static": () => import("../a/fake/path/posts/static.svelte"),
     "/comments": {
@@ -77,14 +77,14 @@ export const { p, navigate, isActive, route } = createRouter({
 		it('should get the file tree', () => {
 			const result = buildFileTree('a/fake/path');
 			expect(result).toEqual([
-				'*.svelte',
+				'[...slug].svelte',
 				'about.svelte',
 				'index.svelte',
 				{
 					name: 'posts',
 					tree: [
 						'[id].svelte',
-						'_layout.svelte',
+						'layout.svelte',
 						'index.svelte',
 						'static.svelte',
 						{
@@ -108,14 +108,14 @@ export const { p, navigate, isActive, route } = createRouter({
 						'index.svelte',
 						'static.svelte',
 						'[id].svelte',
-						'_layout.svelte',
+						'layout.svelte',
 						{
 							name: 'comments',
 							tree: ['[id].svelte'],
 						},
 					],
 				},
-				'*.svelte',
+				'[...slug].svelte',
 			]);
 			expect(result).toEqual({
 				'/': 'index.svelte',
@@ -124,12 +124,12 @@ export const { p, navigate, isActive, route } = createRouter({
 					'/': 'posts/index.svelte',
 					'/static': 'posts/static.svelte',
 					'/:id': 'posts/[id].svelte',
-					layout: 'posts/_layout.svelte',
+					layout: 'posts/layout.svelte',
 					'/comments': {
 						'/:id': 'posts/comments/[id].svelte',
 					},
 				},
-				'*': '*.svelte',
+				'*slug': '[...slug].svelte',
 			});
 		});
 	});
@@ -145,7 +145,7 @@ export const { p, navigate, isActive, route } = createRouter({
 						'/static': 'posts/static.svelte',
 						'/:id': 'posts/:id.svelte',
 					},
-					'*': '*.svelte',
+					'*slug': '[...slug].svelte',
 				},
 				'./routes',
 			);
@@ -159,7 +159,7 @@ export const { p, navigate, isActive, route } = createRouter({
     "/static": () => import("./routes/posts/static.svelte"),
     "/:id": () => import("./routes/posts/:id.svelte"),
   },
-  "*": () => import("./routes/*.svelte"),
+  "*slug": () => import("./routes/[...slug].svelte"),
 });`);
 		});
 	});

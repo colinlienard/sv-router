@@ -46,7 +46,8 @@ export function buildFileTree(routesPath) {
  * @param {string} path
  */
 function handleFlatFilename(tree, path) {
-	const splited = path.split('.');
+	// Split the path by the first dot that is not preceded or followed by another dot
+	const splited = path.split(/(?<!\.)\.(?!\.)/);
 	if (splited.length === 2) {
 		tree.push(path);
 		return;
@@ -74,17 +75,18 @@ export function createRouteMap(fileTree, prefix = '') {
 	const result = {};
 	for (const entry of fileTree) {
 		if (typeof entry === 'string') {
-			switch (entry) {
-				case 'index.svelte': {
+			const catchAll = /\[\.\.\.(.*)\]\.svelte/g.exec(entry); // Match [...slug].svelte
+			switch (true) {
+				case entry === 'index.svelte': {
 					result['/'] = prefix + entry;
 					break;
 				}
-				case '*.svelte': {
-					result['*'] = prefix + entry;
+				case entry === 'layout.svelte': {
+					result['layout'] = prefix + entry;
 					break;
 				}
-				case '_layout.svelte': {
-					result['layout'] = prefix + entry;
+				case !!catchAll: {
+					result['*' + catchAll[1]] = prefix + entry;
 					break;
 				}
 				default: {

@@ -30,7 +30,7 @@ export type LayoutComponent = RouteComponent<{ children: Snippet }>;
 
 export type Routes = {
 	[_: `/${string}`]: RouteComponent | Routes;
-	'*'?: RouteComponent;
+	[_: `*${string}`]: RouteComponent | undefined;
 	layout?: LayoutComponent;
 };
 
@@ -127,9 +127,11 @@ type NavigateArgs<T extends string> =
 		: [T, NavigateOptions & { params: PathParams<T> }];
 
 type StripNonRoutes<T extends Routes> = {
-	[K in keyof T as K extends '*' ? never : K extends 'layout' ? never : K]: T[K] extends Routes
-		? StripNonRoutes<T[K]>
-		: T[K];
+	[K in keyof T as K extends `*${string}`
+		? never
+		: K extends 'layout'
+			? never
+			: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
 };
 
 type RecursiveKeys<T extends Routes, Prefix extends string = ''> = {

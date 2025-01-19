@@ -14,5 +14,5 @@ export const { p, navigate, route } = createRouter({
 		'/:id': DynamicPost,
 		layout: () => import('./Layout.svelte'),
 	},
-	'*': NotFound,
+	'*slug': NotFound,
 });
