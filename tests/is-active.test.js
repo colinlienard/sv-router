@@ -7,11 +7,11 @@ vi.mock('../src/create-router.svelte.js', () => ({
 	},
 }));
 
-describe('isActive', () => {
-	afterEach(() => {
-		vi.resetAllMocks();
-	});
+afterEach(() => {
+	vi.resetAllMocks();
+});
 
+describe('isActive', () => {
 	it('should match a simple route', () => {
 		location.pathname = '/about';
 		expect(isActive('/about')).toBe(true);
@@ -19,10 +19,20 @@ describe('isActive', () => {
 
 	it('should match a route with a param', () => {
 		location.pathname = '/post/123';
+		expect(isActive('/post/:id', { id: '123' })).toBe(true);
+	});
+
+	it('should match a route with any param', () => {
+		location.pathname = '/post/123';
 		expect(isActive('/post/:id')).toBe(true);
 	});
 
-	it('should match a route with multiple params', () => {
+	it('should match a route with params', () => {
+		location.pathname = '/post/123/comments/456';
+		expect(isActive('/post/:id/comments/:commentId', { id: '123', commentId: '456' })).toBe(true);
+	});
+
+	it('should match a route with any params', () => {
 		location.pathname = '/post/123/comments/456';
 		expect(isActive('/post/:id/comments/:commentId')).toBe(true);
 	});
@@ -34,6 +44,6 @@ describe('isActive', () => {
 
 	it('should not match either', () => {
 		location.pathname = '/foo/bar';
-		expect(isActive('/hello/world')).toBe(false);
+		expect(isActive('/hello/:id', { id: 'world' })).toBe(false);
 	});
 });

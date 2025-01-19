@@ -1,12 +1,18 @@
 <script lang="ts">
-	import { Router } from 'sv-router';
-	import { isActive, navigate, p } from 'sv-router/generated';
+	import { isActiveLink, Router } from 'sv-router';
+	import { navigate, p } from 'sv-router/generated';
 </script>
 
-<a href={p('/')}>Home {isActive('/')}</a>
-<a href={p('/about')}>About {isActive('/about')}</a>
-<a href={p('/posts')} data-preload>Posts {isActive('/posts')}</a>
+<a href={p('/')}>Home</a>
+<a use:isActiveLink={{ className: 'aaa' }} href={p('/about')}>About</a>
+<a href={p('/posts')} data-preload>Posts</a>
 <button onclick={() => navigate('/posts/:id', { params: { id: 'programmatic' } })}>
 	Programmatic
 </button>
 <Router />
+
+<style>
+	a:global(.is-active) {
+		color: red;
+	}
+</style>

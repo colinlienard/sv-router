@@ -1,4 +1,5 @@
 import type { Component, Snippet } from 'svelte';
+import type { Action } from 'svelte/action';
 
 /**
  * Setup a new router instance with the given routes.
@@ -12,6 +13,7 @@ import type { Component, Snippet } from 'svelte';
  * ```
  */
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
+export const isActiveLink: Action<HTMLAnchorElement, { className?: string }>;
 export const Router: Component;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -66,9 +68,10 @@ export type RouterApi<T extends Routes> = {
 	/**
 	 * Will return `true` if the given path is active.
 	 *
-	 * @param path The path to check.
+	 * @param path The route to check.
+	 * @param params The optional parameters to replace in the route.
 	 */
-	isActive(path: Path<T>): boolean;
+	isActive<U extends Path<T>>(...args: ConstructPathArgs2<U>): boolean;
 	route: {
 		/**
 		 * An object containing the parameters of the current route.
@@ -96,6 +99,9 @@ export type Path<T extends Routes> = RemoveParenthesis<
 export type ConstructPathArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T, PathParams<T>];
 
+export type ConstructPathArgs2<T extends string> =
+	PathParams<T> extends never ? [T] : [T] | [T, PathParams<T>];
+
 export type PathParams<T extends string> =
 	ExtractParams<T> extends never ? never : Record<ExtractParams<T>, string>;
 
@@ -110,7 +116,7 @@ export type NavigateOptions =
 	  }
 	| undefined;
 
-export type NavigateArgs<T extends string> =
+type NavigateArgs<T extends string> =
 	PathParams<T> extends never
 		? [T, NavigateOptions]
 		: [T, NavigateOptions & { params: PathParams<T> }];
