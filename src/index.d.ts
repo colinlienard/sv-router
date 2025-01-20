@@ -1,6 +1,9 @@
 import type { Component, Snippet } from 'svelte';
 import type { Action } from 'svelte/action';
+import type { SvelteURLSearchParams } from 'svelte/reactivity';
 
+/** TODO */
+export const isActiveLink: IsActiveLink;
 /**
  * Setup a new router instance with the given routes.
  *
@@ -13,8 +16,10 @@ import type { Action } from 'svelte/action';
  * ```
  */
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
-export const isActiveLink: IsActiveLink;
+/** TODO */
 export const Router: Component;
+/** TODO */
+export const searchParams: SvelteURLSearchParams;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type BaseProps = {};

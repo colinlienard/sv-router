@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isActiveLink, Router } from 'sv-router';
+	import { isActiveLink, Router, searchParams } from 'sv-router';
 	import { navigate, p } from 'sv-router/generated';
 </script>
 
@@ -8,6 +8,13 @@
 <a href={p('/posts')} data-preload>Posts</a>
 <button onclick={() => navigate('/posts/:id', { params: { id: 'programmatic' } })}>
 	Programmatic
+</button>
+<button
+	onclick={() => {
+		searchParams.set('test', 'ok');
+	}}
+>
+	ok
 </button>
 <Router />
 

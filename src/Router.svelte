@@ -2,8 +2,11 @@
 	import { on } from 'svelte/events';
 	import { componentTree, onGlobalClick, onNavigate } from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
+	import { effectSearchParam } from './search-params.svelte.js';
 
 	onNavigate();
+
+	effectSearchParam();
 
 	$effect(() => {
 		const off1 = on(globalThis, 'popstate', onNavigate);

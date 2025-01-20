@@ -3,6 +3,7 @@ import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preloadOnHover } from './helpers/preload-on-hover.js';
 import { constructPath, resolveRouteComponents } from './helpers/utils.js';
+import { setupSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
 export let routes;
@@ -30,6 +31,7 @@ export function createRouter(r) {
 	}
 
 	preloadOnHover(routes);
+	setupSearchParams();
 
 	return {
 		p: constructPath,
