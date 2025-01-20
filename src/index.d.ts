@@ -152,4 +152,8 @@ type ExtractParams<T extends string> = T extends `${string}:${infer Param}/${inf
 	? Param | ExtractParams<`/${Rest}`>
 	: T extends `${string}:${infer Param}`
 		? Param
-		: never;
+		: T extends `${string}*${infer Param}`
+			? Param extends ''
+				? never
+				: Param
+			: never;

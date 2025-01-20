@@ -21,7 +21,7 @@ type TestRoutes = {
 		};
 		layout: RouteComponent;
 	};
-	'*': RouteComponent;
+	'*rest': RouteComponent;
 };
 
 type test_path = Expect<Equal<test_path_result, test_path_expected>>;
@@ -58,4 +58,4 @@ type test_construct_path_expected_1 = ['/posts'];
 
 type test_params = Expect<Equal<test_params_result, test_params_expected>>;
 type test_params_result = AllParams<TestRoutes>;
-type test_params_expected = Partial<Record<'id' | 'commentId', string>>;
+type test_params_expected = Partial<Record<'id' | 'commentId' | 'rest', string>>;

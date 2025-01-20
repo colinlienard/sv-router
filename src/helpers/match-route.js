@@ -48,7 +48,11 @@ export function matchRoute(pathname, routes) {
 			const pathPart = pathParts[index];
 			if (routePart.startsWith(':')) {
 				params[routePart.slice(1)] = pathPart;
-			} else if (routePart === '*') {
+			} else if (routePart.startsWith('*')) {
+				const param = routePart.slice(1);
+				if (param) {
+					params[param] = pathParts.slice(index).join('/');
+				}
 				const resolvedPath = /** @type {keyof Routes} */ (
 					(index ? '/' : '') + routeParts.join('/')
 				);
@@ -110,7 +114,7 @@ export function sortRoutes(routes) {
  */
 function getRoutePriority(route) {
 	if (route === '' || route === '/') return 1;
-	if (route === '*') return 4;
+	if (route.startsWith('*')) return 4;
 	if (route.includes(':')) return 3;
 	return 2;
 }

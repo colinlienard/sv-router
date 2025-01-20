@@ -32,7 +32,7 @@ describe('matchRoute', () => {
 				'/posts/:id': DynamicPost,
 				'/posts/:id/comments/:commentId': DynamicPostComment,
 				'/users/*': UserNotFound,
-				'*': PageNotFound,
+				'*rest': PageNotFound,
 			},
 		},
 		{
@@ -42,7 +42,7 @@ describe('matchRoute', () => {
 				'/posts': Posts,
 				'/users/*': UserNotFound,
 				'/posts/static': StaticPost,
-				'*': PageNotFound,
+				'*rest': PageNotFound,
 				'/posts/:id': DynamicPost,
 				'/': Home,
 			},
@@ -67,13 +67,13 @@ describe('matchRoute', () => {
 					'*': UserNotFound,
 					layout: Layout1,
 				},
-				'*': PageNotFound,
+				'*rest': PageNotFound,
 			},
 		},
 		{
 			mode: 'tree unordered',
 			routes: {
-				'*': PageNotFound,
+				'*rest': PageNotFound,
 				'/posts': {
 					'/:id': {
 						'/comments': {
@@ -162,23 +162,25 @@ describe('matchRoute', () => {
 		}
 
 		it('should match wildcard route', () => {
-			const { match, layouts } = matchRoute('/notfound', routes);
+			const { match, params, layouts } = matchRoute('/not/found', routes);
 			expect(match).toEqual(PageNotFound);
+			expect(params).toEqual({ rest: 'not/found' });
 			if (treeMode) {
 				expect(layouts).toEqual([]);
 			}
 		});
 
 		it('should match wildcard nested route', () => {
-			const { match, layouts } = matchRoute('/users/notfound', routes);
+			const { match, params, layouts } = matchRoute('/users/notfound', routes);
 			expect(match).toEqual(UserNotFound);
+			expect(params).toEqual({});
 			if (treeMode) {
 				expect(layouts).toEqual([Layout1]);
 			}
 		});
 
 		it('should not match any route', () => {
-			delete routes['*'];
+			delete routes['*rest'];
 			const { match } = matchRoute('/notfound', routes);
 			expect(match).toBeUndefined();
 		});
@@ -187,7 +189,7 @@ describe('matchRoute', () => {
 
 describe('sortRoutes', () => {
 	it('should sort routes', () => {
-		const result = sortRoutes(['/:id', '*', '/foo', '', '/']);
-		expect(result).toEqual(['', '/', '/foo', '/:id', '*']);
+		const result = sortRoutes(['/:id', '*rest', '/foo', '', '/']);
+		expect(result).toEqual(['', '/', '/foo', '/:id', '*rest']);
 	});
 });
