@@ -1,6 +1,5 @@
 import type { Component, Snippet } from 'svelte';
 import type { Action } from 'svelte/action';
-import type { SvelteURLSearchParams } from 'svelte/reactivity';
 
 /** TODO */
 export const isActiveLink: IsActiveLink;
@@ -16,10 +15,13 @@ export const isActiveLink: IsActiveLink;
  * ```
  */
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
-/** TODO */
+/** The component that will render the current route. */
 export const Router: Component;
-/** TODO */
-export const searchParams: SvelteURLSearchParams;
+/**
+ * The reactive search params of the URL. It is just a wrapper around `SvelteURLSearchParam` that
+ * will update the url on change.
+ */
+export const searchParams: URLSearchParams;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type BaseProps = {};

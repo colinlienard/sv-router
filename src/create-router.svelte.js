@@ -3,7 +3,7 @@ import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preloadOnHover } from './helpers/preload-on-hover.js';
 import { constructPath, resolveRouteComponents } from './helpers/utils.js';
-import { setupSearchParams } from './search-params.svelte.js';
+import { clearSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
 export let routes;
@@ -31,7 +31,6 @@ export function createRouter(r) {
 	}
 
 	preloadOnHover(routes);
-	setupSearchParams();
 
 	return {
 		p: constructPath,
@@ -44,7 +43,7 @@ export function createRouter(r) {
 				path = constructPath(path, options.params);
 			}
 			if (options.search) {
-				path += options.search;
+				path += (options.search.startsWith('?') ? '' : '?') + options.search;
 			}
 			if (options.hash) {
 				path += options.hash;
@@ -78,7 +77,11 @@ export function onNavigate() {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
+
+	clearSearchParams();
+
 	Object.assign(location, updatedLocation());
+
 	const { match, layouts, params: newParams } = matchRoute(globalThis.location.pathname, routes);
 	params.value = newParams || {};
 	resolveRouteComponents(match ? [...layouts, match] : layouts).then((components) => {
