@@ -1,44 +1,78 @@
 import { SvelteURLSearchParams } from 'svelte/reactivity';
 
-// export const ok = $state(
-// 	new Proxy(new URLSearchParams(), {
-// 		get(target, prop, receiver) {
-// 			console.log(target, prop, receiver);
-// 			const called = target[prop];
-// 			if (typeof called === 'function') {
-// 				return function (...args) {
-// 					console.log('called', args);
-// 					return called.apply(target, args);
-// 				};
-// 			}
-// 			return called;
-// 		},
-// 	}),
-// );
-
-let state = new SvelteURLSearchParams(globalThis.location.search);
+let searchParams = new SvelteURLSearchParams(globalThis.location.search);
 
 /** @type {URLSearchParams} */
-export const searchParams = {
-	toString() {
-		return state.toString();
+const shell = {
+	append(...args) {
+		searchParams.append(...args);
+		updateUrlSearchParams();
+	},
+	delete(...args) {
+		searchParams.delete(...args);
+		updateUrlSearchParams();
+	},
+	entries() {
+		return searchParams.entries();
+	},
+	forEach(...args) {
+		// eslint-disable-next-line unicorn/no-array-for-each
+		return searchParams.forEach(...args);
+	},
+	get(...args) {
+		return searchParams.get(...args);
+	},
+	getAll(...args) {
+		return searchParams.getAll(...args);
+	},
+	has(...args) {
+		return searchParams.has(...args);
+	},
+	keys() {
+		return searchParams.keys();
 	},
 	set(...args) {
-		state.set(...args);
+		searchParams.set(...args);
 		updateUrlSearchParams();
+	},
+	sort() {
+		searchParams.sort();
+		updateUrlSearchParams();
+	},
+	toString() {
+		return searchParams.toString();
+	},
+	values() {
+		return searchParams.values();
+	},
+	get size() {
+		return searchParams.size;
+	},
+	[Symbol.iterator]() {
+		return searchParams[Symbol.iterator]();
 	},
 };
 
-export function clearSearchParams() {
-	for (const key of state.keys()) {
-		state.delete(key);
+export { shell as searchParams };
+
+export function syncSearchParams() {
+	const newSearchParams = new URLSearchParams(globalThis.location.search);
+	if (searchParams.toString() === newSearchParams.toString()) {
+		return;
+	}
+
+	for (const key of searchParams.keys()) {
+		searchParams.delete(key);
+	}
+	for (const [key, value] of newSearchParams.entries()) {
+		searchParams.append(key, value);
 	}
 }
 
 function updateUrlSearchParams() {
 	let url = globalThis.location.origin + globalThis.location.pathname;
-	if (state.size > 0) {
-		url += '?' + state.toString();
+	if (searchParams.size > 0) {
+		url += '?' + searchParams.toString();
 	}
 	globalThis.history.pushState({}, '', url);
 }

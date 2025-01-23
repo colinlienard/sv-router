@@ -3,7 +3,7 @@ import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preloadOnHover } from './helpers/preload-on-hover.js';
 import { constructPath, resolveRouteComponents } from './helpers/utils.js';
-import { clearSearchParams } from './search-params.svelte.js';
+import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
 export let routes;
@@ -78,7 +78,7 @@ export function onNavigate() {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
 
-	clearSearchParams();
+	syncSearchParams();
 
 	Object.assign(location, updatedLocation());
 

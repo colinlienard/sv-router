@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { isActiveLink, Router, searchParams } from 'sv-router';
 	import { navigate, p } from 'sv-router/generated';
-
-	$inspect(searchParams.toString());
 </script>
 
 <a href={p('/')}>Home</a>

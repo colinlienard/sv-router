@@ -1,7 +1,15 @@
 import type { Component, Snippet } from 'svelte';
 import type { Action } from 'svelte/action';
 
-/** TODO */
+/**
+ * A Svelte action that will add a class to the anchor if its `href` matches the current route. It
+ * can have an optional `className` parameter to specify the class to add, otherwise it will default
+ * to `is-active`.
+ *
+ * ```svelte
+ * <a href="/about" use:isActiveLink={{ className: 'active-link' }}>
+ * ```
+ */
 export const isActiveLink: IsActiveLink;
 /**
  * Setup a new router instance with the given routes.
