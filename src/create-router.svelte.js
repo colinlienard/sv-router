@@ -34,24 +34,7 @@ export function createRouter(r) {
 
 	return {
 		p: constructPath,
-		/**
-		 * @param {string} path
-		 * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
-		 */
-		navigate(path, options = {}) {
-			if (options.params) {
-				path = constructPath(path, options.params);
-			}
-			if (options.search) {
-				path += (options.search.startsWith('?') ? '' : '?') + options.search;
-			}
-			if (options.hash) {
-				path += options.hash;
-			}
-			const historyMethod = options.replace ? 'replaceState' : 'pushState';
-			globalThis.history[historyMethod](options.state || {}, '', path);
-			onNavigate();
-		},
+		navigate,
 		isActive,
 		route: {
 			get params() {
@@ -72,6 +55,27 @@ export function createRouter(r) {
 		},
 	};
 }
+
+/**
+ * @param {string} path
+ * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
+ */
+function navigate(path, options = {}) {
+	if (options.params) {
+		path = constructPath(path, options.params);
+	}
+	if (options.search) {
+		path += (options.search.startsWith('?') ? '' : '?') + options.search;
+	}
+	if (options.hash) {
+		path += options.hash;
+	}
+	const historyMethod = options.replace ? 'replaceState' : 'pushState';
+	globalThis.history[historyMethod](options.state || {}, '', path);
+	onNavigate();
+}
+navigate.back = () => globalThis.history.back();
+navigate.forward = () => globalThis.history.forward();
 
 export function onNavigate() {
 	if (!routes) {

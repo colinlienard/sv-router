@@ -76,12 +76,19 @@ export type RouterApi<T extends Routes> = {
 	 * 		id: 1,
 	 * 	},
 	 * });
+	 * // Back and forward
+	 * navigate.back();
+	 * navigate.forward();
 	 * ```
 	 *
 	 * @param route The route to navigate to.
 	 * @param options The navigation options.
 	 */
-	navigate<U extends Path<T>>(...args: NavigateArgs<U>): void;
+	navigate: {
+		<U extends Path<T>>(...args: NavigateArgs<U>): void;
+		back: () => void;
+		forward: () => void;
+	};
 	/**
 	 * Will return `true` if the given path is active.
 	 *

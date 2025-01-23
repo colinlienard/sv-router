@@ -17,8 +17,10 @@
 		searchParams.set('test', searchParams.has('test') ? 'ok' : '1');
 	}}
 >
-	ok
+	search params
 </button>
+<button onclick={navigate.back}>back</button>
+<button onclick={navigate.forward}>forward</button>
 <Router />
 
 <style>
