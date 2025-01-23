@@ -1,5 +1,14 @@
 # sv-router
 
+## 0.0.6
+
+### Patch Changes
+
+- b5da6da: Add back and forward navigate methods
+- 4ef06c5: Add support for params in catch-all routes
+- 99b437f: Add isActive function
+- 53c73ca: Add reactive url search params
+
 ## 0.0.5
 
 ### Patch Changes
