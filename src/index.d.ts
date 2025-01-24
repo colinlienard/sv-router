@@ -145,7 +145,7 @@ export type NavigateOptions =
 
 type NavigateArgs<T extends string> =
 	PathParams<T> extends never
-		? [T, NavigateOptions]
+		? [T] | [T, NavigateOptions]
 		: [T, NavigateOptions & { params: PathParams<T> }];
 
 type StripNonRoutes<T extends Routes> = {

@@ -6,7 +6,5 @@
 <a href={p('/')}>Home</a>
 <a href={p('/about')}>About</a>
 <a href={p('/posts')}>Posts</a>
-<button onclick={() => navigate('/posts/:id', { params: { id: 'programmatic' } })}>
-	Programmatic
-</button>
+<button onclick={() => navigate('/posts/static')}>Programmatic</button>
 <Router />

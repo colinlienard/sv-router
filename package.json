@@ -33,8 +33,6 @@
 		"src"
 	],
 	"scripts": {
-		"ex:config-based": "pnpm --filter config-based-example",
-		"ex:file-based": "pnpm --filter file-based-example",
 		"test": "vitest",
 		"check": "tsc --noEmit && pnpm -r check",
 		"lint": "eslint .",
@@ -47,9 +45,9 @@
 		"esm-env": "^1.2.2"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.27.11",
-		"@eslint/js": "^9.18.0",
-		"@types/node": "^22.10.7",
+		"@changesets/cli": "^2.27.12",
+		"@eslint/js": "^9.19.0",
+		"@types/node": "^22.10.10",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
 		"eslint-plugin-svelte": "^2.46.1",
@@ -60,9 +58,9 @@
 		"prettier-plugin-svelte": "^3.3.3",
 		"type-testing": "^0.2.0",
 		"typescript": "^5.7.3",
-		"typescript-eslint": "^8.20.0",
-		"vite": "^6.0.7",
-		"vitest": "^3.0.2"
+		"typescript-eslint": "^8.21.0",
+		"vite": "^6.0.11",
+		"vitest": "^3.0.4"
 	},
 	"peerDependencies": {
 		"svelte": "^5"
