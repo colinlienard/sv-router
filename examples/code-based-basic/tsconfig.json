@@ -1,0 +1,8 @@
+{
+	"extends": ["../../tsconfig.json"],
+	"compilerOptions": {
+		"module": "Preserve",
+		"moduleResolution": "Bundler"
+	},
+	"include": ["src/**/*.ts", "src/**/*.svelte"]
+}
