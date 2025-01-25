@@ -34,7 +34,7 @@
 	],
 	"scripts": {
 		"test": "vitest",
-		"check": "svelte-check --tsconfig ./tsconfig.json && pnpm -r check",
+		"check": "svelte-check && pnpm -r check",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier . --check",
