@@ -36,33 +36,9 @@ export function buildFileTree(routesPath) {
 			continue;
 		}
 		if (!entry.endsWith('.svelte')) continue;
-		handleFlatFilename(tree, entry);
+		tree.push(entry);
 	}
 	return tree;
-}
-
-/**
- * @param {FileTree} tree
- * @param {string} path
- */
-function handleFlatFilename(tree, path) {
-	// Split the path by the first dot that is not preceded or followed by another dot
-	const splited = path.split(/(?<!\.)\.(?!\.)/);
-	if (splited.length === 2) {
-		tree.push(path);
-		return;
-	}
-	const first = /** @type {string} */ (splited.shift());
-	for (const item of tree) {
-		if (typeof item === 'object' && item.name === first) {
-			handleFlatFilename(item.tree, splited.join('.'));
-			return;
-		}
-	}
-	/** @type {FileTree} */
-	const branch = [];
-	handleFlatFilename(branch, splited.join('.'));
-	tree.push({ name: first, tree: branch });
 }
 
 /**
@@ -75,34 +51,48 @@ export function createRouteMap(fileTree, prefix = '') {
 	const result = {};
 	for (const entry of fileTree) {
 		if (typeof entry === 'string') {
-			const catchAll = /\[\.\.\.(.*)\]\.svelte/g.exec(entry); // Match [...slug].svelte
-			switch (true) {
-				case entry === 'index.svelte': {
-					result['/'] = prefix + entry;
-					break;
-				}
-				case entry === 'layout.svelte': {
-					result['layout'] = prefix + entry;
-					break;
-				}
-				case !!catchAll: {
-					result['*' + catchAll[1]] = prefix + entry;
-					break;
-				}
-				default: {
-					if (PARAM_FILENAME_REGEX.test(entry)) {
-						result['/' + entry.replaceAll(PARAM_FILENAME_REGEX, ':$1')] = prefix + entry;
-						break;
-					}
-					result['/' + entry.replace('.svelte', '')] = prefix + entry;
-					break;
-				}
+			if (entry.endsWith('index.svelte')) {
+				const indexEntry = entry.replace(/\.?index\.svelte/, '');
+				result['/' + (indexEntry ? filePathToRoute(indexEntry) : '')] = prefix + entry;
+				continue;
 			}
+
+			if (entry === 'layout.svelte') {
+				result['layout'] = prefix + entry;
+				continue;
+			}
+
+			// Match [...slug].svelte
+			const catchAll = /\[\.\.\.(.*)\]\.svelte/g.exec(entry);
+			if (catchAll) {
+				result['*' + catchAll[1]] = prefix + entry;
+				continue;
+			}
+
+			// Match [id].svelte
+			if (PARAM_FILENAME_REGEX.test(entry)) {
+				result['/' + filePathToRoute(entry.replaceAll(PARAM_FILENAME_REGEX, ':$1'))] =
+					prefix + entry;
+				continue;
+			}
+
+			result['/' + filePathToRoute(entry.replace('.svelte', ''))] = prefix + entry;
 		} else {
-			result['/' + entry.name] = createRouteMap(entry.tree, prefix + entry.name + '/');
+			const entryName = filePathToRoute(entry.name);
+			result['/' + entryName] = createRouteMap(entry.tree, prefix + entryName + '/');
 		}
 	}
 	return result;
+}
+
+/**
+ * Replace `.` with `/`, but not `...`
+ *
+ * @param {string} filename
+ * @returns {string}
+ */
+function filePathToRoute(filename) {
+	return filename.replaceAll(/\.(?!\.\.)/g, '/');
 }
 
 /**

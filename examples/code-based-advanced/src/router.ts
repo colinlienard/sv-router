@@ -5,14 +5,18 @@ import NotFound from './routes/NotFound.svelte';
 import Posts from './routes/Posts.svelte';
 import StaticPost from './routes/StaticPost.svelte';
 
-export const { p, navigate, route } = createRouter({
+export const { p, navigate, isActive, route } = createRouter({
 	'/': Home,
 	'/about': () => import('./routes/About.svelte'),
+	'/a/more/nested/route': () => import('./routes/AMoreNestedRoute.svelte'),
 	'/posts': {
 		'/': Posts,
 		'/static': StaticPost,
-		'/:id': DynamicPost,
+		'/:slug': DynamicPost,
+		'/comments': {
+			'/:commentId': () => import('./routes/Comment.svelte'),
+		},
 		layout: () => import('./Layout.svelte'),
 	},
-	'*slug': NotFound,
+	'*notfound': NotFound,
 });

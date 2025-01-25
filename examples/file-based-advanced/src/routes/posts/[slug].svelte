@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { p, route } from '../router';
+	import { p, route } from 'sv-router/generated';
 </script>
 
 <h1>A post with the slug {route.params.slug}</h1>

@@ -2,5 +2,4 @@
 	import { route } from 'sv-router/generated';
 </script>
 
-<h1>404</h1>
-<p>Not found route: {route.params.slug}</p>
+<h1>A comment with the slug {route.params.commentId}</h1>
