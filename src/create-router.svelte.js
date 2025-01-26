@@ -81,16 +81,22 @@ export function onNavigate() {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
+	const {
+		match,
+		layouts,
+		hooks,
+		params: newParams,
+	} = matchRoute(globalThis.location.pathname, routes);
 
-	syncSearchParams();
+	for (const { beforeLoad, afterLoad } of hooks) {
+	}
 
-	Object.assign(location, updatedLocation());
-
-	const { match, layouts, params: newParams } = matchRoute(globalThis.location.pathname, routes);
-	params.value = newParams || {};
 	resolveRouteComponents(match ? [...layouts, match] : layouts).then((components) => {
 		componentTree.value = components;
 	});
+	params.value = newParams || {};
+	syncSearchParams();
+	Object.assign(location, updatedLocation());
 }
 
 /** @param {Event} event */

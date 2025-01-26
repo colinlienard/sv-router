@@ -40,8 +40,10 @@ export const { p, navigate, isActive, route } = createRouter({
     "layout": () => import("../a/fake/path/posts/layout.svelte"),
     "/": () => import("../a/fake/path/posts/index.svelte"),
     "/static": () => import("../a/fake/path/posts/static.svelte"),
+    "hooks": () => import("../a/fake/path/posts/hooks.ts"),
     "/comments": {
       "/:id": () => import("../a/fake/path/posts/comments/[id].svelte"),
+      "hooks": () => import("../a/fake/path/posts/comments/hooks.ts"),
     }
   }
 });`);
@@ -77,9 +79,10 @@ describe('buildFileTree', () => {
 					'layout.svelte',
 					'index.svelte',
 					'static.svelte',
+					'hooks.ts',
 					{
 						name: 'comments',
-						tree: ['[id].svelte'],
+						tree: ['[id].svelte', 'hooks.ts'],
 					},
 				],
 			},
@@ -120,9 +123,10 @@ describe('createRouteMap', () => {
 					'static.svelte',
 					'[id].svelte',
 					'layout.svelte',
+					'hooks.ts',
 					{
 						name: 'comments',
-						tree: ['[id].svelte'],
+						tree: ['[id].svelte', 'hooks.ts'],
 					},
 				],
 			},
@@ -136,8 +140,10 @@ describe('createRouteMap', () => {
 				'/static': 'posts/static.svelte',
 				'/:id': 'posts/[id].svelte',
 				layout: 'posts/layout.svelte',
+				hooks: 'posts/hooks.ts',
 				'/comments': {
 					'/:id': 'posts/comments/[id].svelte',
+					hooks: 'posts/comments/hooks.ts',
 				},
 			},
 			'*slug': '[...slug].svelte',
@@ -200,13 +206,14 @@ function mockTreeMode() {
 				'layout.svelte',
 				'index.svelte',
 				'static.svelte',
+				'hooks.ts',
 				'text.txt',
 				'noextension',
 				'comments',
 			];
 		}
 		if (dir.toString().endsWith('comments')) {
-			return ['[id].svelte'];
+			return ['[id].svelte', 'hooks.ts'];
 		}
 		return ['[...slug].svelte', 'about.svelte', 'index.svelte', 'posts'];
 	});

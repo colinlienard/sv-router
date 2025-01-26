@@ -42,12 +42,13 @@ export type RouteComponent<Props extends BaseProps = any> =
 	| Component<Props>
 	| LazyRouteComponent<Props>;
 export type LayoutComponent = RouteComponent<{ children: Snippet }>;
+export type Hooks = Partial<Record<'beforeLoad' | 'afterLoad', () => void>>;
 
 export type Routes = {
 	[_: `/${string}`]: RouteComponent | Routes;
 	[_: `*${string}`]: RouteComponent | undefined;
 	layout?: LayoutComponent;
-	hooks?: Record<'beforeLoad', () => void>;
+	hooks?: Hooks;
 };
 
 export type IsActiveLink = Action<HTMLAnchorElement, { className?: string } | undefined>;

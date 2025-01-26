@@ -35,7 +35,9 @@ export function buildFileTree(routesPath) {
 			tree.push({ name: entry, tree: buildFileTree(path.join(routesPath, entry)) });
 			continue;
 		}
-		if (!entry.endsWith('.svelte')) continue;
+		if (!entry.endsWith('.svelte') && entry !== 'hooks.ts' && entry !== 'hooks.js') {
+			continue;
+		}
 		tree.push(entry);
 	}
 	return tree;
@@ -51,6 +53,14 @@ export function createRouteMap(fileTree, prefix = '') {
 	const result = {};
 	for (const entry of fileTree) {
 		if (typeof entry === 'string') {
+			if (!entry.endsWith('.svelte')) {
+				if (entry === 'hooks.js' || entry === 'hooks.ts') {
+					result['hooks'] = prefix + entry;
+					continue;
+				}
+				continue;
+			}
+
 			if (entry.endsWith('index.svelte')) {
 				const indexEntry = entry.replace(/\.?index\.svelte/, '');
 				result['/' + (indexEntry ? filePathToRoute(indexEntry) : '')] = prefix + entry;

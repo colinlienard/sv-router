@@ -10,6 +10,9 @@ export const { p, navigate, isActive, route } = createRouter({
 		'/:slug': () => import('./routes/DynamicPost.svelte'),
 		'/comments': {
 			'/:commentId': () => import('./routes/Comment.svelte'),
+			hooks: {
+				afterLoad() {},
+			},
 		},
 		layout: () => import('./Layout.svelte'),
 	},

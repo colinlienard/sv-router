@@ -3,6 +3,8 @@
  *
  * @typedef {import('../index.d.ts').RouteComponent} RouteComponent
  *
+ * @typedef {import('../index.d.ts').Hooks} Hooks
+ *
  * @typedef {import('../index.d.ts').Routes} Routes
  */
 
@@ -12,6 +14,7 @@
  * @returns {{
  * 	match: RouteComponent | undefined;
  * 	layouts: LayoutComponent[];
+ * 	hooks: Hooks[];
  * 	params: Record<string, string>;
  * 	breakFromLayouts: boolean;
  * }}
@@ -29,6 +32,9 @@ export function matchRoute(pathname, routes) {
 
 	/** @type {LayoutComponent[]} */
 	let layouts = [];
+
+	/** @type {Hooks[]} */
+	let hooks = [];
 
 	/** @type {Record<string, string>} */
 	let params = {};
@@ -74,6 +80,10 @@ export function matchRoute(pathname, routes) {
 				layouts.push(routes.layout);
 			}
 
+			if ('hooks' in routes && routes.hooks) {
+				hooks.push(routes.hooks);
+			}
+
 			if (typeof routeMatch === 'function') {
 				if (routeParts.length === pathParts.length) {
 					match = routeMatch;
@@ -87,6 +97,7 @@ export function matchRoute(pathname, routes) {
 			if (result) {
 				match = result.match;
 				params = { ...params, ...result.params };
+				hooks.push(...result.hooks);
 				if (result.breakFromLayouts) {
 					layouts = [];
 				} else {
@@ -97,7 +108,7 @@ export function matchRoute(pathname, routes) {
 		}
 	}
 
-	return { match, layouts, params, breakFromLayouts };
+	return { match, layouts, hooks, params, breakFromLayouts };
 }
 
 /**

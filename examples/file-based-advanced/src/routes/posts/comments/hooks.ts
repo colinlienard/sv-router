@@ -1,5 +1,5 @@
 import type { Hooks } from 'sv-router';
 
 export default {
-	beforeLoad() {},
+	afterLoad() {},
 } satisfies Hooks;
