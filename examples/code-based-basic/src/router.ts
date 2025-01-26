@@ -1,4 +1,6 @@
 import { createRouter } from 'sv-router';
+import Layout from './Layout.svelte';
+import About from './routes/About.svelte';
 import DynamicPost from './routes/DynamicPost.svelte';
 import Home from './routes/Home.svelte';
 import NotFound from './routes/NotFound.svelte';
@@ -7,12 +9,12 @@ import StaticPost from './routes/StaticPost.svelte';
 
 export const { p, navigate, isActive, route } = createRouter({
 	'/': Home,
-	'/about': () => import('./routes/About.svelte'),
+	'/about': About,
 	'/posts': {
 		'/': Posts,
 		'/static': StaticPost,
 		'/:slug': DynamicPost,
-		layout: () => import('./Layout.svelte'),
+		layout: Layout,
 	},
 	'*notfound': NotFound,
 });

@@ -47,6 +47,7 @@ export type Routes = {
 	[_: `/${string}`]: RouteComponent | Routes;
 	[_: `*${string}`]: RouteComponent | undefined;
 	layout?: LayoutComponent;
+	hooks?: Record<'beforeLoad', () => void>;
 };
 
 export type IsActiveLink = Action<HTMLAnchorElement, { className?: string } | undefined>;
@@ -153,7 +154,9 @@ type StripNonRoutes<T extends Routes> = {
 		? never
 		: K extends 'layout'
 			? never
-			: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
+			: K extends 'hooks'
+				? never
+				: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
 };
 
 type RecursiveKeys<T extends Routes, Prefix extends string = ''> = {
