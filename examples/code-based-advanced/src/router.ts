@@ -13,6 +13,7 @@ export const { p, navigate, isActive, route } = createRouter({
 			'/:commentId': () => import('./routes/Comment.svelte'),
 			hooks: {
 				afterLoad() {
+					// eslint-disable-next-line no-console
 					console.log('Loaded comment');
 				},
 			},

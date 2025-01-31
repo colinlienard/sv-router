@@ -115,14 +115,33 @@ export function createRouterCode(routes, routesPath) {
 		routesPath += '/';
 	}
 
-	const jsonRoutes = JSON.stringify(routes, undefined, 2);
-	const withImports = jsonRoutes.replaceAll(
-		/"(.*)": "(.*)",?/g,
-		`"$1": () => import("${routesPath}$2"),`,
+	// const jsonRoutes = JSON.stringify(routes, undefined, 2);
+	// const withImports = jsonRoutes.replaceAll(
+	// 	/"(?!hooks)(.*)": "(.*)",?/g,
+	// 	`"$1": () => import("${routesPath}$2"),`,
+	// );
+
+	const withImports = (function daccord(routes, routesPath) {
+		/** @type {GeneratedRoutes} */
+		const result = {};
+		for (const [key, value] of Object.entries(routes)) {
+			result[key] =
+				typeof value === 'object'
+					? daccord(value, routesPath)
+					: `() => import('${routesPath}${value}')`;
+		}
+		return result;
+	})(routes, routesPath);
+
+	console.log(JSON.stringify(withImports, undefined, 2));
+	const stringified = JSON.stringify(withImports, undefined, 2).replaceAll(
+		/"(.*)": "?([^"]*)"/g,
+		`'$1': $2`,
 	);
+
 	return [
 		'import { createRouter } from "sv-router";',
 		'\n\n',
-		`export const { p, navigate, isActive, route } = createRouter(${withImports});`,
+		`export const { p, navigate, isActive, route } = createRouter(${stringified});`,
 	].join('');
 }

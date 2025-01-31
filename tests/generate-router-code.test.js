@@ -151,7 +151,7 @@ describe('createRouteMap', () => {
 	});
 });
 
-describe('createRouterCode', () => {
+describe.only('createRouterCode', () => {
 	it('should generate the router', () => {
 		const result = createRouterCode(
 			{
@@ -161,22 +161,25 @@ describe('createRouterCode', () => {
 					'/': 'posts/index.svelte',
 					'/static': 'posts/static.svelte',
 					'/:id': 'posts/:id.svelte',
+					hooks: 'posts/hooks.ts',
 				},
 				'*slug': '[...slug].svelte',
 			},
 			'./routes',
 		);
 		expect(result).toBe(`import { createRouter } from "sv-router";
+import postsHooks from "./routes/posts/hooks.ts";
 
 export const { p, navigate, isActive, route } = createRouter({
-  "/": () => import("./routes/index.svelte"),
-  "/about": () => import("./routes/about.svelte"),
-  "/posts": {
-    "/": () => import("./routes/posts/index.svelte"),
-    "/static": () => import("./routes/posts/static.svelte"),
-    "/:id": () => import("./routes/posts/:id.svelte"),
+  '/': () => import('./routes/index.svelte'),
+  '/about': () => import('./routes/about.svelte'),
+  '/posts': {
+    '/': () => import('./routes/posts/index.svelte'),
+    '/static': () => import('./routes/posts/static.svelte'),
+    '/:id': () => import('./routes/posts/:id.svelte'),
+    'hooks': postsHooks,
   },
-  "*slug": () => import("./routes/[...slug].svelte"),
+  '*slug': () => import('./routes/[...slug].svelte'),
 });`);
 	});
 });

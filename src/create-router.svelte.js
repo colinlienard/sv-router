@@ -80,7 +80,6 @@ navigate.forward = () => globalThis.history.forward();
  * @param {import('./index.d.ts').NavigateOptions} options
  */
 export async function onNavigate(path, options = {}) {
-	console.log('onNavigate', path, options);
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
@@ -92,7 +91,11 @@ export async function onNavigate(path, options = {}) {
 	} = matchRoute(path || globalThis.location.pathname, routes);
 
 	for (const { beforeLoad } of hooks) {
-		await beforeLoad?.();
+		try {
+			await beforeLoad?.();
+		} catch {
+			return;
+		}
 	}
 
 	componentTree.value = await resolveRouteComponents(match ? [...layouts, match] : layouts);

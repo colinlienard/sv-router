@@ -1,5 +1,9 @@
 import type { Hooks } from 'sv-router';
+import { navigate } from 'sv-router/generated';
 
 export default {
-	beforeLoad() {},
+	async beforeLoad() {
+		await new Promise((r) => setTimeout(r, 1000));
+		throw navigate('/aaa');
+	},
 } satisfies Hooks;
