@@ -1,1 +1,1 @@
-<h1>Unauthorized</h1>
+<h1>Will redirect in 1s</h1>

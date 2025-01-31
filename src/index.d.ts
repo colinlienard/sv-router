@@ -15,7 +15,7 @@ export const isActiveLink: IsActiveLink;
  * Setup a new router instance with the given routes.
  *
  * ```js
- * export const { p, navigate, route } = createRouter({
+ * export const { p, navigate, isActive, route } = createRouter({
  *   '/': Home,
  *   '/about': About,
  *   ...
@@ -42,7 +42,7 @@ export type RouteComponent<Props extends BaseProps = any> =
 	| Component<Props>
 	| LazyRouteComponent<Props>;
 export type LayoutComponent = RouteComponent<{ children: Snippet }>;
-export type Hooks = Partial<Record<'beforeLoad' | 'afterLoad', () => void>>;
+export type Hooks = Partial<Record<'beforeLoad' | 'afterLoad', () => void | Promise<void>>>;
 
 export type Routes = {
 	[_: `/${string}`]: RouteComponent | Routes;
@@ -141,7 +141,7 @@ export type NavigateOptions =
 			replace?: boolean;
 			search?: string;
 			state?: string;
-			hash?: `#${string}`;
+			hash?: string;
 	  }
 	| undefined;
 

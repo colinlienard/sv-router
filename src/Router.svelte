@@ -3,10 +3,14 @@
 	import { componentTree, onGlobalClick, onNavigate } from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
 
-	onNavigate();
+	// onNavigate();
+	onNavigate().catch(() => {});
 
 	$effect(() => {
-		const off1 = on(globalThis, 'popstate', onNavigate);
+		const off1 = on(globalThis, 'popstate', () => {
+			// onNavigate();
+			onNavigate().catch(() => {});
+		});
 		const off2 = on(globalThis, 'click', onGlobalClick);
 
 		return () => {
