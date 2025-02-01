@@ -124,7 +124,7 @@ export function createRouterCode(routes, routesPath) {
 		for (const [key, value] of Object.entries(routes)) {
 			if (typeof value === 'object') {
 				result[key] = handleImports(value, routesPath);
-			} else if (key === 'hooks') {
+			} else if (key === 'hooks' || !value.endsWith('.lazy.svelte')) {
 				const variableName = hooksPathToCamelCase(value);
 				importsMap.set(variableName, routesPath + value);
 				result[key] = variableName;
@@ -160,10 +160,15 @@ export function createRouterCode(routes, routesPath) {
  */
 export function hooksPathToCamelCase(value) {
 	const parts = value.split(/\/|-/);
-	parts.pop();
-	parts.push('hooks');
+	const lastPart = /** @type {string} */ (parts.pop());
+	const isHooks = HOOKS_FILENAME_REGEX.test(lastPart);
+	if (lastPart.endsWith('.svelte')) {
+		parts.push(lastPart.replace('.svelte', ''));
+	} else if (isHooks) {
+		parts.push('hooks');
+	}
 	const uppercased = parts.map((part, index) => {
-		if (index === 0) return part;
+		if (index === 0 && isHooks) return part;
 		return part.charAt(0).toUpperCase() + part.slice(1);
 	});
 	return uppercased.join('');

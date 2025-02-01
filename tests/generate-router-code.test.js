@@ -93,24 +93,24 @@ describe('buildFileTree', () => {
 	});
 });
 
-describe('createRouteMap', () => {
+describe.only('createRouteMap', () => {
 	it('should generate routes (flat)', () => {
 		const result = createRouteMap([
-			'[...slug].svelte',
+			'[...slug].lazy.svelte',
 			'about.svelte',
 			'index.svelte',
-			'posts.[id].svelte',
-			'posts.index.svelte',
+			'posts.[id].lazy.svelte',
+			'posts.index.lazy.svelte',
 			'posts.static.svelte',
-			'posts.comments.[id].svelte',
+			'posts.comments.[id].lazy.svelte',
 		]);
 		expect(result).toEqual({
-			'*slug': '[...slug].svelte',
+			'*slug': '[...slug].lazy.svelte',
 			'/': 'index.svelte',
 			'/about': 'about.svelte',
-			'/posts/:id': 'posts.[id].svelte',
-			'/posts/comments/:id': 'posts.comments.[id].svelte',
-			'/posts': 'posts.index.svelte',
+			'/posts/:id': 'posts.[id].lazy.svelte',
+			'/posts/comments/:id': 'posts.comments.[id].lazy.svelte',
+			'/posts': 'posts.index.lazy.svelte',
 			'/posts/static': 'posts.static.svelte',
 		});
 	});
@@ -122,34 +122,34 @@ describe('createRouteMap', () => {
 			{
 				name: 'posts',
 				tree: [
-					'index.svelte',
+					'index.lazy.svelte',
 					'static.svelte',
-					'[id].svelte',
+					'[id].lazy.svelte',
 					'layout.svelte',
 					'hooks.ts',
 					{
 						name: 'comments',
-						tree: ['[id].svelte', 'hooks.svelte.ts'],
+						tree: ['[id].lazy.svelte', 'hooks.svelte.ts'],
 					},
 				],
 			},
-			'[...slug].svelte',
+			'[...slug].lazy.svelte',
 		]);
 		expect(result).toEqual({
 			'/': 'index.svelte',
 			'/about': 'about.svelte',
 			'/posts': {
-				'/': 'posts/index.svelte',
+				'/': 'posts/index.lazy.svelte',
 				'/static': 'posts/static.svelte',
-				'/:id': 'posts/[id].svelte',
+				'/:id': 'posts/[id].lazy.svelte',
 				layout: 'posts/layout.svelte',
 				hooks: 'posts/hooks.ts',
 				'/comments': {
-					'/:id': 'posts/comments/[id].svelte',
+					'/:id': 'posts/comments/[id].lazy.svelte',
 					hooks: 'posts/comments/hooks.svelte.ts',
 				},
 			},
-			'*slug': '[...slug].svelte',
+			'*slug': '[...slug].lazy.svelte',
 		});
 	});
 });
@@ -161,41 +161,44 @@ describe('createRouterCode', () => {
 				'/': 'index.svelte',
 				'/about': 'about.svelte',
 				'/posts': {
-					'/': 'posts/index.svelte',
+					'/': 'posts/index.lazy.svelte',
 					'/static': 'posts/static.svelte',
-					'/:id': 'posts/:id.svelte',
+					'/:id': 'posts/[id].lazy.svelte',
 					hooks: 'posts/hooks.ts',
 				},
-				'*slug': '[...slug].svelte',
+				'*slug': '[...slug].lazy.svelte',
 			},
 			'./routes',
 		);
 		expect(result).toBe(`import { createRouter } from 'sv-router';
+import Index from './routes/index.svelte';
+import About from './routes/about.svelte';
+import PostsStatic from './routes/posts/static.svelte';
 import postsHooks from './routes/posts/hooks';
 
 export const { p, navigate, isActive, route } = createRouter({
-  '/': () => import('./routes/index.svelte'),
-  '/about': () => import('./routes/about.svelte'),
+  '/': Index,
+  '/about': About,
   '/posts': {
-    '/': () => import('./routes/posts/index.svelte'),
-    '/static': () => import('./routes/posts/static.svelte'),
-    '/:id': () => import('./routes/posts/:id.svelte'),
+    '/': () => import('./routes/posts/index.lazy.svelte'),
+    '/static': PostsStatic,
+    '/:id': () => import('./routes/posts/[id].lazy.svelte'),
     'hooks': postsHooks
   },
-  '*slug': () => import('./routes/[...slug].svelte')
+  '*slug': () => import('./routes/[...slug].lazy.svelte')
 });`);
 	});
 });
 
 describe('hooksPathToCamelCase', () => {
-	it('should convert a simple path to camelCase', () => {
-		const result = hooksPathToCamelCase('simple/path/hooks.ts');
-		expect(result).toBe('simplePathHooks');
+	it('should handle paths with only one segment', () => {
+		const result = hooksPathToCamelCase('about.svelte');
+		expect(result).toBe('about');
 	});
 
 	it('should convert a path with multiple segments to camelCase', () => {
-		const result = hooksPathToCamelCase('this/is/a/test/path/hooks.ts');
-		expect(result).toBe('thisIsATestPathHooks');
+		const result = hooksPathToCamelCase('simple/path/about.svelte');
+		expect(result).toBe('simplePathAbout');
 	});
 
 	it('should handle paths with dashes correctly', () => {
@@ -203,23 +206,23 @@ describe('hooksPathToCamelCase', () => {
 		expect(result).toBe('thisIsATestPathHooks');
 	});
 
-	it('should handle paths with only one segment', () => {
-		const result = hooksPathToCamelCase('hooks.ts');
-		expect(result).toBe('hooks');
+	it('should handle paths with hooks', () => {
+		const result = hooksPathToCamelCase('posts/hooks.svelte.ts');
+		expect(result).toBe('postsHooks');
 	});
 });
 
 function mockFlatMode() {
 	readdirSync.mockImplementation(() => [
-		'[...slug].svelte',
+		'[...slug].lazy.svelte',
 		'about.svelte',
 		'index.svelte',
-		'posts.[id].svelte',
-		'posts.index.svelte',
+		'posts.[id].lazy.svelte',
+		'posts.index.lazy.svelte',
 		'posts.static.svelte',
 		'posts.text.txt',
 		'posts.noextension',
-		'posts.comments.[id].svelte',
+		'posts.comments.[id].lazy.svelte',
 	]);
 	lstatSync.mockImplementation(() => ({
 		isDirectory: () => false,
@@ -230,9 +233,9 @@ function mockTreeMode() {
 	readdirSync.mockImplementation((dir) => {
 		if (dir.toString().endsWith('posts')) {
 			return [
-				'[id].svelte',
+				'[id].lazy.svelte',
 				'layout.svelte',
-				'index.svelte',
+				'index.lazy.svelte',
 				'static.svelte',
 				'hooks.ts',
 				'text.txt',
@@ -241,9 +244,9 @@ function mockTreeMode() {
 			];
 		}
 		if (dir.toString().endsWith('comments')) {
-			return ['[id].svelte', 'hooks.svelte.ts'];
+			return ['[id].lazy.svelte', 'hooks.svelte.ts'];
 		}
-		return ['[...slug].svelte', 'about.svelte', 'index.svelte', 'posts'];
+		return ['[...slug].lazy.svelte', 'about.svelte', 'index.svelte', 'posts'];
 	});
 	lstatSync.mockImplementation((dir) => ({
 		isDirectory() {

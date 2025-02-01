@@ -1,10 +1,13 @@
 import { createRouter } from 'sv-router';
+import Layout from './Layout.svelte';
+import About from './routes/About.svelte';
+import AMoreNestedRoute from './routes/AMoreNestedRoute.svelte';
 import Home from './routes/Home.svelte';
 
 export const { p, navigate, isActive, route } = createRouter({
 	'/': Home,
-	'/about': () => import('./routes/About.svelte'),
-	'/a/more/nested/route': () => import('./routes/AMoreNestedRoute.svelte'),
+	'/about': About,
+	'/a/more/nested/route': AMoreNestedRoute,
 	'/posts': {
 		'/': () => import('./routes/Posts.svelte'),
 		'/static': () => import('./routes/StaticPost.svelte'),
@@ -18,7 +21,7 @@ export const { p, navigate, isActive, route } = createRouter({
 				},
 			},
 		},
-		layout: () => import('./Layout.svelte'),
+		layout: Layout,
 	},
 	'/unauthorized': {
 		'/': () => import('./routes/Unauthorized.svelte'),

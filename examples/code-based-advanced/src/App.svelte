@@ -3,10 +3,10 @@
 	import { isActive, navigate, p } from './router';
 </script>
 
-<a href={p('/')} use:isActiveLink data-preload>Home</a>
-<a href={p('/about')} use:isActiveLink data-preload>About</a>
+<a href={p('/')} use:isActiveLink>Home</a>
+<a href={p('/about')} use:isActiveLink>About</a>
 <a href={p('/posts')} use:isActiveLink data-preload>Posts</a>
-<a href={p('/a/more/nested/route')} use:isActiveLink data-preload>A more nested route</a>
+<a href={p('/a/more/nested/route')} use:isActiveLink>A more nested route</a>
 <a href={p('/unauthorized')}>Unauthorized</a>
 <button
 	onclick={() => navigate('/posts/:slug', { params: { slug: 'static' }, search: 'hello=world' })}
