@@ -1,5 +1,5 @@
 {
-	"name": "file-based-basic-example",
+	"name": "file-based-basic",
 	"private": true,
 	"type": "module",
 	"scripts": {

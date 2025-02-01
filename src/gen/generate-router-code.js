@@ -125,7 +125,7 @@ export function createRouterCode(routes, routesPath) {
 			if (typeof value === 'object') {
 				result[key] = handleImports(value, routesPath);
 			} else if (key === 'hooks') {
-				const variableName = pathToCamelCase(value);
+				const variableName = hooksPathToCamelCase(value);
 				importsMap.set(variableName, routesPath + value);
 				result[key] = variableName;
 			} else {
@@ -158,7 +158,7 @@ export function createRouterCode(routes, routesPath) {
  * @param {string} value
  * @returns {string}
  */
-export function pathToCamelCase(value) {
+export function hooksPathToCamelCase(value) {
 	const parts = value.split(/\/|-/);
 	parts.pop();
 	parts.push('hooks');

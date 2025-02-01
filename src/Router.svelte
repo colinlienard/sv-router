@@ -6,9 +6,7 @@
 	onNavigate();
 
 	$effect(() => {
-		const off1 = on(globalThis, 'popstate', () => {
-			onNavigate();
-		});
+		const off1 = on(globalThis, 'popstate', () => onNavigate());
 		const off2 = on(globalThis, 'click', onGlobalClick);
 
 		return () => {

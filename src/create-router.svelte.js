@@ -112,7 +112,7 @@ export async function onNavigate(path, options = {}) {
 	Object.assign(location, updatedLocation());
 
 	for (const { afterLoad } of hooks) {
-		await afterLoad?.();
+		afterLoad?.();
 	}
 }
 
@@ -134,8 +134,7 @@ export function onGlobalClick(event) {
 		search: url.search,
 		state,
 		hash: url.hash,
-		// });
-	}).catch(() => {});
+	});
 }
 
 function updatedLocation() {

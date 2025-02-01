@@ -3,7 +3,7 @@ import {
 	createRouteMap,
 	createRouterCode,
 	generateRouterCode,
-	pathToCamelCase,
+	hooksPathToCamelCase,
 } from '../src/gen/generate-router-code.js';
 
 const readdirSync = vi.hoisted(() => vi.fn());
@@ -187,24 +187,24 @@ export const { p, navigate, isActive, route } = createRouter({
 	});
 });
 
-describe('pathToCamelCase', () => {
+describe('hooksPathToCamelCase', () => {
 	it('should convert a simple path to camelCase', () => {
-		const result = pathToCamelCase('simple/path/hooks.ts');
+		const result = hooksPathToCamelCase('simple/path/hooks.ts');
 		expect(result).toBe('simplePathHooks');
 	});
 
 	it('should convert a path with multiple segments to camelCase', () => {
-		const result = pathToCamelCase('this/is/a/test/path/hooks.ts');
+		const result = hooksPathToCamelCase('this/is/a/test/path/hooks.ts');
 		expect(result).toBe('thisIsATestPathHooks');
 	});
 
 	it('should handle paths with dashes correctly', () => {
-		const result = pathToCamelCase('this-is/a-test/path/hooks.ts');
+		const result = hooksPathToCamelCase('this-is/a-test/path/hooks.ts');
 		expect(result).toBe('thisIsATestPathHooks');
 	});
 
 	it('should handle paths with only one segment', () => {
-		const result = pathToCamelCase('hooks.ts');
+		const result = hooksPathToCamelCase('hooks.ts');
 		expect(result).toBe('hooks');
 	});
 });

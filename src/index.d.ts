@@ -42,7 +42,24 @@ export type RouteComponent<Props extends BaseProps = any> =
 	| Component<Props>
 	| LazyRouteComponent<Props>;
 export type LayoutComponent = RouteComponent<{ children: Snippet }>;
-export type Hooks = Partial<Record<'beforeLoad' | 'afterLoad', () => void | Promise<void>>>;
+export type Hooks = {
+	/**
+	 * A function that will be called before the route is loaded. If it returns a promise, the route
+	 * will wait for it to resolve before loading.
+	 *
+	 * You can throw a `navigate` call to redirect to another route.
+	 *
+	 * ```js
+	 * async beforeLoad() {
+	 *   await ...
+	 *   throw navigate('/home');
+	 * }
+	 * ```
+	 */
+	beforeLoad?(): void | Promise<void>;
+	/** A function that will be called after the route is loaded. */
+	afterLoad?(): void;
+};
 
 export type Routes = {
 	[_: `/${string}`]: RouteComponent | Routes;
