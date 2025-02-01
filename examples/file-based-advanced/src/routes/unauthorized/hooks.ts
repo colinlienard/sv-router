@@ -4,6 +4,6 @@ import { navigate } from 'sv-router/generated';
 export default {
 	async beforeLoad() {
 		await new Promise((r) => setTimeout(r, 1000));
-		throw navigate('/aaa');
+		throw navigate('/');
 	},
 } satisfies Hooks;

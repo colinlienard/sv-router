@@ -42,5 +42,5 @@ export function resolveRouteComponent(input) {
  * @returns {input is import('../index.d.ts').LazyRouteComponent}
  */
 export function isLazyImport(input) {
-	return typeof input === 'function' && !!/\(\)\s?=>\s?import\(.*\)/g.test(String(input));
+	return typeof input === 'function' && !!/\(\)\s?=>\s?import\(.*\)/.test(String(input));
 }
