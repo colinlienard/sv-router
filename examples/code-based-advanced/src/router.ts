@@ -3,6 +3,7 @@ import Layout from './Layout.svelte';
 import About from './routes/About.svelte';
 import AMoreNestedRoute from './routes/AMoreNestedRoute.svelte';
 import Home from './routes/Home.svelte';
+import StaticPost from './routes/StaticPost.svelte';
 
 export const { p, navigate, isActive, route } = createRouter({
 	'/': Home,
@@ -10,7 +11,7 @@ export const { p, navigate, isActive, route } = createRouter({
 	'/a/more/nested/route': AMoreNestedRoute,
 	'/posts': {
 		'/': () => import('./routes/Posts.svelte'),
-		'/static': () => import('./routes/StaticPost.svelte'),
+		'/static': StaticPost,
 		'/:slug': () => import('./routes/DynamicPost.svelte'),
 		'/comments': {
 			'/:commentId': () => import('./routes/Comment.svelte'),
