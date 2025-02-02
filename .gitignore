@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .svelte-kit
+cache
 
 # Editor directories and files
 .vscode/*

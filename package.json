@@ -33,6 +33,9 @@
 		"src"
 	],
 	"scripts": {
+		"docs:dev": "pnpm --filter docs dev",
+		"docs:build": "pnpm --filter docs build",
+		"docs:preview": "pnpm --filter docs preview",
 		"test": "vitest",
 		"check": "svelte-check && pnpm -r check",
 		"lint": "eslint .",
