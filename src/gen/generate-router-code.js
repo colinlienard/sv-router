@@ -182,19 +182,6 @@ export function pathToCorrectCasing(value) {
 	}
 	parts.push(...lastPart.split('-'));
 
-	// const parts = value.split(/\/|-/);
-	// const lastPart = /** @type {string} */ (parts.pop());
-
-	// if (CATCH_ALL_FILENAME_REGEX.test(lastPart)) {
-	// 	parts.push(lastPart.replace(CATCH_ALL_FILENAME_REGEX, '$1'));
-	// } else if (PARAM_FILENAME_REGEX.test(lastPart)) {
-	// 	parts.push(lastPart.replace(PARAM_FILENAME_REGEX, '$1'));
-	// } else if (lastPart === 'hooks') {
-	// 	parts.push('hooks');
-	// } else {
-	// 	parts.push(lastPart.replace('.svelte', ''));
-	// }
-
 	const uppercased = parts.map((part, index) => {
 		if (index === 0 && lastPart === 'hooks') return part;
 		return part.charAt(0).toUpperCase() + part.slice(1);
