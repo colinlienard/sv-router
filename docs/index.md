@@ -1,24 +1,37 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
-  name: 'sv-router documentation'
-  text: 'Modern Svelte routing'
-  tagline: My great project tagline
+  name: sv-router
+  text: Modern Svelte routing
+  tagline: A feature-rich yet intuitive routing library for Svelte SPAs.
+  image:
+    src: /logo.png
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Get Started
+      link: /guide/getting-started
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Why sv-router?
+      link: /guide/why
+    - theme: alt
+      text: GitHub
+      link: https://github.com/colinlienard/sv-router
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - icon:
+      src: /typescript.svg
+    title: Typesafe navigation
+    details: Get autocomplete and type checking for your routes, ensuring reliable navigation.
+  - icon:
+      src: /vitejs.svg
+    title: File-based routing (optional)
+    details: Enjoy the DX of a meta-framework-like approach with a Vite plugin.
+  - icon: 🌿
+    title: Nested routes
+    details: Create complex layouts with ease, thanks to intuitive route nesting.
+  - icon:
+      src: /svelte.svg
+    title: Made for Svelte 5
+    details: Benefit from faster performance and a smaller bundle size, built natively for the latest Svelte.
 ---
