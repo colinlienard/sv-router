@@ -4,9 +4,11 @@ layout: home
 hero:
   name: sv-router
   text: Modern Svelte routing
-  tagline: A feature-rich yet intuitive routing library for Svelte SPAs.
+  tagline: A feature-rich yet intuitive routing library for Svelte single-page apps.
   image:
-    src: /logo.png
+    src: /logo.svg
+    width: 100%
+    height: 100%
   actions:
     - theme: brand
       text: Get Started
@@ -19,19 +21,16 @@ hero:
       link: https://github.com/colinlienard/sv-router
 
 features:
-  - icon:
-      src: /typescript.svg
+  - icon: 🔒
     title: Typesafe navigation
-    details: Get autocomplete and type checking for your routes, ensuring reliable navigation.
-  - icon:
-      src: /vitejs.svg
+    details: Get autocomplete and type checking for your routes.
+  - icon: 🗂️
     title: File-based routing (optional)
-    details: Enjoy the DX of a meta-framework-like approach with a Vite plugin.
+    details: Enjoy the DX of a meta-framework-like approach.
   - icon: 🌿
     title: Nested routes
-    details: Create complex layouts with ease, thanks to intuitive route nesting.
-  - icon:
-      src: /svelte.svg
+    details: Create complex layouts with ease.
+  - icon: 🚀
     title: Made for Svelte 5
-    details: Benefit from faster performance and a smaller bundle size, built natively for the latest Svelte.
+    details: Benefit from faster performance and smaller bundle size.
 ---

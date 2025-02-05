@@ -1,11 +1,13 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
-	title: 'sv-router',
-	description: 'Modern Svelte routing',
-	head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+	title: 'sv-router | Modern Svelte routing',
+	description: 'A feature-rich yet intuitive routing library for Svelte single-page apps.',
+	head: [['link', { rel: 'icon', href: '/logo.svg' }]],
 	cleanUrls: true,
 	themeConfig: {
+		logo: '/logo.svg',
+		siteTitle: 'sv-router',
 		nav: [
 			{ text: 'Guide', link: '/guide/why', activeMatch: '/guide/' },
 			{ text: 'Reference', link: '/reference/foo', activeMatch: '/reference/' },
