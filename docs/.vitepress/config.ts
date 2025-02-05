@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
 
 export default defineConfig({
 	title: 'sv-router | Modern Svelte routing',
@@ -21,10 +22,32 @@ export default defineConfig({
 			'/guide': [
 				{
 					text: 'Introduction',
+					collapsed: false,
 					items: [
 						{ text: 'Why sv-router?', link: '/guide/why' },
 						{ text: 'Getting Started', link: '/guide/getting-started' },
 					],
+				},
+				{
+					text: 'Code-based Routing',
+					collapsed: false,
+					items: [
+						{ text: 'Setup', link: '/guide/code-based/setup' },
+						{ text: 'Routing Concepts', link: '/guide/code-based/routing-concepts' },
+					],
+				},
+				{
+					text: 'File-based Routing',
+					collapsed: false,
+					items: [
+						{ text: 'Setup', link: '/guide/file-based/setup' },
+						{ text: 'Routing Concepts', link: '/guide/file-based/routing-concepts' },
+						{ text: 'Configuration', link: '/guide/file-based/configuration' },
+					],
+				},
+				{
+					text: 'API reference',
+					link: '/reference/foo',
 				},
 			],
 			'/reference': [
@@ -48,5 +71,14 @@ export default defineConfig({
 		search: {
 			provider: 'local',
 		},
+	},
+	markdown: {
+		config(md) {
+			md.use(groupIconMdPlugin);
+		},
+	},
+	vite: {
+		// @ts-expect-error Types not up-to-date
+		plugins: [groupIconVitePlugin()],
 	},
 });
