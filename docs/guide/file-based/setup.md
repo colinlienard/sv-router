@@ -4,11 +4,11 @@ When using this method, a file will be generated based on your files structure.
 
 Lets say that you have created two routes in your `src/routes` directory:
 
-```
+```sh
 src
-└─ routes
-  ├─ about.svelte
-  └─ index.svelte
+└── routes
+  ├── about.svelte
+  └── index.svelte
 ```
 
 > [!IMPORTANT]
@@ -24,10 +24,10 @@ import { defineConfig } from 'vite';
 import { router } from 'sv-router/vite-plugin'; // [!code ++]
 
 export default defineConfig({
-  plugins: [
-    svelte(),
-    router(), // [!code ++]
-  ],
+	plugins: [
+		svelte(),
+		router(), // [!code ++]
+	],
 });
 ```
 
@@ -37,9 +37,9 @@ In your `package.json`, add a script to generate the routes.
 
 ```json [package.json]
 {
-  "scripts": {
-    "gen-routes": "sv-router", // [!code ++]
-  }
+	"scripts": {
+		"gen-routes": "sv-router" // [!code ++]
+	}
 }
 ```
 
@@ -49,9 +49,9 @@ You can also add a `postinstall` script in your `package.json` to generate the r
 
 ```json [package.json]
 {
-  "scripts": {
-    "postinstall": "sv-router" // [!code ++]
-  }
+	"scripts": {
+		"postinstall": "sv-router" // [!code ++]
+	}
 }
 ```
 
@@ -59,7 +59,7 @@ Then run your install command or start the dev server, and a `.router` directory
 
 You can ignore the `.router` directory in your `.gitignore` file.
 
-```gitignore [.gitignore]
+```[.gitignore]
 .router
 ```
 
@@ -67,7 +67,7 @@ Then you should extends your tsconfig from the generated one:
 
 ```json [tsconfig.json]
 {
-  "extends": ["./.router/tsconfig.json"]
+	"extends": ["./.router/tsconfig.json"]
 }
 ```
 

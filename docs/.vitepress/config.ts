@@ -34,6 +34,7 @@ export default defineConfig({
 					items: [
 						{ text: 'Setup', link: '/guide/code-based/setup' },
 						{ text: 'Routing Concepts', link: '/guide/code-based/routing-concepts' },
+						{ text: 'Code Splitting', link: '/guide/code-based/code-splitting' },
 					],
 				},
 				{
@@ -42,7 +43,18 @@ export default defineConfig({
 					items: [
 						{ text: 'Setup', link: '/guide/file-based/setup' },
 						{ text: 'Routing Concepts', link: '/guide/file-based/routing-concepts' },
+						{ text: 'Code Splitting', link: '/guide/file-based/code-splitting' },
 						{ text: 'Configuration', link: '/guide/file-based/configuration' },
+					],
+				},
+				{
+					text: 'Common',
+					collapsed: false,
+					items: [
+						{ text: 'Navigation', link: '/guide/common/navigation' },
+						{ text: 'Search Params', link: '/guide/common/search-params' },
+						{ text: 'Hooks', link: '/guide/common/hooks' },
+						{ text: 'Preloading', link: '/guide/common/preloading' },
 					],
 				},
 				{

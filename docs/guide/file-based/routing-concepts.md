@@ -4,42 +4,56 @@
 
 When defining your routes, you can choose between two modes: flat or tree. In flat mode, all routes are defined at the root level of the router. In tree mode, routes are defined as a tree structure.
 
-```ts [router.ts]
-// Flat Mode
-'/about': About,
-'/about/work': Work,
-'/about/work/mywork': MyWork,
-'/about/contact': Contact,
+```sh
+# Flat
+routes
+├── about.svelte                       ➜ /about
+├── about.contact.svelte               ➜ /about/contact
+├── about.work.svelte                  ➜ /about/work
+└── about.work.mywork.svelte           ➜ /about/work/mywork
 
-// Tree Mode
-'/about': {
-  '/': About,
-  '/work': {
-    '/': Work,
-    '/mywork': MyWork,
-  },
-  '/contact': Contact,
-},
+# Tree
+routes
+└── about
+   ├── contact.svelte                  ➜ /about/contact
+   ├── index.svelte                    ➜ /about
+   └── work
+      ├── index.svelte                 ➜ /about/work
+      └── mywork.svelte                ➜ /about/work/mywork
 ```
 
 You can also mix-and-match both modes in the same router.
 
 ## Dynamic Routes
 
-To define dynamic routes, you can prefix a route segment with a colon `:`. This will match any value for that segment.
+To define dynamic routes, you can surround a route segment with square brackets. This will match any value for that segment.
 
 You can also define multiple dynamic segments in a single route.
 
-```ts [router.ts]
-'/user/:id': User,
-'/user/:id/post/:postId': Post,
+::: code-group
+
+```sh [Flat mode]
+routes
+├── user.[id].svelte                   ➜ /user/123
+└── user.[id].post.[postId].svelte     ➜ /user/123/post/456
 ```
+
+```sh [Tree mode]
+routes
+└── user
+   └── [id]
+      ├── index.svelte                 ➜ /user/123
+      └── post
+         └── [postId].svelte           ➜ /user/123/post/456
+```
+
+:::
 
 To access the dynamic segments in your component, you can use the `route.params` object.
 
 ```svelte [Post.svelte]
 <script lang="ts">
-	import { route } from '../router';
+	import { route } from 'sv-router/generated';
 
 	route.params; // Typed as { id?: string, postId?: string }
 </script>
@@ -55,27 +69,29 @@ To access the dynamic segments in your component, you can use the `route.params`
 
 If you want to match any route that hasn't been matched by other routes, you can define a catch-all route using the `*` wildcard.
 
-```ts [router.ts]
-'*': NotFound,
+```sh
+routes
+└── *.svelte                           ➜ /not-found
 ```
 
 You can define an optional name that you will then be able to access in your component using `route.params` similarly to dynamic routes.
 
-```ts [router.ts]
-'*notfound': NotFound,
+```sh
+routes
+└── *notfound.svelte                   ➜ /not-found
 ```
 
 ## Layouts
 
 You can define a component that will wrap the other routes at the same level or below using layouts:
 
-```ts{5} [router.ts]
-'/about': {
-  '/': About,
-  '/work': Work,
-  '/team': Team,
-  layout: AboutLayout,
-},
+```sh{4}
+routes
+└── about
+   ├── index.svelte
+   ├── layout.svelte
+   ├── team.svelte
+   └── work.svelte
 ```
 
 This layout component must render children:
