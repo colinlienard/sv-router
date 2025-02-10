@@ -16,7 +16,7 @@ src
 
 ## With Vite
 
-After starting a fresh new Vite project, you can add the Vite plugin in your config:
+After starting a fresh new Vite and Svelte project, you can add the Vite plugin in your config:
 
 ```ts [vite.config.ts]
 import { svelte } from '@sveltejs/vite-plugin-svelte';
@@ -71,7 +71,7 @@ Then you should extends your tsconfig from the generated one:
 }
 ```
 
-In the entrypoint component of your app, you should then import and the `Router` component - it will take care of rendering the correct route.
+In the entrypoint component of your app, you should then import and use the `Router` component - it will take care of rendering the correct route.
 
 You can also add links to navigate between the routes. You should now have an app with working navigation!
 

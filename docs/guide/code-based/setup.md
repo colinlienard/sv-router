@@ -15,7 +15,7 @@ export const { p, navigate, isActive, route } = createRouter({
 });
 ```
 
-In the entrypoint component of your app, you should then import and the `Router` component - it will take care of rendering the correct route.
+In the entrypoint component of your app, you should then import and use the `Router` component - it will take care of rendering the correct route.
 
 You can also add links to navigate between the routes. You should now have an app with working navigation!
 

@@ -96,7 +96,7 @@ routes
 
 This layout component must render children:
 
-```svelte [AboutLayout.svelte]
+```svelte [layout.svelte]
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 

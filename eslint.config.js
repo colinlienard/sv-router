@@ -73,6 +73,6 @@ export default [
 	prettier,
 	...svelte.configs['flat/prettier'],
 	{
-		ignores: ['**/dist/**'],
+		ignores: ['**/dist/**', '**/cache/**'],
 	},
 ];
