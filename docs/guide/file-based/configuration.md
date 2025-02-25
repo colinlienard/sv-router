@@ -19,7 +19,7 @@ export default defineConfig({
 });
 ```
 
-You should also pass the options to the CLI that you hopefully use in your postinstall script:
+You should also pass the options to the CLI that you have setup in your `postinstall` script:
 
 ```json [package.json]
 {
