@@ -12,16 +12,15 @@ For enhanced type safety, use the `p` function:
 
 ::: code-group
 
-```svelte [code-based]
+```svelte [Code-based]
 <script lang="ts">
-	// Import from where you called the `createRoute` function
-	import { p } from '../router.ts';
+	import { p } from '../router';
 </script>
 
 <a href={p('/about')}>About</a>
 ```
 
-```svelte [file-based]
+```svelte [File-based]
 <script lang="ts">
 	import { p } from 'sv-router/generated';
 </script>
@@ -49,15 +48,15 @@ For navigation triggered by JavaScript events, use the `navigate` function:
 
 ::: code-group
 
-```svelte [code-based]
+```svelte [Code-based]
 <script lang="ts">
-	import { navigate } from '../router.ts';
+	import { navigate } from '../router';
 </script>
 
 <button on:click={() => navigate('/about')}>About</button>
 ```
 
-```svelte [file-based]
+```svelte [File-based]
 <script lang="ts">
 	import { navigate } from 'sv-router/generated';
 </script>

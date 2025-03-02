@@ -2,7 +2,7 @@
 
 sv-router provides a convenient way to access and manipulate URL search parameters. The `searchParam` object extends [`SvelteURLSearchParams`](https://svelte.dev/docs/svelte/svelte-reactivity#SvelteURLSearchParams) from Svelte's reactivity API.
 
-It implements the same interface as the native `URLSearchParams` object but with two significant advantages:
+It implements the same interface as the native [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) object but with two significant advantages:
 
 1. It's fully reactive
 2. It automatically updates the URL when modified

@@ -1,0 +1,106 @@
+---
+outline: [2, 4]
+---
+
+# sv-router
+
+## Functions
+
+### `createRouter(routes)`
+
+Sets up a new router instance with the given routes configuration.
+
+**Parameters:**
+- `routes` - An object mapping paths to components or nested routes
+
+**Returns:** A router API object with the following properties:
+- [`p`](#p-path-params) - Path constructor
+- [`navigate`](#navigate-path-options) - Navigation function
+- [`isActive`](#isactive-path-params) - Route activation checker
+- [`route`](#route) - Current route information
+
+#### `p(path, params?)`
+
+Constructs a path with type-safe parameter substitution.
+
+**Parameters:**
+- `path` - The route path
+- `params` - (Optional) Parameters to substitute in the path
+
+**Returns:** A string representing the constructed path
+
+#### `navigate(path, options?)`
+
+Programmatically navigate to a route.
+
+**Parameters:**
+- `path` - The route to navigate to
+- `options` - (Optional) Navigation options
+
+**Options:**
+- `replace` - Replace current history entry instead of pushing
+- `search` - Query string
+- `state` - History state to save
+- `hash` - URL hash fragment
+- `params` - Parameters to substitute in the path
+
+**Methods:**
+- `navigate.back()` - Navigate back in history
+- `navigate.forward()` - Navigate forward in history
+
+#### `isActive(path, params?)`
+
+Checks if a given path is currently active.
+
+**Parameters:**
+- `path` - The route to check
+- `params` - (Optional) Parameters to substitute in the path
+
+**Returns:** Boolean indicating if the route is active
+
+#### `route`
+
+An object containing information about the current route.
+
+**Properties:**
+- `params` - Parameters from the current route
+- `pathname` - Current path
+- `search` - Query string portion of the URL
+- `state` - History state
+- `hash` - Hash fragment of the URL
+
+### `isActiveLink`
+
+A Svelte action that adds a class to anchors when their `href` matches the current route.
+
+**Parameters:**
+- `options` - (Optional) Configuration object
+  - `className` - The class to add when active (defaults to `is-active`)
+
+## Components
+
+### `<Router />`
+
+The component that renders the current route.
+
+This component will automatically render the component that matches the current URL path. It uses the routes configuration provided to `createRouter()` to determine which component to render.
+
+## Variables
+
+### `searchParams`
+
+A reactive URL search parameters object that updates the URL when changed.
+
+**Properties and Methods:**
+- All standard [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) methods (`get`, `set`, `has`, `delete`, etc.)
+
+
+## Types
+
+### `Hooks`
+
+Configuration object for route lifecycle hooks.
+
+**Properties:**
+- `beforeLoad?(): void | Promise<void>` - A function called before the route is loaded. You can throw a `navigate` call to redirect.
+- `afterLoad?(): void` - A function called after the route is loaded.

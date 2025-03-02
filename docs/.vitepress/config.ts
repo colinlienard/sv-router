@@ -11,7 +11,7 @@ export default defineConfig({
 		siteTitle: 'sv-router',
 		nav: [
 			{ text: 'Guide', link: '/guide/why', activeMatch: '/guide/' },
-			{ text: 'Reference', link: '/reference/foo', activeMatch: '/reference/' },
+			{ text: 'Reference', link: '/reference/', activeMatch: '/reference/' },
 			{ text: 'Examples', link: 'https://github.com/colinlienard/sv-router/tree/main/examples' },
 			{
 				text: 'Changelog',
@@ -68,8 +68,8 @@ export default defineConfig({
 				{
 					text: 'Reference',
 					items: [
-						{ text: 'foo', link: '/reference/foo' },
-						{ text: 'bar', link: '/reference/bar' },
+						{ text: 'sv-router', link: '/reference/' },
+						{ text: 'sv-router/vite-plugin', link: '/reference/vite-plugin' },
 					],
 				},
 			],

@@ -7,6 +7,10 @@ When building navigation menus, you often need to highlight the currently active
 When applied to an anchor tag, this action automatically adds a CSS class when the link's href matches the current route. By default, it adds the class `is-active`, but you can customize this:
 
 ```svelte
+<script lang="ts">
+import { isActiveLink } from 'sv-router';
+</script>
+
 <a href="/about" use:isActiveLink>About</a>
 
 <!-- With custom class name -->
@@ -17,8 +21,10 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 
 For more complex scenarios, check if a route is active using the `isActiveRoute` function:
 
-```ts
-import { isActive } from 'sv-router';
+::: code-group
+
+```ts [Code-based]
+import { isActive } from './router';
 
 // Check if we're on the about page
 isActive('/about'); // returns true when on '/about'
@@ -29,3 +35,18 @@ isActive('/post/:slug', { slug: '123' }); // returns true when on '/post/123'
 // Check with any parameter value
 isActive('/post/:slug'); // returns true on any '/post/{value}' route
 ```
+
+```ts [File-based]
+import { isActive } from 'sv-router/generated';
+
+// Check if we're on the about page
+isActive('/about'); // returns true when on '/about'
+
+// Check with a specific parameter
+isActive('/post/:slug', { slug: '123' }); // returns true when on '/post/123'
+
+// Check with any parameter value
+isActive('/post/:slug'); // returns true on any '/post/{value}' route
+```
+
+:::

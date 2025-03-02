@@ -8,7 +8,9 @@ outline: [2, 3]
 
 Configure the Vite plugin by passing an options object to the `router()` function in your Vite configuration:
 
-```ts{4-6} [vite.config.ts]
+```ts{1,6-8} [vite.config.ts]
+import { router } from 'sv-router/vite-plugin';
+
 export default defineConfig({
 	plugins: [
 		svelte(),
