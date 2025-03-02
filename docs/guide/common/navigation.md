@@ -2,19 +2,19 @@
 
 ## Links
 
-Similarly to SvelteKit, just using anchor tags is sufficient to navigate between pages:
+Similar to SvelteKit, standard anchor tags provide basic navigation between pages:
 
 ```svelte
 <a href="/about">About</a>
 ```
 
-But to take advantage of navigation type-safety, you can use the `p` function:
+For enhanced type safety, use the `p` function:
 
 ::: code-group
 
 ```svelte [code-based]
 <script lang="ts">
-	// From where you have called the `createRoute` function`
+	// Import from where you called the `createRoute` function
 	import { p } from '../router.ts';
 </script>
 
@@ -31,7 +31,7 @@ But to take advantage of navigation type-safety, you can use the `p` function:
 
 :::
 
-You can also pass params and other options:
+You can also pass parameters and additional options:
 
 ```svelte
 <a
@@ -45,7 +45,7 @@ You can also pass params and other options:
 
 ## Programmatic Navigation
 
-To navigate programmatically, you can use the `navigate` function:
+For navigation triggered by JavaScript events, use the `navigate` function:
 
 ::: code-group
 
@@ -67,7 +67,7 @@ To navigate programmatically, you can use the `navigate` function:
 
 :::
 
-Similarly, you can pass params and other options:
+Similarly, you can pass parameters and additional options:
 
 ```ts
 navigate('/post/:slug', {
@@ -81,7 +81,7 @@ navigate('/post/:slug', {
 });
 ```
 
-You can also navigate back or forward:
+For browser history navigation, use:
 
 ```ts
 navigate.back();

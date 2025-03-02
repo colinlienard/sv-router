@@ -4,22 +4,22 @@ outline: [2, 3]
 
 # Configuration
 
-## How to configure
+## How to Configure
 
-To configure the Vite plugin, you can pass an object to the `router()` function in your Vite config file:
+Configure the Vite plugin by passing an options object to the `router()` function in your Vite configuration:
 
 ```ts{4-6} [vite.config.ts]
 export default defineConfig({
-  plugins: [
-   	svelte(),
-   	router({
-      path: 'src/pages',
-   	}),
-  ],
+	plugins: [
+		svelte(),
+		router({
+			path: 'src/pages',
+		}),
+	],
 });
 ```
 
-You should also pass the options to the CLI that you have setup in your `postinstall` script:
+Apply the same options to the CLI in your `postinstall` script:
 
 ```json [package.json]
 {
@@ -37,7 +37,7 @@ You should also pass the options to the CLI that you have setup in your `postins
 | -------- | --------------------- | -------- |
 | `string` | <pre>src/routes</pre> | No       |
 
-The path to the directory containing the route files.
+Specifies the directory containing your route files.
 
 ### `js`
 
@@ -45,4 +45,4 @@ The path to the directory containing the route files.
 | --------- | ---------------- | -------- |
 | `boolean` | <pre>false</pre> | No       |
 
-If set to `true`, generate a `.js` file instead of a `.ts` file.
+When set to `true`, generates a `.js` file instead of a `.ts` file.

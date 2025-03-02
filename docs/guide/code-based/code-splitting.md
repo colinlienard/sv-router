@@ -1,8 +1,8 @@
 # Code Splitting
 
-Code splitting is a technique used to split your code into multiple bundles which can then be loaded on demand or in parallel. This can help reduce the initial load time of your application, though it may be ommited for a home page for example.
+Code splitting divides your application into multiple bundles that load on demand or in parallel. This technique significantly reduces initial load times, though you might choose to omit it for frequently accessed pages like your home page.
 
-You can opt in by using the `import()` function:
+Implement code splitting using the `import()` function:
 
 ```ts [router.ts]
 import { createRouter } from 'sv-router';
@@ -17,6 +17,6 @@ export const { p, navigate, isActive, route } = createRouter({
 ```
 
 > [!NOTE]
-> This can also be done for [layouts](./routing-concepts#layouts).
+> Code splitting works equally well with [layouts](./routing-concepts#layouts).
 
-See [Preloading](../common/preloading) for more information on how to preload routes.
+For advanced loading strategies, see [Preloading](../common/preloading).

@@ -1,8 +1,10 @@
 # Hooks
 
-When defining your routes, you can also define hooks that will be executed before or after the route is executed.
+When defining routes, you can attach specialized hooks that execute before or after route activation.
 
-This can be useful for authorization, data fetching, etc.
+These hooks are valuable for implementing authorization checks, data fetching, and other preparatory or cleanup operations.
+
+Create a dedicated `hooks.ts` file within your route directory:
 
 ```sh {3}
 routes
@@ -16,19 +18,19 @@ import type { Hooks } from 'sv-router';
 
 export default {
 	beforeLoad() {
-		...
+		// Execute before route loads
 	},
 	afterLoad() {
-		...
+		// Execute after route loads
 	},
 } satisfies Hooks;
 ```
 
-These functions will be executed when a route at the same level or below is triggered.
+These functions activate when a route at the same level or any nested level is triggered.
 
-They can be asynchronous, and for the `beforeLoad` hook, this means that the route will not be loaded until the promise is resolved.
+Hooks can be asynchronous, and in the case of `beforeLoad`, the route won't load until the promise resolves.
 
-You can `throw` in a `beforeLoad` hook to prevent the route from being loaded. To redirect to another route from a hook, you can throw a `navigate` function:
+You can `throw` within a `beforeLoad` hook to prevent route loading. For redirecting to another route, throw a `navigate` function:
 
 ```ts
 export default {

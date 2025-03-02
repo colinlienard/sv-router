@@ -1,8 +1,8 @@
 # Setup
 
-Let's say that you already have created to components `Home.svelte` and `About.svelte` that you want to use as routes.
+Let's assume you've already created two components, `Home.svelte` and `About.svelte`, that you want to use as routes.
 
-You must first define the routes of your app in a file that will then export methods to use the router. Let's call this file `router.ts`.
+First, define your application's routes in a dedicated file that will export methods for interacting with the router. We'll name this file `router.ts`.
 
 ```ts [router.ts]
 import { createRouter } from 'sv-router';
@@ -15,13 +15,14 @@ export const { p, navigate, isActive, route } = createRouter({
 });
 ```
 
-In the entrypoint component of your app, you should then import and use the `Router` component - it will take care of rendering the correct route.
+Next, in your application's entry point component, import and use the `Router` component, which handles rendering the active route.
 
-You can also add links to navigate between the routes. You should now have an app with working navigation!
+Add links to enable navigation between routes, and you'll have a functioning navigation system:
 
 ```svelte [App.svelte]
 <script lang="ts">
 	import { Router } from 'sv-router';
+	import './router.ts';
 </script>
 
 <a href="/">Home</a>
@@ -30,4 +31,4 @@ You can also add links to navigate between the routes. You should now have an ap
 <Router />
 ```
 
-You can now learn more about the routing concepts.
+Continue reading to learn more about advanced routing concepts.

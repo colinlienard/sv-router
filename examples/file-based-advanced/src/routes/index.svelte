@@ -14,7 +14,7 @@
 	Remove first search param
 </button>
 <ul>
-	{#each searchParams.entries() as [key, value]}
+	{#each searchParams.entries() as [key, value] (key)}
 		<li>{key}: {value}</li>
 	{/each}
 </ul>

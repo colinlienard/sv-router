@@ -2,7 +2,7 @@
 
 ## Flat Mode or Tree Mode
 
-When defining your routes, you can choose between two modes: flat or tree. In flat mode, all routes are defined at the root level of the router. In tree mode, routes are defined as a tree structure.
+When defining routes, you can choose between two organizational structures: flat or tree. Flat mode defines all routes at the root level, while tree mode organizes routes in a hierarchical directory structure.
 
 ```sh
 # Flat
@@ -22,13 +22,13 @@ routes
       └── mywork.svelte                ➜ /about/work/mywork
 ```
 
-You can also mix-and-match both modes in the same router.
+You can effectively combine both modes within the same router configuration for maximum flexibility.
 
 ## Dynamic Routes
 
-To define dynamic routes, you can surround a route segment with square brackets. This will match any value for that segment.
+To create dynamic routes that match variable segments, surround the segment name with square brackets. This allows that segment to match any value.
 
-You can also define multiple dynamic segments in a single route.
+You can include multiple dynamic segments in a single route:
 
 ::: code-group
 
@@ -49,13 +49,14 @@ routes
 
 :::
 
-To access the dynamic segments in your component, you can use the `route.params` object.
+Access these dynamic segments in your components using the `route.params` object:
 
 ```svelte [Post.svelte]
 <script lang="ts">
 	import { route } from 'sv-router/generated';
 
-	route.params; // Typed as { id?: string, postId?: string }
+	// Typed as { id?: string, postId?: string }
+	route.params;
 </script>
 
 <main>
@@ -67,14 +68,14 @@ To access the dynamic segments in your component, you can use the `route.params`
 
 ## Catch-All Routes
 
-If you want to match any route that hasn't been matched by other routes, you can define a catch-all route using the `*` wildcard.
+To handle any unmatched routes, define a catch-all route using the `*` wildcard:
 
 ```sh
 routes
 └── *.svelte                           ➜ /not-found
 ```
 
-You can define an optional name that you will then be able to access in your component using `route.params` similarly to dynamic routes.
+You can assign an optional name to this wildcard, which you can then access via `route.params` similar to dynamic routes:
 
 ```sh
 routes
@@ -83,7 +84,7 @@ routes
 
 ## Layouts
 
-You can define a component that will wrap the other routes at the same level or below using layouts:
+Define a wrapping component for routes at the same level or below using layouts:
 
 ```sh{4}
 routes
@@ -94,7 +95,7 @@ routes
    └── work.svelte
 ```
 
-This layout component must render children:
+This layout component must render its children:
 
 ```svelte [layout.svelte]
 <script lang="ts">
@@ -109,4 +110,4 @@ This layout component must render children:
 ```
 
 > [!NOTE]
-> When changing routes that are using the same layout, the layout component will not be re-created. This is useful to avoid re-triggering side effects.
+> When navigating between routes that share the same layout, the layout component persists without being recreated. This prevents unnecessary side effect triggers and improves performance.

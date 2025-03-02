@@ -1,8 +1,8 @@
 # Setup
 
-When using this method, a file will be generated based on your files structure.
+With file-based routing, routes are automatically generated based on your file structure.
 
-Lets say that you have created two routes in your `src/routes` directory:
+Imagine you've created two route components in your `src/routes` directory:
 
 ```sh
 src
@@ -12,11 +12,11 @@ src
 ```
 
 > [!IMPORTANT]
-> File-based routing is primarly intended to use will Vite, though you can use it through the `sv-router` CLI.
+> While file-based routing is primarily designed for Vite, you can also use it through the `sv-router` CLI.
 
 ## With Vite
 
-After starting a fresh new Vite and Svelte project, you can add the Vite plugin in your config:
+After initializing a new Vite and Svelte project, add the sv-router plugin to your Vite configuration:
 
 ```ts [vite.config.ts]
 import { svelte } from '@sveltejs/vite-plugin-svelte';
@@ -31,9 +31,9 @@ export default defineConfig({
 });
 ```
 
-## With another bundler
+## With Another Bundler
 
-In your `package.json`, add a script to generate the routes.
+In your `package.json`, create a script to generate routes:
 
 ```json [package.json]
 {
@@ -43,9 +43,9 @@ In your `package.json`, add a script to generate the routes.
 }
 ```
 
-## Common steps
+## Common Steps
 
-You can also add a `postinstall` script in your `package.json` to generate the routes in CI or when welcoming new contributors:
+To ensure routes are generated during installation in CI environments or for new contributors, add a `postinstall` script:
 
 ```json [package.json]
 {
@@ -55,15 +55,15 @@ You can also add a `postinstall` script in your `package.json` to generate the r
 }
 ```
 
-Then run your install command or start the dev server, and a `.router` directory will be created with a TypeScript file containing the auto-generated routes mapping code, and a `tsconfig.json` file.
+After running your installation command or starting the development server, a `.router` directory will be created containing the auto-generated routes mapping code and a `tsconfig.json` file.
 
-You can ignore the `.router` directory in your `.gitignore` file.
+Add the `.router` directory to your `.gitignore` file:
 
 ```[.gitignore]
 .router
 ```
 
-Then you should extends your tsconfig from the generated one:
+Extend your project's TypeScript configuration from the generated one:
 
 ```json [tsconfig.json]
 {
@@ -71,9 +71,7 @@ Then you should extends your tsconfig from the generated one:
 }
 ```
 
-In the entrypoint component of your app, you should then import and use the `Router` component - it will take care of rendering the correct route.
-
-You can also add links to navigate between the routes. You should now have an app with working navigation!
+In your application's entry point component, import and use the `Router` component, which handles rendering the active route:
 
 ```svelte [App.svelte]
 <script lang="ts">
@@ -86,4 +84,4 @@ You can also add links to navigate between the routes. You should now have an ap
 <Router />
 ```
 
-You can now learn more about the routing concepts.
+You now have a functional navigation system. Continue reading to learn more about advanced routing concepts.

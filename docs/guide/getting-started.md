@@ -3,9 +3,9 @@
 ## Installation
 
 > [!IMPORTANT]
-> You must be using Svelte 5 in order to use this router.
+> sv-router requires Svelte 5 to function properly.
 
-Run the following command to install the package:
+Install the package using your preferred package manager:
 
 ::: code-group
 
@@ -29,7 +29,7 @@ bun add sv-router
 
 ## Setup
 
-Now you have to choose between **code-based** or **file-based** routing:
+Choose between two routing approaches:
 
-- With code-based routing, you'll have more control over the way you architect your files, but you'll have to manually define the routes. [Setup code-based routing here](./code-based/setup).
-- With file-based routing, you'll have to follow a specific file structure, but the routes mapping will be automatically generated. [Setup file-based routing here](./file-based/setup).
+- **Code-based routing**: Offers greater control over your file architecture but requires manual route definition. [Set up code-based routing here](./code-based/setup).
+- **File-based routing**: Automatically generates route mappings based on a specific file structure. [Set up file-based routing here](./file-based/setup).

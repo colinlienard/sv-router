@@ -1,30 +1,31 @@
 # Active Route
 
-## On links
+## On Links
 
-Often when you have links in your app, you want to highlight the link that corresponds to the current route. This is where the `isActiveLink` action comes in.
+When building navigation menus, you often need to highlight the currently active route. The `isActiveLink` action simplifies this process.
 
-When used on an anchor tag, the `isActiveLink` action will add a class to the anchor tag if the href matches the current route. This class defaults to `is-active` but can be customized.
+When applied to an anchor tag, this action automatically adds a CSS class when the link's href matches the current route. By default, it adds the class `is-active`, but you can customize this:
 
 ```svelte
 <a href="/about" use:isActiveLink>About</a>
 
-// With custom class
+<!-- With custom class name -->
 <a href="/about" use:isActiveLink={{ className: 'custom-class' }}>About</a>
 ```
 
 ## Programmatically
 
-You can also check if a route is active programmatically using the `isActiveRoute` function.
+For more complex scenarios, check if a route is active using the `isActiveRoute` function:
 
 ```ts
 import { isActive } from 'sv-router';
 
-isActive('/about'); // true on `/about`
+// Check if we're on the about page
+isActive('/about'); // returns true when on '/about'
 
-// With a specific param
-isActive('/post/:slug', { slug: '123' }); // true on `/post/123`
+// Check with a specific parameter
+isActive('/post/:slug', { slug: '123' }); // returns true when on '/post/123'
 
-// With any param
-isActive('/post/:slug'); // true on `/post/123`
+// Check with any parameter value
+isActive('/post/:slug'); // returns true on any '/post/{value}' route
 ```

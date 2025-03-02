@@ -1,18 +1,25 @@
 # Search Params
 
-`sv-router` provides an easy way to access and edit search params from the URL. The `searchParam` object is a wrapper around [`SvelteURLSearchParams`](https://svelte.dev/docs/svelte/svelte-reactivity#SvelteURLSearchParams) from the Svelte reactivity API.
+sv-router provides a convenient way to access and manipulate URL search parameters. The `searchParam` object extends [`SvelteURLSearchParams`](https://svelte.dev/docs/svelte/svelte-reactivity#SvelteURLSearchParams) from Svelte's reactivity API.
 
-It has exactly the same API as the native `URLSearchParams` object, but with the added benefit of being reactive, and updating the URL automatically:
+It implements the same interface as the native `URLSearchParams` object but with two significant advantages:
+
+1. It's fully reactive
+2. It automatically updates the URL when modified
 
 ```ts
 import { searchParams } from 'sv-router';
 
+// Add a parameter
 searchParams.append('hello', 'world');
 
+// Remove a parameter
 searchParams.delete('hello');
 
+// React to parameter changes
 $effect(() => {
-	// Will trigger on change
-	searchParams.get('hello');
+	// This effect will re-run whenever the 'hello' parameter changes
+	const value = searchParams.get('hello');
+	console.log(`Hello parameter is now: ${value}`);
 });
 ```

@@ -1,11 +1,13 @@
 # Preloading
 
-Preloading is a technique that allows you to load the next page in the background while the user is interacting with the current page. This can significantly reduce the perceived loading time of the next page.
+Preloading loads the next page in the background while users interact with the current page. This technique significantly reduces perceived loading times when users navigate to the preloaded page.
 
-For preloading to work, you need to first code-split the route you want to preload. See the [code-splitting](../code-based/code-splitting.md) guide for more information.
+For preloading to work effectively, you must first implement code splitting for the route you want to preload. See the [code-splitting guide](../code-based/code-splitting.md) for implementation details.
 
-You can add a `data-preload` attribute to an anchor to preload the route when the user hovers over the link:
+To enable preloading, simply add a `data-preload` attribute to the link that triggers navigation:
 
 ```svelte
 <a href="/about" data-preload>About</a>
 ```
+
+When users hover over this link, the About page component will begin loading in the background, ensuring it's ready (or nearly ready) by the time they click.
