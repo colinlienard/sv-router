@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: sv-router
-  text: Modern Svelte routing
+  text: Modern Svelte Routing
   tagline: A feature-rich yet intuitive routing library for Svelte single-page apps.
   image:
     src: /logo.svg

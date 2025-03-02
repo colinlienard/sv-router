@@ -1,7 +1,7 @@
 {
 	"name": "sv-router",
 	"version": "0.0.6",
-	"description": "Modern Svelte routing",
+	"description": "Modern Svelte Routing",
 	"keywords": [
 		"svelte",
 		"router",
@@ -70,5 +70,5 @@
 	"peerDependencies": {
 		"svelte": "^5"
 	},
-	"packageManager": "pnpm@10.2.1"
+	"packageManager": "pnpm@10.5.2"
 }

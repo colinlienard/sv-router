@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress';
 import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
 
 export default defineConfig({
-	title: 'sv-router | Modern Svelte routing',
+	title: 'sv-router | Modern Svelte Routing',
 	description: 'A feature-rich yet intuitive routing library for Svelte single-page apps.',
 	head: [['link', { rel: 'icon', href: '/logo.svg' }]],
 	cleanUrls: true,
