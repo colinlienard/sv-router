@@ -1,6 +1,6 @@
 # Preloading
 
-Preloading loads the next page in the background while users interact with the current page. This technique significantly reduces perceived loading times when users navigate to the preloaded page.
+Preloading loads the next page in the background while users interact with the current page. This technique can reduces perceived loading times when users navigate to the preloaded page.
 
 For preloading to work effectively, you must first implement code splitting for the route you want to preload. See the [code-splitting guide](../code-based/code-splitting.md) for implementation details.
 

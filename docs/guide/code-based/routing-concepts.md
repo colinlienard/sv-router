@@ -94,4 +94,4 @@ This layout component must render its children:
 ```
 
 > [!NOTE]
-> When navigating between routes that share the same layout, the layout component persists without being recreated. This prevents unnecessary side effect triggers and improves performance.
+> When navigating between routes that share the same layout, the layout component persists without being recreated. This prevents unnecessary side effect triggers.

@@ -1,6 +1,6 @@
 # Code Splitting
 
-Code splitting divides your application into multiple bundles that load on demand or in parallel. This technique significantly reduces initial load times, though you might choose to omit it for frequently accessed pages like your home page.
+Code splitting divides your application into multiple bundles that load on demand or in parallel. This technique reduces initial load times, though you might choose to omit it for frequently accessed pages like your home page.
 
 Implement code splitting by simply suffixing your route filename with `.lazy.svelte`:
 
