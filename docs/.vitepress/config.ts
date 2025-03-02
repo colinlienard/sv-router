@@ -61,7 +61,7 @@ export default defineConfig({
 				},
 				{
 					text: 'API reference',
-					link: '/reference/foo',
+					link: '/reference/',
 				},
 			],
 			'/reference': [

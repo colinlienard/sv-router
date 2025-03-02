@@ -8,7 +8,7 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 
 ```svelte
 <script lang="ts">
-import { isActiveLink } from 'sv-router';
+	import { isActiveLink } from 'sv-router';
 </script>
 
 <a href="/about" use:isActiveLink>About</a>
@@ -19,7 +19,7 @@ import { isActiveLink } from 'sv-router';
 
 ## Programmatically
 
-For more complex scenarios, check if a route is active using the `isActiveRoute` function:
+For more complex scenarios, check if a route is active using the `isActive` function:
 
 ::: code-group
 
