@@ -1,5 +1,13 @@
 # sv-router
 
+## 0.0.7
+
+### Patch Changes
+
+- 3a233a1: Improve navigate traversing api
+- b138b04: Specify which routes to lazy load in file-based routing
+- 94e608f: Add route hooks
+
 ## 0.0.6
 
 ### Patch Changes
