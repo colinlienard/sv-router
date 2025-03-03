@@ -38,9 +38,9 @@ Programmatically navigate to a route.
 
 **Parameters:**
 
- - `path | number` - Either:
-   - A string path to navigate to, or
-   - A number representing steps to navigate in history (negative for back, positive for forward)
+- `path | number` - Either:
+  - A string path to navigate to, or
+  - A number representing steps to navigate in history (negative for back, positive for forward)
 - `options` - (Optional) Navigation options
   - `replace` - Replace current history entry instead of pushing
   - `search` - Query string

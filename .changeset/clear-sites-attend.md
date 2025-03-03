@@ -2,4 +2,4 @@
 'sv-router': patch
 ---
 
-Rework navigate traversing api
+Improve navigate traversing api
