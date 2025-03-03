@@ -96,18 +96,15 @@ export type RouterApi<T extends Routes> = {
 	 * 	},
 	 * });
 	 * // Back and forward
-	 * navigate.back();
-	 * navigate.forward();
+	 * navigate(-1);
+	 * navigate(2);
 	 * ```
 	 *
 	 * @param route The route to navigate to.
 	 * @param options The navigation options.
 	 */
-	navigate: {
-		<U extends Path<T>>(...args: NavigateArgs<U>): void;
-		back: () => void;
-		forward: () => void;
-	};
+	navigate<U extends Path<T>>(...args: NavigateArgs<U>): void;
+
 	/**
 	 * Will return `true` if the given path is active.
 	 *
@@ -163,9 +160,10 @@ export type NavigateOptions =
 	| undefined;
 
 type NavigateArgs<T extends string> =
-	PathParams<T> extends never
-		? [T] | [T, NavigateOptions]
-		: [T, NavigateOptions & { params: PathParams<T> }];
+	| (PathParams<T> extends never
+			? [T] | [T, NavigateOptions]
+			: [T, NavigateOptions & { params: PathParams<T> }])
+	| [number];
 
 type StripNonRoutes<T extends Routes> = {
 	[K in keyof T as K extends `*${string}`

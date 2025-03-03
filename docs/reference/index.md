@@ -38,18 +38,15 @@ Programmatically navigate to a route.
 
 **Parameters:**
 
-- `path` - The route to navigate to
+ - `path | number` - Either:
+   - A string path to navigate to, or
+   - A number representing steps to navigate in history (negative for back, positive for forward)
 - `options` - (Optional) Navigation options
   - `replace` - Replace current history entry instead of pushing
   - `search` - Query string
   - `state` - History state to save
   - `hash` - URL hash fragment
   - `params` - Parameters to substitute in the path
-
-**Methods:**
-
-- `navigate.back()` - Navigate back in history
-- `navigate.forward()` - Navigate forward in history
 
 #### `isActive(path, params?)`
 

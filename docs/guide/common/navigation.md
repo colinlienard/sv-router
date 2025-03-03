@@ -80,9 +80,15 @@ navigate('/post/:slug', {
 });
 ```
 
-For browser history navigation, use:
+The `navigate` function also supports traversing through browser history, similar to the native [History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API):
 
 ```ts
-navigate.back();
-navigate.forward();
+// Go back one page (equivalent to the browser's back button)
+navigate(-1);
+
+// Go forward one page (equivalent to the browser's forward button)
+navigate(1);
+
+// Go back two pages
+navigate(-2);
 ```

@@ -57,10 +57,14 @@ export function createRouter(r) {
 }
 
 /**
- * @param {string} path
+ * @param {string | number} path
  * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
  */
 function navigate(path, options = {}) {
+	if (typeof path === 'number') {
+		globalThis.history.go(path);
+		return;
+	}
 	if (options.params) {
 		path = constructPath(path, options.params);
 	}
@@ -72,8 +76,6 @@ function navigate(path, options = {}) {
 	}
 	onNavigate(path, options);
 }
-navigate.back = () => globalThis.history.back();
-navigate.forward = () => globalThis.history.forward();
 
 /**
  * @param {string} [path]
