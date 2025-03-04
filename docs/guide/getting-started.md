@@ -25,6 +25,10 @@ yarn add sv-router
 bun add sv-router
 ```
 
+```sh [deno]
+deno add npm:sv-router
+```
+
 :::
 
 ## Setup

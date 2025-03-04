@@ -19,7 +19,7 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 
 ## Programmatically
 
-For more complex scenarios, check if a route is active using the `isActive` function:
+For more complex scenarios, check if a route is active using the `isActive` function, which provides auto-complete and type checking for your routes:
 
 ::: code-group
 

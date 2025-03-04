@@ -12,3 +12,10 @@ sv-router is a feature-rich yet intuitive routing library for Svelte SPAs. It pr
 - **🔌 No Backend Required**: Works perfectly for purely client-side SPAs
 
 Whether you're building a small project or a complex application, sv-router provides the tools you need without the overhead of a full-stack framework.
+
+## Acknowledgements
+
+sv-router draws inspiration from:
+- [TanStack Router](https://tanstack.com/router/latest)
+- [Vue Router](https://router.vuejs.org/)
+- [Solid Router](https://docs.solidjs.com/solid-router)
