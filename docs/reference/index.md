@@ -59,7 +59,7 @@ Checks if a given path is currently active.
 
 **Returns:** Boolean indicating if the route is active
 
-**Method:**
+**Methods:**
 
 - `startsWith(path: string, params?: Record<string, string | number>): boolean` - Returns true if the current route starts with the given path and parameters.
 
