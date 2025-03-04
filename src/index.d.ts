@@ -68,7 +68,10 @@ export type Routes = {
 	hooks?: Hooks;
 };
 
-export type IsActiveLink = Action<HTMLAnchorElement, { className?: string } | undefined>;
+export type IsActiveLink = Action<
+	HTMLAnchorElement,
+	{ className?: string; startsWith?: boolean } | undefined
+>;
 
 export type RouterApi<T extends Routes> = {
 	/**
@@ -114,7 +117,10 @@ export type RouterApi<T extends Routes> = {
 	 * @param path The route to check.
 	 * @param params The optional parameters to replace in the route.
 	 */
-	isActive<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
+	isActive: {
+		<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
+		startsWith<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
+	};
 	route: {
 		/**
 		 * An object containing the parameters of the current route.

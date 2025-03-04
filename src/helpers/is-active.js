@@ -7,25 +7,41 @@ import { constructPath } from './utils.js';
  * @returns {boolean}
  */
 export function isActive(pathname, params) {
+	return compare((a, b) => a === b, pathname, params);
+}
+
+/**
+ * @param {string} pathname
+ * @param {Record<string, string>} [params]
+ * @returns {boolean}
+ */
+isActive.startsWith = (pathname, params) => {
+	return compare((a, b) => a.startsWith(b), pathname, params);
+};
+
+/**
+ * @param {function(string, string): boolean} compareFn
+ * @param {string} pathname
+ * @param {Record<string, string>} [params]
+ * @returns {boolean}
+ */
+function compare(compareFn, pathname, params) {
 	if (!pathname.includes(':')) {
-		return pathname === location.pathname;
+		return compareFn(location.pathname, pathname);
 	}
 
 	if (params) {
-		return constructPath(pathname, params) === location.pathname;
+		return compareFn(location.pathname, constructPath(pathname, params));
 	}
 
 	const pathParts = pathname.split('/').slice(1);
 	const routeParts = location.pathname.split('/').slice(1);
-	if (pathParts.length !== routeParts.length) {
-		return false;
-	}
 	for (const [index, pathPart] of pathParts.entries()) {
 		const routePart = routeParts[index];
 		if (routePart.startsWith(':')) {
 			continue;
 		}
-		return pathPart === routePart;
+		return compareFn(pathPart, routePart);
 	}
 	return false;
 }

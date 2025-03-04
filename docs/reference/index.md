@@ -59,6 +59,9 @@ Checks if a given path is currently active.
 
 **Returns:** Boolean indicating if the route is active
 
+**Method:**
+- `startsWith(path: string, params?: Record<string, string | number>): boolean` - Returns true if the current route starts with the given path and parameters.
+
 #### `route`
 
 An object containing information about the current route.
@@ -79,6 +82,7 @@ A Svelte action that adds a class to anchors when their `href` matches the curre
 
 - `options` - (Optional) Configuration object
   - `className` - The class to add when active (defaults to `is-active`)
+  - `startsWith` - Whether to match the start of the path (defaults to `false`)
 
 ## Components
 

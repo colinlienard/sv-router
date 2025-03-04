@@ -15,6 +15,9 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 
 <!-- With custom class name -->
 <a href="/about" use:isActiveLink={{ className: 'custom-class' }}>About</a>
+
+<!-- Active when the route starts with '/about' -->
+<a href="/about" use:isActiveLink={{ startsWith: true }}>About</a>
 ```
 
 ## Programmatically
@@ -26,27 +29,33 @@ For more complex scenarios, check if a route is active using the `isActive` func
 ```ts [Code-based]
 import { isActive } from './router';
 
-// Check if we're on the about page
-isActive('/about'); // returns true when on '/about'
+// Returns true when on '/about'
+isActive('/about');
 
-// Check with a specific parameter
-isActive('/post/:slug', { slug: '123' }); // returns true when on '/post/123'
+// Returns true when on '/post/123'
+isActive('/post/:slug', { slug: '123' });
 
-// Check with any parameter value
-isActive('/post/:slug'); // returns true on any '/post/{value}' route
+// Returns true when on '/post/*'
+isActive('/post/:slug');
+
+// Returns true when on '/about' or '/about/*'
+isActive.startsWith('/about');
 ```
 
 ```ts [File-based]
 import { isActive } from 'sv-router/generated';
 
-// Check if we're on the about page
-isActive('/about'); // returns true when on '/about'
+// Returns true when on '/about'
+isActive('/about');
 
-// Check with a specific parameter
-isActive('/post/:slug', { slug: '123' }); // returns true when on '/post/123'
+// Returns true when on '/post/123'
+isActive('/post/:slug', { slug: '123' });
 
-// Check with any parameter value
-isActive('/post/:slug'); // returns true on any '/post/{value}' route
+// Returns true when on '/post/*'
+isActive('/post/:slug');
+
+// Returns true when on '/about' or '/about/*'
+isActive.startsWith('/about');
 ```
 
 :::
