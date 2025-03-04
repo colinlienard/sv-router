@@ -9,8 +9,9 @@ import path from 'node:path';
  * }} GeneratedRoutes
  */
 
-const PARAM_FILENAME_REGEX = /\[(.*)\](\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte
-const CATCH_ALL_FILENAME_REGEX = /\[\.\.\.(.*)\](\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte
+const PARAM_FILENAME_REGEX = /\(?\[(.*)\]\)?(\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte, ([any]).svelte
+const CATCH_ALL_FILENAME_REGEX = /\(?\[\.\.\.(.*)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
+const OUT_OF_LAYOUT_FILENAME_REGEX = /\(\[\.?\.?\.?(.*)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte
 const HOOKS_FILENAME_REGEX = /(hooks)(\.svelte)?\.(js|ts)$/; // hooks.js, hooks.svelte.js, hooks.ts, hooks.svelte.ts
 
 /**
@@ -74,15 +75,30 @@ export function createRouteMap(fileTree, prefix = '') {
 				continue;
 			}
 
-			const catchAll = CATCH_ALL_FILENAME_REGEX.exec(entry);
-			if (catchAll) {
-				result['*' + catchAll[1]] = prefix + entry;
+			if (CATCH_ALL_FILENAME_REGEX.test(entry)) {
+				let key = filePathToRoute(
+					entry.replace(
+						CATCH_ALL_FILENAME_REGEX,
+						OUT_OF_LAYOUT_FILENAME_REGEX.test(entry) ? '(*$1)' : '*$1',
+					),
+				);
+				if (!key.startsWith('*') && !key.startsWith('(*')) {
+					key = '/' + key;
+				}
+				result[key] = prefix + entry;
 				continue;
 			}
 
-			// Match [id].svelte
 			if (PARAM_FILENAME_REGEX.test(entry)) {
-				result['/' + filePathToRoute(entry.replace(PARAM_FILENAME_REGEX, ':$1'))] = prefix + entry;
+				const key =
+					'/' +
+					filePathToRoute(
+						entry.replace(
+							PARAM_FILENAME_REGEX,
+							OUT_OF_LAYOUT_FILENAME_REGEX.test(entry) ? '(:$1)' : ':$1',
+						),
+					);
+				result[key] = prefix + entry;
 				continue;
 			}
 
@@ -176,7 +192,7 @@ export function pathToCorrectCasing(value) {
 		extractLastPart(CATCH_ALL_FILENAME_REGEX) ||
 		extractLastPart(PARAM_FILENAME_REGEX) ||
 		extractLastPart(HOOKS_FILENAME_REGEX) ||
-		extractLastPart(/([\w-]+)(\.lazy)?\.svelte$/);
+		extractLastPart(/\(?([\w-]+)\)?(\.lazy)?\.svelte$/);
 	if (!lastPart) {
 		throw new Error(`Invalid filename: ${value}`);
 	}

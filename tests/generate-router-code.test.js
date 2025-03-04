@@ -18,6 +18,7 @@ describe('generateRouterCode', () => {
 import About from '../a/fake/path/about.svelte';
 import Index from '../a/fake/path/index.svelte';
 import PostsStatic from '../a/fake/path/posts.static.svelte';
+import PostsNolayout from '../a/fake/path/posts.(nolayout).svelte';
 
 export const { p, navigate, isActive, route } = createRouter({
   '*notfound': () => import('../a/fake/path/[...notfound].lazy.svelte'),
@@ -26,6 +27,7 @@ export const { p, navigate, isActive, route } = createRouter({
   '/posts/:id': () => import('../a/fake/path/posts.[id].lazy.svelte'),
   '/posts': () => import('../a/fake/path/posts.index.lazy.svelte'),
   '/posts/static': PostsStatic,
+  '/posts/(nolayout)': PostsNolayout,
   '/posts/comments/:id': () => import('../a/fake/path/posts.comments.[id].lazy.svelte')
 });`);
 	});
@@ -38,6 +40,7 @@ import About from '../a/fake/path/about.svelte';
 import Index from '../a/fake/path/index.svelte';
 import PostsLayout from '../a/fake/path/posts/layout.svelte';
 import PostsStatic from '../a/fake/path/posts/static.svelte';
+import PostsNolayout from '../a/fake/path/posts/(nolayout).svelte';
 import postsHooks from '../a/fake/path/posts/hooks';
 import postsCommentsHooks from '../a/fake/path/posts/comments/hooks.svelte';
 
@@ -50,6 +53,7 @@ export const { p, navigate, isActive, route } = createRouter({
     'layout': PostsLayout,
     '/': () => import('../a/fake/path/posts/index.lazy.svelte'),
     '/static': PostsStatic,
+    '/(nolayout)': PostsNolayout,
     'hooks': postsHooks,
     '/comments': {
       '/:id': () => import('../a/fake/path/posts/comments/[id].lazy.svelte'),
@@ -71,6 +75,7 @@ describe('buildFileTree', () => {
 			'posts.[id].lazy.svelte',
 			'posts.index.lazy.svelte',
 			'posts.static.svelte',
+			'posts.(nolayout).svelte',
 			'posts.comments.[id].lazy.svelte',
 		]);
 	});
@@ -89,6 +94,7 @@ describe('buildFileTree', () => {
 					'layout.svelte',
 					'index.lazy.svelte',
 					'static.svelte',
+					'(nolayout).svelte',
 					'hooks.ts',
 					{
 						name: 'comments',
@@ -109,16 +115,22 @@ describe('createRouteMap', () => {
 			'posts.[id].svelte',
 			'posts.index.lazy.svelte',
 			'posts.static.svelte',
+			'posts.(nolayout).svelte',
+			'posts.([nolayoutparam]).svelte',
 			'posts.comments.[id].lazy.svelte',
+			'posts.comments.([...notfound]).svelte',
 		]);
 		expect(result).toEqual({
 			'*notfound': '[...notfound].lazy.svelte',
 			'/': 'index.svelte',
 			'/about': 'about.svelte',
 			'/posts/:id': 'posts.[id].svelte',
-			'/posts/comments/:id': 'posts.comments.[id].lazy.svelte',
 			'/posts': 'posts.index.lazy.svelte',
 			'/posts/static': 'posts.static.svelte',
+			'/posts/(nolayout)': 'posts.(nolayout).svelte',
+			'/posts/(:nolayoutparam)': 'posts.([nolayoutparam]).svelte',
+			'/posts/comments/:id': 'posts.comments.[id].lazy.svelte',
+			'/posts/comments/(*notfound)': 'posts.comments.([...notfound]).svelte',
 		});
 	});
 
@@ -131,12 +143,14 @@ describe('createRouteMap', () => {
 				tree: [
 					'index.lazy.svelte',
 					'static.svelte',
+					'(nolayout).svelte',
 					'[id].svelte',
+					'([nolayoutparam]).svelte',
 					'layout.svelte',
 					'hooks.ts',
 					{
 						name: 'comments',
-						tree: ['[id].lazy.svelte', 'hooks.svelte.ts'],
+						tree: ['[id].lazy.svelte', '([...notfound]).svelte', 'hooks.svelte.ts'],
 					},
 				],
 			},
@@ -148,11 +162,14 @@ describe('createRouteMap', () => {
 			'/posts': {
 				'/': 'posts/index.lazy.svelte',
 				'/static': 'posts/static.svelte',
+				'/(nolayout)': 'posts/(nolayout).svelte',
 				'/:id': 'posts/[id].svelte',
+				'/(:nolayoutparam)': 'posts/([nolayoutparam]).svelte',
 				layout: 'posts/layout.svelte',
 				hooks: 'posts/hooks.ts',
 				'/comments': {
 					'/:id': 'posts/comments/[id].lazy.svelte',
+					'(*notfound)': 'posts/comments/([...notfound]).svelte',
 					hooks: 'posts/comments/hooks.svelte.ts',
 				},
 			},
@@ -170,6 +187,7 @@ describe('createRouterCode', () => {
 				'/posts': {
 					'/': 'posts/index.lazy.svelte',
 					'/static': 'posts/static.svelte',
+					'/(nolayout)': 'posts/(nolayout).svelte',
 					'/:id': 'posts/[id].lazy.svelte',
 					hooks: 'posts/hooks.ts',
 					'/comments': {
@@ -185,6 +203,7 @@ describe('createRouterCode', () => {
 import Index from './routes/index.svelte';
 import About from './routes/about.svelte';
 import PostsStatic from './routes/posts/static.svelte';
+import PostsNolayout from './routes/posts/(nolayout).svelte';
 import postsHooks from './routes/posts/hooks';
 import PostsCommentsCommentId from './routes/posts/comments/[commentId].svelte';
 import postsCommentsHooks from './routes/posts/comments/hooks.svelte';
@@ -195,6 +214,7 @@ export const { p, navigate, isActive, route } = createRouter({
   '/posts': {
     '/': () => import('./routes/posts/index.lazy.svelte'),
     '/static': PostsStatic,
+    '/(nolayout)': PostsNolayout,
     '/:id': () => import('./routes/posts/[id].lazy.svelte'),
     'hooks': postsHooks,
     '/comments': {
@@ -238,6 +258,11 @@ describe('pathToCorrectCasing', () => {
 		expect(result).toBe('PostsNotfound');
 	});
 
+	it('should handle paths with no layout', () => {
+		const result = pathToCorrectCasing('posts/(nolayout).svelte');
+		expect(result).toBe('PostsNolayout');
+	});
+
 	it('should handle paths with hooks', () => {
 		const result = pathToCorrectCasing('posts/hooks.svelte.ts');
 		expect(result).toBe('postsHooks');
@@ -266,6 +291,7 @@ function mockFlatMode() {
 		'posts.[id].lazy.svelte',
 		'posts.index.lazy.svelte',
 		'posts.static.svelte',
+		'posts.(nolayout).svelte',
 		'posts.text.txt',
 		'posts.noextension',
 		'posts.comments.[id].lazy.svelte',
@@ -283,6 +309,7 @@ function mockTreeMode() {
 				'layout.svelte',
 				'index.lazy.svelte',
 				'static.svelte',
+				'(nolayout).svelte',
 				'hooks.ts',
 				'text.txt',
 				'noextension',
