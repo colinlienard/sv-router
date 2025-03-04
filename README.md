@@ -4,12 +4,8 @@
 
 # sv-router
 
-<a href="https://www.npmjs.com/package/sv-router" target="_blank">
-  <img src="https://badgen.net/npm/v/sv-router" alt="npm">
-</a>
-<a href="https://packagephobia.com/result?p=sv-router" target="_blank">
-  <img src="https://packagephobia.com/badge?p=sv-router" alt="install size">
-</a>
+[![npm](https://badgen.net/npm/v/sv-router)](https://www.npmjs.com/package/sv-router)
+[![install size](https://packagephobia.com/badge?p=sv-router)](https://packagephobia.com/result?p=sv-router)
 
 A feature-rich yet intuitive routing library for Svelte single-page apps.
 
