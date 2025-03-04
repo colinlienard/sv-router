@@ -16,6 +16,7 @@ Whether you're building a small project or a complex application, sv-router prov
 ## Acknowledgements
 
 sv-router draws inspiration from:
+
 - [TanStack Router](https://tanstack.com/router/latest)
 - [Vue Router](https://router.vuejs.org/)
 - [Solid Router](https://docs.solidjs.com/solid-router)
