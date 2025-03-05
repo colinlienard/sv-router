@@ -63,8 +63,7 @@ export type Hooks = {
 
 export type Routes = {
 	[_: `/${string}`]: RouteComponent | Routes;
-	[_: `*${string}`]: RouteComponent | undefined;
-	[_: `(*${string})`]: RouteComponent | undefined;
+	[_: `*${string}` | `(*${string})`]: RouteComponent | undefined;
 	layout?: LayoutComponent;
 	hooks?: Hooks;
 };

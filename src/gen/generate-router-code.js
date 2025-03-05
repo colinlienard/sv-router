@@ -9,6 +9,7 @@ import path from 'node:path';
  * }} GeneratedRoutes
  */
 
+const FILENAME_REGEX = /\(?([\w-]+)\)?(\.lazy)?\.svelte$/; // any.svelte, any.lazy.svelte, (any).svelte
 const PARAM_FILENAME_REGEX = /\(?\[(.*)\]\)?(\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte, ([any]).svelte
 const CATCH_ALL_FILENAME_REGEX = /\(?\[\.\.\.(.*)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
 const OUT_OF_LAYOUT_FILENAME_REGEX = /\(\[\.?\.?\.?(.*)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte
@@ -76,12 +77,8 @@ export function createRouteMap(fileTree, prefix = '') {
 			}
 
 			if (CATCH_ALL_FILENAME_REGEX.test(entry)) {
-				let key = filePathToRoute(
-					entry.replace(
-						CATCH_ALL_FILENAME_REGEX,
-						OUT_OF_LAYOUT_FILENAME_REGEX.test(entry) ? '(*$1)' : '*$1',
-					),
-				);
+				const replacement = OUT_OF_LAYOUT_FILENAME_REGEX.test(entry) ? '(*$1)' : '*$1';
+				let key = filePathToRoute(entry.replace(CATCH_ALL_FILENAME_REGEX, replacement));
 				if (!key.startsWith('*') && !key.startsWith('(*')) {
 					key = '/' + key;
 				}
@@ -90,14 +87,8 @@ export function createRouteMap(fileTree, prefix = '') {
 			}
 
 			if (PARAM_FILENAME_REGEX.test(entry)) {
-				const key =
-					'/' +
-					filePathToRoute(
-						entry.replace(
-							PARAM_FILENAME_REGEX,
-							OUT_OF_LAYOUT_FILENAME_REGEX.test(entry) ? '(:$1)' : ':$1',
-						),
-					);
+				const replacement = OUT_OF_LAYOUT_FILENAME_REGEX.test(entry) ? '(:$1)' : ':$1';
+				const key = '/' + filePathToRoute(entry.replace(PARAM_FILENAME_REGEX, replacement));
 				result[key] = prefix + entry;
 				continue;
 			}
@@ -192,7 +183,7 @@ export function pathToCorrectCasing(value) {
 		extractLastPart(CATCH_ALL_FILENAME_REGEX) ||
 		extractLastPart(PARAM_FILENAME_REGEX) ||
 		extractLastPart(HOOKS_FILENAME_REGEX) ||
-		extractLastPart(/\(?([\w-]+)\)?(\.lazy)?\.svelte$/);
+		extractLastPart(FILENAME_REGEX);
 	if (!lastPart) {
 		throw new Error(`Invalid filename: ${value}`);
 	}
