@@ -14,7 +14,7 @@ export const { p, navigate, isActive, route } = createRouter({
 		'/static': StaticPost,
 		'/:slug': () => import('./routes/DynamicPost.svelte'),
 		'/comments': {
-			'/:commentId': () => import('./routes/Comment.svelte'),
+			'/(:commentId)': () => import('./routes/Comment.svelte'),
 			hooks: {
 				afterLoad() {
 					// eslint-disable-next-line no-console

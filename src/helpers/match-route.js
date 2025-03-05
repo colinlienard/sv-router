@@ -59,6 +59,9 @@ export function matchRoute(pathname, routes) {
 				if (param) {
 					params[param] = pathParts.slice(index).join('/');
 				}
+				if (breakFromLayouts) {
+					routePart = `(${routePart})`;
+				}
 				const resolvedPath = /** @type {keyof Routes} */ (
 					(index ? '/' : '') + routeParts.join('/')
 				);

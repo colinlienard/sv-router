@@ -170,15 +170,14 @@ describe('matchRoute', () => {
 				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(:foo)']);
 			});
 
-			// it('should break out of layouts with catch-all', () => {
-			// 	/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/*foo'] = NoLayout;
-			// 	const { match, layouts, params } = matchRoute('/users/nolayout', routes);
-			// 	expect(match).toEqual(NoLayout);
-			// 	expect(layouts).toEqual([]);
-			// 	expect(params).toEqual({ foo: 'nolayout' });
-			// 	delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(*foo)']);
-			// 	delete routes['layout'];
-			// });
+			it('should break out of layouts with catch-all', () => {
+				/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)'] = NoLayout;
+				const { match, layouts, params } = matchRoute('/users/nolayout', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([]);
+				expect(params).toEqual({ foo: 'nolayout' });
+				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)']);
+			});
 
 			it('should match one hook', () => {
 				const { hooks } = matchRoute('/posts', routes);

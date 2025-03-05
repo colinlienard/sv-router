@@ -56,6 +56,24 @@ type test_construct_path_1 = Expect<
 type test_construct_path_result_1 = ConstructPathArgs<'/posts'>;
 type test_construct_path_expected_1 = ['/posts'];
 
+type test_construct_path_2 = Expect<
+	Equal<test_construct_path_result_2, test_construct_path_expected_2>
+>;
+type test_construct_path_result_2 = ConstructPathArgs<'/*rest'>;
+type test_construct_path_expected_2 = ['/*rest', Record<'rest', string>];
+
+type test_construct_path_3 = Expect<
+	Equal<test_construct_path_result_3, test_construct_path_expected_3>
+>;
+type test_construct_path_result_3 = ConstructPathArgs<'(*rest)'>;
+type test_construct_path_expected_3 = ['(*rest)', Record<'rest', string>];
+
+type test_construct_path_4 = Expect<
+	Equal<test_construct_path_result_4, test_construct_path_expected_4>
+>;
+type test_construct_path_result_4 = ConstructPathArgs<'/(:id)'>;
+type test_construct_path_expected_4 = ['/(:id)', Record<'id', string>];
+
 type test_params = Expect<Equal<test_params_result, test_params_expected>>;
 type test_params_result = AllParams<TestRoutes>;
 type test_params_expected = Partial<Record<'id' | 'commentId' | 'rest', string>>;

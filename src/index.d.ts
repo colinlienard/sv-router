@@ -64,6 +64,7 @@ export type Hooks = {
 export type Routes = {
 	[_: `/${string}`]: RouteComponent | Routes;
 	[_: `*${string}`]: RouteComponent | undefined;
+	[_: `(*${string})`]: RouteComponent | undefined;
 	layout?: LayoutComponent;
 	hooks?: Hooks;
 };
@@ -174,11 +175,13 @@ type NavigateArgs<T extends string> =
 type StripNonRoutes<T extends Routes> = {
 	[K in keyof T as K extends `*${string}`
 		? never
-		: K extends 'layout'
+		: K extends `(*${string})`
 			? never
-			: K extends 'hooks'
+			: K extends 'layout'
 				? never
-				: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
+				: K extends 'hooks'
+					? never
+					: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
 };
 
 type RecursiveKeys<T extends Routes, Prefix extends string = ''> = {
@@ -197,10 +200,14 @@ type RemoveParenthesis<T extends string> = T extends `${infer A}(${infer B})${in
 
 type ExtractParams<T extends string> = T extends `${string}:${infer Param}/${infer Rest}`
 	? Param | ExtractParams<`/${Rest}`>
-	: T extends `${string}:${infer Param}`
+	: T extends `${string}(:${infer Param})`
 		? Param
-		: T extends `${string}*${infer Param}`
-			? Param extends ''
-				? never
-				: Param
-			: never;
+		: T extends `${string}:${infer Param}`
+			? Param
+			: T extends `${string}(*${infer Param})`
+				? Param
+				: T extends `${string}*${infer Param}`
+					? Param extends ''
+						? never
+						: Param
+					: never;
