@@ -14,6 +14,7 @@ const PARAM_FILENAME_REGEX = /\(?\[(.*)\]\)?(\.lazy)?\.svelte$/; // [any].svelte
 const CATCH_ALL_FILENAME_REGEX = /\(?\[\.\.\.(.*)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
 const OUT_OF_LAYOUT_FILENAME_REGEX = /\(\[\.?\.?\.?(.*)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte
 const HOOKS_FILENAME_REGEX = /(hooks)(\.svelte)?\.(js|ts)$/; // hooks.js, hooks.svelte.js, hooks.ts, hooks.svelte.ts
+const LAYOUT_FILENAME_REGEX = /(layout)(\.svelte)?\.(js|ts)$/; // layout.js, layout.svelte.js, layout.ts, layout.svelte.ts
 
 /**
  * @param {string} routesPath
@@ -58,10 +59,12 @@ export function createRouteMap(fileTree, prefix = '') {
 	for (const entry of fileTree) {
 		if (typeof entry === 'string') {
 			if (!entry.endsWith('.svelte')) {
-				if (HOOKS_FILENAME_REGEX.test(entry)) {
-					result['hooks'] = prefix + entry;
+				if (!HOOKS_FILENAME_REGEX.test(entry)) {
 					continue;
 				}
+				const hooksEntry = entry.replace(/(\.svelte)?\.(js|ts)/, '');
+				result[(hooksEntry.startsWith('hooks') ? '' : '/') + filePathToRoute(hooksEntry)] =
+					prefix + entry;
 				continue;
 			}
 
@@ -71,8 +74,10 @@ export function createRouteMap(fileTree, prefix = '') {
 				continue;
 			}
 
-			if (entry === 'layout.svelte' || entry === 'layout.lazy.svelte') {
-				result['layout'] = prefix + entry;
+			if (entry.endsWith('layout.svelte') || entry.endsWith('layout.lazy.svelte')) {
+				const layoutEntry = entry.replace(/(\.lazy)?\.svelte$/, '');
+				result[(layoutEntry.startsWith('layout') ? '' : '/') + filePathToRoute(layoutEntry)] =
+					prefix + entry;
 				continue;
 			}
 
@@ -183,6 +188,7 @@ export function pathToCorrectCasing(value) {
 		extractLastPart(CATCH_ALL_FILENAME_REGEX) ||
 		extractLastPart(PARAM_FILENAME_REGEX) ||
 		extractLastPart(HOOKS_FILENAME_REGEX) ||
+		extractLastPart(LAYOUT_FILENAME_REGEX) ||
 		extractLastPart(FILENAME_REGEX);
 	if (!lastPart) {
 		throw new Error(`Invalid filename: ${value}`);

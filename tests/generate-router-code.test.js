@@ -19,6 +19,9 @@ import About from '../a/fake/path/about.svelte';
 import Index from '../a/fake/path/index.svelte';
 import PostsStatic from '../a/fake/path/posts.static.svelte';
 import PostsNolayout from '../a/fake/path/posts.(nolayout).svelte';
+import PostsLayout from '../a/fake/path/posts.layout.svelte';
+import postsHooks from '../a/fake/path/posts.hooks';
+import postsCommentsHooks from '../a/fake/path/posts.comments.hooks';
 
 export const { p, navigate, isActive, route } = createRouter({
   '*notfound': () => import('../a/fake/path/[...notfound].lazy.svelte'),
@@ -28,7 +31,10 @@ export const { p, navigate, isActive, route } = createRouter({
   '/posts': () => import('../a/fake/path/posts.index.lazy.svelte'),
   '/posts/static': PostsStatic,
   '/posts/(nolayout)': PostsNolayout,
-  '/posts/comments/:id': () => import('../a/fake/path/posts.comments.[id].lazy.svelte')
+  '/posts/layout': PostsLayout,
+  '/posts/hooks': postsHooks,
+  '/posts/comments/:id': () => import('../a/fake/path/posts.comments.[id].lazy.svelte'),
+  '/posts/comments/hooks': postsCommentsHooks
 });`);
 	});
 
@@ -76,7 +82,10 @@ describe('buildFileTree', () => {
 			'posts.index.lazy.svelte',
 			'posts.static.svelte',
 			'posts.(nolayout).svelte',
+			'posts.layout.svelte',
+			'posts.hooks.ts',
 			'posts.comments.[id].lazy.svelte',
+			'posts.comments.hooks.ts',
 		]);
 	});
 
@@ -116,9 +125,12 @@ describe('createRouteMap', () => {
 			'posts.index.lazy.svelte',
 			'posts.static.svelte',
 			'posts.(nolayout).svelte',
+			'posts.layout.svelte',
+			'posts.hooks.ts',
 			'posts.([nolayoutparam]).svelte',
 			'posts.comments.[id].lazy.svelte',
 			'posts.comments.([...notfound]).svelte',
+			'posts.comments.hooks.ts',
 		]);
 		expect(result).toEqual({
 			'*notfound': '[...notfound].lazy.svelte',
@@ -128,9 +140,12 @@ describe('createRouteMap', () => {
 			'/posts': 'posts.index.lazy.svelte',
 			'/posts/static': 'posts.static.svelte',
 			'/posts/(nolayout)': 'posts.(nolayout).svelte',
+			'/posts/layout': 'posts.layout.svelte',
+			'/posts/hooks': 'posts.hooks.ts',
 			'/posts/(:nolayoutparam)': 'posts.([nolayoutparam]).svelte',
 			'/posts/comments/:id': 'posts.comments.[id].lazy.svelte',
 			'/posts/comments/(*notfound)': 'posts.comments.([...notfound]).svelte',
+			'/posts/comments/hooks': 'posts.comments.hooks.ts',
 		});
 	});
 
@@ -268,6 +283,11 @@ describe('pathToCorrectCasing', () => {
 		expect(result).toBe('postsHooks');
 	});
 
+	it('should handle paths with layout', () => {
+		const result = pathToCorrectCasing('posts/layout.svelte');
+		expect(result).toBe('PostsLayout');
+	});
+
 	it('should handle flat paths', () => {
 		const result1 = pathToCorrectCasing('simple.path.about.svelte');
 		expect(result1).toBe('SimplePathAbout');
@@ -278,8 +298,11 @@ describe('pathToCorrectCasing', () => {
 		const result3 = pathToCorrectCasing('posts.[...notfound].svelte');
 		expect(result3).toBe('PostsNotfound');
 
-		const result4 = pathToCorrectCasing('posts.hooks.ts');
-		expect(result4).toBe('postsHooks');
+		const result4 = pathToCorrectCasing('posts.layout.ts');
+		expect(result4).toBe('PostsLayout');
+
+		const result5 = pathToCorrectCasing('posts.hooks.ts');
+		expect(result5).toBe('postsHooks');
 	});
 });
 
@@ -292,9 +315,12 @@ function mockFlatMode() {
 		'posts.index.lazy.svelte',
 		'posts.static.svelte',
 		'posts.(nolayout).svelte',
+		'posts.layout.svelte',
+		'posts.hooks.ts',
 		'posts.text.txt',
 		'posts.noextension',
 		'posts.comments.[id].lazy.svelte',
+		'posts.comments.hooks.ts',
 	]);
 	lstatSync.mockImplementation(() => ({
 		isDirectory: () => false,

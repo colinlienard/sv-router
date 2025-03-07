@@ -32,21 +32,31 @@ describe('matchRoute', () => {
 				'/posts': Posts,
 				'/posts/static': StaticPost,
 				'/posts/:id': DynamicPost,
+				'/posts/layout': Layout1,
+				'/posts/hooks': Hooks1,
+				'/posts/:id/layout': Layout2,
+				'/posts/:id/hooks': Hooks2,
 				'/posts/:id/comments/:commentId': DynamicPostComment,
 				'/users/*': UserNotFound,
+				'/users/layout': Layout1,
 				'*rest': PageNotFound,
 			},
 		},
 		{
 			mode: 'flat unordered',
 			routes: {
+				'/users/layout': Layout1,
 				'/posts/:id/comments/:commentId': DynamicPostComment,
 				'/posts': Posts,
+				'/posts/layout': Layout1,
 				'/users/*': UserNotFound,
+				'/posts/:id/hooks': Hooks2,
 				'/posts/static': StaticPost,
 				'*rest': PageNotFound,
+				'/posts/hooks': Hooks1,
 				'/posts/:id': DynamicPost,
 				'/': Home,
+				'/posts/:id/layout': Layout2,
 			},
 		},
 		{
@@ -135,60 +145,58 @@ describe('matchRoute', () => {
 			expect(params).toEqual({ id: 'bar', commentId: 'baz' });
 		});
 
-		if (treeMode) {
-			it('should match routes with layout', () => {
-				const { layouts: layouts1 } = matchRoute('/', routes);
-				const { layouts: layouts2 } = matchRoute('/posts', routes);
-				const { layouts: layouts3 } = matchRoute('/posts/static', routes);
-				const { layouts: layouts4 } = matchRoute('/posts/bar/comments/baz', routes);
-				expect(layouts1).toEqual([]);
-				expect(layouts2).toEqual([Layout1]);
-				expect(layouts3).toEqual([Layout1]);
-				expect(layouts4).toEqual([Layout1, Layout2]);
-			});
+		it('should match routes with layout', () => {
+			const { layouts: layouts1 } = matchRoute('/', routes);
+			const { layouts: layouts2 } = matchRoute('/posts', routes);
+			const { layouts: layouts3 } = matchRoute('/posts/static', routes);
+			const { layouts: layouts4 } = matchRoute('/posts/bar/comments/baz', routes);
+			expect(layouts1).toEqual([]);
+			expect(layouts2).toEqual([Layout1]);
+			expect(layouts3).toEqual([Layout1]);
+			expect(layouts4).toEqual([Layout1, Layout2]);
+		});
 
-			it('should also find root layout', () => {
-				routes['layout'] = Layout1;
-				const { layouts } = matchRoute('/', routes);
-				expect(layouts).toEqual([Layout1]);
-			});
+		it('should also find root layout', () => {
+			routes['layout'] = Layout1;
+			const { layouts } = matchRoute('/', routes);
+			expect(layouts).toEqual([Layout1]);
+		});
 
-			it('should break out of layouts', () => {
-				routes['/(nolayout)'] = NoLayout;
-				const { match, layouts } = matchRoute('/nolayout', routes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
-				delete routes['/(nolayout)'];
-			});
+		it('should break out of layouts', () => {
+			routes['/(nolayout)'] = NoLayout;
+			const { match, layouts } = matchRoute('/nolayout', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+			delete routes['/(nolayout)'];
+		});
 
-			it('should break out of layouts with a param', () => {
-				/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(:foo)'] = NoLayout;
-				const { match, layouts, params } = matchRoute('/users/nolayout', routes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
-				expect(params).toEqual({ foo: 'nolayout' });
-				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(:foo)']);
-			});
+		it('should break out of layouts with a param', () => {
+			/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(:foo)'] = NoLayout;
+			const { match, layouts, params } = matchRoute('/users/nolayout', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+			expect(params).toEqual({ foo: 'nolayout' });
+			delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(:foo)']);
+		});
 
-			it('should break out of layouts with catch-all', () => {
-				/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)'] = NoLayout;
-				const { match, layouts, params } = matchRoute('/users/nolayout', routes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
-				expect(params).toEqual({ foo: 'nolayout' });
-				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)']);
-			});
+		it('should break out of layouts with catch-all', () => {
+			/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)'] = NoLayout;
+			const { match, layouts, params } = matchRoute('/users/nolayout', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+			expect(params).toEqual({ foo: 'nolayout' });
+			delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)']);
+		});
 
-			it('should match one hook', () => {
-				const { hooks } = matchRoute('/posts', routes);
-				expect(hooks).toEqual([Hooks1]);
-			});
+		it('should match one hook', () => {
+			const { hooks } = matchRoute('/posts', routes);
+			expect(hooks).toEqual([Hooks1]);
+		});
 
-			it('should match multiple hooks', () => {
-				const { hooks } = matchRoute('/posts/bar/comments/baz', routes);
-				expect(hooks).toEqual([Hooks1, Hooks2]);
-			});
-		}
+		it('should match multiple hooks', () => {
+			const { hooks } = matchRoute('/posts/bar/comments/baz', routes);
+			expect(hooks).toEqual([Hooks1, Hooks2]);
+		});
 
 		it('should match wildcard route', () => {
 			const { match, params, layouts } = matchRoute('/not/found', routes);
