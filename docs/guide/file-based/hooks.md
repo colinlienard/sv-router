@@ -47,5 +47,5 @@ async function beforeLoad() {
 > ```sh
 > routes
 > ├── about.svelte
-> └── about.hooks.svelte # ❌ Won't work
+> └── about.hooks.ts # ❌ Won't work
 > ```

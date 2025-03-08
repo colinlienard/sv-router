@@ -43,5 +43,5 @@ hooks: {
 >
 > ```ts
 > '/about': About,
-> '/about/hooks': ..., // ❌ Won't work
+> '/about/hooks': { ... }, // ❌ Won't work
 > ```
