@@ -33,12 +33,19 @@ Hooks can be asynchronous, and in the case of `beforeLoad`, the route won't load
 You can `throw` within a `beforeLoad` hook to prevent route loading. For redirecting to another route, throw a `navigate` function:
 
 ```ts
-export default {
-	async beforeLoad() {
-		const user = await someAsyncFunction();
-		if (!user.admin) {
-			throw navigate('/login');
-		}
-	},
-} satisfies Hooks;
+async function beforeLoad() {
+	const user = await someAsyncFunction();
+	if (!user.admin) {
+		throw navigate('/login');
+	}
+}
 ```
+
+> [!WARNING]
+> Hooks can only be used in tree structure, which means that doing the following will not work:
+>
+> ```sh
+> routes
+> ├── about.svelte
+> └── about.hooks.svelte # ❌ Won't work
+> ```

@@ -30,7 +30,7 @@ To create dynamic routes that match variable segments, prefix a route segment wi
 
 Multiple dynamic segments can be included in a single route:
 
-```ts [router.ts]
+```ts
 '/user/:id': User,
 '/user/:id/post/:postId': Post,
 ```
@@ -56,13 +56,13 @@ Access these dynamic segments in your components using the `route.params` object
 
 To handle any unmatched routes, define a catch-all route using the `*` wildcard:
 
-```ts [router.ts]
+```ts
 '*': NotFound,
 ```
 
 You can assign an optional name to this wildcard, which you can then access via `route.params` similar to dynamic routes:
 
-```ts [router.ts]
+```ts
 '*notfound': NotFound,
 ```
 
@@ -70,7 +70,7 @@ You can assign an optional name to this wildcard, which you can then access via 
 
 Define a wrapping component for routes at the same level or below using layouts:
 
-```ts{5} [router.ts]
+```ts{5}
 '/about': {
 	'/': About,
 	'/work': Work,
@@ -96,11 +96,19 @@ This layout component must render its children:
 > [!NOTE]
 > When navigating between routes that share the same layout, the layout component persists without being recreated. This prevents unnecessary side effect triggers.
 
+> [!WARNING]
+> Layouts can only be used in tree structure, which means that doing the following will not work:
+>
+> ```ts
+> '/about': About,
+> '/about/layout': AboutLayout, // ❌ Won't work
+> ```
+
 ## Break Out of Layouts
 
 Sometimes you may want certain routes to ignore their parent's layout. You can exclude a route from inheriting its parent layout by wrapping the route segment in parentheses:
 
-```ts{5} [router.ts]
+```ts{5}
 '/about': {
 	'/': About, // Uses AboutLayout
 	'/work': {
@@ -113,7 +121,7 @@ Sometimes you may want certain routes to ignore their parent's layout. You can e
 
 This pattern works for all route types, including dynamic segments and catch-all routes:
 
-```ts [router.ts]
+```ts
 // Dynamic route that ignores parent layout
 "/(:id)": PostId,
 

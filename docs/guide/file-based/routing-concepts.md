@@ -112,6 +112,15 @@ This layout component must render its children:
 > [!NOTE]
 > When navigating between routes that share the same layout, the layout component persists without being recreated. This prevents unnecessary side effect triggers
 
+> [!WARNING]
+> Layouts can only be used in tree structure, which means that doing the following will not work:
+>
+> ```sh
+> routes
+> ├── about.svelte
+> └── about.layout.svelte # ❌ Won't work
+> ```
+
 ## Break Out of Layouts
 
 Sometimes you may want certain routes to ignore their parent's layout. You can exclude a route from inheriting its parent layout by wrapping the route segment in parentheses:
