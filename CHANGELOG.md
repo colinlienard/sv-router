@@ -1,5 +1,14 @@
 # sv-router
 
+## 0.0.8
+
+### Patch Changes
+
+- 44d259e: Improve error experience when no routes directory
+- a6ebcf9: Fix routes generation on windows
+- f995375: Break out of layouts in file-based
+- 20883a0: Add isActive.startsWith function
+
 ## 0.0.7
 
 ### Patch Changes
