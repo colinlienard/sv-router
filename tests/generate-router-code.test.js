@@ -8,7 +8,7 @@ import {
 
 const readdirSync = vi.hoisted(() => vi.fn());
 const lstatSync = vi.hoisted(() => vi.fn());
-vi.mock('node:fs', () => ({ default: { readdirSync, lstatSync } }));
+vi.mock('node:fs', () => ({ default: { readdirSync, lstatSync, existsSync: () => true } }));
 
 describe('generateRouterCode', () => {
 	it('should generate the router code (flat)', () => {
