@@ -26,7 +26,7 @@ export function generateRouterCode(routesPath) {
 	}
 	const fileTree = buildFileTree(absoluteRoutesPath);
 	const routeMap = createRouteMap(fileTree);
-	return createRouterCode(routeMap, path.join('..', routesPath));
+	return createRouterCode(routeMap, path.posix.join('..', routesPath));
 }
 
 /**
