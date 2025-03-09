@@ -37,7 +37,10 @@ export function writeRouterCode() {
 
 		console.log('✅️ Routes generated');
 	} catch (error) {
-		console.error('Error during routes generation:', error);
+		console.error(
+			'Error during routes generation:',
+			error instanceof Error ? error.message : String(error),
+		);
 	}
 }
 

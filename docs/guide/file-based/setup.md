@@ -76,6 +76,7 @@ In your application's entry point component, import and use the `Router` compone
 ```svelte [App.svelte]
 <script lang="ts">
 	import { Router } from 'sv-router';
+	import 'sv-router/generated';
 </script>
 
 <a href="/">Home</a>

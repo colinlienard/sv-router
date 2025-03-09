@@ -20,7 +20,11 @@ const HOOKS_FILENAME_REGEX = /(hooks)(\.svelte)?\.(js|ts)$/; // hooks.js, hooks.
  * @returns {string}
  */
 export function generateRouterCode(routesPath) {
-	const fileTree = buildFileTree(path.join(process.cwd(), routesPath));
+	const absoluteRoutesPath = path.join(process.cwd(), routesPath);
+	if (!fs.existsSync(absoluteRoutesPath)) {
+		throw new Error(`Routes directory not found at \`${routesPath}\``);
+	}
+	const fileTree = buildFileTree(absoluteRoutesPath);
 	const routeMap = createRouteMap(fileTree);
 	return createRouterCode(routeMap, path.join('..', routesPath));
 }
