@@ -68,19 +68,14 @@ Access these dynamic segments in your components using the `route.params` object
 
 ## Catch-All Routes
 
-To handle any unmatched routes, define a catch-all route using the `*` wildcard:
+To handle any unmatched routes, define a catch-all route using the spread syntax:
 
 ```sh
 routes
-└── *.svelte                           ➜ /not-found
+└── [...notfound].svelte               ➜ /any-path
 ```
 
-You can assign an optional name to this wildcard, which you can then access via `route.params` similar to dynamic routes:
-
-```sh
-routes
-└── *notfound.svelte                   ➜ /not-found
-```
+You can access the unmatched part of the URL via `route.params` (with the `notfound` key in this example) similar to dynamic routes.
 
 ## Layouts
 
