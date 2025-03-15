@@ -2,14 +2,17 @@
 
 sv-router is a feature-rich yet intuitive routing library for Svelte SPAs. It provides powerful routing capabilities while maintaining simplicity.
 
-## Key Benefits
+## Features
 
-- **🛡️ Type Safety**: Full TypeScript support with autocompletion for routes and parameters
-- **🔄 Flexibility**: Choose between code-based or file-based routing approaches
-- **⚡ Performance**: Optimized for speed with built-in code splitting and preloading
-- **🧩 Familiar API**: Follows established conventions from popular meta frameworks
-- **🪶 Lightweight**: Minimal impact on your bundle size
-- **🔌 No Backend Required**: Works perfectly for purely client-side SPAs
+- 🔒 **Typesafe navigation**: Get autocomplete and type checking for your routes.
+- 🔄 **Flexibility**: Choose between code-based or file-based routing approaches.
+- 🌿 **Nested routes**: Create complex layouts with ease.
+- 🔍 **Reactive search params**: For simpler state management in the URL.
+- 🛡️ **Hooks**: For navigation guards, data loading, or analytics tracking.
+- ⚡ **Performance**: Optimized for speed with built-in code splitting and preloading.
+- 🧩 **Familiar API**: Follows established conventions from popular meta frameworks.
+- 🪶 **Lightweight**: Minimal impact on your bundle size.
+- 🚀 **Made for Svelte 5**: True Svelte 5 implementation with the latest features.
 
 Whether you're building a small project or a complex application, sv-router provides the tools you need without the overhead of a full-stack framework.
 

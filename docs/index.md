@@ -32,5 +32,5 @@ features:
     details: Create complex layouts with ease.
   - icon: 🚀
     title: Made for Svelte 5
-    details: Benefit from faster performance and smaller bundle size.
+    details: True Svelte 5 implementation with the latest features.
 ---

@@ -18,11 +18,14 @@ A feature-rich yet intuitive routing library for Svelte single-page apps.
 ## Features
 
 - 🔒 **Typesafe navigation**: Get autocomplete and type checking for your routes.
-- 🗂️ **File-based routing (optional)**: Enjoy the DX of a meta-framework-like approach.
+- 🔄 **Flexibility**: Choose between code-based or file-based routing approaches.
 - 🌿 **Nested routes**: Create complex layouts with ease.
+- 🔍 **Reactive search params**: For simpler state management in the URL.
+- 🛡️ **Hooks**: For navigation guards, data loading, or analytics tracking.
 - ⚡ **Performance**: Optimized for speed with built-in code splitting and preloading.
-- 🧩 **Familiar API**: Follows established conventions from popular meta frameworks
-- 🚀 **Made for Svelte 5**: Benefit from faster performance and smaller bundle size.
+- 🧩 **Familiar API**: Follows established conventions from popular meta frameworks.
+- 🪶 **Lightweight**: Minimal impact on your bundle size.
+- 🚀 **Made for Svelte 5**: True Svelte 5 implementation with the latest features.
 
 ## Installation
 

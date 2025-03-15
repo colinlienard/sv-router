@@ -57,7 +57,7 @@ To ensure routes are generated during installation in CI environments or for new
 
 After running your installation command or starting the development server, a `.router` directory will be created containing the auto-generated routes mapping code and a `tsconfig.json` file.
 
-Add the `.router` directory to your `.gitignore` file:
+Add the `.router` directory to your `.gitignore` file (you should probably also ignore it in Prettier, ESLint, Biome, etc):
 
 ```[.gitignore]
 .router
