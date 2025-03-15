@@ -9,11 +9,11 @@ import path from 'node:path';
  * }} GeneratedRoutes
  */
 
-const FILENAME_REGEX = /\(?([\w-]+)\)?(\.lazy)?\.svelte$/; // any.svelte, any.lazy.svelte, (any).svelte
-const PARAM_FILENAME_REGEX = /\(?\[(.*)\]\)?(\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte, ([any]).svelte
-const CATCH_ALL_FILENAME_REGEX = /\(?\[\.\.\.(.*)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
-const OUT_OF_LAYOUT_FILENAME_REGEX = /\(\[\.?\.?\.?(.*)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte
-const HOOKS_FILENAME_REGEX = /(hooks)(\.svelte)?\.(js|ts)$/; // hooks.js, hooks.svelte.js, hooks.ts, hooks.svelte.ts
+const FILENAME_REGEX = /(?<=[/.]|^)\(?([\w-]+)\)?(\.lazy)?\.svelte$/; // any.svelte, any.lazy.svelte, (any).svelte
+const PARAM_FILENAME_REGEX = /(?<=[/.]|^)\(?\[([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte, ([any]).svelte
+const CATCH_ALL_FILENAME_REGEX = /(?<=[/.]|^)\(?\[\.\.\.([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
+const OUT_OF_LAYOUT_FILENAME_REGEX = /(?<=[/.]|^)\(\[\.?\.?\.?([\w-]+)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte
+const HOOKS_FILENAME_REGEX = /(?<=[/.]|^)(hooks)(\.svelte)?\.(js|ts)$/; // hooks.js, hooks.svelte.js, hooks.ts, hooks.svelte.ts
 
 /**
  * @param {string} routesPath

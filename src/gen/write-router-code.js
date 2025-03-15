@@ -9,10 +9,6 @@ export function writeRouterCode() {
 			fs.mkdirSync(genConfig.genCodeDirPath);
 		}
 
-		// Write `.router/router.ts` file
-		const routerCode = generateRouterCode(genConfig.routesPath);
-		writeFileIfDifferent(genConfig.routerPath, routerCode);
-
 		// Write `.router/tsconfig.json` file
 		const tsConfig = {
 			compilerOptions: {
@@ -35,7 +31,15 @@ export function writeRouterCode() {
 		};
 		writeFileIfDifferent(genConfig.tsconfigPath, JSON.stringify(tsConfig, undefined, 2));
 
-		console.log('✅️ Routes generated');
+		// Write `.router/router.ts` file
+		const routerCode = generateRouterCode(genConfig.routesPath);
+		const written = writeFileIfDifferent(genConfig.routerPath, routerCode);
+
+		if (written) {
+			console.log('✅️ Routes generated');
+		} else {
+			console.log('✅️ Routes already up to date');
+		}
 	} catch (error) {
 		console.error(
 			'Error during routes generation:',
@@ -51,5 +55,6 @@ export function writeRouterCode() {
 function writeFileIfDifferent(filePath, content) {
 	if (!fs.existsSync(filePath) || fs.readFileSync(filePath, 'utf8') !== content) {
 		fs.writeFileSync(filePath, content);
+		return true;
 	}
 }
