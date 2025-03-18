@@ -113,6 +113,10 @@ export async function onNavigate(path, options = {}) {
 	syncSearchParams();
 	Object.assign(location, updatedLocation());
 
+	if (options.scrollToTop !== false) {
+		window.scrollTo({ top: 0, left: 0, behavior: options.scrollToTop });
+	}
+
 	for (const { afterLoad } of hooks) {
 		afterLoad?.();
 	}
@@ -130,12 +134,13 @@ export function onGlobalClick(event) {
 	if (url.origin !== currentOrigin) return;
 
 	event.preventDefault();
-	const { replace, state } = anchor.dataset;
+	const { replace, state, scrollToTop } = anchor.dataset;
 	onNavigate(url.pathname, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
 		hash: url.hash,
+		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
 	});
 }
 

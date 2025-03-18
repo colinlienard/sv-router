@@ -162,6 +162,7 @@ export type NavigateOptions =
 			search?: string;
 			state?: string;
 			hash?: string;
+			scrollToTop?: ScrollBehavior | false;
 	  }
 	| undefined;
 
