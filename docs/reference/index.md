@@ -103,6 +103,8 @@ A reactive URL search parameters object that updates the URL when changed.
 **Properties and Methods:**
 
 - All standard [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) methods (`get`, `set`, `has`, `delete`, etc.)
+  - `options` - (Optional) For `append`, `delete`, `set` and `sort`
+    - `replace` - Wheter to create a new entry in the history stack (defaults to `false`)
 
 ## Types
 

@@ -29,7 +29,7 @@ export const Router: Component;
  * The reactive search params of the URL. It is just a wrapper around `SvelteURLSearchParam` that
  * will update the url on change.
  */
-export const searchParams: URLSearchParams;
+export const searchParams: SearchParams;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type BaseProps = {};
@@ -165,6 +165,13 @@ export type NavigateOptions =
 			scrollToTop?: ScrollBehavior | false;
 	  }
 	| undefined;
+
+export type SearchParams = URLSearchParams & {
+	append: (name: string, value: string, options?: { replace?: boolean }) => void;
+	delete: (name: string, value?: string, options?: { replace?: boolean }) => void;
+	set: (name: string, value: string, options?: { replace?: boolean }) => void;
+	sort: (options?: { replace?: boolean }) => void;
+};
 
 type NavigateArgs<T extends string> =
 	| (PathParams<T> extends never

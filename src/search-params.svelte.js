@@ -2,15 +2,15 @@ import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 let searchParams = new SvelteURLSearchParams(globalThis.location.search);
 
-/** @type {URLSearchParams} */
+/** @type {import('./index.js').SearchParams} */
 const shell = {
-	append(...args) {
-		searchParams.append(...args);
-		updateUrlSearchParams();
+	append(name, value, options) {
+		searchParams.append(name, value);
+		updateUrlSearchParams(options);
 	},
-	delete(...args) {
-		searchParams.delete(...args);
-		updateUrlSearchParams();
+	delete(name, value, options) {
+		searchParams.delete(name, value);
+		updateUrlSearchParams(options);
 	},
 	entries() {
 		return searchParams.entries();
@@ -31,13 +31,13 @@ const shell = {
 	keys() {
 		return searchParams.keys();
 	},
-	set(...args) {
-		searchParams.set(...args);
-		updateUrlSearchParams();
+	set(name, value, options) {
+		searchParams.set(name, value);
+		updateUrlSearchParams(options);
 	},
-	sort() {
+	sort(options) {
 		searchParams.sort();
-		updateUrlSearchParams();
+		updateUrlSearchParams(options);
 	},
 	toString() {
 		return searchParams.toString();
@@ -60,19 +60,17 @@ export function syncSearchParams() {
 	if (searchParams.toString() === newSearchParams.toString()) {
 		return;
 	}
-
-	for (const key of searchParams.keys()) {
-		searchParams.delete(key);
-	}
+	searchParams = new SvelteURLSearchParams();
 	for (const [key, value] of newSearchParams.entries()) {
 		searchParams.append(key, value);
 	}
 }
 
-function updateUrlSearchParams() {
+/** @param {{ replace?: boolean }} [options] */
+function updateUrlSearchParams(options) {
 	let url = globalThis.location.origin + globalThis.location.pathname;
 	if (searchParams.size > 0) {
 		url += '?' + searchParams.toString();
 	}
-	globalThis.history.pushState({}, '', url);
+	globalThis.history[options?.replace ? 'replaceState' : 'pushState']({}, '', url);
 }
