@@ -1,5 +1,16 @@
 # sv-router
 
+## 0.1.0
+
+### Minor Changes
+
+- 31a8a2d: Replace option for search params
+
+### Patch Changes
+
+- 4740b1c: Scroll behavior features
+- 9b79e89: Fix filenames regexes in router code generation by not allowing characters before the match
+
 ## 0.0.8
 
 ### Patch Changes
