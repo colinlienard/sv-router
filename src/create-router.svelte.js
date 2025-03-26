@@ -16,6 +16,9 @@ export let params = $state({ value: {} });
 
 export let location = $state(updatedLocation());
 
+/** @type {`/${string}` | undefined} */
+export let basename;
+
 /**
  * @template {import('./index.d.ts').Routes} T
  * @param {T} r
@@ -56,6 +59,12 @@ export function createRouter(r) {
 	};
 }
 
+/** @param {`/${string}` | undefined} value */
+export function setBasename(value) {
+	basename = value;
+	onNavigate();
+}
+
 /**
  * @param {string | number} path
  * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
@@ -85,12 +94,11 @@ export async function onNavigate(path, options = {}) {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
-	const {
-		match,
-		layouts,
-		hooks,
-		params: newParams,
-	} = matchRoute(path || globalThis.location.pathname, routes);
+	let matchPath = path || globalThis.location.pathname;
+	if (basename && matchPath.startsWith(basename)) {
+		matchPath = matchPath.slice(basename.length);
+	}
+	const { match, layouts, hooks, params: newParams } = matchRoute(matchPath, routes);
 
 	for (const { beforeLoad } of hooks) {
 		try {
@@ -107,7 +115,7 @@ export async function onNavigate(path, options = {}) {
 		if (options.search) path += options.search;
 		if (options.hash) path += options.hash;
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
-		globalThis.history[historyMethod](options.state || {}, '', path);
+		globalThis.history[historyMethod](options.state || {}, '', basename ? basename + path : path);
 	}
 
 	syncSearchParams();
