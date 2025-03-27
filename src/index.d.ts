@@ -23,9 +23,11 @@ export const isActiveLink: IsActiveLink;
  * ```
  */
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
-export function setBasename(basename: `/${string}` | undefined): void;
-/** The component that will render the current route. */
-export const Router: Component;
+/**
+ * The component that will render the current route. You can pass a `base` prop to set the base path
+ * that is prepended to every url.
+ */
+export const Router: Component<{ base?: `/${string}` }>;
 /**
  * The reactive search params of the URL. It is just a wrapper around `SvelteURLSearchParam` that
  * will update the url on change.

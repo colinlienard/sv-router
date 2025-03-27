@@ -1,6 +1,6 @@
 <script>
+	import { params } from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
-	import { params } from './router.svelte.js';
 
 	/** @type {{ tree: import('svelte').Component[] }} */
 	let { tree } = $props();

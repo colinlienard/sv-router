@@ -5,8 +5,8 @@ import { preloadOnHover } from './helpers/preload-on-hover.js';
 import { constructPath, join, resolveRouteComponents } from './helpers/utils.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
-/** @type {import('./index.d.ts').Routes} */
-export let routes;
+/** @type {import('./index.js').Routes} */
+let routes;
 
 /** @type {{ value: import('svelte').Component[] }} */
 export let componentTree = $state({ value: [] });
@@ -16,13 +16,15 @@ export let params = $state({ value: {} });
 
 export let location = $state(updatedLocation());
 
-/** @type {`/${string}` | undefined} */
-export let basename;
+/** @type {{ name?: `/${string}` }} */
+export const base = {
+	name: undefined,
+};
 
 /**
- * @template {import('./index.d.ts').Routes} T
+ * @template {import('./index.js').Routes} T
  * @param {T} r
- * @returns {import('./index.d.ts').RouterApi<T>}
+ * @returns {import('./index.js').RouterApi<T>}
  */
 export function createRouter(r) {
 	routes = r;
@@ -61,7 +63,7 @@ export function createRouter(r) {
 
 /**
  * @param {string | number} path
- * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
+ * @param {import('./index.js').NavigateOptions & { params?: Record<string, string> }} options
  */
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
@@ -82,15 +84,15 @@ function navigate(path, options = {}) {
 
 /**
  * @param {string} [path]
- * @param {import('./index.d.ts').NavigateOptions} options
+ * @param {import('./index.js').NavigateOptions} options
  */
 export async function onNavigate(path, options = {}) {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
 	let matchPath = path || globalThis.location.pathname;
-	if (basename && matchPath.startsWith(basename)) {
-		matchPath = matchPath.slice(basename.length) || '/';
+	if (base.name && matchPath.startsWith(base.name)) {
+		matchPath = matchPath.slice(base.name.length) || '/';
 	}
 	const { match, layouts, hooks, params: newParams } = matchRoute(matchPath, routes);
 
@@ -109,7 +111,7 @@ export async function onNavigate(path, options = {}) {
 		if (options.search) path += options.search;
 		if (options.hash) path += options.hash;
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
-		const to = basename ? join(basename, path) : path;
+		const to = base.name ? join(base.name, path) : path;
 		globalThis.history[historyMethod](options.state || {}, '', to);
 	}
 
@@ -145,21 +147,6 @@ export function onGlobalClick(event) {
 		hash: url.hash,
 		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
 	});
-}
-
-/** @param {`/${string}` | undefined} value */
-export function setBasename(value) {
-	const url = new URL(globalThis.location.href);
-	if (basename) {
-		url.pathname = url.pathname.slice(basename.length);
-	}
-	if (value && !url.pathname.startsWith(value)) {
-		url.pathname = join(value, url.pathname);
-	}
-	basename = value;
-	history.replaceState(history.state || {}, '', url.href);
-
-	Object.assign(location, updatedLocation());
 }
 
 function updatedLocation() {
