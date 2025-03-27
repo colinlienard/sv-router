@@ -4,7 +4,7 @@
 	import { join } from './helpers/utils.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
 
-	/** @type {{ base?: `/${string}` }} */
+	/** @type {{ base?: string }} */
 	let { base: basename } = $props();
 
 	if (basename) {

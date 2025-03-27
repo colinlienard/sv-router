@@ -5,7 +5,7 @@ import { preloadOnHover } from './helpers/preload-on-hover.js';
 import { constructPath, join, resolveRouteComponents } from './helpers/utils.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
-/** @type {import('./index.js').Routes} */
+/** @type {import('./index.d.ts').Routes} */
 let routes;
 
 /** @type {{ value: import('svelte').Component[] }} */
@@ -16,15 +16,15 @@ export let params = $state({ value: {} });
 
 export let location = $state(updatedLocation());
 
-/** @type {{ name?: `/${string}` }} */
+/** @type {{ name?: string }} */
 export const base = {
 	name: undefined,
 };
 
 /**
- * @template {import('./index.js').Routes} T
+ * @template {import('./index.d.ts').Routes} T
  * @param {T} r
- * @returns {import('./index.js').RouterApi<T>}
+ * @returns {import('./index.d.ts').RouterApi<T>}
  */
 export function createRouter(r) {
 	routes = r;
@@ -63,7 +63,7 @@ export function createRouter(r) {
 
 /**
  * @param {string | number} path
- * @param {import('./index.js').NavigateOptions & { params?: Record<string, string> }} options
+ * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
  */
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
@@ -84,7 +84,7 @@ function navigate(path, options = {}) {
 
 /**
  * @param {string} [path]
- * @param {import('./index.js').NavigateOptions} options
+ * @param {import('./index.d.ts').NavigateOptions} options
  */
 export async function onNavigate(path, options = {}) {
 	if (!routes) {
