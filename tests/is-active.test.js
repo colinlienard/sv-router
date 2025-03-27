@@ -1,7 +1,7 @@
-import { location } from '../src/create-router.svelte.js';
 import { isActive } from '../src/helpers/is-active.js';
+import { location } from '../src/router.svelte.js';
 
-vi.mock('../src/create-router.svelte.js', () => ({
+vi.mock('../src/router.svelte.js', () => ({
 	location: {
 		pathname: '',
 	},

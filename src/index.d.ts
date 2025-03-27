@@ -23,6 +23,7 @@ export const isActiveLink: IsActiveLink;
  * ```
  */
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
+export function setBasename(basename: `/${string}` | undefined): void;
 /** The component that will render the current route. */
 export const Router: Component;
 /**

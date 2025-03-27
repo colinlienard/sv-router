@@ -1,4 +1,4 @@
-import { location } from './create-router.svelte.js';
+import { location } from './router.svelte.js';
 
 /** @type {import('./index.d.ts').IsActiveLink} */
 export function isActiveLink(node, { className = 'is-active', startsWith = false } = {}) {

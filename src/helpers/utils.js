@@ -44,3 +44,18 @@ export function resolveRouteComponent(input) {
 export function isLazyImport(input) {
 	return typeof input === 'function' && !!/\(\)\s?=>\s?import\(.*\)/.test(String(input));
 }
+
+/** @param {...string} parts */
+export function join(...parts) {
+	let result = '';
+	for (let part of parts) {
+		if (!part.startsWith('/')) {
+			result += '/';
+		}
+		if (part.endsWith('/')) {
+			part = part.slice(0, -1);
+		}
+		result += part;
+	}
+	return result;
+}

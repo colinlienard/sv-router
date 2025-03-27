@@ -2,7 +2,7 @@ import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preloadOnHover } from './helpers/preload-on-hover.js';
-import { constructPath, resolveRouteComponents } from './helpers/utils.js';
+import { constructPath, join, resolveRouteComponents } from './helpers/utils.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -59,12 +59,6 @@ export function createRouter(r) {
 	};
 }
 
-/** @param {`/${string}` | undefined} value */
-export function setBasename(value) {
-	basename = value;
-	onNavigate();
-}
-
 /**
  * @param {string | number} path
  * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
@@ -96,7 +90,7 @@ export async function onNavigate(path, options = {}) {
 	}
 	let matchPath = path || globalThis.location.pathname;
 	if (basename && matchPath.startsWith(basename)) {
-		matchPath = matchPath.slice(basename.length);
+		matchPath = matchPath.slice(basename.length) || '/';
 	}
 	const { match, layouts, hooks, params: newParams } = matchRoute(matchPath, routes);
 
@@ -115,7 +109,8 @@ export async function onNavigate(path, options = {}) {
 		if (options.search) path += options.search;
 		if (options.hash) path += options.hash;
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
-		globalThis.history[historyMethod](options.state || {}, '', basename ? basename + path : path);
+		const to = basename ? join(basename, path) : path;
+		globalThis.history[historyMethod](options.state || {}, '', to);
 	}
 
 	syncSearchParams();
@@ -152,11 +147,26 @@ export function onGlobalClick(event) {
 	});
 }
 
+/** @param {`/${string}` | undefined} value */
+export function setBasename(value) {
+	const url = new URL(globalThis.location.href);
+	if (basename) {
+		url.pathname = url.pathname.slice(basename.length);
+	}
+	if (value && !url.pathname.startsWith(value)) {
+		url.pathname = join(value, url.pathname);
+	}
+	basename = value;
+	history.replaceState(history.state || {}, '', url.href);
+
+	Object.assign(location, updatedLocation());
+}
+
 function updatedLocation() {
 	return {
 		pathname: globalThis.location.pathname,
 		search: globalThis.location.search,
-		state: globalThis.history.state,
+		state: history.state,
 		hash: globalThis.location.hash,
 	};
 }
