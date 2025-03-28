@@ -8,10 +8,10 @@
 	let { base: basename } = $props();
 
 	if (basename) {
-		base.name = basename;
+		base.name = (basename.startsWith('/') ? '' : '/') + basename;
 		const url = new URL(globalThis.location.href);
-		if (!url.pathname.startsWith(basename)) {
-			url.pathname = join(basename, url.pathname);
+		if (!url.pathname.startsWith(base.name)) {
+			url.pathname = join(base.name, url.pathname);
 			history.replaceState(history.state || {}, '', url.href);
 		}
 	}
