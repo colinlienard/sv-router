@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.2.0
+
+### Minor Changes
+
+- 02a7f27: Add support for basename
+
 ## 0.1.0
 
 ### Minor Changes
