@@ -17,7 +17,7 @@ const HOOKS_FILENAME_REGEX = /(?<=[/.]|^)(hooks)(\.svelte)?\.(js|ts)$/; // hooks
 
 /**
  * @param {string} routesPath
- * @param {{ allLazy: boolean }} options
+ * @param {{ allLazy?: boolean }} [options]
  * @returns {string}
  */
 export function generateRouterCode(routesPath, options) {
@@ -120,10 +120,10 @@ function filePathToRoute(filename) {
 /**
  * @param {GeneratedRoutes} routes
  * @param {string} routesPath
- * @param {{ allLazy: boolean }} options
+ * @param {{ allLazy?: boolean }} [options]
  * @returns {string}
  */
-export function createRouterCode(routes, routesPath, { allLazy }) {
+export function createRouterCode(routes, routesPath, { allLazy = false } = {}) {
 	if (!routesPath.endsWith('/')) {
 		routesPath += '/';
 	}

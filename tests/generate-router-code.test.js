@@ -13,7 +13,7 @@ vi.mock('node:fs', () => ({ default: { readdirSync, lstatSync, existsSync: () =>
 describe('generateRouterCode', () => {
 	it('should generate the router code (flat)', () => {
 		mockFlatMode();
-		const result = generateRouterCode('./a/fake/path', { allLazy: false });
+		const result = generateRouterCode('./a/fake/path');
 		expect(result).toBe(`import { createRouter } from 'sv-router';
 import About from '../a/fake/path/about.svelte';
 import Index from '../a/fake/path/index.svelte';
@@ -34,7 +34,7 @@ export const { p, navigate, isActive, route } = createRouter({
 
 	it('should generate the router code (tree)', () => {
 		mockTreeMode();
-		const result = generateRouterCode('./a/fake/path', { allLazy: false });
+		const result = generateRouterCode('./a/fake/path');
 		expect(result).toBe(`import { createRouter } from 'sv-router';
 import About from '../a/fake/path/about.svelte';
 import Index from '../a/fake/path/index.svelte';
@@ -197,7 +197,7 @@ describe('createRouterCode', () => {
 	};
 
 	it('should generate the router', () => {
-		const result = createRouterCode(routes, './routes', { allLazy: false });
+		const result = createRouterCode(routes, './routes');
 		expect(result).toBe(`import { createRouter } from 'sv-router';
 import Index from './routes/index.svelte';
 import About from './routes/about.svelte';

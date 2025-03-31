@@ -10,9 +10,9 @@
  * }}
  */
 export const genConfig = {
-	routesPath: 'src/routes',
-	routesInJs: false,
 	allLazy: false,
+	routesInJs: false,
+	routesPath: 'src/routes',
 	genCodeDirPath: '.router',
 	get routerPath() {
 		return '.router/router.' + (this.routesInJs ? 'js' : 'ts');
