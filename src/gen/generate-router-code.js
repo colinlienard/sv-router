@@ -17,16 +17,17 @@ const HOOKS_FILENAME_REGEX = /(?<=[/.]|^)(hooks)(\.svelte)?\.(js|ts)$/; // hooks
 
 /**
  * @param {string} routesPath
+ * @param {{ allLazy: boolean }} options
  * @returns {string}
  */
-export function generateRouterCode(routesPath) {
+export function generateRouterCode(routesPath, options) {
 	const absoluteRoutesPath = path.join(process.cwd(), routesPath);
 	if (!fs.existsSync(absoluteRoutesPath)) {
 		throw new Error(`Routes directory not found at \`${routesPath}\``);
 	}
 	const fileTree = buildFileTree(absoluteRoutesPath);
 	const routeMap = createRouteMap(fileTree);
-	return createRouterCode(routeMap, path.posix.join('..', routesPath));
+	return createRouterCode(routeMap, path.posix.join('..', routesPath), options);
 }
 
 /**
@@ -119,9 +120,10 @@ function filePathToRoute(filename) {
 /**
  * @param {GeneratedRoutes} routes
  * @param {string} routesPath
+ * @param {{ allLazy: boolean }} options
  * @returns {string}
  */
-export function createRouterCode(routes, routesPath) {
+export function createRouterCode(routes, routesPath, { allLazy }) {
 	if (!routesPath.endsWith('/')) {
 		routesPath += '/';
 	}
@@ -135,7 +137,7 @@ export function createRouterCode(routes, routesPath) {
 		for (const [key, value] of Object.entries(routes)) {
 			if (typeof value === 'object') {
 				result[key] = handleImports(value, routesPath);
-			} else if (key === 'hooks' || !value.endsWith('.lazy.svelte')) {
+			} else if (key === 'hooks' || (!value.endsWith('.lazy.svelte') && !allLazy)) {
 				const variableName = pathToCorrectCasing(value);
 				importsMap.set(variableName, routesPath + value);
 				result[key] = variableName;

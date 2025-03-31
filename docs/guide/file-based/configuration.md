@@ -33,13 +33,13 @@ Apply the same options to the CLI in your `postinstall` script:
 
 ## Options
 
-### `path`
+### `allLazy`
 
-| Type     | Default               | Required |
-| -------- | --------------------- | -------- |
-| `string` | <pre>src/routes</pre> | No       |
+| Type      | Default          | Required |
+| --------- | ---------------- | -------- |
+| `boolean` | <pre>false</pre> | No       |
 
-Specifies the directory containing your route files.
+When set to `true`, all routes will be lazy loaded by default.
 
 ### `js`
 
@@ -48,3 +48,11 @@ Specifies the directory containing your route files.
 | `boolean` | <pre>false</pre> | No       |
 
 When set to `true`, generates a `.js` file instead of a `.ts` file.
+
+### `path`
+
+| Type     | Default               | Required |
+| -------- | --------------------- | -------- |
+| `string` | <pre>src/routes</pre> | No       |
+
+Specifies the directory containing your route files.

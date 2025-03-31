@@ -18,10 +18,13 @@ function arg(option) {
 	return args[pathArgIndex];
 }
 
-const pathArg = arg('path');
-if (pathArg) genConfig.routesPath = pathArg;
+const allLazyArg = arg('allLazy');
+if (allLazyArg) genConfig.allLazy = true;
 
 const jsArg = arg('js');
 if (jsArg) genConfig.routesInJs = true;
+
+const pathArg = arg('path');
+if (pathArg) genConfig.routesPath = pathArg;
 
 writeRouterCode();
