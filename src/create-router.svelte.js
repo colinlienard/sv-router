@@ -46,7 +46,7 @@ export function createRouter(r) {
 				return params.value;
 			},
 			get pathname() {
-				return location.pathname;
+				return /** @type {import('./index.d.ts').Path<T>} */ (location.pathname);
 			},
 			get search() {
 				return location.search;
