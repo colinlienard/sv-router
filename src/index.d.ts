@@ -134,7 +134,7 @@ export type RouterApi<T extends Routes> = {
 		 */
 		params: AllParams<T>;
 		/** The reactive pathname of the URL. */
-		pathname: string;
+		pathname: Path<T>;
 		/** The reactive query string part of the URL. */
 		search: string;
 		/** The reactive history state that can be passed to the `navigate` function. */
