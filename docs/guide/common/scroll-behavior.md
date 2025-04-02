@@ -30,7 +30,7 @@ For standard anchor tags, control scroll behavior with the `data-scroll-to-top` 
 <a href={p('/about')} data-scroll-to-top="false">About</a>
 ```
 
-## Scroll Position Restoration
+## Scroll Restoration
 
 sv-router leverages the browser's native scroll restoration mechanism by default. This means that when using the browser back/forward buttons, scroll positions are automatically restored.
 

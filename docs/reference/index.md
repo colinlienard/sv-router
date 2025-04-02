@@ -47,6 +47,7 @@ Programmatically navigate to a route.
   - `state` - History state to save
   - `hash` - URL hash fragment
   - `scrollToTop` - Scroll behavior (`"auto" | "instant" | "smooth" | false`)
+  - `viewTransition` - Enable view transition (`boolean`)
   - `params` - Parameters to substitute in the path
 
 #### `isActive(path, params?)`

@@ -59,3 +59,23 @@ export function join(...parts) {
 	}
 	return result;
 }
+
+/**
+ * @param {() => void | Promise<void>} callback
+ * @param {boolean} [enable]
+ * @returns
+ */
+export function wrapInViewTransition(callback, enable) {
+	return /** @type {Promise<void>} */ (
+		new Promise((resolve) => {
+			if (enable && document.startViewTransition !== undefined) {
+				document.startViewTransition(async () => {
+					await callback();
+					resolve();
+				});
+			} else {
+				Promise.resolve(callback()).then(resolve);
+			}
+		})
+	);
+}

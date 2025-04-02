@@ -58,6 +58,7 @@ export default defineConfig({
 						{ text: 'Active Route', link: '/guide/common/active-route' },
 						{ text: 'Preloading', link: '/guide/common/preloading' },
 						{ text: 'Scroll Behavior', link: '/guide/common/scroll-behavior' },
+						{ text: 'View Transitions', link: '/guide/common/view-transitions' },
 						{ text: 'Basename', link: '/guide/common/basename' },
 					],
 				},

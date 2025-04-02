@@ -166,6 +166,7 @@ export type NavigateOptions =
 			state?: string;
 			hash?: string;
 			scrollToTop?: ScrollBehavior | false;
+			viewTransition?: boolean;
 	  }
 	| undefined;
 

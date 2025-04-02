@@ -2,7 +2,12 @@ import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preloadOnHover } from './helpers/preload-on-hover.js';
-import { constructPath, join, resolveRouteComponents } from './helpers/utils.js';
+import {
+	constructPath,
+	join,
+	resolveRouteComponents,
+	wrapInViewTransition,
+} from './helpers/utils.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -104,8 +109,9 @@ export async function onNavigate(path, options = {}) {
 		}
 	}
 
-	componentTree.value = await resolveRouteComponents(match ? [...layouts, match] : layouts);
-	params.value = newParams || {};
+	await wrapInViewTransition(async () => {
+		componentTree.value = await resolveRouteComponents(match ? [...layouts, match] : layouts);
+	}, options.viewTransition);
 
 	if (path) {
 		if (options.search) path += options.search;
@@ -115,6 +121,7 @@ export async function onNavigate(path, options = {}) {
 		globalThis.history[historyMethod](options.state || {}, '', to);
 	}
 
+	params.value = newParams || {};
 	syncSearchParams();
 	Object.assign(location, updatedLocation());
 
@@ -139,13 +146,14 @@ export function onGlobalClick(event) {
 	if (url.origin !== currentOrigin) return;
 
 	event.preventDefault();
-	const { replace, state, scrollToTop } = anchor.dataset;
+	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
 	onNavigate(url.pathname, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
 		hash: url.hash,
 		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
+		viewTransition: viewTransition === '' || viewTransition === 'true',
 	});
 }
 
