@@ -7,9 +7,9 @@ import { writeRouterCode } from '../gen/write-router-code.js';
  * @returns {import('vite').Plugin}
  */
 export function router(options) {
-	if (options?.allLazy) genConfig.allLazy = options.allLazy;
-	if (options?.js) genConfig.routesInJs = options.js;
-	if (options?.path) genConfig.routesPath = options.path;
+	genConfig.allLazy = options?.allLazy || false;
+	genConfig.routesInJs = options?.js || false;
+	genConfig.routesPath = options?.path || 'src/routes';
 
 	return {
 		name: 'sv-router',
