@@ -135,6 +135,24 @@ describe('matchRoute', () => {
 			expect(params).toEqual({ id: 'bar', commentId: 'baz' });
 		});
 
+		it('should match catch-all route', () => {
+			const { match, params, layouts } = matchRoute('/not/found', routes);
+			expect(match).toEqual(PageNotFound);
+			expect(params).toEqual({ rest: 'not/found' });
+			if (treeMode) {
+				expect(layouts).toEqual([]);
+			}
+		});
+
+		it('should match catch-all nested route', () => {
+			const { match, params, layouts } = matchRoute('/users/notfound', routes);
+			expect(match).toEqual(UserNotFound);
+			expect(params).toEqual({});
+			if (treeMode) {
+				expect(layouts).toEqual([Layout1]);
+			}
+		});
+
 		if (treeMode) {
 			it('should match routes with layout', () => {
 				const { layouts: layouts1 } = matchRoute('/', routes);
@@ -145,6 +163,12 @@ describe('matchRoute', () => {
 				expect(layouts2).toEqual([Layout1]);
 				expect(layouts3).toEqual([Layout1]);
 				expect(layouts4).toEqual([Layout1, Layout2]);
+			});
+
+			it('should match catch-all routes with layout', () => {
+				const { match, layouts } = matchRoute('/users', routes);
+				expect(match).toEqual(UserNotFound);
+				expect(layouts).toEqual([Layout1]);
 			});
 
 			it('should also find root layout', () => {
@@ -189,24 +213,6 @@ describe('matchRoute', () => {
 				expect(hooks).toEqual([Hooks1, Hooks2]);
 			});
 		}
-
-		it('should match wildcard route', () => {
-			const { match, params, layouts } = matchRoute('/not/found', routes);
-			expect(match).toEqual(PageNotFound);
-			expect(params).toEqual({ rest: 'not/found' });
-			if (treeMode) {
-				expect(layouts).toEqual([]);
-			}
-		});
-
-		it('should match wildcard nested route', () => {
-			const { match, params, layouts } = matchRoute('/users/notfound', routes);
-			expect(match).toEqual(UserNotFound);
-			expect(params).toEqual({});
-			if (treeMode) {
-				expect(layouts).toEqual([Layout1]);
-			}
-		});
 
 		it('should not match any route', () => {
 			delete routes['*rest'];
