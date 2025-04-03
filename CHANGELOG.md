@@ -1,5 +1,16 @@
 # sv-router
 
+## 0.3.0
+
+### Minor Changes
+
+- 43f8e33: Add an option to lazy load all routes by default in file-based routing
+
+### Patch Changes
+
+- 22db6cb: Add typesafe pathname
+- 2673cd9: Fix layout not rendered with catch-all routes
+
 ## 0.2.0
 
 ### Minor Changes
