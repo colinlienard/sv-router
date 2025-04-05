@@ -57,9 +57,9 @@ export default defineConfig({
 						{ text: 'Search Params', link: '/guide/common/search-params' },
 						{ text: 'Active Route', link: '/guide/common/active-route' },
 						{ text: 'Preloading', link: '/guide/common/preloading' },
+						{ text: 'Basename', link: '/guide/common/basename' },
 						{ text: 'Scroll Behavior', link: '/guide/common/scroll-behavior' },
 						{ text: 'View Transitions', link: '/guide/common/view-transitions' },
-						{ text: 'Basename', link: '/guide/common/basename' },
 					],
 				},
 				{

@@ -114,7 +114,7 @@ describe('matchRoute', () => {
 		});
 
 		it('should match a simple route with a trailing slash', () => {
-			const { match } = matchRoute('/posts', routes);
+			const { match } = matchRoute('/posts/', routes);
 			expect(match).toEqual(Posts);
 		});
 
