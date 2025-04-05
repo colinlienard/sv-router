@@ -1,5 +1,15 @@
 # sv-router
 
+## 0.4.0
+
+### Minor Changes
+
+- b79846a: Add support for view transitions
+
+### Patch Changes
+
+- ed442a3: Fix vite plugin config change during development
+
 ## 0.3.0
 
 ### Minor Changes
