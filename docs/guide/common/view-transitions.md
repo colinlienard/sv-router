@@ -16,7 +16,7 @@ This will wrap the navigation in `document.startViewTransition()`. If not suppor
 
 Then, you can customize the animation effects with CSS (example from the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API/Using)):
 
-````css
+```css
 @keyframes move-out {
 	from {
 		transform: translateY(0%);
@@ -46,4 +46,4 @@ Then, you can customize the animation effects with CSS (example from the [MDN do
 ::view-transition-new(root) {
 	animation: 0.4s ease-in both move-in;
 }
-````
+```
