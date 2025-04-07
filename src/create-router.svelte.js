@@ -2,12 +2,7 @@ import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preloadOnHover } from './helpers/preload-on-hover.js';
-import {
-	constructPath,
-	join,
-	resolveRouteComponents,
-	wrapInViewTransition,
-} from './helpers/utils.js';
+import { constructPath, join, resolveRouteComponents } from './helpers/utils.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -20,6 +15,9 @@ export let componentTree = $state({ value: [] });
 export let params = $state({ value: {} });
 
 export let location = $state(updatedLocation());
+
+let navigationIndex = 0;
+let pendingNavigationIndex = 0;
 
 /** @type {{ name?: string }} */
 export const base = {
@@ -95,6 +93,10 @@ export async function onNavigate(path, options = {}) {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
+
+	navigationIndex++;
+	const currentNavigation = navigationIndex;
+
 	let matchPath = path || globalThis.location.pathname;
 	if (base.name && matchPath.startsWith(base.name)) {
 		matchPath = matchPath.slice(base.name.length) || '/';
@@ -103,15 +105,21 @@ export async function onNavigate(path, options = {}) {
 
 	for (const { beforeLoad } of hooks) {
 		try {
+			pendingNavigationIndex = navigationIndex;
 			await beforeLoad?.();
 		} catch {
+			if (pendingNavigationIndex === navigationIndex) {
+				navigationIndex--;
+			}
 			return;
 		}
 	}
 
-	await wrapInViewTransition(async () => {
-		componentTree.value = await resolveRouteComponents(match ? [...layouts, match] : layouts);
-	}, options.viewTransition);
+	const routeComponents = await resolveRouteComponents(match ? [...layouts, match] : layouts);
+
+	if (navigationIndex !== currentNavigation) {
+		return;
+	}
 
 	if (path) {
 		if (options.search) path += options.search;
@@ -121,6 +129,13 @@ export async function onNavigate(path, options = {}) {
 		globalThis.history[historyMethod](options.state || {}, '', to);
 	}
 
+	if (options.viewTransition && document.startViewTransition !== undefined) {
+		document.startViewTransition(() => {
+			componentTree.value = routeComponents;
+		});
+	} else {
+		componentTree.value = routeComponents;
+	}
 	params.value = newParams || {};
 	syncSearchParams();
 	Object.assign(location, updatedLocation());
