@@ -1,5 +1,16 @@
 # sv-router
 
+## 0.4.0
+
+### Minor Changes
+
+- b79846a: Add support for view transitions
+- 4dd5892: Cancel pending navigation if new one is started
+
+### Patch Changes
+
+- ed442a3: Fix vite plugin config change during development
+
 ## 0.3.0
 
 ### Minor Changes
