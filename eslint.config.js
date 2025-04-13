@@ -36,6 +36,7 @@ export default [
 	eslintPluginUnicorn.configs['flat/recommended'],
 	{
 		rules: {
+			'unicorn/error-message': 'off',
 			'unicorn/filename-case': [
 				'error',
 				{

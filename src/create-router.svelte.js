@@ -95,7 +95,7 @@ export async function onNavigate(path, options = {}) {
 	}
 
 	navigationIndex++;
-	const currentNavigation = navigationIndex;
+	const currentNavigationIndex = navigationIndex;
 
 	let matchPath = path || globalThis.location.pathname;
 	if (base.name && matchPath.startsWith(base.name)) {
@@ -105,19 +105,20 @@ export async function onNavigate(path, options = {}) {
 
 	for (const { beforeLoad } of hooks) {
 		try {
-			pendingNavigationIndex = navigationIndex;
+			pendingNavigationIndex = currentNavigationIndex;
 			await beforeLoad?.();
 		} catch {
-			if (pendingNavigationIndex === navigationIndex) {
-				navigationIndex--;
-			}
 			return;
 		}
 	}
 
-	const routeComponents = await resolveRouteComponents(match ? [...layouts, match] : layouts);
+	const fromBeforeLoadHook = new Error().stack?.includes('beforeLoad');
 
-	if (navigationIndex !== currentNavigation) {
+	const routeComponents = await resolveRouteComponents(match ? [...layouts, match] : layouts);
+	if (
+		navigationIndex !== currentNavigationIndex ||
+		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)
+	) {
 		return;
 	}
 
