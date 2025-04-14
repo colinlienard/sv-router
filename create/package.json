@@ -1,0 +1,32 @@
+{
+	"name": "create-sv-router",
+	"version": "0.1.0",
+	"description": "Modern Svelte Routing",
+	"keywords": [
+		"svelte",
+		"router",
+		"spa"
+	],
+	"homepage": "https://github.com/colinlienard/sv-router",
+	"bugs": {
+		"url": "https://github.com/colinlienard/sv-router/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/colinlienard/sv-router.git"
+	},
+	"license": "MIT",
+	"type": "module",
+	"bin": "./dist/index.js",
+	"files": [
+		"dist",
+		"templates"
+	],
+	"scripts": {
+		"dev": "node src",
+		"build": "echo 'TODO'"
+	},
+	"dependencies": {
+		"@clack/prompts": "^0.10.1"
+	}
+}

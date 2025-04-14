@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "preserve",
+		"moduleResolution": "bundler",
+		"esModuleInterop": true,
+		"strict": true,
+		"noEmit": true,
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*.ts", "src/**/*.svelte"]
+}

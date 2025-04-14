@@ -7,7 +7,6 @@
 		"allowJs": true,
 		"checkJs": true,
 		"strict": true,
-		"outDir": "dist",
 		"noEmit": true,
 		"verbatimModuleSyntax": true,
 		"rewriteRelativeImportExtensions": true,

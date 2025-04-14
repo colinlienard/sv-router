@@ -33,6 +33,8 @@
 		"src"
 	],
 	"scripts": {
+		"create:dev": "pnpm --filter create-sv-router dev",
+		"create:build": "pnpm --filter create-sv-router build",
 		"docs:dev": "pnpm --filter docs dev",
 		"docs:build": "pnpm --filter docs build",
 		"docs:preview": "pnpm --filter docs preview",
