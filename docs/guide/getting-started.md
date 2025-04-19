@@ -31,6 +31,7 @@ deno run -A npm:create-sv-router@latest
 After setting up your project, you can use the [`sv` CLI](https://svelte.dev/docs/cli/sv-add) to automatically configure tools like ESLint and Prettier.
 
 Then, dive into the routing concepts:
+
 - [For code-based routing](./code-based/routing-concepts)
 - [For file-based routing](./file-based/routing-concepts)
 
