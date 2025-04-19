@@ -24,9 +24,13 @@
 	],
 	"scripts": {
 		"dev": "node src",
-		"build": "echo 'TODO'"
+		"build": "ncc build src/index.js"
 	},
 	"dependencies": {
-		"@clack/prompts": "^0.10.1"
+		"@clack/prompts": "^0.10.1",
+		"execa": "^9.5.2"
+	},
+	"devDependencies": {
+		"@vercel/ncc": "^0.38.3"
 	}
 }

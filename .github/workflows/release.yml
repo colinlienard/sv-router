@@ -20,6 +20,8 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: pnpm install
+      - name: Build create package
+        run: pnpm create:build
       - name: Create release pull request or publish to npm
         id: changesets
         uses: changesets/action@v1

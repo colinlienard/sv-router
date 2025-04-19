@@ -1,4 +1,4 @@
-# Setup
+# Manual Setup
 
 Let's assume you've already created two components, `Home.svelte` and `About.svelte`, that you want to use as routes.
 

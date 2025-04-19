@@ -1,4 +1,4 @@
-# Setup
+# Manual Setup
 
 With file-based routing, routes are automatically generated based on your file structure.
 

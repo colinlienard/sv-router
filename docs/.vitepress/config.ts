@@ -32,7 +32,7 @@ export default defineConfig({
 					text: 'Code-based Routing',
 					collapsed: false,
 					items: [
-						{ text: 'Setup', link: '/guide/code-based/setup' },
+						{ text: 'Manual Setup', link: '/guide/code-based/manual-setup' },
 						{ text: 'Routing Concepts', link: '/guide/code-based/routing-concepts' },
 						{ text: 'Hooks', link: '/guide/code-based/hooks' },
 						{ text: 'Code Splitting', link: '/guide/code-based/code-splitting' },
@@ -42,7 +42,7 @@ export default defineConfig({
 					text: 'File-based Routing',
 					collapsed: false,
 					items: [
-						{ text: 'Setup', link: '/guide/file-based/setup' },
+						{ text: 'Manual Setup', link: '/guide/file-based/manual-setup' },
 						{ text: 'Routing Concepts', link: '/guide/file-based/routing-concepts' },
 						{ text: 'Hooks', link: '/guide/file-based/hooks' },
 						{ text: 'Code Splitting', link: '/guide/file-based/code-splitting' },

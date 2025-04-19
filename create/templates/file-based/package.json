@@ -1,5 +1,5 @@
 {
-	"name": "code-based",
+	"name": "svelte-app",
 	"private": true,
 	"type": "module",
 	"scripts": {

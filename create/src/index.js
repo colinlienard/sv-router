@@ -1,6 +1,14 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { cancel, intro, isCancel, outro, select, spinner, text } from '@clack/prompts';
+import { execa } from 'execa';
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 function checkCancel(value) {
 	if (isCancel(value)) {
@@ -11,25 +19,27 @@ function checkCancel(value) {
 
 intro(`create-sv-router`);
 
-const location = await text({
+const locationPlaceholder = 'Leave blank to use `./`';
+let location = await text({
 	message: 'Where do you want to create your project?',
-	placeholder: 'Leave blank to use `./`',
+	placeholder: locationPlaceholder,
 });
 checkCancel(location);
+if (location === locationPlaceholder) location = '';
 
-const type = await select({
-	message: 'Pick a type.',
+const template = await select({
+	message: 'Choose your template.',
 	options: [
-		{ value: 'file', label: 'File-based routing' },
-		{ value: 'code', label: 'Code-based routing' },
+		{ value: 'file-based', label: 'File-based routing' },
+		{ value: 'code-based', label: 'Code-based routing' },
 	],
 });
-checkCancel(type);
+checkCancel(template);
 
-const installDeps = await select({
+const pkgManager = await select({
 	message: 'Which package manager do you want to install dependencies with?',
 	options: [
-		{ value: 'none', label: 'None' },
+		{ value: '', label: 'None' },
 		{ value: 'npm', label: 'npm' },
 		{ value: 'yarn', label: 'yarn' },
 		{ value: 'pnpm', label: 'pnpm' },
@@ -37,13 +47,31 @@ const installDeps = await select({
 		{ value: 'deno', label: 'deno' },
 	],
 });
-checkCancel(installDeps);
+checkCancel(pkgManager);
 
-if (installDeps !== 'none') {
+const target = path.join(process.cwd(), location);
+if (location) {
+	fs.mkdirSync(target);
+}
+fs.cpSync(path.join(dirname, '../templates', template), target, { recursive: true });
+if (pkgManager) {
 	const s = spinner();
-	s.start('Installing via npm');
-	await new Promise((resolve) => setTimeout(resolve, 1000));
-	s.stop('Installed via npm');
+	s.start('Installing dependencies with ' + pkgManager);
+	try {
+		await execa(pkgManager, ['install'], { cwd: target });
+		s.stop('Dependencies installed with ' + pkgManager);
+	} catch (error) {
+		s.stop('Failed to install dependencies with ' + pkgManager);
+		console.error(error);
+		process.exit(1);
+	}
 }
 
-outro("You're all set!");
+outro("You're all set! You can now run:");
+console.log(
+	[
+		...(location ? [`cd ${location}`] : []),
+		...(pkgManager ? [] : ['npm install']),
+		(pkgManager || 'npm') + ' run dev',
+	].join('\n'),
+);
