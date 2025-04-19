@@ -27,7 +27,7 @@ A feature-rich yet intuitive routing library for Svelte single-page apps.
 - 🪶 **Lightweight**: Minimal impact on your bundle size.
 - 🚀 **Made for Svelte 5**: True Svelte 5 implementation with the latest features.
 
-## Installation
+## Getting Started
 
 Kickstart a new project:
 
@@ -35,7 +35,7 @@ Kickstart a new project:
 npm create sv-router
 ```
 
-...or add it to an existing Svelte project:
+...or add it to an existing project:
 
 ```bash
 npm install sv-router
