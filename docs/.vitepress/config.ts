@@ -59,7 +59,7 @@ export default defineConfig({
 					],
 				},
 				{
-					text: 'Tips 💡',
+					text: 'Tips',
 					link: '/guide/tips',
 				},
 				{
