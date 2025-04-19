@@ -71,6 +71,21 @@ Extend your project's TypeScript configuration from the generated one:
 }
 ```
 
+> [!WARNING]
+> If you're using path aliases in your `tsconfig.json`, they will override the `sv-router/generated` alias from the extended configuration. Make sure to include it in your own paths configuration:
+>
+> ```json [tsconfig.json]
+> {
+> 	"extends": ["./.router/tsconfig.json"],
+> 	"compilerOptions": {
+> 		"paths": {
+> 			"your-path": ["./src/your-path"],
+> 			"sv-router/generated": ["./.router/generated"] // [!code ++]
+> 		}
+> 	}
+> }
+> ```
+
 In your application's entry point component, import and use the `Router` component, which handles rendering the active route:
 
 ```svelte [App.svelte]
