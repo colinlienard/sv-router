@@ -24,7 +24,7 @@
 	],
 	"scripts": {
 		"dev": "node src",
-		"build": "ncc build src/index.js"
+		"build": "ncc build src/index.js -m"
 	},
 	"dependencies": {
 		"@clack/prompts": "^0.10.1",

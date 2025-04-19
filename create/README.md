@@ -5,29 +5,29 @@
 With NPM:
 
 ```bash
-npm create vite@latest
+npm create sv-router@latest
 ```
 
 With Yarn:
 
 ```bash
-yarn create vite
+yarn create sv-router
 ```
 
 With PNPM:
 
 ```bash
-pnpm create vite
+pnpm create sv-router
 ```
 
 With Bun:
 
 ```bash
-bun create vite
+bun create sv-router
 ```
 
 With Deno:
 
 ```bash
-deno add npm:sv-router
+deno run -A npm:create-sv-router@latest
 ```

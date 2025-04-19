@@ -29,7 +29,13 @@ A feature-rich yet intuitive routing library for Svelte single-page apps.
 
 ## Installation
 
-Add it to an existing Svelte project:
+Kickstart a new project:
+
+```bash
+npm create sv-router
+```
+
+...or add it to an existing Svelte project:
 
 ```bash
 npm install sv-router
