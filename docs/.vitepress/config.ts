@@ -22,6 +22,7 @@ export default defineConfig({
 			'/guide': [
 				{
 					text: 'Introduction',
+					collapsed: false,
 					items: [
 						{ text: 'Why sv-router?', link: '/guide/why' },
 						{ text: 'Getting Started', link: '/guide/getting-started' },
@@ -29,6 +30,7 @@ export default defineConfig({
 				},
 				{
 					text: 'Code-based Routing',
+					collapsed: false,
 					items: [
 						{ text: 'Manual Setup', link: '/guide/code-based/manual-setup' },
 						{ text: 'Routing Concepts', link: '/guide/code-based/routing-concepts' },
@@ -38,6 +40,7 @@ export default defineConfig({
 				},
 				{
 					text: 'File-based Routing',
+					collapsed: false,
 					items: [
 						{ text: 'Manual Setup', link: '/guide/file-based/manual-setup' },
 						{ text: 'Routing Concepts', link: '/guide/file-based/routing-concepts' },
@@ -48,6 +51,7 @@ export default defineConfig({
 				},
 				{
 					text: 'Common',
+					collapsed: false,
 					items: [
 						{ text: 'Navigation', link: '/guide/common/navigation' },
 						{ text: 'Search Params', link: '/guide/common/search-params' },
