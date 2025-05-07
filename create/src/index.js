@@ -41,6 +41,7 @@ if (location) {
 	fs.mkdirSync(target, { recursive: true });
 }
 fs.cpSync(path.join(dirname, '../templates', template), target, { recursive: true });
+fs.renameSync(path.join(target, 'gitignore'), path.join(target, '.gitignore')); // By default, npm doesn't include .gitignore files
 
 const pkgManager = await p.select({
 	message: 'Which package manager do you want to install dependencies with?',
