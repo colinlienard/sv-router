@@ -1,5 +1,11 @@
 # create-sv-router
 
+## 0.1.2
+
+### Patch Changes
+
+- 9482246: Include gitignore files in npm
+
 ## 0.1.1
 
 ### Patch Changes
