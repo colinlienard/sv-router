@@ -134,7 +134,7 @@ export type RouterApi<T extends Routes> = {
 		 */
 		params: AllParams<T>;
 		/** The reactive pathname of the URL. */
-		pathname: Path<T>;
+		pathname: (Path<T, true> & {}) | (string & {});
 		/** The reactive query string part of the URL. */
 		search: string;
 		/** The reactive history state that can be passed to the `navigate` function. */
@@ -144,8 +144,8 @@ export type RouterApi<T extends Routes> = {
 	};
 };
 
-export type Path<T extends Routes> = RemoveParenthesis<
-	RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>>>
+export type Path<T extends Routes, AnyParam extends boolean = false> = RemoveParenthesis<
+	RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>, '', AnyParam>>
 >;
 
 export type ConstructPathArgs<T extends string> =
@@ -155,9 +155,13 @@ export type IsActiveArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T] | [T, PathParams<T>];
 
 export type PathParams<T extends string> =
-	ExtractParams<T> extends never ? never : Record<ExtractParams<T>, string>;
+	ExtractParams<RemoveParenthesis<T>> extends never
+		? never
+		: Record<ExtractParams<RemoveParenthesis<T>>, string>;
 
-export type AllParams<T extends Routes> = Partial<Record<ExtractParams<RecursiveKeys<T>>, string>>;
+export type AllParams<T extends Routes> = Partial<
+	Record<ExtractParams<RemoveParenthesis<RecursiveKeys<T>>>, string>
+>;
 
 export type NavigateOptions =
 	| {
@@ -195,13 +199,27 @@ type StripNonRoutes<T extends Routes> = {
 					: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
 };
 
-type RecursiveKeys<T extends Routes, Prefix extends string = ''> = {
+type RecursiveKeys<
+	T extends Routes,
+	Prefix extends string = '',
+	AnyParam extends boolean = false,
+> = {
 	[K in keyof T]: K extends string
 		? T[K] extends Routes
-			? RecursiveKeys<T[K], `${Prefix}${K}`>
-			: `${Prefix}${K}`
+			? RecursiveKeys<
+					T[K],
+					`${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`,
+					AnyParam
+				>
+			: `${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`
 		: never;
 }[keyof T];
+
+type ReplaceParamWithString<T extends string> = T extends `/:${string}`
+	? `/${string}`
+	: T extends `/(:${string})`
+		? `/${string}`
+		: T;
 
 type RemoveLastSlash<T extends string> = T extends '/' ? T : T extends `${infer R}/` ? R : T;
 
@@ -211,14 +229,10 @@ type RemoveParenthesis<T extends string> = T extends `${infer A}(${infer B})${in
 
 type ExtractParams<T extends string> = T extends `${string}:${infer Param}/${infer Rest}`
 	? Param | ExtractParams<`/${Rest}`>
-	: T extends `${string}(:${infer Param})`
+	: T extends `${string}:${infer Param}`
 		? Param
-		: T extends `${string}:${infer Param}`
-			? Param
-			: T extends `${string}(*${infer Param})`
-				? Param
-				: T extends `${string}*${infer Param}`
-					? Param extends ''
-						? never
-						: Param
-					: never;
+		: T extends `${string}*${infer Param}`
+			? Param extends ''
+				? never
+				: Param
+			: never;

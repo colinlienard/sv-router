@@ -26,9 +26,9 @@ type TestRoutes = {
 
 // Path
 
-type test_path = Expect<Equal<test_path_result, test_path_expected>>;
-type test_path_result = Path<TestRoutes>;
-type test_path_expected =
+type test_path_0 = Expect<Equal<test_path_result_0, test_path_expected_0>>;
+type test_path_result_0 = Path<TestRoutes>;
+type test_path_expected_0 =
 	| '/'
 	| '/about'
 	| '/contact/nested'
@@ -37,6 +37,18 @@ type test_path_expected =
 	| '/posts/nolayout'
 	| `/posts/:id`
 	| `/posts/:id/:commentId`;
+
+type test_path_1 = Expect<Equal<test_path_result_1, test_path_expected_1>>;
+type test_path_result_1 = Path<TestRoutes, true>;
+type test_path_expected_1 =
+	| '/'
+	| '/about'
+	| '/contact/nested'
+	| '/posts'
+	| '/posts/static'
+	| '/posts/nolayout'
+	| `/posts/${string}`
+	| `/posts/${string}/${string}`;
 
 // PathParams
 
