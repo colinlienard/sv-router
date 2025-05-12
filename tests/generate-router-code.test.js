@@ -20,7 +20,7 @@ import Index from '../a/fake/path/index.svelte';
 import PostsStatic from '../a/fake/path/posts.static.svelte';
 import PostsNolayout from '../a/fake/path/posts.(nolayout).svelte';
 
-export const { p, navigate, isActive, route } = createRouter({
+export const { p, navigate, isActive, preload, route } = createRouter({
   '*notfound': () => import('../a/fake/path/[...notfound].lazy.svelte'),
   '/about': About,
   '/': Index,
@@ -44,7 +44,7 @@ import PostsNolayout from '../a/fake/path/posts/(nolayout).svelte';
 import postsHooks from '../a/fake/path/posts/hooks';
 import postsCommentsHooks from '../a/fake/path/posts/comments/hooks.svelte';
 
-export const { p, navigate, isActive, route } = createRouter({
+export const { p, navigate, isActive, preload, route } = createRouter({
   '*notfound': () => import('../a/fake/path/[...notfound].lazy.svelte'),
   '/about': About,
   '/': Index,
@@ -207,7 +207,7 @@ import postsHooks from './routes/posts/hooks';
 import PostsCommentsCommentId from './routes/posts/comments/[commentId].svelte';
 import postsCommentsHooks from './routes/posts/comments/hooks.svelte';
 
-export const { p, navigate, isActive, route } = createRouter({
+export const { p, navigate, isActive, preload, route } = createRouter({
   '/': Index,
   '/about': About,
   '/posts': {
@@ -231,7 +231,7 @@ export const { p, navigate, isActive, route } = createRouter({
 import postsHooks from './routes/posts/hooks';
 import postsCommentsHooks from './routes/posts/comments/hooks.svelte';
 
-export const { p, navigate, isActive, route } = createRouter({
+export const { p, navigate, isActive, preload, route } = createRouter({
   '/': () => import('./routes/index.svelte'),
   '/about': () => import('./routes/about.svelte'),
   '/posts': {

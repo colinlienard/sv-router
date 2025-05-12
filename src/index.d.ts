@@ -11,6 +11,7 @@ import type { Action } from 'svelte/action';
  * ```
  */
 export const isActiveLink: IsActiveLink;
+
 /**
  * Setup a new router instance with the given routes.
  *
@@ -23,11 +24,13 @@ export const isActiveLink: IsActiveLink;
  * ```
  */
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
+
 /**
  * The component that will render the current route. You can pass a `base` prop to set the base path
  * that is prepended to every url.
  */
 export const Router: Component<{ base?: string }>;
+
 /**
  * The reactive search params of the URL. It is just a wrapper around `SvelteURLSearchParam` that
  * will update the url on change.
@@ -90,6 +93,7 @@ export type RouterApi<T extends Routes> = {
 	 * @param params The parameters to replace in the route.
 	 */
 	p<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
+
 	/**
 	 * Navigate programatically to a route.
 	 *
@@ -124,6 +128,10 @@ export type RouterApi<T extends Routes> = {
 		<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
 		startsWith<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
 	};
+
+	/** TODO */
+	preload<U extends Path<T>>(path: U): Promise<void>;
+
 	route: {
 		/**
 		 * An object containing the parameters of the current route.

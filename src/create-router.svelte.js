@@ -1,7 +1,7 @@
 import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
-import { preloadOnHover } from './helpers/preload-on-hover.js';
+import { preload, preloadOnHover } from './helpers/preload.js';
 import { constructPath, join, resolveRouteComponents } from './helpers/utils.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
@@ -44,6 +44,9 @@ export function createRouter(r) {
 		p: constructPath,
 		navigate,
 		isActive,
+		async preload(pathname) {
+			await preload(routes, pathname);
+		},
 		route: {
 			get params() {
 				return params.value;

@@ -19,6 +19,7 @@ Sets up a new router instance with the given routes configuration.
 - [`p`](#p-path-params) - Path constructor
 - [`navigate`](#navigate-path-options) - Navigation function
 - [`isActive`](#isactive-path-params) - Route activation checker
+- [`preload`](#preload-path) - Preload route components
 - [`route`](#route) - Current route information
 
 #### `p(path, params?)`
@@ -64,6 +65,16 @@ Checks if a given path is currently active.
 **Methods:**
 
 - `startsWith(path: string, params?: Record<string, string | number>): boolean` - Returns true if the current route starts with the given path and parameters.
+
+#### `preload(path)`
+
+Preload route components.
+
+**Parameters:**
+
+- `path` - The route to preload
+
+**Returns:** Promise that resolves when the route components are preloaded
 
 #### `route`
 

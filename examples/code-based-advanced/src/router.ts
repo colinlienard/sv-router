@@ -5,7 +5,7 @@ import AMoreNestedRoute from './routes/AMoreNestedRoute.svelte';
 import Home from './routes/Home.svelte';
 import StaticPost from './routes/StaticPost.svelte';
 
-export const { p, navigate, isActive, route } = createRouter({
+export const { p, navigate, isActive, preload, route } = createRouter({
 	'/': Home,
 	'/about': About,
 	'/a/more/nested/route': AMoreNestedRoute,

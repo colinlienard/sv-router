@@ -163,7 +163,7 @@ export function createRouterCode(routes, routesPath, { allLazy = false } = {}) {
 		`import { createRouter } from 'sv-router';`,
 		...imports,
 		'',
-		`export const { p, navigate, isActive, route } = createRouter(${stringifiedRoutes});`,
+		`export const { p, navigate, isActive, preload, route } = createRouter(${stringifiedRoutes});`,
 	].join('\n');
 }
 
