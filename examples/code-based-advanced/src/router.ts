@@ -20,6 +20,10 @@ export const { p, navigate, isActive, preload, route } = createRouter({
 					// eslint-disable-next-line no-console
 					console.log('Loaded comment');
 				},
+				onPreload() {
+					// eslint-disable-next-line no-console
+					console.log('Comments route preloaded');
+				},
 			},
 		},
 		layout: Layout,

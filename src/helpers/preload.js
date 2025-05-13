@@ -6,7 +6,10 @@ import { resolveRouteComponents } from './utils.js';
  * @param {string} path
  */
 export async function preload(routes, path) {
-	const { match, layouts } = matchRoute(path, routes);
+	const { match, layouts, hooks } = matchRoute(path, routes);
+	for (const { onPreload } of hooks) {
+		onPreload?.();
+	}
 	await resolveRouteComponents(match ? [...layouts, match] : layouts);
 }
 

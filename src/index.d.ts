@@ -65,6 +65,8 @@ export type Hooks = {
 	beforeLoad?(): void | Promise<void>;
 	/** A function that will be called after the route is loaded. */
 	afterLoad?(): void;
+	/** A function that will be called when the route is preloaded. */
+	onPreload?(): void;
 };
 
 export type Routes = {
