@@ -128,3 +128,4 @@ Configuration object for route lifecycle hooks.
 
 - `beforeLoad?(): void | Promise<void>` - A function called before the route is loaded. You can throw a `navigate` call to redirect.
 - `afterLoad?(): void` - A function called after the route is loaded.
+- `onPreload?(): void` - A function called when the route is preloaded.

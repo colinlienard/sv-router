@@ -33,3 +33,7 @@ await preload('/about');
 ```
 
 :::
+
+## The `onPreload` Hook
+
+The `onPreload` hook is called when the corresponding route is preloaded. It can be used to perform any necessary setup or initialization before the route is loaded, for example to fetch data that will then be used on the route. See [code-based hooks](../code-based/hooks) or [file-based hooks](../file-based/hooks).
