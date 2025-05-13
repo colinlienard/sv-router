@@ -6,7 +6,7 @@ For preloading to work effectively, you must first implement code splitting for 
 
 ## On Links
 
-To enable preloading, simply add a `data-preload` attribute to the link that triggers navigation:
+Simply add a `data-preload` attribute to the link that triggers navigation:
 
 ```svelte
 <a href="/about" data-preload>About</a>
@@ -16,7 +16,7 @@ When users hover over this link, the About page component will begin loading in 
 
 ## Programmatically
 
-You can also preload a route programatically with the `preload` function:
+You can also preload a route programmatically with the `preload` function:
 
 ::: code-group
 

@@ -95,7 +95,7 @@ export type RouterApi<T extends Routes> = {
 	p<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
 
 	/**
-	 * Navigate programatically to a route.
+	 * Navigate programmatically to a route.
 	 *
 	 * ```js
 	 * navigate('/users');
@@ -129,7 +129,11 @@ export type RouterApi<T extends Routes> = {
 		startsWith<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
 	};
 
-	/** TODO */
+	/**
+	 * Preloads the given route.
+	 *
+	 * @param path The route to preload.
+	 */
 	preload<U extends Path<T>>(path: U): Promise<void>;
 
 	route: {

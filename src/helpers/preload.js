@@ -24,8 +24,7 @@ export function preloadOnHover(routes) {
 				link.removeEventListener('mouseenter', callback);
 				const href = link.getAttribute('href');
 				if (!href) return;
-				const { match, layouts } = matchRoute(href, routes);
-				resolveRouteComponents(match ? [...layouts, match] : layouts);
+				preload(routes, href);
 			});
 		}
 	});
