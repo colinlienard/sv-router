@@ -9,7 +9,7 @@ For preloading to work effectively, you must first implement code splitting for 
 Simply add a `data-preload` attribute to the link that triggers navigation:
 
 ```svelte
-<a href="/about" data-preload>About</a>
+<a href={p('/about')} data-preload>About</a>
 ```
 
 When users hover over this link, the About page component will begin loading in the background, ensuring it's ready (or nearly ready) by the time they click.

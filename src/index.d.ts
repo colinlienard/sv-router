@@ -7,7 +7,7 @@ import type { Action } from 'svelte/action';
  * to `is-active`.
  *
  * ```svelte
- * <a href="/about" use:isActiveLink={{ className: 'active-link' }}>
+ * <a href={p('/about')} use:isActiveLink={{ className: 'active-link' }}>
  * ```
  */
 export const isActiveLink: IsActiveLink;

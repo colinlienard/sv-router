@@ -11,13 +11,13 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 	import { isActiveLink } from 'sv-router';
 </script>
 
-<a href="/about" use:isActiveLink>About</a>
+<a href={p('/about')} use:isActiveLink>About</a>
 
 <!-- With custom class name -->
-<a href="/about" use:isActiveLink={{ className: 'custom-class' }}>About</a>
+<a href={p('/about')} use:isActiveLink={{ className: 'custom-class' }}>About</a>
 
 <!-- Active when the route starts with '/about' -->
-<a href="/about" use:isActiveLink={{ startsWith: true }}>About</a>
+<a href={p('/about')} use:isActiveLink={{ startsWith: true }}>About</a>
 ```
 
 ## Programmatically
