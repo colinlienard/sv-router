@@ -17,7 +17,7 @@ export const { p, navigate, isActive, route } = createRouter({
 				// Execute after route loads
 			},
 			onPreload() {
-			  // Execute when the route is preloaded
+				// Execute when the route is preloaded
 			},
 		},
 	},

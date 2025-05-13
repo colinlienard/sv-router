@@ -24,7 +24,7 @@ export default {
 		// Execute after route loads
 	},
 	onPreload() {
-	  // Execute when the route is preloaded
+		// Execute when the route is preloaded
 	},
 } satisfies Hooks;
 ```
