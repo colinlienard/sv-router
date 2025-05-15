@@ -1,5 +1,16 @@
 # sv-router
 
+## 0.5.0
+
+### Minor Changes
+
+- 20f5b50: Add a function to programmatically preload routes
+- 2946378: Add onPreload hook
+
+### Patch Changes
+
+- 90a66e4: Better typing for route.pathname
+
 ## 0.4.0
 
 ### Minor Changes
