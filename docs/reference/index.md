@@ -82,7 +82,8 @@ An object containing information about the current route.
 
 **Properties:**
 
-- `params` - Parameters from the current route
+- `params` - Non-strict parameters from the current route
+- `getParams(pathname: string)` - Strict parameters from the current route
 - `pathname` - Current path
 - `search` - Query string portion of the URL
 - `state` - History state

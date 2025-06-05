@@ -147,6 +147,17 @@ export type RouterApi<T extends Routes> = {
 		 * 'hello-world', commentId: '123' }`.
 		 */
 		params: AllParams<T>;
+		/**
+		 * Extract parameters from the given pathname. Will throw if the pathname does not match the
+		 * current route.
+		 *
+		 * ```ts
+		 * route.getParams('/posts/:slug').slug;
+		 * ```
+		 *
+		 * @param pathname
+		 */
+		getParams<U extends Path<T>>(pathname: U): Record<ExtractParams<U>, string>;
 		/** The reactive pathname of the URL. */
 		pathname: (Path<T, true> & {}) | (string & {});
 		/** The reactive query string part of the URL. */

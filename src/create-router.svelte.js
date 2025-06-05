@@ -51,6 +51,12 @@ export function createRouter(r) {
 			get params() {
 				return params.value;
 			},
+			getParams(pathname) {
+				if (!isActive(pathname)) {
+					throw new Error(`\`${pathname}\` does not match the current route`);
+				}
+				return params.value;
+			},
 			get pathname() {
 				return /** @type {import('./index.d.ts').Path<T>} */ (location.pathname);
 			},

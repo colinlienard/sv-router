@@ -38,10 +38,12 @@ function compare(compareFn, pathname, params) {
 	const routeParts = location.pathname.split('/').slice(1);
 	for (const [index, pathPart] of pathParts.entries()) {
 		const routePart = routeParts[index];
-		if (routePart.startsWith(':')) {
+		if (pathPart.startsWith(':')) {
 			continue;
 		}
-		return compareFn(pathPart, routePart);
+		if (pathPart !== routePart) {
+			return false;
+		}
 	}
-	return false;
+	return true;
 }

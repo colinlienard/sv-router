@@ -35,21 +35,21 @@ Multiple dynamic segments can be included in a single route:
 '/user/:id/post/:postId': Post,
 ```
 
-Access these dynamic segments in your components using the `route.params` object:
+Access these dynamic segments in your components using the `route.params` object or the `route.getParams` method:
+
+- **Non-strict:** `route.params` is typed as a partial record with all the possible params in the app.
+- **Strict:** `route.getParams` has a return type of the only possible params for a specific route, but requires the pathname to be passed as an argument. It will throw an error if the pathname does not match the current route
 
 ```svelte [Post.svelte]
 <script lang="ts">
-	import { route } from '../router';
+	import { route } from 'sv-router/generated';
 
 	// Typed as { id?: string, postId?: string }
 	route.params;
-</script>
 
-<main>
-	<h1>Post</h1>
-	<p>User ID: {route.params.id}</p>
-	<p>Post ID: {route.params.postId}</p>
-</main>
+	// Typed as { postId: string }
+	route.getParams('/post/:postId');
+</script>
 ```
 
 ## Catch-All Routes
