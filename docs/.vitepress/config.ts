@@ -96,6 +96,16 @@ export default defineConfig({
 	markdown: {
 		config(md) {
 			md.use(groupIconMdPlugin);
+			md.use(() => {
+				const fenceRule = md.renderer.rules.fence;
+				if (fenceRule) {
+					md.renderer.rules.fence = (...args) => {
+						return fenceRule(...args)
+							.replaceAll('(|', '[')
+							.replaceAll('|)', ']');
+					};
+				}
+			});
 		},
 	},
 	vite: {
