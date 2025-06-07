@@ -60,12 +60,19 @@ describe('matchRoute', () => {
 						'/': DynamicPost,
 						'/comments': {
 							'/:commentId': DynamicPostComment,
+							meta: {
+								foo: 'bar',
+							},
 						},
 						layout: Layout2,
 						hooks: Hooks2,
 					},
 					layout: Layout1,
 					hooks: Hooks1,
+					meta: {
+						title: 'Posts',
+						description: 'All posts',
+					},
 				},
 				'/users': {
 					'*': UserNotFound,
@@ -79,8 +86,15 @@ describe('matchRoute', () => {
 			routes: {
 				'*rest': PageNotFound,
 				'/posts': {
+					meta: {
+						title: 'Posts',
+						description: 'All posts',
+					},
 					'/:id': {
 						'/comments': {
+							meta: {
+								foo: 'bar',
+							},
 							'/:commentId': DynamicPostComment,
 						},
 						'/': DynamicPost,
@@ -211,6 +225,23 @@ describe('matchRoute', () => {
 			it('should match multiple hooks', () => {
 				const { hooks } = matchRoute('/posts/bar/comments/baz', routes);
 				expect(hooks).toEqual([Hooks1, Hooks2]);
+			});
+
+			it('should match a route with a meta property', () => {
+				const { meta } = matchRoute('/posts', routes);
+				expect(meta).toEqual({
+					title: 'Posts',
+					description: 'All posts',
+				});
+			});
+
+			it('should match a route with a meta property', () => {
+				const { meta } = matchRoute('/posts/bar/comments/baz', routes);
+				expect(meta).toEqual({
+					title: 'Posts',
+					description: 'All posts',
+					foo: 'bar',
+				});
 			});
 		}
 
