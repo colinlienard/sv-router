@@ -16,6 +16,8 @@ export let params = $state({ value: {} });
 
 export let location = $state(updatedLocation());
 
+let meta = $state({ value: {} });
+
 let navigationIndex = 0;
 let pendingNavigationIndex = 0;
 
@@ -69,6 +71,9 @@ export function createRouter(r) {
 			get hash() {
 				return location.hash;
 			},
+			get meta() {
+				return meta.value;
+			},
 		},
 	};
 }
@@ -110,7 +115,7 @@ export async function onNavigate(path, options = {}) {
 	if (base.name && matchPath.startsWith(base.name)) {
 		matchPath = matchPath.slice(base.name.length) || '/';
 	}
-	const { match, layouts, hooks, params: newParams } = matchRoute(matchPath, routes);
+	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
 	for (const { beforeLoad } of hooks) {
 		try {
@@ -146,7 +151,8 @@ export async function onNavigate(path, options = {}) {
 	} else {
 		componentTree.value = routeComponents;
 	}
-	params.value = newParams || {};
+	params.value = newParams;
+	meta.value = newMeta;
 	syncSearchParams();
 	Object.assign(location, updatedLocation());
 

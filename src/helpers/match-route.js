@@ -15,6 +15,7 @@
  * 	match: RouteComponent | undefined;
  * 	layouts: LayoutComponent[];
  * 	hooks: Hooks[];
+ * 	meta: Record<string, any>;
  * 	params: Record<string, string>;
  * 	breakFromLayouts: boolean;
  * }}
@@ -38,6 +39,9 @@ export function matchRoute(pathname, routes) {
 
 	/** @type {Record<string, string>} */
 	let params = {};
+
+	/** @type {Record<string, any>} */
+	let meta = {};
 
 	let breakFromLayouts = false;
 
@@ -89,6 +93,10 @@ export function matchRoute(pathname, routes) {
 				hooks.push(routes.hooks);
 			}
 
+			if ('meta' in routes && routes.meta) {
+				meta = { ...meta, ...routes.meta };
+			}
+
 			if (typeof routeMatch === 'function') {
 				if (routeParts.length === pathParts.length) {
 					match = routeMatch;
@@ -103,6 +111,7 @@ export function matchRoute(pathname, routes) {
 				match = result.match;
 				params = { ...params, ...result.params };
 				hooks.push(...result.hooks);
+				meta = { ...meta, ...result.meta };
 				if (result.breakFromLayouts) {
 					layouts = [];
 				} else {
@@ -113,7 +122,7 @@ export function matchRoute(pathname, routes) {
 		}
 	}
 
-	return { match, layouts, hooks, params, breakFromLayouts };
+	return { match, layouts, hooks, params, meta, breakFromLayouts };
 }
 
 /**

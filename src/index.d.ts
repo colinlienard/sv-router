@@ -74,6 +74,7 @@ export type Routes = {
 	[_: `*${string}` | `(*${string})`]: RouteComponent | undefined;
 	layout?: LayoutComponent;
 	hooks?: Hooks;
+	meta?: Record<string, any>;
 };
 
 export type IsActiveLink = Action<
@@ -166,6 +167,8 @@ export type RouterApi<T extends Routes> = {
 		state: unknown;
 		/** The reactive hash part of the URL. */
 		hash: string;
+		/** Arbitrary metadata associated with the route. */
+		meta: Record<string, any>;
 	};
 };
 
