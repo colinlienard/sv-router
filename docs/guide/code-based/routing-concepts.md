@@ -44,10 +44,10 @@ You can access these dynamic segments in your components in two different ways:
 <script lang="ts">
 	import { route } from '../router';
 
-	// Typed as { postId: string }
-	route.getParams('/post/:postId');
+	// Typed as { id: string, postId: string }
+	route.getParams('/user/:id/post/:postId');
 
-	// Typed as { id?: string, postId?: string }
+	// Typed as { id?: string, postId?: string, ... }
 	route.params;
 </script>
 ```
