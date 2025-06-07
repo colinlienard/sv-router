@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.6.0
+
+### Minor Changes
+
+- 32a4037: Add route.getParams method for a stricter way to access params
+
 ## 0.5.0
 
 ### Minor Changes
