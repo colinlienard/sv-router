@@ -25,7 +25,7 @@ export function resolveRouteComponents(input) {
  * @param {import('../index.d.ts').RouteComponent} input
  * @returns {Promise<import('svelte').Component>}
  */
-export function resolveRouteComponent(input) {
+function resolveRouteComponent(input) {
 	return new Promise((resolve) => {
 		if (isLazyImport(input)) {
 			Promise.resolve(input()).then((module) => {

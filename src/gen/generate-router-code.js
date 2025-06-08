@@ -14,6 +14,7 @@ const PARAM_FILENAME_REGEX = /(?<=[/.]|^)\(?\[([\w-]+)\]\)?(\.lazy)?\.svelte$/; 
 const CATCH_ALL_FILENAME_REGEX = /(?<=[/.]|^)\(?\[\.\.\.([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
 const OUT_OF_LAYOUT_FILENAME_REGEX = /(?<=[/.]|^)\(\[\.?\.?\.?([\w-]+)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte
 const HOOKS_FILENAME_REGEX = /(?<=[/.]|^)(hooks)(\.svelte)?\.(js|ts)$/; // hooks.js, hooks.svelte.js, hooks.ts, hooks.svelte.ts
+const META_FILENAME_REGEX = /(?<=[/.]|^)(meta)(\.svelte)?\.(js|ts)$/; // meta.js, meta.svelte.js, meta.ts, meta.svelte.ts
 
 /**
  * @param {string} routesPath
@@ -44,7 +45,11 @@ export function buildFileTree(routesPath) {
 			tree.push({ name: entry, tree: buildFileTree(path.join(routesPath, entry)) });
 			continue;
 		}
-		if (!entry.endsWith('.svelte') && !HOOKS_FILENAME_REGEX.test(entry)) {
+		if (
+			!entry.endsWith('.svelte') &&
+			!HOOKS_FILENAME_REGEX.test(entry) &&
+			!META_FILENAME_REGEX.test(entry)
+		) {
 			continue;
 		}
 		tree.push(entry);
@@ -65,6 +70,10 @@ export function createRouteMap(fileTree, prefix = '') {
 			if (!entry.endsWith('.svelte')) {
 				if (HOOKS_FILENAME_REGEX.test(entry)) {
 					result['hooks'] = prefix + entry;
+					continue;
+				}
+				if (META_FILENAME_REGEX.test(entry)) {
+					result['meta'] = prefix + entry;
 					continue;
 				}
 				continue;
@@ -101,7 +110,8 @@ export function createRouteMap(fileTree, prefix = '') {
 			result['/' + filePathToRoute(entry.replace('.svelte', ''))] = prefix + entry;
 		} else {
 			const entryName = filePathToRoute(entry.name);
-			result['/' + entryName] = createRouteMap(entry.tree, prefix + entryName + '/');
+			const paramFolder = entryName.replace(/^\[(.*)\]$/, ':$1');
+			result['/' + paramFolder] = createRouteMap(entry.tree, prefix + entryName + '/');
 		}
 	}
 	return result;
@@ -137,7 +147,11 @@ export function createRouterCode(routes, routesPath, { allLazy = false } = {}) {
 		for (const [key, value] of Object.entries(routes)) {
 			if (typeof value === 'object') {
 				result[key] = handleImports(value, routesPath);
-			} else if (key === 'hooks' || (!value.endsWith('.lazy.svelte') && !allLazy)) {
+			} else if (
+				key === 'hooks' ||
+				key === 'meta' ||
+				(!value.endsWith('.lazy.svelte') && !allLazy)
+			) {
 				const variableName = pathToCorrectCasing(value);
 				importsMap.set(variableName, routesPath + value);
 				result[key] = variableName;
@@ -189,6 +203,7 @@ export function pathToCorrectCasing(value) {
 		extractLastPart(CATCH_ALL_FILENAME_REGEX) ||
 		extractLastPart(PARAM_FILENAME_REGEX) ||
 		extractLastPart(HOOKS_FILENAME_REGEX) ||
+		extractLastPart(META_FILENAME_REGEX) ||
 		extractLastPart(FILENAME_REGEX);
 	if (!lastPart) {
 		throw new Error(`Invalid filename: ${value}`);
@@ -196,7 +211,8 @@ export function pathToCorrectCasing(value) {
 	parts.push(...lastPart.split('-'));
 
 	const uppercased = parts.map((part, index) => {
-		if (index === 0 && lastPart === 'hooks') return part;
+		if (index === 0 && (lastPart === 'hooks' || lastPart === 'meta')) return part;
+		part = part.replace(/^\[(.*)\]$/, '$1');
 		return part.charAt(0).toUpperCase() + part.slice(1);
 	});
 	return uppercased.join('');
