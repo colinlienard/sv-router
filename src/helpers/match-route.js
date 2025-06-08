@@ -6,6 +6,8 @@
  * @typedef {import('../index.d.ts').Hooks} Hooks
  *
  * @typedef {import('../index.d.ts').Routes} Routes
+ *
+ * @typedef {import('../index.d.ts').RouteMeta} RouteMeta
  */
 
 /**
@@ -15,7 +17,7 @@
  * 	match: RouteComponent | undefined;
  * 	layouts: LayoutComponent[];
  * 	hooks: Hooks[];
- * 	meta: Record<string, any>;
+ * 	meta: RouteMeta;
  * 	params: Record<string, string>;
  * 	breakFromLayouts: boolean;
  * }}
@@ -40,7 +42,7 @@ export function matchRoute(pathname, routes) {
 	/** @type {Record<string, string>} */
 	let params = {};
 
-	/** @type {Record<string, any>} */
+	/** @type {RouteMeta} */
 	let meta = {};
 
 	let breakFromLayouts = false;

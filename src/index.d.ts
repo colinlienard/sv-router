@@ -74,13 +74,28 @@ export type Routes = {
 	[_: `*${string}` | `(*${string})`]: RouteComponent | undefined;
 	layout?: LayoutComponent;
 	hooks?: Hooks;
-	meta?: Record<string, any>;
+	meta?: RouteMeta;
 };
 
 export type IsActiveLink = Action<
 	HTMLAnchorElement,
 	{ className?: string; startsWith?: boolean } | undefined
 >;
+
+/**
+ * Route metadata that can be extended via module augmentation.
+ *
+ * @example
+ * 	declare module 'sv-router' {
+ * 		interface RouteMeta {
+ * 			title: string;
+ * 			requiresAuth: boolean;
+ * 		}
+ * 	}
+ */
+export interface RouteMeta {
+	[key: string]: any;
+}
 
 export type RouterApi<T extends Routes> = {
 	/**
@@ -168,7 +183,7 @@ export type RouterApi<T extends Routes> = {
 		/** The reactive hash part of the URL. */
 		hash: string;
 		/** Arbitrary metadata associated with the route. */
-		meta: Record<string, any>;
+		meta: RouteMeta;
 	};
 };
 
