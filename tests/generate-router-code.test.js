@@ -313,7 +313,7 @@ describe('pathToCorrectCasing', () => {
 		expect(result).toBe('PostsId');
 	});
 
-	it.only('should handle paths with a param in a folder correctly', () => {
+	it('should handle paths with a param in a folder correctly', () => {
 		const result = pathToCorrectCasing('posts/[id]/index.svelte');
 		expect(result).toBe('PostsIdIndex');
 	});
