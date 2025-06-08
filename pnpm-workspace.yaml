@@ -1,5 +1,7 @@
 packages:
-  - '.'
-  - 'create'
-  - 'docs'
-  - 'examples/*'
+  - .
+  - create
+  - docs
+  - examples/*
+onlyBuiltDependencies:
+  - esbuild
