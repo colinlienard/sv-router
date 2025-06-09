@@ -17,6 +17,6 @@ export const { p, navigate, isActive, route } = createRouter({
 ```
 
 > [!NOTE]
-> Code splitting works equally well with [layouts](./routing-concepts#layouts).
+> Code splitting works equally well with [layouts](./concepts#layouts).
 
 For advanced loading strategies, see [Preloading](../common/preloading).

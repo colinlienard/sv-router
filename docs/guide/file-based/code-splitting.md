@@ -12,7 +12,7 @@ routes
 ```
 
 > [!NOTE]
-> Code splitting works equally well with [layouts](./routing-concepts#layouts).
+> Code splitting works equally well with [layouts](./concepts#layouts).
 
 > [!TIP]
 > To make all routes lazy by default, use the `allLazy` configuration option instead of manually adding the `.lazy.svelte` suffix to each file. See [Configuration](./configuration#alllazy) for details.

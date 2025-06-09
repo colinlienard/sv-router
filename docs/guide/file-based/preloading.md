@@ -18,21 +18,11 @@ When users hover over this link, the About page component will begin loading in 
 
 You can also preload a route programmatically with the `preload` function:
 
-::: code-group
-
-```ts [Code-based]
-import { preload } from './router';
-
-await preload('/about');
-```
-
-```ts [File-based]
+```ts
 import { preload } from 'sv-router/generated';
 
 await preload('/about');
 ```
-
-:::
 
 ## The `onPreload` Hook
 

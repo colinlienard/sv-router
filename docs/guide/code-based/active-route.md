@@ -24,9 +24,7 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 
 For more complex scenarios, check if a route is active using the `isActive` function, which provides auto-complete and type checking for your routes:
 
-::: code-group
-
-```ts [Code-based]
+```ts
 import { isActive } from './router';
 
 // Returns true when on '/about'
@@ -41,21 +39,3 @@ isActive('/post/:slug');
 // Returns true when on '/about' or '/about/*'
 isActive.startsWith('/about');
 ```
-
-```ts [File-based]
-import { isActive } from 'sv-router/generated';
-
-// Returns true when on '/about'
-isActive('/about');
-
-// Returns true when on '/post/123'
-isActive('/post/:slug', { slug: '123' });
-
-// Returns true when on '/post/*'
-isActive('/post/:slug');
-
-// Returns true when on '/about' or '/about/*'
-isActive.startsWith('/about');
-```
-
-:::

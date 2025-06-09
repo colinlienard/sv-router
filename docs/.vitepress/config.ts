@@ -10,9 +10,31 @@ export default defineConfig({
 		logo: '/logo.svg',
 		siteTitle: 'sv-router',
 		nav: [
-			{ text: 'Guide', link: '/guide/why', activeMatch: '/guide/' },
-			{ text: 'Reference', link: '/reference/', activeMatch: '/reference/' },
-			{ text: 'Examples', link: 'https://github.com/colinlienard/sv-router/tree/main/examples' },
+			{
+				text: 'Guide',
+				activeMatch: '/guide',
+				items: [
+					{
+						text: 'Code-based routing',
+						link: '/guide/code-based/concepts',
+						activeMatch: '/guide/code-based',
+					},
+					{
+						text: 'File-based routing',
+						link: '/guide/file-based/concepts',
+						activeMatch: '/guide/file-based',
+					},
+				],
+			},
+			{
+				text: 'Reference',
+				link: '/reference/',
+				activeMatch: '/reference/',
+			},
+			{
+				text: 'Examples',
+				link: 'https://github.com/colinlienard/sv-router/tree/main/examples',
+			},
 			{
 				text: 'Changelog',
 				link: 'https://github.com/colinlienard/sv-router/blob/main/CHANGELOG.md',
@@ -20,56 +42,31 @@ export default defineConfig({
 		],
 		sidebar: {
 			'/guide': [
+				...getSidebarIntro(),
 				{
-					text: 'Introduction',
-					collapsed: false,
+					text: 'Approaches',
 					items: [
-						{ text: 'Why sv-router?', link: '/guide/why' },
-						{ text: 'Getting Started', link: '/guide/getting-started' },
+						{
+							text: 'File-based',
+							link: '/guide/file-based/concepts',
+						},
+						{
+							text: 'Code-based',
+							link: '/guide/code-based/concepts',
+						},
 					],
 				},
-				{
-					text: 'Code-based Routing',
-					collapsed: false,
-					items: [
-						{ text: 'Manual Setup', link: '/guide/code-based/manual-setup' },
-						{ text: 'Routing Concepts', link: '/guide/code-based/routing-concepts' },
-						{ text: 'Hooks', link: '/guide/code-based/hooks' },
-						{ text: 'Code Splitting', link: '/guide/code-based/code-splitting' },
-					],
-				},
-				{
-					text: 'File-based Routing',
-					collapsed: false,
-					items: [
-						{ text: 'Manual Setup', link: '/guide/file-based/manual-setup' },
-						{ text: 'Routing Concepts', link: '/guide/file-based/routing-concepts' },
-						{ text: 'Hooks', link: '/guide/file-based/hooks' },
-						{ text: 'Code Splitting', link: '/guide/file-based/code-splitting' },
-						{ text: 'Configuration', link: '/guide/file-based/configuration' },
-					],
-				},
-				{
-					text: 'Common',
-					collapsed: false,
-					items: [
-						{ text: 'Navigation', link: '/guide/common/navigation' },
-						{ text: 'Search Params', link: '/guide/common/search-params' },
-						{ text: 'Active Route', link: '/guide/common/active-route' },
-						{ text: 'Preloading', link: '/guide/common/preloading' },
-						{ text: 'Basename', link: '/guide/common/basename' },
-						{ text: 'Scroll Behavior', link: '/guide/common/scroll-behavior' },
-						{ text: 'View Transitions', link: '/guide/common/view-transitions' },
-					],
-				},
-				{
-					text: 'Tips',
-					link: '/guide/tips',
-				},
-				{
-					text: 'API reference',
-					link: '/reference/',
-				},
+				...getSidebarOutro(),
+			],
+			'/guide/code-based': [
+				...getSidebarIntro(),
+				...getSidebarGuide('code-based'),
+				...getSidebarOutro(),
+			],
+			'/guide/file-based': [
+				...getSidebarIntro(),
+				...getSidebarGuide('file-based'),
+				...getSidebarOutro(),
 			],
 			'/reference': [
 				{
@@ -93,6 +90,9 @@ export default defineConfig({
 			provider: 'local',
 		},
 	},
+	sitemap: {
+		hostname: 'https://sv-router.vercel.app',
+	},
 	markdown: {
 		config(md) {
 			md.use(groupIconMdPlugin);
@@ -109,7 +109,73 @@ export default defineConfig({
 		},
 	},
 	vite: {
-		// @ts-expect-error Types not up-to-date
 		plugins: [groupIconVitePlugin()],
 	},
 });
+
+function getSidebarIntro() {
+	return [
+		{
+			text: 'Introduction',
+			items: [
+				{ text: 'Why sv-router?', link: '/guide/why' },
+				{ text: 'Getting Started', link: '/guide/getting-started' },
+			],
+		},
+	];
+}
+
+function getSidebarOutro() {
+	return [
+		{
+			text: 'Tips',
+			link: '/guide/tips',
+		},
+		{
+			text: 'API reference',
+			link: '/reference',
+		},
+	];
+}
+
+function getSidebarGuide(mode: 'code-based' | 'file-based') {
+	return [
+		{
+			text: 'Manual Setup',
+			link: '/guide/' + mode + '/manual-setup',
+		},
+		...(mode === 'file-based'
+			? [
+					{
+						text: 'Configuration',
+						link: '/guide/file-based/configuration',
+					},
+				]
+			: []),
+		{
+			text: 'Essentials',
+			base: '/guide/' + mode,
+			items: [
+				{ text: 'Concepts', link: '/concepts' },
+				{ text: 'Dynamic Routes', link: '/dynamic-routes' },
+				{ text: 'Catch-All Routes', link: '/catch-all-routes' },
+				{ text: 'Layouts', link: '/layouts' },
+				{ text: 'Navigation', link: '/navigation' },
+				{ text: 'Search Params', link: '/search-params' },
+				{ text: 'Active Route', link: '/active-route' },
+			],
+		},
+		{
+			text: 'Advanced',
+			base: '/guide/' + mode,
+			items: [
+				{ text: 'Hooks', link: '/hooks' },
+				{ text: 'Code Splitting', link: '/code-splitting' },
+				{ text: 'Preloading', link: '/preloading' },
+				{ text: 'Basename', link: '/basename' },
+				{ text: 'Scroll Behavior', link: '/scroll-behavior' },
+				{ text: 'View Transitions', link: '/view-transitions' },
+			],
+		},
+	];
+}

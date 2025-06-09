@@ -4,7 +4,7 @@ When defining routes, you can attach specialized hooks that execute before or af
 
 These hooks are valuable for implementing authorization checks, data fetching, and other preparatory or cleanup operations.
 
-```ts {5-12} [router.ts]
+```ts {5-15} [router.ts]
 export const { p, navigate, isActive, route } = createRouter({
 	'/': Home,
 	'/about': {

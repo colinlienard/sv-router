@@ -1,5 +1,8 @@
 # Manual Setup
 
+> [!NOTE]
+> You can skip this section if you started your project with `npm create sv-router`.
+
 With file-based routing, routes are automatically generated based on your file structure.
 
 Imagine you've created two route components in your `src/routes` directory:
@@ -7,8 +10,8 @@ Imagine you've created two route components in your `src/routes` directory:
 ```sh
 src
 └── routes
-  ├── about.svelte
-  └── index.svelte
+   ├── about.svelte
+   └── index.svelte
 ```
 
 > [!IMPORTANT]
@@ -100,4 +103,4 @@ In your application's entry point component, import and use the `Router` compone
 <Router />
 ```
 
-You now have a functional navigation system. Continue reading to learn more about advanced routing concepts.
+You now have a functional navigation system. Continue reading to learn more about routing concepts.
