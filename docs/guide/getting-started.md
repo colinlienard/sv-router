@@ -1,7 +1,3 @@
----
-outline: [2, 3]
----
-
 # Getting Started
 
 ## Start a New Project

@@ -47,12 +47,12 @@ export default defineConfig({
 					text: 'Approaches',
 					items: [
 						{
-							text: 'File-based',
-							link: '/guide/file-based/route-definition',
-						},
-						{
 							text: 'Code-based',
 							link: '/guide/code-based/route-definition',
+						},
+						{
+							text: 'File-based',
+							link: '/guide/file-based/route-definition',
 						},
 					],
 				},
