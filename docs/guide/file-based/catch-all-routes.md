@@ -1,4 +1,3 @@
-
 # Catch-All Routes
 
 To handle any unmatched routes, define a catch-all route using the spread syntax:

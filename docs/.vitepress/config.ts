@@ -16,12 +16,12 @@ export default defineConfig({
 				items: [
 					{
 						text: 'Code-based routing',
-						link: '/guide/code-based/concepts',
+						link: '/guide/code-based/route-definition',
 						activeMatch: '/guide/code-based',
 					},
 					{
 						text: 'File-based routing',
-						link: '/guide/file-based/concepts',
+						link: '/guide/file-based/route-definition',
 						activeMatch: '/guide/file-based',
 					},
 				],
@@ -48,11 +48,11 @@ export default defineConfig({
 					items: [
 						{
 							text: 'File-based',
-							link: '/guide/file-based/concepts',
+							link: '/guide/file-based/route-definition',
 						},
 						{
 							text: 'Code-based',
-							link: '/guide/code-based/concepts',
+							link: '/guide/code-based/route-definition',
 						},
 					],
 				},
@@ -139,24 +139,31 @@ function getSidebarOutro() {
 }
 
 function getSidebarGuide(mode: 'code-based' | 'file-based') {
+	const base = '/guide/' + mode;
 	return [
 		{
-			text: 'Manual Setup',
-			link: '/guide/' + mode + '/manual-setup',
+			text: 'Setup',
+			base,
+			items: [
+				{
+					text: 'Manual Setup',
+					link: '/manual-setup',
+				},
+				...(mode === 'file-based'
+					? [
+							{
+								text: 'Configuration',
+								link: '/configuration',
+							},
+						]
+					: []),
+			],
 		},
-		...(mode === 'file-based'
-			? [
-					{
-						text: 'Configuration',
-						link: '/guide/file-based/configuration',
-					},
-				]
-			: []),
 		{
 			text: 'Essentials',
-			base: '/guide/' + mode,
+			base,
 			items: [
-				{ text: 'Concepts', link: '/concepts' },
+				{ text: 'Route Definition', link: '/route-definition' },
 				{ text: 'Dynamic Routes', link: '/dynamic-routes' },
 				{ text: 'Catch-All Routes', link: '/catch-all-routes' },
 				{ text: 'Layouts', link: '/layouts' },
@@ -167,7 +174,7 @@ function getSidebarGuide(mode: 'code-based' | 'file-based') {
 		},
 		{
 			text: 'Advanced',
-			base: '/guide/' + mode,
+			base,
 			items: [
 				{ text: 'Hooks', link: '/hooks' },
 				{ text: 'Code Splitting', link: '/code-splitting' },

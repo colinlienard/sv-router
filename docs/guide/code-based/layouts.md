@@ -1,4 +1,3 @@
-
 # Layouts
 
 Define a wrapping component for routes at the same level or below using layouts:

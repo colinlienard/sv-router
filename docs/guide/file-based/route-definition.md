@@ -1,4 +1,17 @@
-# Routing Concepts
+# Route Definition
+
+In file-based routing, you create routes by placing `.svelte` files in the `routes` directory. Each file automatically becomes a route based on its filename and location.
+
+Unlike code-based routing where you manually define route mappings, file-based routing automatically generates the router configuration for you. This generated code lives in the `.router` directory and exports methods and properties you'll use throughout your application for navigation and route management
+
+You can access these generated exports through the `sv-router/generated` entry point:
+
+```ts
+import { navigate, ... } from 'sv-router/generated';
+```
+
+> [!NOTE]
+> Routes are case-insensitive and trailing slashes are ignored, meaning `/about` and `/About/` are treated as the same route.
 
 ## Flat Mode or Tree Mode
 

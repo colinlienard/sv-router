@@ -2,7 +2,7 @@
 
 Preloading loads the next page in the background while users interact with the current page. This technique can reduces perceived loading times when users navigate to the preloaded page.
 
-For preloading to work effectively, you must first implement code splitting for the route you want to preload. See the **code-splitting guide** ([code-based](../code-based/code-splitting.md) or [file-based](../file-based/code-splitting.md)) for implementation details.
+For preloading to work effectively, you must first implement code splitting for the route you want to preload. See the [code-splitting guide](./code-splitting.md) for implementation details.
 
 ## On Links
 
@@ -26,4 +26,4 @@ await preload('/about');
 
 ## The `onPreload` Hook
 
-The `onPreload` hook is called when the corresponding route is preloaded. It can be used to perform any necessary setup or initialization before the route is loaded, for example to fetch data that will then be used on the route. See [code-based hooks](../code-based/hooks) or [file-based hooks](../file-based/hooks).
+The `onPreload` hook is called when the corresponding route is preloaded. It can be used to perform any necessary setup or initialization before the route is loaded, for example to fetch data that will then be used on the route. See [hooks](./hooks).

@@ -18,7 +18,6 @@ To leverage type-safe navigation, use the `p` function, which provides auto-comp
 <a href={p('/about')}>About</a>
 ```
 
-
 You can also pass parameters and additional options:
 
 ```svelte

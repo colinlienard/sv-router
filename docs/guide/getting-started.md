@@ -36,8 +36,8 @@ After setting up your project, you can use the [`sv` CLI](https://svelte.dev/doc
 
 Then, dive into the routing concepts:
 
-- [For code-based routing](./code-based/concepts)
-- [For file-based routing](./file-based/concepts)
+- [For code-based routing](./code-based/route-definition)
+- [For file-based routing](./file-based/route-definition)
 
 ## Install on an Existing Project
 
