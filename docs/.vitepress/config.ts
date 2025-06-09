@@ -177,9 +177,10 @@ function getSidebarGuide(mode: 'code-based' | 'file-based') {
 			base,
 			items: [
 				{ text: 'Hooks', link: '/hooks' },
+				{ text: 'Basename', link: '/basename' },
 				{ text: 'Code Splitting', link: '/code-splitting' },
 				{ text: 'Preloading', link: '/preloading' },
-				{ text: 'Basename', link: '/basename' },
+				{ text: 'Route Metadata', link: '/route-metadata' },
 				{ text: 'Scroll Behavior', link: '/scroll-behavior' },
 				{ text: 'View Transitions', link: '/view-transitions' },
 			],

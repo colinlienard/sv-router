@@ -15,6 +15,8 @@ export const { p, navigate, isActive, preload, route } = createRouter({
 		'/:slug': {
 			'/': () => import('./routes/DynamicPost.svelte'),
 			meta: {
+				title: 'Posts',
+				description: 'Posts page',
 				foo: 'bar',
 			},
 		},
