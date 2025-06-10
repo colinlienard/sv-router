@@ -1,5 +1,16 @@
 # sv-router
 
+## 0.6.0
+
+### Minor Changes
+
+- 894ec78: Add route metadata
+- 32a4037: Add route.getParams method for a stricter way to access params
+
+### Patch Changes
+
+- bf7036d: Make route matching case-insensitive
+
 ## 0.5.0
 
 ### Minor Changes
