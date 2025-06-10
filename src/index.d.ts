@@ -88,14 +88,13 @@ export type IsActiveLink = Action<
  * @example
  * 	declare module 'sv-router' {
  * 		interface RouteMeta {
- * 			title: string;
- * 			requiresAuth: boolean;
+ * 			public?: boolean;
+ * 			requiresAuth?: boolean;
  * 		}
  * 	}
  */
-export interface RouteMeta {
-	[key: string]: any;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface RouteMeta {}
 
 export type RouterApi<T extends Routes> = {
 	/**
@@ -239,7 +238,9 @@ type StripNonRoutes<T extends Routes> = {
 				? never
 				: K extends 'hooks'
 					? never
-					: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
+					: K extends 'meta'
+						? never
+						: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
 };
 
 type RecursiveKeys<

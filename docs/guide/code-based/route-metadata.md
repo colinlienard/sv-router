@@ -28,7 +28,7 @@ export const { p, navigate, isActive, route } = createRouter({
 >   '/settings': {
 >     '/': Settings,
 >     meta: {
->       subsection: 'preferences',
+>       public: false,
 >     },
 >   },
 > },

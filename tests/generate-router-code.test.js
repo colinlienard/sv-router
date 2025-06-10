@@ -187,7 +187,7 @@ describe('createRouteMap', () => {
 		});
 	});
 
-	it('should generate dynamic route (tree)', () => {
+	it('should generate dynamic folder route (tree)', () => {
 		const result = createRouteMap([
 			'index.svelte',
 			{

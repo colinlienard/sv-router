@@ -4,9 +4,8 @@ import App from './App.svelte';
 
 declare module 'sv-router' {
 	interface RouteMeta {
-		title: string;
-		description: string;
-		foo?: string;
+		public?: boolean;
+		section?: string;
 	}
 }
 

@@ -1,3 +1,5 @@
+import type { RouteMeta } from 'sv-router';
+
 export default {
-	foo: 'bar',
-};
+	section: 'Comments',
+} satisfies RouteMeta;

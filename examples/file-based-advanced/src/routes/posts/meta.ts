@@ -1,4 +1,6 @@
+import type { RouteMeta } from 'sv-router';
+
 export default {
-	title: 'Posts',
-	description: 'Posts page',
-};
+	public: true,
+	section: 'Posts',
+} satisfies RouteMeta;

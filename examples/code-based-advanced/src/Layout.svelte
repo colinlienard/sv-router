@@ -7,6 +7,8 @@
 
 <main>
 	inside layout
-	{JSON.stringify(route.meta)}
+	<br />
+	Route metadata: {JSON.stringify(route.meta)}
+	<br />
 	{@render children()}
 </main>

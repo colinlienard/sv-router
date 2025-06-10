@@ -10,9 +10,11 @@ routes
 ```
 
 ```ts [meta.ts]
+import type { RouteMeta } from 'sv-router';
+
 export default {
 	public: false,
-};
+} satisfies RouteMeta;
 ```
 
 > [!NOTE]
@@ -25,7 +27,7 @@ export default {
 >    ├── index.svelte
 >    └── meta.ts                  ➜ { section: 'app', requiresAuth: true }
 >       ├── index.svelte
->       └── meta.ts               ➜ { subsection: 'preferences' }
+>       └── meta.ts               ➜ { public: false }
 > ```
 >
 > The `/dashboard/settings` route will have metadata: `{ section: 'app', requiresAuth: true, subsection: 'preferences' }`.
