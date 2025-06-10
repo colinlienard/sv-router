@@ -134,6 +134,11 @@ describe('matchRoute', () => {
 			expect(match).toEqual(Posts);
 		});
 
+		it('should match a simple route with a different casing', () => {
+			const { match } = matchRoute('/Posts', routes);
+			expect(match).toEqual(Posts);
+		});
+
 		it('should match a nested route', () => {
 			const { match } = matchRoute('/posts/static', routes);
 			expect(match).toEqual(StaticPost);
@@ -149,6 +154,12 @@ describe('matchRoute', () => {
 			const { match, params } = matchRoute('/posts/bar/comments/baz', routes);
 			expect(match).toEqual(DynamicPostComment);
 			expect(params).toEqual({ id: 'bar', commentId: 'baz' });
+		});
+
+		it('should match a dynamic route with a different casing and return a param with the correct casing', () => {
+			const { match, params } = matchRoute('/Posts/Bar/coMMENts/baZ', routes);
+			expect(match).toEqual(DynamicPostComment);
+			expect(params).toEqual({ id: 'Bar', commentId: 'baZ' });
 		});
 
 		it('should match catch-all route', () => {
