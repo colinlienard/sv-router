@@ -56,17 +56,17 @@ export type Hooks = {
 	 * You can throw a `navigate` call to redirect to another route.
 	 *
 	 * ```js
-	 * async beforeLoad() {
+	 * async beforeLoad({ pathname }) {
 	 *   await ...
 	 *   throw navigate('/home');
 	 * }
 	 * ```
 	 */
-	beforeLoad?(): void | Promise<void>;
+	beforeLoad?(context: HooksContext): void | Promise<void>;
 	/** A function that will be called after the route is loaded. */
-	afterLoad?(): void;
+	afterLoad?(context: HooksContext): void;
 	/** A function that will be called when the route is preloaded. */
-	onPreload?(): void;
+	onPreload?(context: HooksContext): void;
 };
 
 export type Routes = {
@@ -204,6 +204,14 @@ export type PathParams<T extends string> =
 export type AllParams<T extends Routes> = Partial<
 	Record<ExtractParams<RemoveParenthesis<RecursiveKeys<T>>>, string>
 >;
+
+export type HooksContext = {
+	pathname: string;
+	replace?: boolean;
+	search?: string;
+	state?: string;
+	hash?: string;
+};
 
 export type NavigateOptions =
 	| {

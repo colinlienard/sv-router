@@ -59,3 +59,12 @@ export function join(...parts) {
 	}
 	return result;
 }
+
+export function updatedLocation() {
+	return {
+		pathname: globalThis.location.pathname,
+		search: globalThis.location.search,
+		state: history.state,
+		hash: globalThis.location.hash,
+	};
+}

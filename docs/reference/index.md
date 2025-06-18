@@ -127,6 +127,16 @@ Configuration object for route lifecycle hooks.
 
 **Properties:**
 
-- `beforeLoad?(): void | Promise<void>` - A function called before the route is loaded. You can throw a `navigate` call to redirect.
-- `afterLoad?(): void` - A function called after the route is loaded.
-- `onPreload?(): void` - A function called when the route is preloaded.
+- `beforeLoad?(context): void | Promise<void>` - A function called before the route is loaded. You can throw a `navigate` call to redirect.
+- `afterLoad?(context): void` - A function called after the route is loaded.
+- `onPreload?(context): void` - A function called when the route is preloaded.
+
+**Context Parameter:**
+
+All hook functions receive a context object with the following properties:
+
+- `pathname` - The current pathname
+- `replace` - Whether this is a replace navigation (optional)
+- `search` - The query string (optional)
+- `state` - The history state (optional)
+- `hash` - The URL hash fragment (optional)

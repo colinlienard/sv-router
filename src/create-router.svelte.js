@@ -2,7 +2,7 @@ import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
-import { constructPath, join, resolveRouteComponents } from './helpers/utils.js';
+import { constructPath, join, resolveRouteComponents, updatedLocation } from './helpers/utils.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -120,7 +120,7 @@ export async function onNavigate(path, options = {}) {
 	for (const { beforeLoad } of hooks) {
 		try {
 			pendingNavigationIndex = currentNavigationIndex;
-			await beforeLoad?.();
+			await beforeLoad?.({ pathname: matchPath, ...options });
 		} catch {
 			return;
 		}
@@ -161,7 +161,7 @@ export async function onNavigate(path, options = {}) {
 	}
 
 	for (const { afterLoad } of hooks) {
-		afterLoad?.();
+		afterLoad?.({ pathname: matchPath, ...options });
 	}
 }
 
@@ -186,13 +186,4 @@ export function onGlobalClick(event) {
 		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
 		viewTransition: viewTransition === '' || viewTransition === 'true',
 	});
-}
-
-function updatedLocation() {
-	return {
-		pathname: globalThis.location.pathname,
-		search: globalThis.location.search,
-		state: history.state,
-		hash: globalThis.location.hash,
-	};
 }

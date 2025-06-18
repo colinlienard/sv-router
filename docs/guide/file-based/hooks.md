@@ -13,6 +13,15 @@ routes
    └── index.svelte
 ```
 
+> [!WARNING]
+> Hooks can only be used in tree structure, which means that doing the following will not work:
+>
+> ```sh
+> routes
+> ├── about.svelte
+> └── about.hooks.ts # ❌ Won't work
+> ```
+
 ```ts [hooks.ts]
 import type { Hooks } from 'sv-router';
 
@@ -44,11 +53,12 @@ async function beforeLoad() {
 }
 ```
 
-> [!WARNING]
-> Hooks can only be used in tree structure, which means that doing the following will not work:
->
-> ```sh
-> routes
-> ├── about.svelte
-> └── about.hooks.ts # ❌ Won't work
-> ```
+All hooks receive a context object with information about the current navigation, which you can use to block navigation for example:
+
+```ts
+function beforeLoad({ pathname, search, hash, state, replace }) {
+	if (!admin && pathname !== '/') {
+		throw navigate('/');
+	}
+}
+```

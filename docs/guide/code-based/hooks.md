@@ -24,6 +24,14 @@ export const { p, navigate, isActive, route } = createRouter({
 });
 ```
 
+> [!WARNING]
+> Hooks can only be used in tree structure, which means that doing the following will not work:
+>
+> ```ts
+> '/about': About,
+> '/about/hooks': { ... }, // ❌ Won't work
+> ```
+
 These functions activate when a route at the same level or any nested level is triggered.
 
 Hooks can be asynchronous, and in the case of `beforeLoad`, the route won't load until the promise resolves.
@@ -41,10 +49,14 @@ hooks: {
 };
 ```
 
-> [!WARNING]
-> Hooks can only be used in tree structure, which means that doing the following will not work:
->
-> ```ts
-> '/about': About,
-> '/about/hooks': { ... }, // ❌ Won't work
-> ```
+All hooks receive a context object with information about the current navigation, which you can use to block navigation for example:
+
+```ts
+hooks: {
+	beforeLoad({ pathname, search, hash, state, replace }) {
+   if (!admin && pathname !== "/") {
+         throw navigate("/");
+       }
+	},
+};
+```
