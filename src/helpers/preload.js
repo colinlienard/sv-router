@@ -4,7 +4,7 @@ import { resolveRouteComponents } from './utils.js';
 /**
  * @param {import('../index.js').Routes} routes
  * @param {string} path
- * @param {import('../index.d.ts').NavigateOptions} options
+ * @param {import('../index.d.ts').NavigateOptions} [options]
  */
 export async function preload(routes, path, options) {
 	const { match, layouts, hooks } = matchRoute(path, routes);
