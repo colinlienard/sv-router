@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.7.0
+
+### Minor Changes
+
+- ed61395: Add context to hooks
+
 ## 0.6.0
 
 ### Minor Changes
