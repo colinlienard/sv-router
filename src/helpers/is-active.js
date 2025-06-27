@@ -1,5 +1,5 @@
-import { location } from '../create-router.svelte.js';
-import { constructPath } from './utils.js';
+import { base, location } from '../create-router.svelte.js';
+import { constructPath, join } from './utils.js';
 
 /**
  * @param {string} pathname
@@ -7,7 +7,8 @@ import { constructPath } from './utils.js';
  * @returns {boolean}
  */
 export function isActive(pathname, params) {
-	return compare((a, b) => a === b, pathname, params);
+	const p = base.name ? join(base.name, pathname) : pathname;
+	return compare((a, b) => a === b, p, params);
 }
 
 /**
@@ -16,7 +17,8 @@ export function isActive(pathname, params) {
  * @returns {boolean}
  */
 isActive.startsWith = (pathname, params) => {
-	return compare((a, b) => a.startsWith(b), pathname, params);
+	const p = base.name ? join(base.name, pathname) : pathname;
+	return compare((a, b) => a.startsWith(b), p, params);
 };
 
 /**

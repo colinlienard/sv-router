@@ -1,9 +1,12 @@
-import { location } from '../src/create-router.svelte.js';
+import { base, location } from '../src/create-router.svelte.js';
 import { isActive } from '../src/helpers/is-active.js';
 
 vi.mock('../src/create-router.svelte.js', () => ({
 	location: {
 		pathname: '',
+	},
+	base: {
+		name: undefined,
 	},
 }));
 
@@ -51,6 +54,13 @@ describe('isActive', () => {
 		location.pathname = '/foo/bar';
 		expect(isActive('/post/:id', { id: '123' })).toBe(false);
 	});
+
+	it('should work with a basename', () => {
+		location.pathname = '/my-app/post/123';
+		base.name = '/my-app';
+		expect(isActive('/post/:id', { id: '123' })).toBe(true);
+		base.name = undefined;
+	});
 });
 
 describe('isActive.startsWith', () => {
@@ -92,5 +102,12 @@ describe('isActive.startsWith', () => {
 	it('should not match a route with params', () => {
 		location.pathname = '/foo/bar';
 		expect(isActive.startsWith('/hello/:id', { id: 'world' })).toBe(false);
+	});
+
+	it('should work with a basename', () => {
+		location.pathname = '/my-app/post/123/foo';
+		base.name = '/my-app';
+		expect(isActive.startsWith('/post/:id', { id: '123' })).toBe(true);
+		base.name = undefined;
 	});
 });

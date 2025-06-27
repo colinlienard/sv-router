@@ -1,4 +1,5 @@
-import { location } from './create-router.svelte.js';
+import { base, location } from './create-router.svelte.js';
+import { join } from './helpers/utils.js';
 
 /** @type {import('./index.d.ts').IsActiveLink} */
 export function isActiveLink(node, { className = 'is-active', startsWith = false } = {}) {
@@ -7,7 +8,10 @@ export function isActiveLink(node, { className = 'is-active', startsWith = false
 	}
 
 	$effect(() => {
-		const pathname = new URL(node.href).pathname;
+		let pathname = new URL(node.href).pathname;
+		if (base.name) {
+			pathname = join(base.name, pathname);
+		}
 		if (startsWith ? location.pathname.startsWith(pathname) : location.pathname === pathname) {
 			node.classList.add(className);
 		} else {
