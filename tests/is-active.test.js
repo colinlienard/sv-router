@@ -46,12 +46,12 @@ describe('isActive', () => {
 	});
 
 	it('should not match a route with any param', () => {
-		location.pathname = '/foo/bar';
+		location.pathname = '/post';
 		expect(isActive('/post/:id')).toBe(false);
 	});
 
 	it('should not match a route with params', () => {
-		location.pathname = '/foo/bar';
+		location.pathname = '/post';
 		expect(isActive('/post/:id', { id: '123' })).toBe(false);
 	});
 
@@ -81,7 +81,9 @@ describe('isActive.startsWith', () => {
 
 	it('should match a route with params', () => {
 		location.pathname = '/post/123/comments/456/foo';
-		expect(isActive.startsWith('/post/:id', { id: '123', commentId: '456' })).toBe(true);
+		expect(
+			isActive.startsWith('/post/:id/comments/:commentId', { id: '123', commentId: '456' }),
+		).toBe(true);
 	});
 
 	it('should match a route with any params', () => {

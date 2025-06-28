@@ -38,6 +38,9 @@ function compare(compareFn, pathname, params) {
 
 	const pathParts = pathname.split('/').slice(1);
 	const routeParts = location.pathname.split('/').slice(1);
+	if (pathParts.length > routeParts.length) {
+		return false;
+	}
 	for (const [index, pathPart] of pathParts.entries()) {
 		const routePart = routeParts[index];
 		if (pathPart.startsWith(':')) {
