@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.7.1
+
+### Patch Changes
+
+- 18f02a0: Fix isActive not working with basename
+
 ## 0.7.0
 
 ### Minor Changes
