@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       esm-env:
         specifier: ^1.2.2
         version: 1.2.2

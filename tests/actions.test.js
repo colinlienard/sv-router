@@ -44,6 +44,17 @@ describe('isActiveLink', () => {
 		expect(screen.getByText('About').classList.contains('custom-class')).toBe(true);
 	});
 
+	it('should set multiple classes', () => {
+		location.pathname = '/about';
+		render(Actions, {
+			children: 'About',
+			href: '/about',
+			className: 'custom-class custom-class-2',
+		});
+		expect(screen.getByText('About').classList.contains('custom-class')).toBe(true);
+		expect(screen.getByText('About').classList.contains('custom-class-2')).toBe(true);
+	});
+
 	it('should only match the start of the path', () => {
 		location.pathname = '/about/team';
 		render(Actions, { children: 'About', href: '/about', startsWith: true });
