@@ -16,7 +16,7 @@ export function isActiveLink(
 		if (base.name) {
 			pathname = join(base.name, pathname);
 		}
-		const tokens = (className ?? clsx(classValue)).split(' ');
+		const tokens = (className ?? clsx(classValue)).split(' ').filter((token) =>  token.length > 0);
 		if (startsWith ? location.pathname.startsWith(pathname) : location.pathname === pathname) {
 			node.classList.add(...tokens);
 		} else {

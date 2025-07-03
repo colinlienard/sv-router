@@ -1,5 +1,5 @@
 ---
-'sv-router': minor
+'sv-router': patch
 ---
 
 improved class usage in isActiveLink
