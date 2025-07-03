@@ -115,6 +115,7 @@ export function createRouter(r) {
  * 	params?: Record<string, string>;
  * 	search?: import('./index.d.ts').Search;
  * }} options
+ * @returns Promise<Error>
  */
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
@@ -133,7 +134,7 @@ function navigate(path, options = {}) {
 }
 
 /**
- * @param {string} [path]
+ * @param {string} path
  * @param {import('./index.d.ts').NavigateOptions} options
  */
 export async function onNavigate(path, options = {}) {
@@ -260,7 +261,7 @@ export function onGlobalClick(event) {
 
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
-	onNavigate(path, {
+	void onNavigate(path, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
