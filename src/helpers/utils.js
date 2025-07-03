@@ -1,3 +1,5 @@
+import { base } from '../create-router.svelte.js';
+
 /**
  * @param {string} path
  * @param {Record<string, string>} [params]
@@ -58,6 +60,17 @@ export function join(...parts) {
 		result += part;
 	}
 	return result;
+}
+
+/**
+ * @param {string} pathname
+ * @returns {string}
+ */
+export function stripBase(pathname) {
+	if (base.name && pathname.startsWith(base.name)) {
+		pathname = pathname.slice(base.name.length) || '/';
+	}
+	return pathname;
 }
 
 export function updatedLocation() {
