@@ -129,8 +129,10 @@ export type RouterApi<T extends Routes> = {
 	 *
 	 * @param route The route to navigate to.
 	 * @param options The navigation options.
+	 *
+	 *   Returns an Error for use with `throw navigate(...)` inside hooks.
 	 */
-	navigate<U extends Path<T>>(...args: NavigateArgs<U>): void;
+	navigate<U extends Path<T>>(...args: NavigateArgs<U>): Error;
 
 	/**
 	 * Will return `true` if the given path is active.

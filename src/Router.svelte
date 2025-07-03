@@ -7,19 +7,27 @@
 	/** @type {{ base?: string }} */
 	let { base: basename } = $props();
 
+	const url = new URL(globalThis.location.href);
 	if (basename) {
 		base.name = (basename.startsWith('/') ? '' : '/') + basename;
-		const url = new URL(globalThis.location.href);
 		if (!url.pathname.startsWith(base.name)) {
 			url.pathname = join(base.name, url.pathname);
 			history.replaceState(history.state || {}, '', url.href);
 		}
 	}
 
-	onNavigate();
+	onNavigate(url.pathname, {
+		search: url.search,
+		hash: url.hash,
+	});
 
 	$effect(() => {
-		const off1 = on(globalThis, 'popstate', () => onNavigate());
+		const off1 = on(globalThis, 'popstate', () =>
+			onNavigate(url.pathname, {
+				search: url.search,
+				hash: url.hash,
+			}),
+		);
 		const off2 = on(globalThis, 'click', onGlobalClick);
 
 		return () => {
