@@ -14,11 +14,22 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 <a href={p('/about')} use:isActiveLink>About</a>
 
 <!-- With custom class name -->
-<a href={p('/about')} use:isActiveLink={{ className: 'custom-class' }}>About</a>
+<a href={p('/about')} use:isActiveLink={{ className: 'custom-class' }}>
 
 <!-- Active when the route starts with '/about' -->
-<a href={p('/about')} use:isActiveLink={{ startsWith: true }}>About</a>
+<a href={p('/about')} use:isActiveLink={{ startsWith: true }}>
 ```
+
+> [!NOTE]
+> The `className` option supports multiple classes for more complex styling needs:
+>
+> ```svelte
+> <!-- Space-separated classes -->
+> <a use:isActiveLink={{ className: 'active highlighted' }}>
+>
+> <!-- Using clsx for conditional classes -->
+> <a use:isActiveLink={{ className: clsx('active', isSpecial && 'special') }}>
+> ```
 
 ## Programmatically
 
