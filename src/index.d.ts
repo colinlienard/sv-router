@@ -46,6 +46,7 @@ export type LazyRouteComponent<Props extends BaseProps = BaseProps> = () => Prom
 
 export type RouteComponent<Props extends BaseProps = any> =
 	| Component<Props>
+	| Snippet<[Props]>
 	| LazyRouteComponent<Props>;
 export type LayoutComponent = RouteComponent<{ children: Snippet }>;
 export type Hooks = {
