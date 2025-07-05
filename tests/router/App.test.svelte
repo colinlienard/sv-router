@@ -11,4 +11,8 @@
 	});
 </script>
 
-<Router />
+<script lang="ts">
+	let { base } = $props<{ base?: string }>();
+</script>
+
+<Router {base} />
