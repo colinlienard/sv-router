@@ -1,5 +1,13 @@
 # sv-router
 
+## 0.7.2
+
+### Patch Changes
+
+- d244efd: improved class usage in isActiveLink
+- 076134c: Strip basename from route.pathname
+- 9b2ba03: pass meta into hooks, allow all hooks to be promises
+
 ## 0.7.1
 
 ### Patch Changes
