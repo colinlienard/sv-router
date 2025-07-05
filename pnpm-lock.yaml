@@ -3855,20 +3855,33 @@ snapshots:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   '@testing-library/svelte@5.2.8(svelte@5.37.3)(vite@7.0.6(@types/node@22.17.0))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0))':
 =======
   '@testing-library/svelte@5.2.8(svelte@5.33.18)(vite@7.0.0(@types/node@22.15.30))(vitest@3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0))':
 >>>>>>> 26ab950 (test: add environment tests)
 =======
+=======
+>>>>>>> 3861945 (test: add environment tests)
   '@testing-library/svelte@5.2.8(svelte@5.33.18)(vite@7.0.0(@types/node@22.15.30))(vitest@3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0))':
 =======
   '@testing-library/svelte@5.2.8(svelte@5.37.3)(vite@7.0.6(@types/node@22.17.0))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0))':
 >>>>>>> 23498de (chore(deps): update all non-major dependencies (#100))
+<<<<<<< HEAD
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+=======
+  '@testing-library/svelte@5.2.8(svelte@5.37.3)(vite@7.0.6(@types/node@22.17.0))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0))':
+=======
+  '@testing-library/svelte@5.2.8(svelte@5.33.18)(vite@7.0.0(@types/node@22.15.30))(vitest@3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0))':
+>>>>>>> 26ab950 (test: add environment tests)
+>>>>>>> a10c7d2 (test: add environment tests)
+>>>>>>> 3861945 (test: add environment tests)
     dependencies:
       '@testing-library/dom': 10.4.0
       svelte: 5.37.3
     optionalDependencies:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       vite: 7.0.6(@types/node@22.17.0)
@@ -3876,6 +3889,8 @@ snapshots:
 =======
 =======
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+>>>>>>> 3861945 (test: add environment tests)
       vite: 7.0.0(@types/node@22.15.30)
       vitest: 3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0)
 
@@ -3889,7 +3904,22 @@ snapshots:
       vite: 7.0.6(@types/node@22.17.0)
       vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0)
 >>>>>>> 23498de (chore(deps): update all non-major dependencies (#100))
+<<<<<<< HEAD
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+=======
+      vite: 7.0.6(@types/node@22.17.0)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0)
+=======
+      vite: 7.0.0(@types/node@22.15.30)
+      vitest: 3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0)
+
+  '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0)':
+    dependencies:
+      '@testing-library/dom': 10.4.0
+>>>>>>> 26ab950 (test: add environment tests)
+>>>>>>> a10c7d2 (test: add environment tests)
+>>>>>>> 3861945 (test: add environment tests)
 
   '@types/aria-query@5.0.4': {}
 
@@ -3932,10 +3962,13 @@ snapshots:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   '@types/node@22.17.0':
 =======
 =======
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+>>>>>>> 3861945 (test: add environment tests)
   '@types/node@20.19.4':
     dependencies:
       undici-types: 6.21.0
@@ -3947,7 +3980,20 @@ snapshots:
 =======
   '@types/node@22.17.0':
 >>>>>>> 23498de (chore(deps): update all non-major dependencies (#100))
+<<<<<<< HEAD
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+=======
+  '@types/node@22.17.0':
+=======
+  '@types/node@20.19.4':
+    dependencies:
+      undici-types: 6.21.0
+
+  '@types/node@22.15.30':
+>>>>>>> 26ab950 (test: add environment tests)
+>>>>>>> a10c7d2 (test: add environment tests)
+>>>>>>> 3861945 (test: add environment tests)
     dependencies:
       undici-types: 6.21.0
 
@@ -3957,6 +4003,7 @@ snapshots:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   '@typescript-eslint/eslint-plugin@8.39.0(@typescript-eslint/parser@8.39.0(eslint@9.32.0)(typescript@5.9.2))(eslint@9.32.0)(typescript@5.9.2)':
 =======
   '@types/whatwg-mimetype@3.0.2': {}
@@ -3964,13 +4011,26 @@ snapshots:
   '@typescript-eslint/eslint-plugin@8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0)(typescript@5.8.3))(eslint@9.28.0)(typescript@5.8.3)':
 >>>>>>> 26ab950 (test: add environment tests)
 =======
+=======
+>>>>>>> 3861945 (test: add environment tests)
   '@types/whatwg-mimetype@3.0.2': {}
 
   '@typescript-eslint/eslint-plugin@8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0)(typescript@5.8.3))(eslint@9.28.0)(typescript@5.8.3)':
 =======
   '@typescript-eslint/eslint-plugin@8.39.0(@typescript-eslint/parser@8.39.0(eslint@9.32.0)(typescript@5.9.2))(eslint@9.32.0)(typescript@5.9.2)':
 >>>>>>> 23498de (chore(deps): update all non-major dependencies (#100))
+<<<<<<< HEAD
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+=======
+  '@typescript-eslint/eslint-plugin@8.39.0(@typescript-eslint/parser@8.39.0(eslint@9.32.0)(typescript@5.9.2))(eslint@9.32.0)(typescript@5.9.2)':
+=======
+  '@types/whatwg-mimetype@3.0.2': {}
+
+  '@typescript-eslint/eslint-plugin@8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0)(typescript@5.8.3))(eslint@9.28.0)(typescript@5.8.3)':
+>>>>>>> 26ab950 (test: add environment tests)
+>>>>>>> a10c7d2 (test: add environment tests)
+>>>>>>> 3861945 (test: add environment tests)
     dependencies:
       '@eslint-community/regexpp': 4.12.1
       '@typescript-eslint/parser': 8.39.0(eslint@9.32.0)(typescript@5.9.2)
@@ -5873,16 +5933,28 @@ snapshots:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0):
 =======
   vitest@3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0):
 >>>>>>> 26ab950 (test: add environment tests)
 =======
+=======
+>>>>>>> 3861945 (test: add environment tests)
   vitest@3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0):
 =======
   vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0):
 >>>>>>> 23498de (chore(deps): update all non-major dependencies (#100))
+<<<<<<< HEAD
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+=======
+  vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.17.0)(jsdom@26.1.0):
+=======
+  vitest@3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(happy-dom@18.0.1)(jsdom@26.1.0):
+>>>>>>> 26ab950 (test: add environment tests)
+>>>>>>> a10c7d2 (test: add environment tests)
+>>>>>>> 3861945 (test: add environment tests)
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
@@ -5911,18 +5983,31 @@ snapshots:
       '@types/debug': 4.1.12
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@types/node': 22.17.0
 =======
       '@types/node': 22.15.30
       happy-dom: 18.0.1
 >>>>>>> 26ab950 (test: add environment tests)
 =======
+=======
+>>>>>>> 3861945 (test: add environment tests)
       '@types/node': 22.15.30
       happy-dom: 18.0.1
 =======
       '@types/node': 22.17.0
 >>>>>>> 23498de (chore(deps): update all non-major dependencies (#100))
+<<<<<<< HEAD
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+=======
+      '@types/node': 22.17.0
+=======
+      '@types/node': 22.15.30
+      happy-dom: 18.0.1
+>>>>>>> 26ab950 (test: add environment tests)
+>>>>>>> a10c7d2 (test: add environment tests)
+>>>>>>> 3861945 (test: add environment tests)
       jsdom: 26.1.0
     transitivePeerDependencies:
       - jiti
