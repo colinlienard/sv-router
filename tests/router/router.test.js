@@ -4,30 +4,6 @@ import App from './App.test.svelte';
 
 window.scrollTo = vi.fn();
 
-const location = {
-	href: 'http://localhost:3000/',
-	pathname: '/',
-	search: '',
-	hash: '',
-	origin: 'http://localhost:3000',
-	protocol: 'http:',
-	host: 'localhost:3000',
-	hostname: 'localhost',
-	port: '3000',
-	assign: vi.fn(),
-	replace: vi.fn(),
-	reload: vi.fn(),
-};
-
-const history = {
-	pushState: vi.fn((state, _, to) => {
-		location.pathname = to;
-	}),
-};
-
-vi.stubGlobal('location', location);
-vi.stubGlobal('history', history);
-
 describe('router', () => {
 	it('should render the index route on page load', async () => {
 		render(App);
@@ -50,14 +26,42 @@ describe('router', () => {
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
-		const user = userEvent.setup();
-		await user.click(screen.getByText('About'));
+		await userEvent.click(screen.getByText('About'));
 		await waitFor(() => {
 			expect(screen.getByText('About Us')).toBeInTheDocument();
 		});
 	});
 
-	it.todo('should redirect to the correct basename');
+	it('should not navigate if anchor has a target attribute');
 
-	it.todo('should navigate with a basename');
+	it('should redirect to the correct basename', async () => {
+		location.pathname = '/';
+		render(App, { base: 'my-app' });
+		expect(location.pathname).toBe('/my-app');
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+	});
+
+	it('should redirect to the correct basename', async () => {
+		location.pathname = '/';
+		render(App, { base: 'my-app' });
+		await userEvent.click(screen.getByText('About'));
+		expect(location.pathname).toBe('/my-app/about');
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+	});
+
+	it('should scroll to top after navigation');
+
+	it('should navigate to the latest route even after before load');
+
+	it('should handle search params');
+
+	it('should preload on hover');
+
+	it('params');
+
+	it('isActive');
 });
