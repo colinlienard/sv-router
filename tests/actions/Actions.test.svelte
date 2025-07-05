@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { isActiveLink } from '../src/actions.svelte.js';
+	import { isActiveLink } from '../../src/actions.svelte.js';
 
 	type Props = {
 		children: Snippet | string;
