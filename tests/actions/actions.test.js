@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/svelte';
-import { base, location } from '../src/create-router.svelte.js';
+import { base, location } from '../../src/create-router.svelte.js';
 import Actions from './Actions.test.svelte';
 
 vi.mock('../src/create-router.svelte.js', () => ({
