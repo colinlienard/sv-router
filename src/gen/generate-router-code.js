@@ -177,7 +177,9 @@ export function createRouterCode(routes, routesPath, { allLazy = false } = {}) {
 		`import { createRouter } from 'sv-router';`,
 		...imports,
 		'',
-		`export const { p, navigate, isActive, preload, route } = createRouter(${stringifiedRoutes});`,
+		`const routes = Object.freeze(${stringifiedRoutes} as const);`,
+		'export type Routes = typeof routes;',
+		'export const { p, navigate, isActive, preload, route } = createRouter(routes);',
 	].join('\n');
 }
 
