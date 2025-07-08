@@ -194,19 +194,21 @@ export type Path<T extends Routes, AnyParam extends boolean = false> = RemovePar
 	RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>, '', AnyParam>>
 >;
 
-export type ConstructPathArgs<T extends string> =
-	PathParams<T> extends never ? [T] : [T, PathParams<T>];
+export type ConstructPathArgs<TPath extends string> = {
+	[Path in TPath]: PathParams<Path> extends never ? [Path] : [Path, PathParams<Path>];
+}[TPath];
 
-export type IsActiveArgs<T extends string> =
-	PathParams<T> extends never ? [T] : [T] | [T, PathParams<T>];
+export type IsActiveArgs<TPath extends string> = {
+	[Path in TPath]: PathParams<Path> extends never ? [Path] : [Path] | [Path, PathParams<Path>];
+}[TPath];
 
-export type PathParams<T extends string> =
-	ExtractParams<RemoveParenthesis<T>> extends never
+export type PathParams<TPath extends string> =
+	ExtractParams<RemoveParenthesis<TPath>> extends never
 		? never
-		: Record<ExtractParams<RemoveParenthesis<T>>, string>;
+		: Record<ExtractParams<RemoveParenthesis<TPath>>, string>;
 
-export type AllParams<T extends Routes> = Partial<
-	Record<ExtractParams<RemoveParenthesis<RecursiveKeys<T>>>, string>
+export type AllParams<TRoutes extends Routes> = Partial<
+	Record<ExtractParams<RemoveParenthesis<RecursiveKeys<TRoutes>>>, string>
 >;
 
 export type HooksContext = {

@@ -85,6 +85,8 @@ type test_construct_path_1 = Expect<
 >;
 type test_construct_path_result_1 = ConstructPathArgs<'/posts'>;
 type test_construct_path_expected_1 = ['/posts'];
+type test_construct_path_result_2 = ConstructPathArgs<'/posts' | '/about/:id'>;
+type test_construct_path_expected_2 = ['/posts'] | ['/about/:id', Record<'id', string>];
 
 // AllParams
 
