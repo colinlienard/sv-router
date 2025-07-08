@@ -108,12 +108,16 @@ export type RouterApi<T extends Routes> = {
 	 * p('/users');
 	 * // With parameters
 	 * p('/users/:id', { id: 1 });
+	 * // With arbitrary search params
+	 * p('/users/:id?modal=cancel, { id: 1 });
+	 * // With arbitrary anchor
+	 * p('/users/:id#cancel', { id: 1 });
 	 * ```
 	 *
 	 * @param route The route to navigate to.
 	 * @param params The parameters to replace in the route.
 	 */
-	p<U extends Path<T>>(...args: ConstructPathArgs<U>): string;
+	p<U extends PathWithSearchAndHash<T>>(...args: ConstructPathArgs<U>): string;
 
 	/**
 	 * Navigate programmatically to a route.
@@ -155,7 +159,7 @@ export type RouterApi<T extends Routes> = {
 	 *
 	 * @param path The route to preload.
 	 */
-	preload<U extends Path<T>>(path: U): Promise<void>;
+	preload<U extends PathWithSearchAndHash<T>>(path: U): Promise<void>;
 
 	route: {
 		/**
@@ -190,6 +194,14 @@ export type RouterApi<T extends Routes> = {
 	};
 };
 
+export type AppendSearchAndHash<Path extends string> =
+	`${Path}${'' | `?${string}`}${'' | `#${string}`}`;
+
+export type PathWithSearchAndHash<
+	T extends Routes,
+	AnyParam extends boolean = false,
+> = AppendSearchAndHash<Path<T, AnyParam>>;
+
 export type Path<T extends Routes, AnyParam extends boolean = false> = RemoveParenthesis<
 	RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>, '', AnyParam>>
 >;
@@ -201,12 +213,12 @@ export type IsActiveArgs<T extends string> =
 	PathParams<T> extends never ? [T] : [T] | [T, PathParams<T>];
 
 export type PathParams<T extends string> =
-	ExtractParams<RemoveParenthesis<T>> extends never
+	ExtractParams<CleanPathForParams<T>> extends never
 		? never
-		: Record<ExtractParams<RemoveParenthesis<T>>, string>;
+		: Record<ExtractParams<CleanPathForParams<T>>, string>;
 
 export type AllParams<T extends Routes> = Partial<
-	Record<ExtractParams<RemoveParenthesis<RecursiveKeys<T>>>, string>
+	Record<ExtractParams<CleanPathForParams<RecursiveKeys<T>>>, string>
 >;
 
 export type HooksContext = {
@@ -283,6 +295,14 @@ type RemoveLastSlash<T extends string> = T extends '/' ? T : T extends `${infer 
 type RemoveParenthesis<T extends string> = T extends `${infer A}(${infer B})${infer C}`
 	? RemoveParenthesis<`${A}${B}${C}`>
 	: T;
+
+type RemoveSearchAndHash<T extends string> = T extends `${infer Path}?${string}`
+	? RemoveSearchAndHash<Path>
+	: T extends `${infer Path}#${string}`
+		? RemoveSearchAndHash<Path>
+		: T;
+
+type CleanPathForParams<T extends string> = RemoveParenthesis<RemoveSearchAndHash<T>>;
 
 type ExtractParams<T extends string> = T extends `${string}:${infer Param}/${infer Rest}`
 	? Param | ExtractParams<`/${Rest}`>

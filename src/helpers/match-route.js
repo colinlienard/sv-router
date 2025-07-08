@@ -11,7 +11,7 @@
  */
 
 /**
- * @param {string} pathname
+ * @param {string} path
  * @param {Routes} routes
  * @returns {{
  * 	match: RouteComponent | undefined;
@@ -22,7 +22,8 @@
  * 	breakFromLayouts: boolean;
  * }}
  */
-export function matchRoute(pathname, routes) {
+export function matchRoute(path, routes) {
+	let pathname = new URL(path, globalThis.location.origin).pathname;
 	// Remove trailing slash
 	if (pathname.length > 1 && pathname.endsWith('/')) {
 		pathname = pathname.slice(0, -1);
