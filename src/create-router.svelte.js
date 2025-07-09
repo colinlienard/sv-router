@@ -2,6 +2,7 @@ import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
+import { Navigation } from './navigation.js';
 import {
 	constructPath,
 	constructUrl,
