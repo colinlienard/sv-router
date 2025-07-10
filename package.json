@@ -52,7 +52,7 @@
 	"devDependencies": {
 		"@changesets/cli": "^2.29.4",
 		"@eslint/js": "^9.28.0",
-		"@sveltejs/vite-plugin-svelte": "^5.1.0",
+		"@sveltejs/vite-plugin-svelte": "^6.0.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/svelte": "^5.2.8",
 		"@types/node": "^22.15.30",
