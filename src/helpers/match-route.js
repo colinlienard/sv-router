@@ -141,7 +141,7 @@ export function sortRoutes(routes) {
  */
 function getRoutePriority(route) {
 	if (route === '' || route === '/') return 1;
-	if (route.startsWith('*')) return 4;
+	if (route.startsWith('*') || route.startsWith('(*')) return 4;
 	if (route.includes(':')) return 3;
 	return 2;
 }

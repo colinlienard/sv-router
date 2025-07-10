@@ -222,6 +222,11 @@ describe('matchRoute', () => {
 			});
 
 			it('should break out of layouts with catch-all', () => {
+				if (typeof routes['/users'] === 'object') {
+					delete routes['/users']['*'];
+				} else {
+					delete routes['/users/*'];
+				}
 				/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)'] = NoLayout;
 				const { match, layouts, params } = matchRoute('/users/nolayout', routes);
 				expect(match).toEqual(NoLayout);
