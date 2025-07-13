@@ -1,5 +1,18 @@
 # sv-router
 
+## 0.7.2
+
+### Patch Changes
+
+- c223ce3: fix priority of catchall breakout route
+- d244efd: improved class usage in isActiveLink
+- 76415fe: support unions in ConstructPathArgs and IsActiveArgs
+- 60be4d0: Export route type
+- 0777973: Improve isActive.startsWith types
+- 076134c: Strip basename from route.pathname
+- 9b2ba03: pass meta into hooks, allow all hooks to be promises
+- 7d23890: Fall back to root catch-all route when nested catch-all is not found
+
 ## 0.7.1
 
 ### Patch Changes
