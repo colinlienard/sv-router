@@ -35,6 +35,7 @@ describe('matchRoute', () => {
 				'/posts/static': StaticPost,
 				'/posts/:id': DynamicPost,
 				'/posts/:id/comments/:commentId': DynamicPostComment,
+				'/users/john': John,
 				'/users/*': UserNotFound,
 				'*rest': PageNotFound,
 			},
@@ -49,6 +50,7 @@ describe('matchRoute', () => {
 				'*rest': PageNotFound,
 				'/posts/:id': DynamicPost,
 				'/': Home,
+				'/users/john': John,
 			},
 		},
 		{
@@ -263,6 +265,12 @@ describe('matchRoute', () => {
 				});
 			});
 		}
+
+		it('should fall back to root catch-all route when nested catch-all is not found', () => {
+			delete routes['/users/*'];
+			const { match } = matchRoute('/users/notfound', routes);
+			expect(match).toEqual(PageNotFound);
+		});
 
 		it('should not match any route', () => {
 			delete routes['*rest'];
