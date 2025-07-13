@@ -2,6 +2,7 @@ import type { Equal, Expect } from 'type-testing';
 import type {
 	AllParams,
 	ConstructPathArgs,
+	IsActiveArgs,
 	Path,
 	PathParams,
 	RouteComponent,
@@ -93,3 +94,28 @@ type test_construct_path_expected_2 = ['/posts'] | ['/about/:id', Record<'id', s
 type test_all_params = Expect<Equal<test_all_params_result, test_all_params_expected>>;
 type test_all_params_result = AllParams<TestRoutes>;
 type test_all_params_expected = Partial<Record<'id' | 'commentId' | 'rest', string>>;
+
+// IsActiveArgs
+
+type test_is_active_args_0 = Expect<
+	Equal<test_is_active_args_result_0, test_is_active_args_expected_0>
+>;
+type test_is_active_args_result_0 = IsActiveArgs<'/posts'>;
+type test_is_active_args_expected_0 = ['/posts'];
+
+type test_is_active_args_1 = Expect<
+	Equal<test_is_active_args_result_1, test_is_active_args_expected_1>
+>;
+type test_is_active_args_result_1 = IsActiveArgs<'/posts/:id'>;
+type test_is_active_args_expected_1 = ['/posts/:id'] | ['/posts/:id', Record<'id', string>];
+
+type test_is_active_args_2 = Expect<
+	Equal<test_is_active_args_result_2, test_is_active_args_expected_2>
+>;
+type test_is_active_args_result_2 = IsActiveArgs<'/posts/:id/:commentId', true>;
+type test_is_active_args_expected_2 =
+	| ['/posts' | '/posts/:id' | '/posts/:id/:commentId']
+	| [
+			'/posts' | '/posts/:id' | '/posts/:id/:commentId',
+			Partial<Record<'id' | 'commentId', string>>,
+	  ];

@@ -147,7 +147,7 @@ export type RouterApi<T extends Routes> = {
 	 */
 	isActive: {
 		<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
-		startsWith<U extends Path<T>>(...args: IsActiveArgs<U>): boolean;
+		startsWith<U extends Path<T>>(...args: IsActiveArgs<U, true>): boolean;
 	};
 
 	/**
@@ -198,9 +198,18 @@ export type ConstructPathArgs<TPath extends string> = {
 	[Path in TPath]: PathParams<Path> extends never ? [Path] : [Path, PathParams<Path>];
 }[TPath];
 
-export type IsActiveArgs<TPath extends string> = {
-	[Path in TPath]: PathParams<Path> extends never ? [Path] : [Path] | [Path, PathParams<Path>];
-}[TPath];
+export type IsActiveArgs<
+	TPath extends string,
+	StartsWith extends boolean = false,
+> = StartsWith extends true
+	? {
+			[Path in TPath]: PathParams<Path> extends never
+				? [PathPrefixes<Path>]
+				: [PathPrefixes<Path>] | [PathPrefixes<Path>, Partial<PathParams<Path>>];
+		}[TPath]
+	: {
+			[Path in TPath]: PathParams<Path> extends never ? [Path] : [Path] | [Path, PathParams<Path>];
+		}[TPath];
 
 export type PathParams<TPath extends string> =
 	ExtractParams<RemoveParenthesis<TPath>> extends never
@@ -295,3 +304,15 @@ type ExtractParams<T extends string> = T extends `${string}:${infer Param}/${inf
 				? never
 				: Param
 			: never;
+
+type PathPrefixes<T extends string, Acc extends string = ''> = T extends '/'
+	? '/'
+	: T extends `/${infer Segment}/${infer Rest}`
+		? Acc extends ''
+			? PathPrefixes<`/${Rest}`, `/${Segment}`> | `/${Segment}`
+			: PathPrefixes<`/${Rest}`, `${Acc}/${Segment}`> | `${Acc}/${Segment}` | Acc
+		: T extends `/${infer Segment}`
+			? Acc extends ''
+				? `/${Segment}`
+				: `${Acc}/${Segment}` | Acc
+			: Acc;
