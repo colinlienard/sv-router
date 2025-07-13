@@ -8,6 +8,9 @@
 <nav>
 	<a href={p('/')}>Home</a>
 	<a href={p('/about')}>About</a>
+	<a href={p('/protected')}>Protected</a>
+	<a href={p('/slow-protected')}>Slow Protected</a>
+	<a href={p('/lazy')} data-preload>Lazy</a>
 </nav>
 
 {@render children()}
