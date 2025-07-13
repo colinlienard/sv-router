@@ -41,11 +41,12 @@ export const searchParams: SearchParams;
 type BaseProps = {};
 
 export type LazyRouteComponent<Props extends BaseProps = BaseProps> = () => Promise<{
-	default: Component<Props>;
+	default: Component<Props> | Snippet<[Props]>;
 }>;
 
 export type RouteComponent<Props extends BaseProps = any> =
 	| Component<Props>
+	| Snippet<[Props]>
 	| LazyRouteComponent<Props>;
 export type LayoutComponent = RouteComponent<{ children: Snippet }>;
 export type Hooks = {
