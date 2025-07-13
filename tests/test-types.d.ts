@@ -115,7 +115,4 @@ type test_is_active_args_2 = Expect<
 type test_is_active_args_result_2 = IsActiveArgs<'/posts/:id/:commentId', true>;
 type test_is_active_args_expected_2 =
 	| ['/posts' | '/posts/:id' | '/posts/:id/:commentId']
-	| [
-			'/posts' | '/posts/:id' | '/posts/:id/:commentId',
-			Partial<Record<'id' | 'commentId', string>>,
-	  ];
+	| ['/posts' | '/posts/:id' | '/posts/:id/:commentId', Record<'id' | 'commentId', string>];

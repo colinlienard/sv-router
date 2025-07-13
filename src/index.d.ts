@@ -205,7 +205,7 @@ export type IsActiveArgs<
 	? {
 			[Path in TPath]: PathParams<Path> extends never
 				? [PathPrefixes<Path>]
-				: [PathPrefixes<Path>] | [PathPrefixes<Path>, Partial<PathParams<Path>>];
+				: [PathPrefixes<Path>] | [PathPrefixes<Path>, PathParams<Path>];
 		}[TPath]
 	: {
 			[Path in TPath]: PathParams<Path> extends never ? [Path] : [Path] | [Path, PathParams<Path>];
