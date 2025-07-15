@@ -128,8 +128,9 @@ Configuration object for route lifecycle hooks.
 **Properties:**
 
 - `beforeLoad?(context): void | Promise<void>` - A function called before the route is loaded. You can throw a `navigate` call to redirect.
-- `afterLoad?(context): void` - A function called after the route is loaded.
-- `onPreload?(context): void` - A function called when the route is preloaded.
+- `afterLoad?(context): void | Promise<void>` - A function called after the route is loaded.
+- `onPreload?(context): void | Promise<void>` - A function called when the route is preloaded.
+- `onError?(error, context): void | Promise<void>` - A function called when route components fail to load or beforeLoad hooks throw an error.
 
 **Context Parameter:**
 

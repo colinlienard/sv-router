@@ -120,18 +120,32 @@ export async function onNavigate(path, options = {}) {
 	const matchPath = stripBase(path || globalThis.location.pathname);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
-	for (const { beforeLoad } of hooks) {
+	let errorHooks = [];
+	for (const hook of hooks) {
 		try {
+			const { beforeLoad } = hook;
+			errorHooks.push(hook);
 			pendingNavigationIndex = currentNavigationIndex;
 			await beforeLoad?.({ pathname: matchPath, meta: newMeta, ...options });
-		} catch {
+		} catch (error) {
+			for (const { onError } of errorHooks) {
+				void onError?.(error, { pathname: matchPath, meta: newMeta, ...options });
+			}
 			return;
 		}
 	}
 
 	const fromBeforeLoadHook = new Error().stack?.includes('beforeLoad');
 
-	const routeComponents = await resolveRouteComponents(match ? [...layouts, match] : layouts);
+	let routeComponents;
+	try {
+		routeComponents = await resolveRouteComponents(match ? [...layouts, match] : layouts);
+	} catch (error) {
+		for (const { onError } of hooks) {
+			void onError?.(error, { pathname: matchPath, meta: newMeta, ...options });
+		}
+		throw error;
+	}
 	if (
 		navigationIndex !== currentNavigationIndex ||
 		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)

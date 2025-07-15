@@ -19,6 +19,9 @@ export const { p, navigate, isActive, route } = createRouter({
 			onPreload() {
 				// Execute when the route is preloaded
 			},
+			onError() {
+				// Execute when route components fail to load or beforeLoad hooks throw an error
+			},
 		},
 	},
 });

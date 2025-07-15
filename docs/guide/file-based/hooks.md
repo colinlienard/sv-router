@@ -35,6 +35,9 @@ export default {
 	onPreload() {
 		// Execute when the route is preloaded
 	},
+	onError() {
+		// Execute when route components fail to load or beforeLoad hooks throw an error
+	},
 } satisfies Hooks;
 ```
 
