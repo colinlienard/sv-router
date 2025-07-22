@@ -7,7 +7,7 @@ import { constructPath, join } from './utils.js';
  * @returns {boolean}
  */
 export function isActive(pathname, params) {
-	const p = base.name ? join(base.name, pathname) : pathname;
+	const p = base.name && base.name !== "#" ? join(base.name, pathname) : pathname;
 	return compare((a, b) => a === b, p, params);
 }
 
@@ -17,7 +17,7 @@ export function isActive(pathname, params) {
  * @returns {boolean}
  */
 isActive.startsWith = (pathname, params) => {
-	const p = base.name ? join(base.name, pathname) : pathname;
+	const p = base.name && base.name !== "#" ? join(base.name, pathname) : pathname;
 	return compare((a, b) => a.startsWith(b), p, params);
 };
 
@@ -29,15 +29,28 @@ isActive.startsWith = (pathname, params) => {
  */
 function compare(compareFn, pathname, params) {
 	if (!pathname.includes(':')) {
-		return compareFn(location.pathname, pathname);
-	}
+        if (base.name === "#") {
+            return compareFn(location.hash.slice(1), pathname);
+        } else {
+            return compareFn(location.pathname, pathname);
+        }
+    }
 
 	if (params) {
-		return compareFn(location.pathname, constructPath(pathname, params));
+        if (base.name === "#") {
+            return compareFn(location.hash, (new URL(constructPath(pathname, params))).hash);
+        } else {
+     		return compareFn(location.pathname, constructPath(pathname, params));
+        }
 	}
 
 	const pathParts = pathname.split('/').slice(1);
-	const routeParts = location.pathname.split('/').slice(1);
+    let routeParts;
+    if (base.name === "#") {
+        routeParts = location.hash.slice(1).split('/').slice(1);
+    } else {
+    	routeParts = location.pathname.split('/').slice(1);
+    }
 	if (pathParts.length > routeParts.length) {
 		return false;
 	}

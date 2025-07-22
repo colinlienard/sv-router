@@ -55,22 +55,21 @@ const shell = {
 
 export { shell as searchParams };
 
-export function syncSearchParams() {
-	const newSearchParams = new URLSearchParams(globalThis.location.search);
-	if (searchParams.toString() === newSearchParams.toString()) {
-		return;
-	}
-	searchParams = new SvelteURLSearchParams();
-	for (const [key, value] of newSearchParams.entries()) {
-		searchParams.append(key, value);
+/** @param {string} [search] */
+export function syncSearchParams(search) {
+	if (searchParams.toString() !== search) {
+		searchParams = new SvelteURLSearchParams();
+		const newSearchParams = new URLSearchParams(search);
+		for (const [key, value] of newSearchParams.entries()) {
+			searchParams.append(key, value);
+		}
 	}
 }
 
 /** @param {{ replace?: boolean }} [options] */
 function updateUrlSearchParams(options) {
-	let url = globalThis.location.origin + globalThis.location.pathname;
-	if (searchParams.size > 0) {
-		url += '?' + searchParams.toString();
-	}
+	let url = new URL(globalThis.location.toString());
+	url.search = searchParams.toString();
+
 	globalThis.history[options?.replace ? 'replaceState' : 'pushState']({}, '', url);
 }

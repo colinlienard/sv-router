@@ -6,13 +6,21 @@ import { base } from '../create-router.svelte.js';
  * @returns {string}
  */
 export function constructPath(path, params) {
-	if (!params) return path;
-
-	let result = path;
-	for (const key in params) {
-		result = result.replace(`:${key}`, params[key]);
+	if (params) {
+		for (const key in params) {
+			path = path.replace(`:${key}`, params[key]);
+		}
 	}
-	return result;
+
+	if (base.name === '#') {
+		const url = new URL(window.location.toString());
+		url.hash = path;
+		url.search = '';
+
+		return url.toString();
+	}
+
+	return path;
 }
 
 /**
