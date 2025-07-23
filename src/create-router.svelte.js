@@ -20,7 +20,7 @@ export let componentTree = $state({ value: [] });
 /** @type {{ value: Record<string, string> }} */
 export let params = $state({ value: {} });
 
-export let location = $state(updatedLocation());
+export let location = $state({});
 
 let meta = $state({ value: {} });
 
@@ -50,7 +50,10 @@ export function init(basename) {
 			}
 		}
 	}
+	Object.assign(location, updatedLocation());
 }
+
+
 
 /**
  * @template {import('./index.d.ts').Routes} T

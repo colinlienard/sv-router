@@ -8,9 +8,14 @@ export function isActiveLink(node, { className = 'is-active', startsWith = false
 	}
 
 	$effect(() => {
-		let pathname = new URL(node.href).pathname;
-		if (base.name) {
-			pathname = join(base.name, pathname);
+		let pathname;
+		if (base.name === "#") {
+			pathname = new URL(node.href).hash;
+		} else {
+			pathname = new URL(node.href).pathname;
+			if (base.name) {
+				pathname = join(base.name, pathname);
+			}
 		}
 		const tokens = className.split(' ').filter(Boolean) ?? [];
 		if (startsWith ? location.pathname.startsWith(pathname) : location.pathname === pathname) {

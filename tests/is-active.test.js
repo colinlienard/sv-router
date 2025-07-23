@@ -65,57 +65,49 @@ describe('isActive', () => {
 describe('isActive with base="#"', () => {
 	it('should match a simple route', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/about';
+        location.pathname = '/about';
 		expect(isActive('/about')).toBe(true);
 	});
 
 	it('should match a route with a param', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123';
+		location.pathname = '/post/123';
 		expect(isActive('/post/:id', { id: '123' })).toBe(true);
 	});
 
 	it('should match a route with any param', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123';
+		location.pathname = '/post/123';
 		expect(isActive('/post/:id')).toBe(true);
 	});
 
 	it('should match a route with params', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123/comments/456';
+		location.pathname = '/post/123/comments/456';
 		expect(isActive('/post/:id/comments/:commentId', { id: '123', commentId: '456' })).toBe(true);
 	});
 
 	it('should match a route with any params', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123/comments/456';
+		location.pathname = '/post/123/comments/456';
 		expect(isActive('/post/:id/comments/:commentId')).toBe(true);
 	});
 
 	it('should not match a simple route', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/foo';
+		location.pathname = '/foo';
 		expect(isActive('/about')).toBe(false);
 	});
 
 	it('should not match a route with any param', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post';
+		location.pathname = '/post';
 		expect(isActive('/post/:id')).toBe(false);
 	});
 
 	it('should not match a route with params', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post';
+		location.pathname = '/post';
 		expect(isActive('/post/:id', { id: '123' })).toBe(false);
 	});
 });
@@ -172,18 +164,15 @@ describe('isActive.startsWith', () => {
 	});
 
 	it('should work with a basename', () => {
-        base.name = undefined;
-		location.pathname = '/my-app/post/123/foo';
 		base.name = '/my-app';
+		location.pathname = '/my-app/post/123/foo';
 		expect(isActive.startsWith('/post/:id', { id: '123' })).toBe(true);
 		base.name = undefined;
 	});
 
 	it('should work with a basename #', () => {
-        base.name = undefined;
-		location.pathname = 'C:/path/to/index.html';
-		location.hash = '#/post/123/foo';
 		base.name = '#';
+		location.pathname = '/post/123/foo';
 		expect(isActive.startsWith('/post/:id', { id: '123' })).toBe(true);
 		base.name = undefined;
 	});
@@ -192,29 +181,25 @@ describe('isActive.startsWith', () => {
 describe('isActive.startsWith with base="#"', () => {
 	it('should match a simple route', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/about/me';
+		location.pathname = '/about/me';
 		expect(isActive.startsWith('/about')).toBe(true);
 	});
 
 	it('should match a route with a param', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123/foo';
+		location.pathname = '/post/123/foo';
 		expect(isActive.startsWith('/post/:id', { id: '123' })).toBe(true);
 	});
 
 	it('should match a route with any param', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123/foo';
+		location.pathname = '/post/123/foo';
 		expect(isActive.startsWith('/post/:id')).toBe(true);
 	});
 
 	it('should match a route with params', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123/comments/456/foo';
+		location.pathname = '/post/123/comments/456/foo';
 		expect(
 			isActive.startsWith('/post/:id/comments/:commentId', { id: '123', commentId: '456' }),
 		).toBe(true);
@@ -222,29 +207,25 @@ describe('isActive.startsWith with base="#"', () => {
 
 	it('should match a route with any params', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/post/123/comments/456/foo';
+		location.pathname = '/post/123/comments/456/foo';
 		expect(isActive.startsWith('/post/:id/comments/:commentId')).toBe(true);
 	});
 
 	it('should not match a simple route', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/foo';
+		location.pathname = '/foo';
 		expect(isActive.startsWith('/hello')).toBe(false);
 	});
 
 	it('should not match a route with any param', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/foo/bar';
+		location.pathname = '/foo/bar';
 		expect(isActive.startsWith('/hello/:id')).toBe(false);
 	});
 
 	it('should not match a route with params', () => {
         base.name = '#';
-        location.pathname = '/C:/path/to/index.html';
-		location.hash = '#/foo/bar';
+		location.pathname = '/foo/bar';
 		expect(isActive.startsWith('/hello/:id', { id: 'world' })).toBe(false);
 	});
 });

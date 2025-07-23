@@ -29,28 +29,19 @@ isActive.startsWith = (pathname, params) => {
  */
 function compare(compareFn, pathname, params) {
 	if (!pathname.includes(':')) {
-        if (base.name === "#") {
-            return compareFn(location.hash.slice(1), pathname);
-        } else {
-            return compareFn(location.pathname, pathname);
-        }
+        return compareFn(location.pathname, pathname);
     }
 
 	if (params) {
         if (base.name === "#") {
-            return compareFn(location.hash, (new URL(constructPath(pathname, params))).hash);
+            return compareFn(location.pathname, (new URL(constructPath(pathname, params))).hash.slice(1));
         } else {
      		return compareFn(location.pathname, constructPath(pathname, params));
         }
 	}
 
 	const pathParts = pathname.split('/').slice(1);
-    let routeParts;
-    if (base.name === "#") {
-        routeParts = location.hash.slice(1).split('/').slice(1);
-    } else {
-    	routeParts = location.pathname.split('/').slice(1);
-    }
+    let routeParts = location.pathname.split('/').slice(1);
 	if (pathParts.length > routeParts.length) {
 		return false;
 	}

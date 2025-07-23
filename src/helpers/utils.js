@@ -82,10 +82,18 @@ export function stripBase(pathname) {
 }
 
 export function updatedLocation() {
+	let pathname, hash;
+	if (base.name === "#") {
+		pathname = globalThis.location.hash.slice(1);
+		hash = "";
+	} else {
+		pathname = globalThis.location.pathname;
+		hash = globalThis.location.hash;
+	}
 	return {
-		pathname: globalThis.location.pathname,
+		pathname: pathname,
 		search: globalThis.location.search,
 		state: history.state,
-		hash: globalThis.location.hash,
+		hash: hash,
 	};
 }
