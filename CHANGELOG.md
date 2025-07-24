@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.7.3
+
+### Patch Changes
+
+- a3d4688: Added onError hook
+
 ## 0.7.2
 
 ### Patch Changes
