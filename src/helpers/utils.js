@@ -6,13 +6,21 @@ import { base } from '../create-router.svelte.js';
  * @returns {string}
  */
 export function constructPath(path, params) {
-	if (!params) return path;
-
-	let result = path;
-	for (const key in params) {
-		result = result.replace(`:${key}`, params[key]);
+	if (params) {
+		for (const key in params) {
+			path = path.replace(`:${key}`, params[key]);
+		}
 	}
-	return result;
+
+	if (base.name === '#') {
+		const url = new URL(window.location.toString());
+		url.hash = path;
+		url.search = '';
+
+		return url.toString();
+	}
+
+	return path;
 }
 
 /**
@@ -74,10 +82,18 @@ export function stripBase(pathname) {
 }
 
 export function updatedLocation() {
+	let pathname, hash;
+	if (base.name === "#") {
+		pathname = globalThis.location.hash.slice(1);
+		hash = "";
+	} else {
+		pathname = globalThis.location.pathname;
+		hash = globalThis.location.hash;
+	}
 	return {
-		pathname: globalThis.location.pathname,
+		pathname: pathname,
 		search: globalThis.location.search,
 		state: history.state,
-		hash: globalThis.location.hash,
+		hash: hash,
 	};
 }

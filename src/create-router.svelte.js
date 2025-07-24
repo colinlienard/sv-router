@@ -20,7 +20,7 @@ export let componentTree = $state({ value: [] });
 /** @type {{ value: Record<string, string> }} */
 export let params = $state({ value: {} });
 
-export let location = $state(updatedLocation());
+export let location = $state({});
 
 let meta = $state({ value: {} });
 
@@ -31,6 +31,29 @@ let pendingNavigationIndex = 0;
 export const base = {
 	name: undefined,
 };
+
+/** @param {string | undefined} basename */
+export function init(basename) {
+	if (basename) {
+		const url = new URL(globalThis.location.toString());
+		if (basename === '#') {
+			base.name = '#';
+			if (!globalThis.location.href.includes('#')) {
+				url.hash = '/';
+				history.replaceState(history.state || {}, '', url.toString());
+			}
+		} else {
+			base.name = (basename.startsWith('/') ? '' : '/') + basename;
+			if (!url.pathname.startsWith(base.name)) {
+				url.pathname = join(base.name, url.pathname);
+				history.replaceState(history.state || {}, '', url.toString());
+			}
+		}
+	}
+	Object.assign(location, updatedLocation());
+}
+
+
 
 /**
  * @template {import('./index.d.ts').Routes} T
@@ -93,16 +116,37 @@ function navigate(path, options = {}) {
 		globalThis.history.go(path);
 		return;
 	}
-	if (options.params) {
-		path = constructPath(path, options.params);
-	}
+
+	path = constructPath(path, options.params);
 	if (options.search && !options.search.startsWith('?')) {
 		options.search = '?' + options.search;
 	}
-	if (options.hash && !options.hash.startsWith('#')) {
+	if (options.hash && !options.hash.startsWith('#') && base.name !== '#') {
 		options.hash = '#' + options.hash;
 	}
+	if (base.name === '#') {
+		path = new URL(path).hash;
+	}
 	onNavigate(path, options);
+}
+
+/** @param {string} [path] */
+function getMatchPath(path) {
+	let matchPath = '';
+
+	if (path) {
+		matchPath = path;
+	} else if (base.name === '#') {
+		matchPath = globalThis.location.hash.slice(1);
+	} else {
+		matchPath = globalThis.location.pathname;
+	}
+
+	if (base.name && matchPath.startsWith(base.name)) {
+		matchPath = matchPath.slice(base.name.length) || '/';
+	}
+
+	return stripBase(matchPath);
 }
 
 /**
@@ -117,7 +161,7 @@ export async function onNavigate(path, options = {}) {
 	navigationIndex++;
 	const currentNavigationIndex = navigationIndex;
 
-	const matchPath = stripBase(path || globalThis.location.pathname);
+	let matchPath = getMatchPath(path);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
 	let errorHooks = [];
@@ -154,11 +198,20 @@ export async function onNavigate(path, options = {}) {
 	}
 
 	if (path) {
-		if (options.search) path += options.search;
-		if (options.hash) path += options.hash;
+		let url = new URL(window.location.toString());
+		url.search = '';
+		if (options.search) url.search = options.search;
+		if (base.name === '#') {
+			url.hash = path;
+		} else {
+			if (options.hash) path += options.hash;
+			url.pathname = base.name ? join(base.name, path) : path;
+		}
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
-		const to = base.name ? join(base.name, path) : path;
-		globalThis.history[historyMethod](options.state || {}, '', to);
+		globalThis.history[historyMethod](options.state || {}, '', url.toString());
+		syncSearchParams(options.search);
+	} else {
+		syncSearchParams(globalThis.location.search);
 	}
 
 	if (options.viewTransition && document.startViewTransition !== undefined) {
@@ -170,7 +223,6 @@ export async function onNavigate(path, options = {}) {
 	}
 	params.value = newParams;
 	meta.value = newMeta;
-	syncSearchParams();
 	Object.assign(location, updatedLocation());
 
 	if (options.scrollToTop !== false) {
@@ -193,13 +245,22 @@ export function onGlobalClick(event) {
 	const currentOrigin = globalThis.location.origin;
 	if (url.origin !== currentOrigin) return;
 
+	let path, hash;
+	if (base.name === '#') {
+		path = url.hash;
+		hash = '';
+	} else {
+		path = url.pathname;
+		hash = url.hash;
+	}
+
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
-	onNavigate(url.pathname, {
+	onNavigate(path, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
-		hash: url.hash,
+		hash: hash,
 		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
 		viewTransition: viewTransition === '' || viewTransition === 'true',
 	});
