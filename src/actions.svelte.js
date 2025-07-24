@@ -8,7 +8,7 @@ export function isActiveLink(node, { className = 'is-active', startsWith = false
 	}
 
 	$effect(() => {
-		let pathname = new URL(node.href).pathname;
+		let pathname = new URL(node.href, globalThis.location.origin).pathname;
 		if (base.name) {
 			pathname = join(base.name, pathname);
 		}

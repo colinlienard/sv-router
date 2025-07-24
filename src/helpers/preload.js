@@ -7,9 +7,10 @@ import { resolveRouteComponents } from './utils.js';
  * @param {import('../index.d.ts').NavigateOptions} [options]
  */
 export async function preload(routes, path, options) {
-	const { match, layouts, hooks, meta } = matchRoute(path, routes);
+	const pathname = new URL(path, globalThis.location.origin).pathname;
+	const { match, layouts, hooks, meta } = matchRoute(pathname, routes);
 	for (const { onPreload } of hooks) {
-		void onPreload?.({ pathname: path, meta, ...options });
+		void onPreload?.({ pathname, meta, ...options });
 	}
 	await resolveRouteComponents(match ? [...layouts, match] : layouts);
 }
@@ -30,9 +31,9 @@ export function preloadOnHover(routes) {
 				link.removeEventListener('mouseenter', callback);
 				const href = link.getAttribute('href');
 				if (!href) return;
-				const url = new URL(link.href);
+				const url = new URL(link.href, globalThis.location.origin);
 				const { replace, state } = link.dataset;
-				preload(routes, href, {
+				void preload(routes, url.pathname, {
 					replace: replace === '' || replace === 'true',
 					search: url.search,
 					state,
