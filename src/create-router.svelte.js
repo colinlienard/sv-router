@@ -9,6 +9,7 @@ import {
 	stripBase,
 	updatedLocation,
 } from './helpers/utils.js';
+import { Navigation } from './navigation.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -87,11 +88,12 @@ export function createRouter(r) {
 /**
  * @param {string | number} path
  * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
+ * @returns Promise<Error>
  */
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
 		globalThis.history.go(path);
-		return;
+		return new Navigation(`History entry: ${path}`);
 	}
 	if (options.params) {
 		path = constructPath(path, options.params);
@@ -103,10 +105,11 @@ function navigate(path, options = {}) {
 		options.hash = '#' + options.hash;
 	}
 	onNavigate(path, options);
+	return new Navigation(`${path}${options?.search ?? ''}${options?.hash ?? ''}`);
 }
 
 /**
- * @param {string} [path]
+ * @param {string} path
  * @param {import('./index.d.ts').NavigateOptions} options
  */
 export async function onNavigate(path, options = {}) {
@@ -195,7 +198,7 @@ export function onGlobalClick(event) {
 
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
-	onNavigate(url.pathname, {
+	void onNavigate(url.pathname, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
