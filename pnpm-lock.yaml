@@ -63,6 +63,7 @@ importers:
         version: 3.11.0(eslint@9.32.0)(svelte@5.37.3)
       eslint-plugin-unicorn:
 <<<<<<< HEAD
+<<<<<<< HEAD
         specifier: ^60.0.0
         version: 60.0.0(eslint@9.32.0)
       globals:
@@ -76,6 +77,10 @@ importers:
 =======
         specifier: ^59.0.1
         version: 59.0.1(eslint@9.32.0)
+=======
+        specifier: ^60.0.0
+        version: 60.0.0(eslint@9.32.0)
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
       globals:
 <<<<<<< HEAD
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
@@ -155,10 +160,14 @@ importers:
       vitepress:
         specifier: ^1.6.3
 <<<<<<< HEAD
+<<<<<<< HEAD
         version: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.17.0)(change-case@5.4.4)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.2)
 =======
         version: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.17.0)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.2)
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+        version: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.17.0)(change-case@5.4.4)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.2)
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
       vitepress-plugin-group-icons:
         specifier: ^1.6.1
         version: 1.6.1(markdown-it@14.1.0)(vite@5.4.19(@types/node@22.17.0))
@@ -827,12 +836,15 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   '@eslint/core@0.13.0':
     resolution: {integrity: sha512-yfkgDw1KR66rkT5A8ci4irzDysN7FRpq3ttJolR88OqQikAWqwA8j5VZyas+vjyBNFIJ7MfybJ9plMILI2UrCw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
   '@eslint/core@0.15.1':
     resolution: {integrity: sha512-bkOp+iumZCCbt1K1CmWf0R9pM5yKpDv+ZXtvSyQpudrI9kuFLp+bM2WOPXImuD/ceQuaa8f5pj93Y7zyECIGNA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -850,12 +862,15 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   '@eslint/plugin-kit@0.2.8':
     resolution: {integrity: sha512-ZAoA40rNMPwSm+AeHpCq8STiNAwzWLJuP8Xv4CHIc9wv/PSuExjMrmjfYNj682vW0OOiZ1HKxzvjQr9XZIisQA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
   '@eslint/plugin-kit@0.3.4':
     resolution: {integrity: sha512-Ul5l+lHEcw3L5+k8POx6r74mxEYKG5kOb6Xpy2gCRW6zweT6TEhAf8vhxGgjhqrd/VO/Dirhsb+1hNpD1ue9hw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -3518,12 +3533,15 @@ snapshots:
   '@eslint/config-helpers@0.3.0': {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   '@eslint/core@0.13.0':
     dependencies:
       '@types/json-schema': 7.0.15
 
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
   '@eslint/core@0.15.1':
     dependencies:
       '@types/json-schema': 7.0.15
@@ -3546,6 +3564,7 @@ snapshots:
 
   '@eslint/object-schema@2.1.6': {}
 
+<<<<<<< HEAD
   '@eslint/plugin-kit@0.3.4':
     dependencies:
 <<<<<<< HEAD
@@ -3553,6 +3572,8 @@ snapshots:
       '@eslint/core': 0.13.0
       levn: 0.4.1
 
+=======
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
   '@eslint/plugin-kit@0.3.4':
     dependencies:
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
@@ -4175,10 +4196,14 @@ snapshots:
       - typescript
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   '@vueuse/integrations@12.5.0(change-case@5.4.4)(focus-trap@7.6.4)(typescript@5.9.2)':
 =======
   '@vueuse/integrations@12.5.0(focus-trap@7.6.4)(typescript@5.9.2)':
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+  '@vueuse/integrations@12.5.0(change-case@5.4.4)(focus-trap@7.6.4)(typescript@5.9.2)':
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
     dependencies:
       '@vueuse/core': 12.5.0(typescript@5.9.2)
       '@vueuse/shared': 12.5.0(typescript@5.9.2)
@@ -4520,6 +4545,7 @@ snapshots:
       - ts-node
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   eslint-plugin-unicorn@60.0.0(eslint@9.32.0):
     dependencies:
       '@babel/helper-validator-identifier': 7.27.1
@@ -4531,14 +4557,22 @@ snapshots:
       core-js-compat: 3.45.0
 =======
   eslint-plugin-unicorn@59.0.1(eslint@9.32.0):
+=======
+  eslint-plugin-unicorn@60.0.0(eslint@9.32.0):
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
     dependencies:
       '@babel/helper-validator-identifier': 7.27.1
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.32.0)
-      '@eslint/plugin-kit': 0.2.8
-      ci-info: 4.2.0
+      '@eslint/plugin-kit': 0.3.4
+      change-case: 5.4.4
+      ci-info: 4.3.0
       clean-regexp: 1.0.0
+<<<<<<< HEAD
       core-js-compat: 3.42.0
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+      core-js-compat: 3.45.0
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
       eslint: 9.32.0
       esquery: 1.6.0
       find-up-simple: 1.0.1
@@ -5773,10 +5807,14 @@ snapshots:
       - supports-color
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.17.0)(change-case@5.4.4)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.2):
 =======
   vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.17.0)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.2):
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+  vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.17.0)(change-case@5.4.4)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.2):
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
     dependencies:
       '@docsearch/css': 3.8.2
       '@docsearch/js': 3.8.2(@algolia/client-search@5.20.0)(search-insights@2.17.3)
@@ -5790,10 +5828,14 @@ snapshots:
       '@vue/shared': 3.5.13
       '@vueuse/core': 12.5.0(typescript@5.9.2)
 <<<<<<< HEAD
+<<<<<<< HEAD
       '@vueuse/integrations': 12.5.0(change-case@5.4.4)(focus-trap@7.6.4)(typescript@5.9.2)
 =======
       '@vueuse/integrations': 12.5.0(focus-trap@7.6.4)(typescript@5.9.2)
 >>>>>>> fc7d901 (chore(deps): update all non-major dependencies (#100))
+=======
+      '@vueuse/integrations': 12.5.0(change-case@5.4.4)(focus-trap@7.6.4)(typescript@5.9.2)
+>>>>>>> 8064c52 (chore(deps): update dependency eslint-plugin-unicorn to v60 (#137))
       focus-trap: 7.6.4
       mark.js: 8.11.1
       minisearch: 7.1.1
