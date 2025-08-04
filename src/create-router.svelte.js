@@ -14,23 +14,23 @@ import { syncSearchParams } from './search-params.svelte.js';
 /** @type {import('./index.d.ts').Routes} */
 let routes;
 
+/** @type {{ name?: string }} */
+export const base = {
+	name: undefined,
+};
+
 /** @type {{ value: import('svelte').Component[] }} */
 export let componentTree = $state({ value: [] });
 
 /** @type {{ value: Record<string, string> }} */
 export let params = $state({ value: {} });
 
-export let location = $state({});
+export let location = $state(updatedLocation());
 
 let meta = $state({ value: {} });
 
 let navigationIndex = 0;
 let pendingNavigationIndex = 0;
-
-/** @type {{ name?: string }} */
-export const base = {
-	name: undefined,
-};
 
 /** @param {string | undefined} basename */
 export function init(basename) {
@@ -52,8 +52,6 @@ export function init(basename) {
 	}
 	Object.assign(location, updatedLocation());
 }
-
-
 
 /**
  * @template {import('./index.d.ts').Routes} T
@@ -184,7 +182,7 @@ export async function onNavigate(path, options = {}) {
 	}
 
 	if (path) {
-		let url = new URL(window.location.toString());
+		let url = new URL(globalThis.location.toString());
 		url.search = '';
 		if (options.search) url.search = options.search;
 		if (base.name === '#') {
@@ -231,14 +229,8 @@ export function onGlobalClick(event) {
 	const currentOrigin = globalThis.location.origin;
 	if (url.origin !== currentOrigin) return;
 
-	let path, hash;
-	if (base.name === '#') {
-		path = url.hash;
-		hash = '';
-	} else {
-		path = url.pathname;
-		hash = url.hash;
-	}
+	const path = base.name === '#' ? url.hash : url.pathname;
+	const hash = base.name === '#' ? undefined : url.hash;
 
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
@@ -246,7 +238,7 @@ export function onGlobalClick(event) {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
-		hash: hash,
+		hash,
 		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
 		viewTransition: viewTransition === '' || viewTransition === 'true',
 	});

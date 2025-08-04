@@ -3,6 +3,6 @@ import { router } from 'sv-router/vite-plugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    base: "./",
+	base: './',
 	plugins: [svelte(), router()],
 });

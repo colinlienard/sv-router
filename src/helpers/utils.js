@@ -13,7 +13,7 @@ export function constructPath(path, params) {
 	}
 
 	if (base.name === '#') {
-		const url = new URL(window.location.toString());
+		const url = new URL(globalThis.location.toString());
 		url.hash = path;
 		url.search = '';
 
@@ -82,18 +82,13 @@ export function stripBase(pathname) {
 }
 
 export function updatedLocation() {
-	let pathname, hash;
-	if (base.name === "#") {
-		pathname = globalThis.location.hash.slice(1);
-		hash = "";
-	} else {
-		pathname = globalThis.location.pathname;
-		hash = globalThis.location.hash;
-	}
+	const pathname =
+		base.name === '#' ? globalThis.location.hash.slice(1) : globalThis.location.pathname;
+	const hash = base.name === '#' ? '' : globalThis.location.hash;
 	return {
-		pathname: pathname,
+		pathname,
 		search: globalThis.location.search,
 		state: history.state,
-		hash: hash,
+		hash,
 	};
 }

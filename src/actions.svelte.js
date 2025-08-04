@@ -9,7 +9,7 @@ export function isActiveLink(node, { className = 'is-active', startsWith = false
 
 	$effect(() => {
 		let pathname;
-		if (base.name === "#") {
+		if (base.name === '#') {
 			pathname = new URL(node.href).hash;
 		} else {
 			pathname = new URL(node.href).pathname;

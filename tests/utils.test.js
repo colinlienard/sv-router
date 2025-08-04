@@ -1,10 +1,5 @@
-import { constructPath, join } from '../src/helpers/utils.js';
 import { base } from '../src/create-router.svelte.js';
-
-vi.mock('../src/create-router.svelte.js', async (importOriginal) => {
-	const mod = await importOriginal();
-	return mod;
-});
+import { constructPath, join } from '../src/helpers/utils.js';
 
 describe('constructPath', () => {
 	it('should return the original path when no params are provided', () => {

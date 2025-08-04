@@ -13,7 +13,7 @@ sv-router is a feature-rich yet intuitive routing library for Svelte SPAs. It pr
 - 🧩 **Familiar API**: Follows established conventions from popular meta frameworks.
 - 🪶 **Lightweight**: Minimal impact on your bundle size.
 - 🚀 **Made for Svelte 5**: True Svelte 5 implementation with the latest features.
-- #️⃣  **Hash-based routing**: Hash-based routing enables usage in local environments.
+- #️⃣ **Hash-based routing**: Hash-based routing enables usage in local environments.
 
 Whether you're building a small project or a complex application, sv-router provides the tools you need without the overhead of a full-stack framework.
 
