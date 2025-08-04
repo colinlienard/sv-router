@@ -242,7 +242,7 @@ export type NavigateOptions =
 	  }
 	| undefined;
 
-export type SearchParams = URLSearchParams & {
+export type SearchParams = Omit<URLSearchParams, 'append' | 'delete' | 'set' | 'sort'> & {
 	append: (name: string, value: string, options?: { replace?: boolean }) => void;
 	delete: (name: string, value?: string, options?: { replace?: boolean }) => void;
 	set: (name: string, value: string, options?: { replace?: boolean }) => void;

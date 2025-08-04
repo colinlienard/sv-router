@@ -69,6 +69,7 @@ export default [
 				{ ignoreRestSiblings: true, varsIgnorePattern: 'test_.*', argsIgnorePattern: '_' },
 			],
 			'no-console': ['warn', { allow: ['warn'] }],
+			'svelte/prefer-svelte-reactivity': 'off',
 		},
 	},
 	prettier,
