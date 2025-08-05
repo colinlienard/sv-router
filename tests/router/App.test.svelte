@@ -1,12 +1,18 @@
 <script module lang="ts">
 	import { createRawSnippet } from 'svelte';
+	import { vi } from 'vitest';
 	import { createRouter } from '../../src/create-router.svelte.js';
 	import Router from '../../src/Router.svelte';
 	import Layout from './Layout.test.svelte';
 
+	export const onPreloadMock = vi.fn();
+
 	export const { p, navigate, isActive, preload, route } = createRouter({
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
 		'/about': createRawSnippet(() => ({ render: () => '<h1>About Us</h1>' })),
+		'/user/:id': createRawSnippet(() => ({
+			render: () => `<h1>User page ${route.params.id}</h1>`,
+		})),
 		'/protected': {
 			'/': createRawSnippet(() => ({ render: () => '<h1>Protected Page</h1>' })),
 			hooks: {
@@ -24,9 +30,10 @@
 				},
 			},
 		},
-		'/lazy': async () => ({
-			default: createRawSnippet(() => ({ render: () => '<h1>Lazy Page</h1>' })),
-		}),
+		'/lazy': {
+			'/': () => import('./Lazy.test.svelte'),
+			hooks: { onPreload: onPreloadMock },
+		},
 		layout: Layout,
 	});
 </script>

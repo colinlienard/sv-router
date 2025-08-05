@@ -52,7 +52,10 @@ function resolveRouteComponent(input) {
  * @returns {input is import('../index.d.ts').LazyRouteComponent}
  */
 export function isLazyImport(input) {
-	return typeof input === 'function' && !!/\(\)\s?=>\s?import\(.*\)/.test(String(input));
+	return (
+		typeof input === 'function' &&
+		!!/\(\)\s?=>\s?(import|__vite_ssr_dynamic_import__)\(.*\)/.test(String(input))
+	);
 }
 
 /** @param {...string} parts */
