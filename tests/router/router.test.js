@@ -3,14 +3,9 @@ import { userEvent } from '@testing-library/user-event';
 import { beforeEach, vi } from 'vitest';
 import { base } from '../../src/create-router.svelte.js';
 import { searchParams } from '../../src/search-params.svelte.js';
-import App, { onPreloadMock, route } from './App.test.svelte';
+import App, { isActive, onPreloadMock, route } from './App.test.svelte';
 
 window.scrollTo = vi.fn();
-
-// TODO:
-// - catch-all
-// - active route
-// - route metadata
 
 describe('router', () => {
 	beforeEach(() => {
@@ -46,6 +41,14 @@ describe('router', () => {
 		});
 	});
 
+	it('should navigate to the catch-all page', async () => {
+		location.pathname = '/not-found';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('404')).toBeInTheDocument();
+		});
+	});
+
 	it('should not navigate if anchor has a target attribute', async () => {
 		render(App);
 		await waitFor(() => {
@@ -54,6 +57,37 @@ describe('router', () => {
 		await userEvent.click(screen.getByText('External'));
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+	});
+
+	it('should work with a dynamic route', async () => {
+		location.pathname = '/user/123';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('User page 123')).toBeInTheDocument();
+		});
+		expect(route.params).toEqual({ id: '123' });
+
+		await userEvent.click(screen.getByText('User 456'));
+		expect(location.pathname).toBe('/user/456');
+		await waitFor(() => {
+			expect(screen.getByText('User page 456')).toBeInTheDocument();
+		});
+		expect(route.params).toEqual({ id: '456' });
+	});
+
+	it('should show active page', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Home')).toHaveClass('is-active');
+			expect(isActive('/')).toBe(true);
+			expect(isActive('/about')).toBe(false);
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(screen.getByText('About')).toHaveClass('is-active');
+			expect(isActive('/')).toBe(false);
+			expect(isActive('/about')).toBe(true);
 		});
 	});
 
@@ -72,22 +106,6 @@ describe('router', () => {
 		await waitFor(() => {
 			expect(screen.getByText('About Us')).toBeInTheDocument();
 		});
-	});
-
-	it('should work with a dynamic route', async () => {
-		location.pathname = '/user/123';
-		render(App);
-		await waitFor(() => {
-			expect(screen.getByText('User page 123')).toBeInTheDocument();
-		});
-		expect(route.params).toEqual({ id: '123' });
-
-		await userEvent.click(screen.getByText('User 456'));
-		expect(location.pathname).toBe('/user/456');
-		await waitFor(() => {
-			expect(screen.getByText('User page 456')).toBeInTheDocument();
-		});
-		expect(route.params).toEqual({ id: '456' });
 	});
 
 	it('should scroll to top after navigation', async () => {
@@ -162,6 +180,15 @@ describe('router', () => {
 			expect(screen.getByText('Lazy Page')).toBeInTheDocument();
 		});
 	});
+
+	it('should have metadata', async () => {
+		location.pathname = '/metadata';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Metadata Page')).toBeInTheDocument();
+			expect(route.meta).toEqual({ title: 'Metadata Page' });
+		});
+	});
 });
 
 describe('router (hash-based)', () => {
@@ -213,6 +240,21 @@ describe('router (hash-based)', () => {
 			expect(screen.getByText('User page 456')).toBeInTheDocument();
 		});
 		expect(route.params).toEqual({ id: '456' });
+	});
+
+	it('should show active page', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Home')).toHaveClass('is-active');
+			expect(isActive('/')).toBe(true);
+			expect(isActive('/about')).toBe(false);
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(screen.getByText('About')).toHaveClass('is-active');
+			expect(isActive('/')).toBe(false);
+			expect(isActive('/about')).toBe(true);
+		});
 	});
 
 	it('should navigate to a lazy route', async () => {

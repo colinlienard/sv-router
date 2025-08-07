@@ -13,6 +13,10 @@
 		'/user/:id': createRawSnippet(() => ({
 			render: () => `<h1>User page ${route.params.id}</h1>`,
 		})),
+		'/metadata': {
+			'/': createRawSnippet(() => ({ render: () => '<h1>Metadata Page</h1>' })),
+			meta: { title: 'Metadata Page' },
+		},
 		'/protected': {
 			'/': createRawSnippet(() => ({ render: () => '<h1>Protected Page</h1>' })),
 			hooks: {
@@ -34,6 +38,7 @@
 			'/': () => import('./Lazy.test.svelte'),
 			hooks: { onPreload: onPreloadMock },
 		},
+		'*': createRawSnippet(() => ({ render: () => '<h1>404</h1>' })),
 		layout: Layout,
 	});
 </script>
