@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "ES2023",
+		"target": "ESNext",
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"esModuleInterop": true,
@@ -10,8 +10,10 @@
 		"noEmit": true,
 		"verbatimModuleSyntax": true,
 		"rewriteRelativeImportExtensions": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"noUncheckedSideEffectImports": true,
 		"types": ["vite/client", "vitest/globals"]
 	},
-	"include": ["src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "tests/**/*.js", "tests/**/*.ts"],
-	"exclude": ["tests/actions/*", "tests/router/*"]
+	"include": ["src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "tests/**/*.js", "tests/**/*.ts"]
 }

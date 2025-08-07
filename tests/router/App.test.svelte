@@ -11,7 +11,10 @@
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
 		'/about': createRawSnippet(() => ({ render: () => '<h1>About Us</h1>' })),
 		'/user/:id': createRawSnippet(() => ({
-			render: () => `<h1>User page ${route.params.id}</h1>`,
+			render: () => `<h1>User page</h1>`,
+			setup(node) {
+				node.append(' ' + route.params.id);
+			},
 		})),
 		'/metadata': {
 			'/': createRawSnippet(() => ({ render: () => '<h1>Metadata Page</h1>' })),

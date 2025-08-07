@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { isActiveLink } from '../../src';
+	import { isActiveLink } from '../../src/index.js';
 	import { p } from './App.test.svelte';
 
 	let { children }: { children: Snippet } = $props();
