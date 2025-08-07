@@ -1,5 +1,15 @@
 # sv-router
 
+## 0.8.0
+
+### Minor Changes
+
+- 67a1719: Add hash-based routing
+
+### Patch Changes
+
+- a3d4688: Added onError hook
+
 ## 0.7.2
 
 ### Patch Changes
