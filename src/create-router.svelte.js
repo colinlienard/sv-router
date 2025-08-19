@@ -2,7 +2,6 @@ import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
-import { Navigation } from './navigation.js';
 import {
 	constructPath,
 	constructUrl,
@@ -116,7 +115,6 @@ export function createRouter(r) {
  * 	params?: Record<string, string>;
  * 	search?: import('./index.d.ts').Search;
  * }} options
- * @returns Promise<Error>
  */
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
@@ -135,7 +133,7 @@ function navigate(path, options = {}) {
 }
 
 /**
- * @param {string} path
+ * @param {string} [path]
  * @param {import('./index.d.ts').NavigateOptions} options
  */
 export async function onNavigate(path, options = {}) {
@@ -180,7 +178,7 @@ export async function onNavigate(path, options = {}) {
 	}
 	if (
 		navigationIndex !== currentNavigationIndex ||
-		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)
+		(fromBeforeLoadHook && pendingNavigationIndex !== currentNavigationIndex)
 	) {
 		return;
 	}
@@ -262,7 +260,7 @@ export function onGlobalClick(event) {
 
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
-	void onNavigate(path, {
+	onNavigate(path, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
