@@ -2,7 +2,6 @@ import { BROWSER, DEV } from 'esm-env';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
-import { Navigation } from './navigation.js';
 import {
 	constructPath,
 	constructUrl,
@@ -13,6 +12,7 @@ import {
 	stripBase,
 	updatedLocation,
 } from './helpers/utils.js';
+import { Navigation } from './navigation.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -134,7 +134,7 @@ function navigate(path, options = {}) {
 }
 
 /**
- * @param {string} path
+ * @param {string} [path]
  * @param {import('./index.d.ts').NavigateOptions} options
  */
 export async function onNavigate(path, options = {}) {
@@ -145,7 +145,7 @@ export async function onNavigate(path, options = {}) {
 	navigationIndex++;
 	const currentNavigationIndex = navigationIndex;
 
-	let matchPath = getMatchPath(path);
+	const matchPath = getMatchPath(path);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
 	const search = parseSearch(options.search);
@@ -179,7 +179,7 @@ export async function onNavigate(path, options = {}) {
 	}
 	if (
 		navigationIndex !== currentNavigationIndex ||
-		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)
+		(fromBeforeLoadHook && pendingNavigationIndex !== currentNavigationIndex)
 	) {
 		return;
 	}
