@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.8.1
+
+### Patch Changes
+
+- ed5d4f6: Fix page remounted during view transitions
+- c068db2: Fix break out of layouts when falling back to root catch-all
+
 ## 0.8.0
 
 ### Minor Changes
