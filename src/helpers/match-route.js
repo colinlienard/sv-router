@@ -67,6 +67,7 @@ export function matchRoute(pathname, routes) {
 				}
 				if (breakFromLayouts) {
 					routePart = `(${routePart})`;
+					layouts = [];
 				} else if ('layout' in routes && routes.layout) {
 					layouts.push(routes.layout);
 				}

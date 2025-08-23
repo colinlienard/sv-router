@@ -272,8 +272,16 @@ describe('matchRoute', () => {
 			expect(match).toEqual(PageNotFound);
 		});
 
-		it('should not match any route', () => {
+		it('should break out of layouts when falling back to root catch-all', () => {
 			delete routes['*rest'];
+			routes['(*rest)'] = PageNotFound;
+			const { match, layouts } = matchRoute('/users/notfound', routes);
+			expect(match).toEqual(PageNotFound);
+			expect(layouts).toEqual([]);
+		});
+
+		it('should not match any route', () => {
+			delete routes['(*rest)'];
 			const { match } = matchRoute('/notfound', routes);
 			expect(match).toBeUndefined();
 		});
