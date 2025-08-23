@@ -22,10 +22,10 @@ export const base = {
 /** @type {{ value: import('svelte').Component[] }} */
 export let componentTree = $state({ value: [] });
 
-/** @type {{ value: Record<string, string> }} */
-export let params = $state({ value: {} });
-
 export let location = $state(updatedLocation());
+
+/** @type {{ value: Record<string, string> }} */
+let params = $state({ value: {} });
 
 let meta = $state({ value: {} });
 

@@ -4,18 +4,14 @@
 	import { createRouter } from '../../src/create-router.svelte.js';
 	import Router from '../../src/Router.svelte';
 	import Layout from './Layout.test.svelte';
+	import UserPage from './UserPage.test.svelte';
 
 	export const onPreloadMock = vi.fn();
 
 	export const { p, navigate, isActive, preload, route } = createRouter({
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
 		'/about': createRawSnippet(() => ({ render: () => '<h1>About Us</h1>' })),
-		'/user/:id': createRawSnippet(() => ({
-			render: () => `<h1>User page</h1>`,
-			setup(node) {
-				node.append(' ' + route.params.id);
-			},
-		})),
+		'/user/:id': UserPage,
 		'/metadata': {
 			'/': createRawSnippet(() => ({ render: () => '<h1>Metadata Page</h1>' })),
 			meta: { title: 'Metadata Page' },
