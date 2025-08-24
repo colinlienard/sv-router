@@ -27,7 +27,16 @@ let location = await p.text({
 checkCancel(location);
 if (location === locationPlaceholder) location = '';
 
-const template = await p.select({
+const language = await p.select({
+	message: 'Choose your language.',
+	options: [
+		{ value: 'ts', label: 'TypeScript' },
+		{ value: 'js', label: 'JavaScript' },
+	],
+});
+checkCancel(language);
+
+let template = await p.select({
 	message: 'Choose your template.',
 	options: [
 		{ value: 'file-based', label: 'File-based routing' },
@@ -40,6 +49,7 @@ const target = path.join(process.cwd(), location);
 if (location) {
 	fs.mkdirSync(target, { recursive: true });
 }
+template += '-' + language;
 fs.cpSync(path.join(dirname, '../templates', template), target, { recursive: true });
 fs.renameSync(path.join(target, 'gitignore'), path.join(target, '.gitignore')); // By default, npm doesn't include .gitignore files
 

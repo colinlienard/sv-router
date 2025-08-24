@@ -1,0 +1,13 @@
+{
+	"extends": ["./.router/jsconfig.json"],
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "preserve",
+		"moduleResolution": "bundler",
+		"esModuleInterop": true,
+		"noEmit": true,
+		"allowJs": true,
+		"checkJs": false,
+		"skipLibCheck": true
+	}
+}
