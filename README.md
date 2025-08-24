@@ -26,7 +26,7 @@ A feature-rich yet intuitive routing library for Svelte single-page apps.
 - 🧩 **Familiar API**: Follows established conventions from popular meta frameworks.
 - 🪶 **Lightweight**: Minimal impact on your bundle size.
 - 🚀 **Made for Svelte 5**: True Svelte 5 implementation with the latest features.
-- #️⃣ Hash-based routing: Hash-based routing enables usage in local environments.
+- #️⃣ **Hash-based routing**: Hash-based routing enables usage in local environments.
 
 ## Getting Started
 
