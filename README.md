@@ -1,6 +1,6 @@
 <div align="center">
 
-![](./docs/public/logo.svg | height=128)
+<img src="./docs/public/logo.svg" alt="" width="128px" height="128px">
 
 # sv-router
 
