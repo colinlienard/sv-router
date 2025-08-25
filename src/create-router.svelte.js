@@ -9,6 +9,7 @@ import {
 	stripBase,
 	updatedLocation,
 } from './helpers/utils.js';
+import { Navigation } from './navigation.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -108,11 +109,12 @@ export function createRouter(r) {
 /**
  * @param {string | number} path
  * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
+ * @returns Promise<Error>
  */
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
 		globalThis.history.go(path);
-		return;
+		return new Navigation(`History entry: ${path}`);
 	}
 
 	path = constructPath(path, options.params);
@@ -126,6 +128,7 @@ function navigate(path, options = {}) {
 		path = new URL(path).hash;
 	}
 	onNavigate(path, options);
+	return new Navigation(`${path}${options?.search ?? ''}${options?.hash ?? ''}`);
 }
 
 /** @param {string} [path] */
@@ -159,7 +162,7 @@ export async function onNavigate(path, options = {}) {
 	navigationIndex++;
 	const currentNavigationIndex = navigationIndex;
 
-	let matchPath = getMatchPath(path);
+	const matchPath = getMatchPath(path);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
 	let errorHooks = [];
@@ -190,7 +193,7 @@ export async function onNavigate(path, options = {}) {
 	}
 	if (
 		navigationIndex !== currentNavigationIndex ||
-		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)
+		(fromBeforeLoadHook && pendingNavigationIndex !== currentNavigationIndex)
 	) {
 		return;
 	}
@@ -248,7 +251,7 @@ export function onGlobalClick(event) {
 
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
-	onNavigate(path, {
+	void onNavigate(path, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
 		state,
