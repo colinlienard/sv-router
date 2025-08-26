@@ -2,13 +2,13 @@ import { base } from '../create-router.svelte.js';
 
 /**
  * @param {string} path
- * @param {Record<string, string>} [params]
+ * @param {Record<string, string | number | boolean>} [params]
  * @returns {string}
  */
 export function constructPath(path, params) {
 	if (params) {
 		for (const key in params) {
-			path = path.replace(`:${key}`, params[key]);
+			path = path.replace(`:${key}`, String(params[key]));
 		}
 	}
 
@@ -21,6 +21,24 @@ export function constructPath(path, params) {
 	}
 
 	return path;
+}
+
+/**
+ * @param {string} path
+ * @param {import('../index.d.ts').ConstructUrlOptions & {
+ * 	params?: Record<string, string | number | boolean>;
+ * }} [options]
+ * @returns {string}
+ */
+export function constructUrl(path, options) {
+	let result = constructPath(path, options?.params);
+	if (options?.search) {
+		result += serializeSearch(options.search);
+	}
+	if (options?.hash && !options.hash.startsWith('#')) {
+		result += '#' + options.hash;
+	}
+	return result;
 }
 
 /**
@@ -94,4 +112,64 @@ export function updatedLocation() {
 		state: history.state,
 		hash,
 	};
+}
+
+/**
+ * @param {import('../index.d.ts').Search} [value]
+ * @returns {string | undefined}
+ */
+export function serializeSearch(value) {
+	if (!value) {
+		return;
+	}
+
+	if (typeof value === 'string') {
+		if (!value.startsWith('?')) {
+			value = '?' + value;
+		}
+		return value;
+	}
+
+	const stringValues = Object.fromEntries(
+		Object.entries(value).map(([key, value]) => [key, String(value)]),
+	);
+	const urlSearchParams = new URLSearchParams(stringValues);
+	return '?' + urlSearchParams.toString();
+}
+
+/**
+ * @param {import('../index.d.ts').Search} [value]
+ * @returns {Record<string, string | number | boolean> | undefined}
+ */
+export function parseSearch(value) {
+	if (!value) {
+		return;
+	}
+
+	if (typeof value === 'string') {
+		const searchParams = new URLSearchParams(value);
+		return Object.fromEntries(
+			searchParams.entries().map(([key, value]) => [key, parseSearchValue(value)]),
+		);
+	}
+
+	return value;
+}
+
+/**
+ * @param {string} value
+ * @returns {string | number | boolean}
+ */
+export function parseSearchValue(value) {
+	if (value === 'true') {
+		return true;
+	}
+	if (value === 'false') {
+		return false;
+	}
+	const number = Number(value);
+	if (!Number.isNaN(number)) {
+		return number;
+	}
+	return value;
 }

@@ -22,7 +22,7 @@ You can also pass parameters and additional options:
 
 ```svelte
 <a
-  href={p('/post/:slug', { slug: '123' })}
+  href={p('/post/:slug', { params: { slug: '123' }, search: { q: 'hello' } })}
   data-replace
   data-state="{ from: 'home' }"
 >
@@ -50,7 +50,7 @@ navigate('/post/:slug', {
 		slug: '123',
 	},
 	replace: true,
-	search: '?q=hello',
+	search: { q: 'hello' },
 	state: '{ from: "home" }',
 	hash: 'first-section',
 });
