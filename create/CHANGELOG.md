@@ -1,5 +1,11 @@
 # create-sv-router
 
+## 0.2.0
+
+### Minor Changes
+
+- b0470f0: Add option between js and ts
+
 ## 0.1.2
 
 ### Patch Changes
