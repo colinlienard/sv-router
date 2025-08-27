@@ -93,7 +93,7 @@ export function createRouter(r) {
 				return /** @type {import('./index.d.ts').Path<T>} */ (stripBase(location.pathname));
 			},
 			get search() {
-				return parseSearch(location.search) || {};
+				return parseSearch(location.search);
 			},
 			get state() {
 				return location.state;

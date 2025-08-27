@@ -59,19 +59,23 @@ export { shell as searchParams };
 
 /** @param {string} [search] */
 export function syncSearchParams(search) {
-	if (searchParams.toString() !== search) {
-		searchParams = new SvelteURLSearchParams();
-		const newSearchParams = new URLSearchParams(search);
-		for (const [key, value] of newSearchParams.entries()) {
-			searchParams.append(key, value);
+	if (searchParams.toString() === search) {
+		return;
+	}
+	const newSearch = new URLSearchParams(search);
+	for (const [key, value] of newSearch) {
+		searchParams.set(key, value);
+	}
+	for (const key of searchParams.keys()) {
+		if (!newSearch.has(key)) {
+			searchParams.delete(key);
 		}
 	}
 }
 
 /** @param {{ replace?: boolean }} [options] */
 function updateUrlSearchParams(options) {
-	let url = new URL(globalThis.location.toString());
+	const url = new URL(globalThis.location.toString());
 	url.search = searchParams.toString();
-
 	globalThis.history[options?.replace ? 'replaceState' : 'pushState']({}, '', url);
 }

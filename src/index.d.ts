@@ -232,7 +232,7 @@ export type HooksContext = {
 	meta: RouteMeta;
 	pathname: string;
 	replace?: boolean;
-	search?: Record<string, string | number | boolean>;
+	search: Record<string, string | number | boolean>;
 	state?: string;
 };
 

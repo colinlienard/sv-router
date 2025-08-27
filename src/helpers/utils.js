@@ -139,11 +139,11 @@ export function serializeSearch(value) {
 
 /**
  * @param {import('../index.d.ts').Search} [value]
- * @returns {Record<string, string | number | boolean> | undefined}
+ * @returns {Record<string, string | number | boolean>}
  */
 export function parseSearch(value) {
 	if (!value) {
-		return;
+		return {};
 	}
 
 	if (typeof value === 'string') {
@@ -161,6 +161,9 @@ export function parseSearch(value) {
  * @returns {string | number | boolean}
  */
 export function parseSearchValue(value) {
+	if (value === '') {
+		return '';
+	}
 	if (value === 'true') {
 		return true;
 	}
