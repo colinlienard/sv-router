@@ -29,7 +29,10 @@ Constructs a path with type-safe parameter substitution.
 **Parameters:**
 
 - `path` - The route path
-- `params` - (Optional) Parameters to substitute in the path
+- `options` - (Optional) Navigation options
+  - `params` - Parameters to substitute in the path
+  - `search` - Query string
+  - `hash` - URL hash fragment
 
 **Returns:** A string representing the constructed path
 

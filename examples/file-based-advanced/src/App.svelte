@@ -9,7 +9,8 @@
 <a href={p('/a/more/nested/route')} use:isActiveLink>A more nested route</a>
 <a href={p('/unauthorized')}>Unauthorized</a>
 <button
-	onclick={() => navigate('/posts/:slug', { params: { slug: 'static' }, search: 'hello=world' })}
+	onclick={() =>
+		navigate('/posts/:slug', { params: { slug: 'static' }, search: { hello: 'world' } })}
 >
 	Programmatic
 </button>

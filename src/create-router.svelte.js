@@ -4,8 +4,11 @@ import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
 import {
 	constructPath,
+	constructUrl,
 	join,
+	parseSearch,
 	resolveRouteComponents,
+	serializeSearch,
 	stripBase,
 	updatedLocation,
 } from './helpers/utils.js';
@@ -70,7 +73,7 @@ export function createRouter(r) {
 	preloadOnHover(routes);
 
 	return {
-		p: constructPath,
+		p: constructUrl,
 		navigate,
 		isActive,
 		async preload(pathname) {
@@ -90,7 +93,7 @@ export function createRouter(r) {
 				return /** @type {import('./index.d.ts').Path<T>} */ (stripBase(location.pathname));
 			},
 			get search() {
-				return location.search;
+				return parseSearch(location.search);
 			},
 			get state() {
 				return location.state;
@@ -107,7 +110,10 @@ export function createRouter(r) {
 
 /**
  * @param {string | number} path
- * @param {import('./index.d.ts').NavigateOptions & { params?: Record<string, string> }} options
+ * @param {import('./index.d.ts').NavigateOptions & {
+ * 	params?: Record<string, string>;
+ * 	search?: import('./index.d.ts').Search;
+ * }} options
  */
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
@@ -116,35 +122,12 @@ function navigate(path, options = {}) {
 	}
 
 	path = constructPath(path, options.params);
-	if (options.search && !options.search.startsWith('?')) {
-		options.search = '?' + options.search;
-	}
-	if (options.hash && !options.hash.startsWith('#') && base.name !== '#') {
-		options.hash = '#' + options.hash;
-	}
 	if (base.name === '#') {
 		path = new URL(path).hash;
+	} else if (options.hash && !options.hash.startsWith('#')) {
+		options.hash = '#' + options.hash;
 	}
 	onNavigate(path, options);
-}
-
-/** @param {string} [path] */
-function getMatchPath(path) {
-	let matchPath = '';
-
-	if (path) {
-		matchPath = path;
-	} else if (base.name === '#') {
-		matchPath = globalThis.location.hash.slice(1);
-	} else {
-		matchPath = globalThis.location.pathname;
-	}
-
-	if (base.name && matchPath.startsWith(base.name)) {
-		matchPath = matchPath.slice(base.name.length) || '/';
-	}
-
-	return stripBase(matchPath);
 }
 
 /**
@@ -162,16 +145,19 @@ export async function onNavigate(path, options = {}) {
 	let matchPath = getMatchPath(path);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
+	const search = parseSearch(options.search);
+	const hooksContext = { pathname: matchPath, meta: newMeta, ...options, search };
+
 	let errorHooks = [];
 	for (const hook of hooks) {
 		try {
 			const { beforeLoad } = hook;
 			errorHooks.push(hook);
 			pendingNavigationIndex = currentNavigationIndex;
-			await beforeLoad?.({ pathname: matchPath, meta: newMeta, ...options });
+			await beforeLoad?.(hooksContext);
 		} catch (error) {
 			for (const { onError } of errorHooks) {
-				void onError?.(error, { pathname: matchPath, meta: newMeta, ...options });
+				void onError?.(error, hooksContext);
 			}
 			return;
 		}
@@ -184,7 +170,7 @@ export async function onNavigate(path, options = {}) {
 		routeComponents = await resolveRouteComponents(match ? [...layouts, match] : layouts);
 	} catch (error) {
 		for (const { onError } of hooks) {
-			void onError?.(error, { pathname: matchPath, meta: newMeta, ...options });
+			void onError?.(error, hooksContext);
 		}
 		throw error;
 	}
@@ -196,18 +182,18 @@ export async function onNavigate(path, options = {}) {
 	}
 
 	if (path) {
-		let url = new URL(globalThis.location.toString());
-		url.search = '';
-		if (options.search) url.search = options.search;
+		const search = serializeSearch(options.search);
+		const url = new URL(globalThis.location.toString());
+		url.search = search || '';
+		url.hash = options.hash || '';
 		if (base.name === '#') {
 			url.hash = path;
 		} else {
-			if (options.hash) path += options.hash;
 			url.pathname = base.name ? join(base.name, path) : path;
 		}
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
 		globalThis.history[historyMethod](options.state || {}, '', url.toString());
-		syncSearchParams(options.search);
+		syncSearchParams(search);
 	} else {
 		syncSearchParams(globalThis.location.search);
 	}
@@ -228,8 +214,27 @@ export async function onNavigate(path, options = {}) {
 	}
 
 	for (const { afterLoad } of hooks) {
-		void afterLoad?.({ pathname: matchPath, meta: newMeta, ...options });
+		void afterLoad?.(hooksContext);
 	}
+}
+
+/** @param {string} [path] */
+function getMatchPath(path) {
+	let matchPath = '';
+
+	if (path) {
+		matchPath = path;
+	} else if (base.name === '#') {
+		matchPath = globalThis.location.hash.slice(1);
+	} else {
+		matchPath = globalThis.location.pathname;
+	}
+
+	if (base.name && matchPath.startsWith(base.name)) {
+		matchPath = matchPath.slice(base.name.length) || '/';
+	}
+
+	return stripBase(matchPath);
 }
 
 /** @param {Event} event */

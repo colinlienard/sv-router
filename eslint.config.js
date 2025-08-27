@@ -33,7 +33,7 @@ export default [
 			},
 		},
 	},
-	eslintPluginUnicorn.configs['flat/recommended'],
+	eslintPluginUnicorn.configs['recommended'],
 	{
 		rules: {
 			'unicorn/error-message': 'off',
@@ -44,7 +44,10 @@ export default [
 					ignore: [/^(.*)\.svelte$/],
 				},
 			],
+			'unicorn/no-array-callback-reference': 'off',
+			'unicorn/no-array-for-each': 'off',
 			'unicorn/no-array-reduce': 'off',
+			'unicorn/no-null': 'off',
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/prefer-ternary': 'off',
 		},

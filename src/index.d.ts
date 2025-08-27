@@ -183,7 +183,7 @@ export type RouterApi<T extends Routes> = {
 		/** The reactive pathname of the URL. */
 		pathname: (Path<T, true> & {}) | (string & {});
 		/** The reactive query string part of the URL. */
-		search: string;
+		search: Record<string, string | number | boolean>;
 		/** The reactive history state that can be passed to the `navigate` function. */
 		state: unknown;
 		/** The reactive hash part of the URL. */
@@ -198,7 +198,9 @@ export type Path<T extends Routes, AnyParam extends boolean = false> = RemovePar
 >;
 
 export type ConstructPathArgs<TPath extends string> = {
-	[Path in TPath]: PathParams<Path> extends never ? [Path] : [Path, PathParams<Path>];
+	[Path in TPath]: PathParams<Path> extends never
+		? [Path] | [Path, ConstructUrlOptions]
+		: [Path, ConstructUrlOptions & { params: PathParams<Path> }];
 }[TPath];
 
 export type IsActiveArgs<
@@ -223,19 +225,21 @@ export type AllParams<TRoutes extends Routes> = Partial<
 	Record<ExtractParams<RemoveParenthesis<RecursiveKeys<TRoutes>>>, string>
 >;
 
+export type Search = string | Record<string, string | number | boolean>;
+
 export type HooksContext = {
 	hash?: string;
 	meta: RouteMeta;
 	pathname: string;
 	replace?: boolean;
-	search?: string;
+	search: Record<string, string | number | boolean>;
 	state?: string;
 };
 
 export type NavigateOptions =
 	| {
 			replace?: boolean;
-			search?: string;
+			search?: Search;
 			state?: string;
 			hash?: string;
 			scrollToTop?: ScrollBehavior | false;
@@ -243,17 +247,31 @@ export type NavigateOptions =
 	  }
 	| undefined;
 
-export type SearchParams = Omit<URLSearchParams, 'append' | 'delete' | 'set' | 'sort'> & {
-	append: (name: string, value: string, options?: { replace?: boolean }) => void;
-	delete: (name: string, value?: string, options?: { replace?: boolean }) => void;
-	set: (name: string, value: string, options?: { replace?: boolean }) => void;
-	sort: (options?: { replace?: boolean }) => void;
+export type ConstructUrlOptions =
+	| {
+			search?: Search;
+			hash?: string;
+	  }
+	| undefined;
+
+export type SearchParams = Omit<
+	URLSearchParams,
+	'append' | 'delete' | 'entries' | 'get' | 'getAll' | 'set' | 'sort' | 'values'
+> & {
+	append(name: string, value: string | number | boolean, options?: { replace?: boolean }): void;
+	delete(name: string, value?: string | number | boolean, options?: { replace?: boolean }): void;
+	entries(): IterableIterator<[string, string | number | boolean]>;
+	get(name: string): string | number | boolean | null;
+	getAll(name: string): (string | number | boolean)[];
+	set(name: string, value: string | number | boolean, options?: { replace?: boolean }): void;
+	sort(options?: { replace?: boolean }): void;
+	values(): IterableIterator<string | number | boolean>;
 };
 
 type NavigateArgs<T extends string> =
 	| (PathParams<T> extends never
-			? [T] | [T, NavigateOptions]
-			: [T, NavigateOptions & { params: PathParams<T> }])
+			? [T] | [T, Omit<NavigateOptions, 'search'> & { search: Search }]
+			: [T, Omit<NavigateOptions, 'search'> & { search: Search; params: PathParams<T> }])
 	| [number];
 
 type StripNonRoutes<T extends Routes> = {

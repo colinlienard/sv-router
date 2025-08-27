@@ -1,5 +1,5 @@
 import { matchRoute } from './match-route.js';
-import { resolveRouteComponents } from './utils.js';
+import { parseSearch, resolveRouteComponents } from './utils.js';
 
 /**
  * @param {import('../index.js').Routes} routes
@@ -9,7 +9,12 @@ import { resolveRouteComponents } from './utils.js';
 export async function preload(routes, path, options) {
 	const { match, layouts, hooks, meta } = matchRoute(path, routes);
 	for (const { onPreload } of hooks) {
-		void onPreload?.({ pathname: path, meta, ...options });
+		void onPreload?.({
+			pathname: path,
+			meta,
+			...options,
+			search: parseSearch(options?.search),
+		});
 	}
 	await resolveRouteComponents(match ? [...layouts, match] : layouts);
 }
