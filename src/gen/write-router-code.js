@@ -32,7 +32,10 @@ export function writeRouterCode() {
 		writeFileIfDifferent(genConfig.tsconfigPath, JSON.stringify(tsConfig, undefined, 2));
 
 		// Write `.router/router.ts` file
-		const routerCode = generateRouterCode(genConfig.routesPath, { allLazy: genConfig.allLazy });
+		const routerCode = generateRouterCode(genConfig.routesPath, {
+			allLazy: genConfig.allLazy,
+			js: genConfig.routesInJs,
+		});
 		const written = writeFileIfDifferent(genConfig.routerPath, routerCode);
 
 		if (written) {

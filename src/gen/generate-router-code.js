@@ -18,7 +18,7 @@ const META_FILENAME_REGEX = /(?<=[/.]|^)(meta)(\.svelte)?\.(js|ts)$/; // meta.js
 
 /**
  * @param {string} routesPath
- * @param {{ allLazy?: boolean }} [options]
+ * @param {{ allLazy?: boolean; js?: boolean }} [options]
  * @returns {string}
  */
 export function generateRouterCode(routesPath, options) {
@@ -130,10 +130,10 @@ function filePathToRoute(filename) {
 /**
  * @param {GeneratedRoutes} routes
  * @param {string} routesPath
- * @param {{ allLazy?: boolean }} [options]
+ * @param {{ allLazy?: boolean; js?: boolean }} [options]
  * @returns {string}
  */
-export function createRouterCode(routes, routesPath, { allLazy = false } = {}) {
+export function createRouterCode(routes, routesPath, { allLazy = false, js = false } = {}) {
 	if (!routesPath.endsWith('/')) {
 		routesPath += '/';
 	}
@@ -178,8 +178,9 @@ export function createRouterCode(routes, routesPath, { allLazy = false } = {}) {
 		...imports,
 		'',
 		`const routes = ${stringifiedRoutes};`,
-		'export type Routes = typeof routes;',
+		...(js ? [] : ['export type Routes = typeof routes;']),
 		'export const { p, navigate, isActive, preload, route } = createRouter(routes);',
+		'',
 	].join('\n');
 }
 

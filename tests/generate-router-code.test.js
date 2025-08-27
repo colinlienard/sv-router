@@ -31,7 +31,8 @@ const routes = {
   '/posts/comments/:id': () => import('../a/fake/path/posts.comments.[id].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);`);
+export const { p, navigate, isActive, preload, route } = createRouter(routes);
+`);
 	});
 
 	it('should generate the router code (tree)', () => {
@@ -68,7 +69,8 @@ const routes = {
   }
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);`);
+export const { p, navigate, isActive, preload, route } = createRouter(routes);
+`);
 	});
 });
 
@@ -261,7 +263,8 @@ const routes = {
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);`);
+export const { p, navigate, isActive, preload, route } = createRouter(routes);
+`);
 	});
 
 	it('should generate the router code with only lazy routes', () => {
@@ -291,7 +294,20 @@ const routes = {
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);`);
+export const { p, navigate, isActive, preload, route } = createRouter(routes);
+`);
+	});
+
+	it('should generate the router code with no types', () => {
+		const result = createRouterCode({ '/': 'index.svelte' }, './routes', { js: true });
+		expect(result).toBe(`import { createRouter } from 'sv-router';
+import Index from './routes/index.svelte';
+
+const routes = {
+  '/': Index
+};
+export const { p, navigate, isActive, preload, route } = createRouter(routes);
+`);
 	});
 });
 
