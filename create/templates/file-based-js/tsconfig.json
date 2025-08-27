@@ -1,13 +1,15 @@
 {
-	"extends": ["./.router/jsconfig.json"],
+	"extends": ["./.router/tsconfig.json"],
 	"compilerOptions": {
 		"target": "ES2020",
 		"module": "preserve",
 		"moduleResolution": "bundler",
 		"esModuleInterop": true,
+		"strict": true,
 		"noEmit": true,
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true,
 		"allowJs": true,
-		"checkJs": false,
-		"skipLibCheck": true
+		"checkJs": true
 	}
 }

@@ -31,7 +31,7 @@ const language = await p.select({
 	message: 'Choose your language.',
 	options: [
 		{ value: 'ts', label: 'TypeScript' },
-		{ value: 'js', label: 'JavaScript' },
+		{ value: 'js', label: 'JavaScript (JSDoc)' },
 	],
 });
 checkCancel(language);

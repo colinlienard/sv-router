@@ -4,10 +4,12 @@
 		"module": "preserve",
 		"moduleResolution": "bundler",
 		"esModuleInterop": true,
+		"strict": true,
 		"noEmit": true,
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true,
 		"allowJs": true,
-		"checkJs": false,
-		"skipLibCheck": true
+		"checkJs": true
 	},
 	"include": ["src/**/*.js", "src/**/*.svelte"]
 }

@@ -1,4 +1,6 @@
 import { mount } from 'svelte';
 import App from './App.svelte';
 
-mount(App, { target: document.querySelector('#app') });
+mount(App, {
+	target: /** @type {HTMLElement} */ (document.querySelector('#app')),
+});
