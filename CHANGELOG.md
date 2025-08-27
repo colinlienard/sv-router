@@ -1,5 +1,15 @@
 # sv-router
 
+## 0.9.0
+
+### Minor Changes
+
+- eb563d5: Support objects for search params
+
+### Patch Changes
+
+- b0470f0: Remove types in generated code if router has js: true
+
 ## 0.8.1
 
 ### Patch Changes
