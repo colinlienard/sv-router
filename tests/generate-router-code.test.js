@@ -214,7 +214,7 @@ describe('createRouteMap', () => {
 		const result = createRouteMap([
 			'index.svelte',
 			{
-				name: '(group)',
+				name: '_group',
 				tree: ['about.svelte', 'layout.svelte', 'hooks.ts', 'meta.ts'],
 			},
 		]);
@@ -222,10 +222,10 @@ describe('createRouteMap', () => {
 		expect(result).toEqual({
 			'/': 'index.svelte',
 			'/about': {
-				'/': '(group)/about.svelte',
-				layout: '(group)/layout.svelte',
-				hooks: '(group)/hooks.ts',
-				meta: '(group)/meta.ts',
+				'/': '_group/about.svelte',
+				layout: '_group/layout.svelte',
+				hooks: '_group/hooks.ts',
+				meta: '_group/meta.ts',
 			},
 		});
 	});
@@ -234,7 +234,7 @@ describe('createRouteMap', () => {
 		const conflictTree = [
 			'index.svelte',
 			{
-				name: '(group)',
+				name: '_group',
 				tree: ['index.svelte'],
 			},
 		];
@@ -259,11 +259,11 @@ describe('createRouterCode', () => {
 				meta: 'posts/comments/meta.svelte.ts',
 			},
 		},
-		'/dashboard': {
-			'/': '(dashboard)/dashboard.svelte',
-			layout: '(dashboard)/layout.svelte',
-			hooks: '(dashboard)/hooks.ts',
-			meta: '(dashboard)/meta.ts',
+		'/contact': {
+			'/': '_group/contact.svelte',
+			layout: '_group/layout.svelte',
+			hooks: '_group/hooks.ts',
+			meta: '_group/meta.ts',
 		},
 		'*notfound': '[...notfound].lazy.svelte',
 	};
@@ -280,10 +280,10 @@ import postsMeta from './routes/posts/meta';
 import PostsCommentsCommentId from './routes/posts/comments/[commentId].svelte';
 import postsCommentsHooks from './routes/posts/comments/hooks.svelte';
 import postsCommentsMeta from './routes/posts/comments/meta.svelte';
-import DashboardDashboard from './routes/(dashboard)/dashboard.svelte';
-import DashboardLayout from './routes/(dashboard)/layout.svelte';
-import dashboardHooks from './routes/(dashboard)/hooks';
-import dashboardMeta from './routes/(dashboard)/meta';
+import GroupContact from './routes/_group/contact.svelte';
+import GroupLayout from './routes/_group/layout.svelte';
+import groupHooks from './routes/_group/hooks';
+import groupMeta from './routes/_group/meta';
 
 const routes = {
   '/': Index,
@@ -301,11 +301,11 @@ const routes = {
       'meta': postsCommentsMeta
     }
   },
-  '/dashboard': {
-    '/': DashboardDashboard,
-    'layout': DashboardLayout,
-    'hooks': dashboardHooks,
-    'meta': dashboardMeta
+  '/contact': {
+    '/': GroupContact,
+    'layout': GroupLayout,
+    'hooks': groupHooks,
+    'meta': groupMeta
   },
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
@@ -321,8 +321,8 @@ import postsHooks from './routes/posts/hooks';
 import postsMeta from './routes/posts/meta';
 import postsCommentsHooks from './routes/posts/comments/hooks.svelte';
 import postsCommentsMeta from './routes/posts/comments/meta.svelte';
-import dashboardHooks from './routes/(dashboard)/hooks';
-import dashboardMeta from './routes/(dashboard)/meta';
+import groupHooks from './routes/_group/hooks';
+import groupMeta from './routes/_group/meta';
 
 const routes = {
   '/': () => import('./routes/index.svelte'),
@@ -340,11 +340,11 @@ const routes = {
       'meta': postsCommentsMeta
     }
   },
-  '/dashboard': {
-    '/': () => import('./routes/(dashboard)/dashboard.svelte'),
-    'layout': () => import('./routes/(dashboard)/layout.svelte'),
-    'hooks': dashboardHooks,
-    'meta': dashboardMeta
+  '/contact': {
+    '/': () => import('./routes/_group/contact.svelte'),
+    'layout': () => import('./routes/_group/layout.svelte'),
+    'hooks': groupHooks,
+    'meta': groupMeta
   },
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
@@ -388,22 +388,22 @@ describe('pathToCorrectCasing', () => {
 	});
 
 	it('should handle paths with route group', () => {
-		const result = pathToCorrectCasing('(group)/about.svelte');
-		expect(result).toBe('GroupAbout');
+		const result = pathToCorrectCasing('_group/contact.svelte');
+		expect(result).toBe('GroupContact');
 	});
 
 	it('should handle nested route group with layout', () => {
-		const result = pathToCorrectCasing('(group)/layout.svelte');
+		const result = pathToCorrectCasing('_group/layout.svelte');
 		expect(result).toBe('GroupLayout');
 	});
 
 	it('should handle nested route group with hooks', () => {
-		const result = pathToCorrectCasing('(group)/hooks.ts');
+		const result = pathToCorrectCasing('_group/hooks.ts');
 		expect(result).toBe('groupHooks');
 	});
 
 	it('should handle nested route group with meta', () => {
-		const result = pathToCorrectCasing('(group)/meta.ts');
+		const result = pathToCorrectCasing('_group/meta.ts');
 		expect(result).toBe('groupMeta');
 	});
 

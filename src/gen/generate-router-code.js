@@ -110,7 +110,7 @@ export function createRouteMap(fileTree, prefix = '') {
 			result['/' + filePathToRoute(entry.replace('.svelte', ''))] = prefix + entry;
 		} else {
 			const entryName = filePathToRoute(entry.name);
-			const isRouteGroup = /^\(.*\)$/.test(entry.name) && !/^\(\[/.test(entry.name);
+			const isRouteGroup = /^_[^_[]/.test(entry.name);
 
 			if (isRouteGroup) {
 				const childMap = createRouteMap(entry.tree, prefix + entryName + '/');
@@ -161,7 +161,7 @@ function mergeRouteGroup(result, childMap) {
 		if (result[key]) {
 			throw new Error(`Route conflict at \`${key}\``);
 		}
-		
+
 		result[key] = routeWithGroupFiles;
 	}
 }
@@ -228,7 +228,6 @@ export function createRouterCode(routes, routesPath, { allLazy = false, js = fal
  * @returns {string}
  */
 export function pathToCorrectCasing(value) {
-	value = value.replaceAll(/\(([^)]+)\)/g, '$1');
 	const parts = /** @type {string[]} */ ([]);
 
 	/** @param {RegExp} regex */
@@ -254,6 +253,7 @@ export function pathToCorrectCasing(value) {
 	parts.push(...lastPart.split('-'));
 
 	const uppercased = parts.map((part, index) => {
+		part = part.replace(/^_+/, '');
 		if (index === 0 && (lastPart === 'hooks' || lastPart === 'meta')) return part;
 		part = part.replace(/^\[(.*)\]$/, '$1');
 		return part.charAt(0).toUpperCase() + part.slice(1);
