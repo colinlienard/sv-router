@@ -133,6 +133,9 @@ export function serializeSearch(value) {
 	const stringValues = Object.fromEntries(
 		Object.entries(value).map(([key, value]) => [key, String(value)]),
 	);
+	if (Object.keys(stringValues).length === 0) {
+		return;
+	}
 	const urlSearchParams = new URLSearchParams(stringValues);
 	return '?' + urlSearchParams.toString();
 }
