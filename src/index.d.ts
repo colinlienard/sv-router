@@ -12,6 +12,9 @@ import type { Action } from 'svelte/action';
  */
 export const isActiveLink: IsActiveLink;
 
+/** Create a search string from the search object that is provided in hooks. */
+export function serializeSearch(search: Search): string | undefined;
+
 /**
  * Setup a new router instance with the given routes.
  *
