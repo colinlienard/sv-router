@@ -18,13 +18,14 @@ You can add a `layout.svelte` inside a route group to wrap all its child routes,
 
 ```sh
 routes
+├── about.svelte             ➜ /about
 └── _dashboard
     ├── layout.svelte
     ├── index.svelte         ➜ /
     └── settings.svelte      ➜ /settings
 ```
 
-Here, `layout.svelte` is shared across `/` and `/settings`, even though the `_dashboard` folder doesn’t show up in the path.
+Here, `layout.svelte` is shared across `/` and `/settings`, even though the `_dashboard` folder doesn’t show up in the path, and `/about` remains unwrapped even though it's at the same level as the other routes.
 
 > [!TIP]
 > You can also combine it with `meta` and `hooks`.

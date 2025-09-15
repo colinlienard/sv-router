@@ -28,6 +28,9 @@ This layout component must render its children:
 > [!NOTE]
 > When navigating between routes that share the same layout, the layout component persists without being recreated. This prevents unnecessary side effect triggers
 
+> [!NOTE]
+> To apply different layouts to routes at the same level, see [Route Groups](/guide/file-based/route-groups).
+
 > [!WARNING]
 > Layouts can only be used in tree structure, which means that doing the following will not work:
 >
