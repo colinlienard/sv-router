@@ -16,9 +16,9 @@ When users hover over this link, the About page component will begin loading in 
 
 There are different preload strategies available:
 
-- `hover` (default): Preloads when the user hovers over the link
-- `viewport`: Preloads when the link becomes visible on screen
-- `predict`: Preloads when the pointer approaches the link, anticipating a click.
+- `hover` (default): Preloads when the user hovers over the link.
+- `viewport`: Preloads when the link becomes visible on screen.
+- `predict`: Preloads based on estimated future pointer positions (using the [`getPredictedEvents()`](https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent/getPredictedEvents) method).
 
 ## Programmatically
 
