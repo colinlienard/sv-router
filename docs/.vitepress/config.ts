@@ -181,6 +181,7 @@ function getSidebarGuide(mode: 'code-based' | 'file-based') {
 				{ text: 'Code Splitting', link: '/code-splitting' },
 				{ text: 'Preloading', link: '/preloading' },
 				{ text: 'Route Metadata', link: '/route-metadata' },
+				{ text: 'Route Groups', link: '/route-groups' },
 				{ text: 'Scroll Behavior', link: '/scroll-behavior' },
 				{ text: 'View Transitions', link: '/view-transitions' },
 			],

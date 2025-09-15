@@ -110,8 +110,15 @@ export function createRouteMap(fileTree, prefix = '') {
 			result['/' + filePathToRoute(entry.replace('.svelte', ''))] = prefix + entry;
 		} else {
 			const entryName = filePathToRoute(entry.name);
-			const paramFolder = entryName.replace(/^\[(.*)\]$/, ':$1');
-			result['/' + paramFolder] = createRouteMap(entry.tree, prefix + entryName + '/');
+			const isRouteGroup = /^_[^_[]/.test(entry.name);
+
+			if (isRouteGroup) {
+				const childMap = createRouteMap(entry.tree, prefix + entryName + '/');
+				mergeRouteGroup(result, childMap);
+			} else {
+				const paramFolder = entryName.replace(/^\[(.*)\]$/, ':$1');
+				result['/' + paramFolder] = createRouteMap(entry.tree, prefix + entryName + '/');
+			}
 		}
 	}
 	return result;
@@ -125,6 +132,38 @@ export function createRouteMap(fileTree, prefix = '') {
  */
 function filePathToRoute(filename) {
 	return filename.replaceAll(/\.(?!\.\.)/g, '/');
+}
+
+/**
+ * @param {GeneratedRoutes} result
+ * @param {GeneratedRoutes} childMap
+ */
+function mergeRouteGroup(result, childMap) {
+	const layout = childMap.layout;
+	const hooks = childMap.hooks;
+	const meta = childMap.meta;
+
+	for (const [key, val] of Object.entries(childMap)) {
+		if (key === 'layout' || key === 'hooks' || key === 'meta') {
+			continue;
+		}
+
+		/** @type {GeneratedRoutes} */
+		let routeWithGroupFiles = {};
+		if (typeof val === 'string') {
+			routeWithGroupFiles = { '/': val };
+		} else {
+			routeWithGroupFiles = { ...val };
+		}
+		if (layout) routeWithGroupFiles.layout = layout;
+		if (hooks) routeWithGroupFiles.hooks = hooks;
+		if (meta) routeWithGroupFiles.meta = meta;
+		if (result[key]) {
+			throw new Error(`Route conflict at \`${key}\``);
+		}
+
+		result[key] = routeWithGroupFiles;
+	}
 }
 
 /**
@@ -214,6 +253,7 @@ export function pathToCorrectCasing(value) {
 	parts.push(...lastPart.split('-'));
 
 	const uppercased = parts.map((part, index) => {
+		part = part.replace(/^_+/, '');
 		if (index === 0 && (lastPart === 'hooks' || lastPart === 'meta')) return part;
 		part = part.replace(/^\[(.*)\]$/, '$1');
 		return part.charAt(0).toUpperCase() + part.slice(1);
