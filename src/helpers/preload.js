@@ -3,6 +3,7 @@ import { parseSearch, resolveRouteComponents, stripBase } from './utils.js';
 
 const PREDICT_CONE_LENGTH = 200;
 const PREDICT_CONE_ANGLE = Math.PI / 6;
+const PREDICT_TIMEOUT = 50;
 
 /**
  * @param {import('../index.js').Routes} routes
@@ -47,11 +48,15 @@ export function preloadOnHover(routes) {
 	/** @type {NodeJS.Timeout | null} */
 	let throttleTimer = null;
 	function pointerMoveListener(/** @type {PointerEvent} */ event) {
-		if (!event.getPredictedEvents) return;
-		if (throttleTimer || predictedLinks.size === 0) return;
+		if (!event.getPredictedEvents || throttleTimer) return;
 		throttleTimer = setTimeout(() => {
 			throttleTimer = null;
-		}, 100);
+		}, PREDICT_TIMEOUT);
+
+		if (predictedLinks.size === 0) {
+			document.removeEventListener('pointermove', pointerMoveListener);
+			return;
+		}
 
 		const predictedEvents = event.getPredictedEvents();
 		if (predictedEvents.length < 2) return;
@@ -97,41 +102,37 @@ export function preloadOnHover(routes) {
 		ctx.closePath();
 		ctx.fill();
 		ctx.stroke();
-		setTimeout(() => canvas.remove(), 100);
+		setTimeout(() => canvas.remove(), PREDICT_TIMEOUT);
 		*/
 
-		for (const link of predictedLinks) {
-			if (link.isConnected) {
-				outer: for (const link of predictedLinks) {
-					const rect = link.getBoundingClientRect();
-					const points = [
-						{ x: rect.left, y: rect.top },
-						{ x: rect.right, y: rect.top },
-						{ x: rect.left, y: rect.bottom },
-						{ x: rect.right, y: rect.bottom },
-					];
-
-					for (const point of points) {
-						const toPointX = point.x - currentX;
-						const toPointY = point.y - currentY;
-						const distToPoint = Math.hypot(toPointX, toPointY);
-						if (distToPoint > PREDICT_CONE_LENGTH || distToPoint < 0) continue;
-
-						const toPointDirX = toPointX / distToPoint;
-						const toPointDirY = toPointY / distToPoint;
-						const dotProduct = dirX * toPointDirX + dirY * toPointDirY;
-						const angle = Math.acos(Math.max(-1, Math.min(1, dotProduct)));
-						if (angle <= PREDICT_CONE_ANGLE) {
-							anchorPreload(link);
-							predictedLinks.delete(link);
-							break outer;
-						}
-					}
-				}
-			} else {
+		outer: for (const link of predictedLinks) {
+			if (!link.isConnected) {
 				predictedLinks.delete(link);
-				if (predictedLinks.size === 0) {
-					document.removeEventListener('pointermove', pointerMoveListener);
+			}
+			const rect = link.getBoundingClientRect();
+			const points = [
+				{ x: rect.left, y: rect.top },
+				{ x: rect.right, y: rect.top },
+				{ x: rect.left, y: rect.bottom },
+				{ x: rect.right, y: rect.bottom },
+				{ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+			];
+
+			for (const point of points) {
+				const toPointX = point.x - currentX;
+				const toPointY = point.y - currentY;
+				const distToPoint = Math.hypot(toPointX, toPointY);
+				if (distToPoint > PREDICT_CONE_LENGTH || distToPoint < 0.001) continue;
+
+				const toPointDirX = toPointX / distToPoint;
+				const toPointDirY = toPointY / distToPoint;
+				const dotProduct = dirX * toPointDirX + dirY * toPointDirY;
+				const angle = Math.acos(Math.max(-1, Math.min(1, dotProduct)));
+
+				if (angle <= PREDICT_CONE_ANGLE) {
+					anchorPreload(link);
+					predictedLinks.delete(link);
+					continue outer;
 				}
 			}
 		}
