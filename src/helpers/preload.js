@@ -1,6 +1,9 @@
 import { matchRoute } from './match-route.js';
 import { parseSearch, resolveRouteComponents, stripBase } from './utils.js';
 
+const PREDICT_CONE_LENGTH = 200;
+const PREDICT_CONE_ANGLE = Math.PI / 6;
+
 /**
  * @param {import('../index.js').Routes} routes
  * @param {string} path
@@ -50,76 +53,78 @@ export function preloadOnHover(routes) {
 			throttleTimer = null;
 		}, 100);
 
+		const predictedEvents = event.getPredictedEvents();
+		if (predictedEvents.length < 2) return;
+
+		const currentX = event.clientX;
+		const currentY = event.clientY;
+		const lastPredicted = predictedEvents.at(-1);
+		if (!lastPredicted) return;
+		const dx = lastPredicted.clientX - currentX;
+		const dy = lastPredicted.clientY - currentY;
+
+		const distance = Math.hypot(dx, dy);
+		if (distance < 2) return;
+		const dirX = dx / distance;
+		const dirY = dy / distance;
+
+		// Visualize the cone (comment out when not debugging)
+		/*
+		const canvas = document.createElement('canvas');
+		canvas.style.position = 'fixed';
+		canvas.style.left = '0';
+		canvas.style.top = '0';
+		canvas.style.width = '100%';
+		canvas.style.height = '100%';
+		canvas.style.pointerEvents = 'none';
+		canvas.style.zIndex = '99999';
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		document.body.append(canvas);
+		const ctx = canvas.getContext('2d');
+		ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+		ctx.strokeStyle = 'rgba(255, 0, 0, 0.6)';
+		ctx.lineWidth = 2;
+		ctx.beginPath();
+		ctx.moveTo(currentX, currentY);
+		const leftAngle = Math.atan2(dirY, dirX) - PREDICT_CONE_ANGLE;
+		const rightAngle = Math.atan2(dirY, dirX) + PREDICT_CONE_ANGLE;
+		const leftX = currentX + Math.cos(leftAngle) * PREDICT_CONE_LENGTH;
+		const leftY = currentY + Math.sin(leftAngle) * PREDICT_CONE_LENGTH;
+		ctx.lineTo(leftX, leftY);
+		ctx.arc(currentX, currentY, PREDICT_CONE_LENGTH, leftAngle, rightAngle, false);
+		ctx.lineTo(currentX, currentY);
+		ctx.closePath();
+		ctx.fill();
+		ctx.stroke();
+		setTimeout(() => canvas.remove(), 100);
+		*/
+
 		for (const link of predictedLinks) {
 			if (link.isConnected) {
-				const predictedEvents = event.getPredictedEvents();
-				if (predictedEvents.length < 2) continue;
+				outer: for (const link of predictedLinks) {
+					const rect = link.getBoundingClientRect();
+					const points = [
+						{ x: rect.left, y: rect.top },
+						{ x: rect.right, y: rect.top },
+						{ x: rect.left, y: rect.bottom },
+						{ x: rect.right, y: rect.bottom },
+					];
 
-				// Calculate trajectory from current position to last predicted position
-				const currentX = event.clientX;
-				const currentY = event.clientY;
-				const lastPredicted = predictedEvents.at(-1);
-				if (!lastPredicted) continue;
+					for (const point of points) {
+						const toPointX = point.x - currentX;
+						const toPointY = point.y - currentY;
+						const distToPoint = Math.hypot(toPointX, toPointY);
+						if (distToPoint > PREDICT_CONE_LENGTH || distToPoint < 0) continue;
 
-				// Calculate velocity vector
-				const dx = lastPredicted.clientX - currentX;
-				const dy = lastPredicted.clientY - currentY;
-
-				// If movement is too small, ignore
-				const distance = Math.hypot(dx, dy);
-				if (distance < 2) continue;
-
-				// Normalize and extend the trajectory
-				const projectionDistance = 200; // How far ahead to look
-				const steps = 10; // Number of points to check along the trajectory
-				const detectionRadius = 30; // Radius around each point to check for links
-
-				for (let i = 1; i <= steps; i++) {
-					const t = i / steps;
-					const projectedX = currentX + (dx / distance) * projectionDistance * t;
-					const projectedY = currentY + (dy / distance) * projectionDistance * t;
-
-					// const ok = document.createElement('div');
-					// document.body.append(ok);
-					// ok.style.position = 'absolute';
-					// ok.style.left = `${projectedX}px`;
-					// ok.style.top = `${projectedY}px`;
-					// ok.style.width = '10px';
-					// ok.style.height = '10px';
-					// ok.style.backgroundColor = 'red';
-					// ok.style.borderRadius = '50%';
-					// ok.style.pointerEvents = 'none';
-					// ok.style.zIndex = '9999';
-					// setTimeout(() => {
-					// 	ok.remove();
-					// }, 1000);
-
-					for (const link of predictedLinks) {
-						const rect = link.getBoundingClientRect();
-						const linkCenterX = rect.left + rect.width / 2;
-						const linkCenterY = rect.top + rect.height / 2;
-
-						// Check if projected point is near the link
-						const distToLink = Math.sqrt(
-							Math.pow(projectedX - linkCenterX, 2) + Math.pow(projectedY - linkCenterY, 2),
-						);
-
-						// Check if link is within detection radius or if trajectory passes through link bounds
-						const expandedBounds = {
-							left: rect.left - detectionRadius,
-							right: rect.right + detectionRadius,
-							top: rect.top - detectionRadius,
-							bottom: rect.bottom + detectionRadius,
-						};
-
-						if (
-							distToLink < detectionRadius ||
-							(projectedX >= expandedBounds.left &&
-								projectedX <= expandedBounds.right &&
-								projectedY >= expandedBounds.top &&
-								projectedY <= expandedBounds.bottom)
-						) {
+						const toPointDirX = toPointX / distToPoint;
+						const toPointDirY = toPointY / distToPoint;
+						const dotProduct = dirX * toPointDirX + dirY * toPointDirY;
+						const angle = Math.acos(Math.max(-1, Math.min(1, dotProduct)));
+						if (angle <= PREDICT_CONE_ANGLE) {
 							anchorPreload(link);
+							predictedLinks.delete(link);
+							break outer;
 						}
 					}
 				}
@@ -171,7 +176,11 @@ export function preloadOnHover(routes) {
 					break;
 				}
 				default: {
-					console.warn(`Unknown preload strategy \`${link.dataset.preload}\` on`, link);
+					console.warn(
+						`Unknown preload strategy \`${link.dataset.preload}\` on`,
+						link,
+						'\nAvailable strategies are: hover, viewport, predict',
+					);
 					break;
 				}
 			}
