@@ -31,6 +31,6 @@
 		"execa": "^9.6.0"
 	},
 	"devDependencies": {
-		"@vercel/ncc": "^0.38.3"
+		"@vercel/ncc": "^0.38.4"
 	}
 }
