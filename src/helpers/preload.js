@@ -45,7 +45,7 @@ export function preloadOnHover(routes) {
 		});
 	}
 
-	/** @type {NodeJS.Timeout | null} */
+	/** @type {ReturnType<typeof setTimeout> | null} */
 	let throttleTimer = null;
 	function pointerMoveListener(/** @type {PointerEvent} */ event) {
 		if (!event.getPredictedEvents || throttleTimer) return;
@@ -59,12 +59,11 @@ export function preloadOnHover(routes) {
 		}
 
 		const predictedEvents = event.getPredictedEvents();
-		if (predictedEvents.length < 2) return;
+		const lastPredicted = predictedEvents.at(-1);
+		if (!lastPredicted) return;
 
 		const currentX = event.clientX;
 		const currentY = event.clientY;
-		const lastPredicted = predictedEvents.at(-1);
-		if (!lastPredicted) return;
 		const dx = lastPredicted.clientX - currentX;
 		const dy = lastPredicted.clientY - currentY;
 
@@ -185,6 +184,11 @@ export function preloadOnHover(routes) {
 					break;
 				}
 			}
+
+			link.addEventListener('focus', function callback() {
+				link.removeEventListener('focus', callback);
+				anchorPreload(link);
+			});
 		}
 	});
 
