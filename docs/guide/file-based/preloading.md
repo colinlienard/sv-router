@@ -14,6 +14,12 @@ Simply add a `data-preload` attribute to the link that triggers navigation:
 
 When users hover over this link, the About page component will begin loading in the background, ensuring it's ready (or nearly ready) by the time they click.
 
+There are different preload strategies available:
+
+- `hover` (default): Preloads when the user hovers over the link.
+- `viewport`: Preloads when the link becomes visible on screen.
+- `predict`: Preloads based on estimated future pointer positions (using the [`getPredictedEvents()`](https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent/getPredictedEvents) method).
+
 ## Programmatically
 
 You can also preload a route programmatically with the `preload` function:
