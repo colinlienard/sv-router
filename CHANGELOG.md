@@ -1,5 +1,16 @@
 # sv-router
 
+## 0.10.0
+
+### Minor Changes
+
+- feeb7cc: Add pathless route group
+- 4a1513f: Add new preloading strategies
+
+### Patch Changes
+
+- 87f5e67: export serializeSearch
+
 ## 0.9.0
 
 ### Minor Changes
