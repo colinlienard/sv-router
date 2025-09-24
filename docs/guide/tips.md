@@ -19,7 +19,8 @@ To catch and handle errors in your application, use Svelte's native `<svelte:bou
 
 When deploying a Single Page Application, ensure your web server is configured to handle client-side routing:
 
-- Platforms like **Vercel**, **Netlify**, and **Cloudflare Pages** natively support SPAs and require no additional configuration.
+- Platforms like **Vercel** and **Cloudflare Pages** natively support SPAs and require no additional configuration.
+- For **Netlify**, see the [official documentation on redirects for SPAs](https://docs.netlify.com/manage/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-apps).
 - For **Nginx**, use the `try_files` directive to serve `index.html` for all routes.
 - For **Apache**, use the `FallbackResource /index.html` directive to redirect all requests to `index.html`.
 - For **AWS Amplify**, see the [official documentation on redirects for SPAs](https://docs.aws.amazon.com/amplify/latest/userguide/redirects.html#redirects-for-single-page-web-apps-spa).
