@@ -9,6 +9,6 @@
 	},
 	"devDependencies": {
 		"vitepress": "^1.6.4",
-		"vitepress-plugin-group-icons": "^1.6.1"
+		"vitepress-plugin-group-icons": "^1.6.3"
 	}
 }
