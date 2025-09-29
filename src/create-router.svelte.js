@@ -173,7 +173,12 @@ export function onGlobalClick(event) {
 	const anchor = /** @type {HTMLElement} */ (event.target).closest('a');
 	if (!anchor) return;
 
-	if (anchor.hasAttribute('target') || anchor.hasAttribute('download')) return;
+	if (
+		anchor.hasAttribute('target') ||
+		anchor.hasAttribute('download') ||
+		!anchor.hasAttribute('href')
+	)
+		return;
 
 	const url = new URL(anchor.href);
 	const currentOrigin = globalThis.location.origin;
