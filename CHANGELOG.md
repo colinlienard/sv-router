@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.10.1
+
+### Patch Changes
+
+- 393f22b: fix error while clicking on an anchor with no href attribute
+- 3388c30: Export routes object for dynamic menu generation
+
 ## 0.10.0
 
 ### Minor Changes
