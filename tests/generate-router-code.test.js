@@ -20,7 +20,7 @@ import Index from '../a/fake/path/index.svelte';
 import PostsStatic from '../a/fake/path/posts.static.svelte';
 import PostsNolayout from '../a/fake/path/posts.(nolayout).svelte';
 
-const routes = {
+export const routes = {
   '*notfound': () => import('../a/fake/path/[...notfound].lazy.svelte'),
   '/about': About,
   '/': Index,
@@ -49,7 +49,7 @@ import postsMeta from '../a/fake/path/posts/meta.svelte';
 import postsCommentsHooks from '../a/fake/path/posts/comments/hooks.svelte';
 import postsCommentsMeta from '../a/fake/path/posts/comments/meta';
 
-const routes = {
+export const routes = {
   '*notfound': () => import('../a/fake/path/[...notfound].lazy.svelte'),
   '/about': About,
   '/': Index,
@@ -285,7 +285,7 @@ import GroupLayout from './routes/_group/layout.svelte';
 import groupHooks from './routes/_group/hooks';
 import groupMeta from './routes/_group/meta';
 
-const routes = {
+export const routes = {
   '/': Index,
   '/about': About,
   '/posts': {
@@ -324,7 +324,7 @@ import postsCommentsMeta from './routes/posts/comments/meta.svelte';
 import groupHooks from './routes/_group/hooks';
 import groupMeta from './routes/_group/meta';
 
-const routes = {
+export const routes = {
   '/': () => import('./routes/index.svelte'),
   '/about': () => import('./routes/about.svelte'),
   '/posts': {
@@ -358,7 +358,7 @@ export const { p, navigate, isActive, preload, route } = createRouter(routes);
 		expect(result).toBe(`import { createRouter } from 'sv-router';
 import Index from './routes/index.svelte';
 
-const routes = {
+export const routes = {
   '/': Index
 };
 export const { p, navigate, isActive, preload, route } = createRouter(routes);
