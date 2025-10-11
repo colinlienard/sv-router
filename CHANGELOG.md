@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.10.2
+
+### Patch Changes
+
+- ed4cd78: increase older browser compatibility
+
 ## 0.10.1
 
 ### Patch Changes
