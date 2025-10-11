@@ -263,12 +263,12 @@ export type SearchParams = Omit<
 > & {
 	append(name: string, value: string | number | boolean, options?: { replace?: boolean }): void;
 	delete(name: string, value?: string | number | boolean, options?: { replace?: boolean }): void;
-	entries(): IterableIterator<[string, string | number | boolean]>;
+	entries(): [string, string | number | boolean][];
 	get(name: string): string | number | boolean | null;
 	getAll(name: string): (string | number | boolean)[];
 	set(name: string, value: string | number | boolean, options?: { replace?: boolean }): void;
 	sort(options?: { replace?: boolean }): void;
-	values(): IterableIterator<string | number | boolean>;
+	values(): (string | number | boolean)[];
 };
 
 type NavigateArgs<T extends string> =

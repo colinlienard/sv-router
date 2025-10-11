@@ -14,7 +14,7 @@ const shell = {
 		updateUrlSearchParams(options);
 	},
 	entries() {
-		return searchParams.entries().map(([key, value]) => [key, parseSearchValue(value)]);
+		return [...searchParams.entries()].map(([key, value]) => [key, parseSearchValue(value)]);
 	},
 	forEach(...args) {
 		return searchParams.forEach(...args);
@@ -45,7 +45,7 @@ const shell = {
 		return searchParams.toString();
 	},
 	values() {
-		return searchParams.values().map(parseSearchValue);
+		return [...searchParams.values()].map(parseSearchValue);
 	},
 	get size() {
 		return searchParams.size;

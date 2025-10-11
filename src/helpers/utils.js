@@ -152,7 +152,7 @@ export function parseSearch(value) {
 	if (typeof value === 'string') {
 		const searchParams = new URLSearchParams(value);
 		return Object.fromEntries(
-			searchParams.entries().map(([key, value]) => [key, parseSearchValue(value)]),
+			[...searchParams.entries()].map(([key, value]) => [key, parseSearchValue(value)]),
 		);
 	}
 
