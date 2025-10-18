@@ -12,6 +12,7 @@ import {
 	stripBase,
 	updatedLocation,
 } from './helpers/utils.js';
+import { Navigation } from './navigation.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -118,7 +119,7 @@ export function createRouter(r) {
 function navigate(path, options = {}) {
 	if (typeof path === 'number') {
 		globalThis.history.go(path);
-		return;
+		return new Navigation(`History entry: ${path}`);
 	}
 
 	path = constructPath(path, options.params);
@@ -128,6 +129,7 @@ function navigate(path, options = {}) {
 		options.hash = '#' + options.hash;
 	}
 	onNavigate(path, options);
+	return new Navigation(`${path}${serializeSearch(options?.search ?? '')}${options?.hash ?? ''}`);
 }
 
 /**
@@ -142,7 +144,7 @@ export async function onNavigate(path, options = {}) {
 	navigationIndex++;
 	const currentNavigationIndex = navigationIndex;
 
-	let matchPath = getMatchPath(path);
+	const matchPath = getMatchPath(path);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
 	const search = parseSearch(options.search);
@@ -220,7 +222,7 @@ export async function onNavigate(path, options = {}) {
 
 /** @param {string} [path] */
 function getMatchPath(path) {
-	let matchPath = '';
+	let matchPath;
 
 	if (path) {
 		matchPath = path;
