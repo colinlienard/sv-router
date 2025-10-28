@@ -278,8 +278,8 @@ export type SearchParams = Omit<
 
 type NavigateArgs<T extends string> =
 	| (PathParams<T> extends never
-			? [T] | [T, Omit<NavigateOptions, 'search'> & { search: Search }]
-			: [T, Omit<NavigateOptions, 'search'> & { search: Search; params: PathParams<T> }])
+			? [T] | [T, Omit<NavigateOptions, 'search'> & { search?: Search }]
+			: [T, Omit<NavigateOptions, 'search'> & { search?: Search; params: PathParams<T> }])
 	| [number];
 
 type StripNonRoutes<T extends Routes> = {
