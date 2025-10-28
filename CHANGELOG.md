@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.10.3
+
+### Patch Changes
+
+- 9638e59: return navigation "error" inside `navigate`
+- d28291b: Fix non optional search on navigate function
+
 ## 0.10.2
 
 ### Patch Changes
