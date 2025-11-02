@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Instal pnpm
         uses: pnpm/action-setup@v4
-      - name: Use Node.js 22
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
           node-version: 24.11.0
@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Instal pnpm
         uses: pnpm/action-setup@v4
-      - name: Use Node.js 22
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
           node-version: 24.11.0
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Instal pnpm
         uses: pnpm/action-setup@v4
-      - name: Use Node.js 22
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
           node-version: 24.11.0
@@ -61,7 +61,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Instal pnpm
         uses: pnpm/action-setup@v4
-      - name: Use Node.js 22
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
           node-version: 24.11.0
