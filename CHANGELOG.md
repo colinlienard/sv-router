@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.10.4
+
+### Patch Changes
+
+- 30975dc: Fix path generation with param or no layout
+
 ## 0.10.3
 
 ### Patch Changes
