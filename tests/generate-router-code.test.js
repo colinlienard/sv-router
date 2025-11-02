@@ -437,6 +437,39 @@ describe('pathToCorrectCasing', () => {
 		expect(result).toBe('postsMeta');
 	});
 
+	it('should handle paths with param as first segment', () => {
+		const result1 = pathToCorrectCasing('[id]/index.svelte');
+		expect(result1).toBe('IdIndex');
+
+		const result2 = pathToCorrectCasing('[id]/hooks.ts');
+		expect(result2).toBe('idHooks');
+
+		const result3 = pathToCorrectCasing('[id]/meta.ts');
+		expect(result3).toBe('idMeta');
+	});
+
+	it('should handle paths with no layout as first segment', () => {
+		const result1 = pathToCorrectCasing('(posts)/index.svelte');
+		expect(result1).toBe('PostsIndex');
+
+		const result2 = pathToCorrectCasing('(posts)/hooks.ts');
+		expect(result2).toBe('postsHooks');
+
+		const result3 = pathToCorrectCasing('(posts)/meta.ts');
+		expect(result3).toBe('postsMeta');
+	});
+
+	it('should handle paths with param and no layout as first segment', () => {
+		const result1 = pathToCorrectCasing('([post])/index.svelte');
+		expect(result1).toBe('PostIndex');
+
+		const result2 = pathToCorrectCasing('([post])/hooks.ts');
+		expect(result2).toBe('postHooks');
+
+		const result3 = pathToCorrectCasing('([post])/meta.ts');
+		expect(result3).toBe('postMeta');
+	});
+
 	it('should handle flat paths', () => {
 		const result1 = pathToCorrectCasing('simple.path.about.svelte');
 		expect(result1).toBe('SimplePathAbout');

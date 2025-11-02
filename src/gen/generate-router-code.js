@@ -254,8 +254,8 @@ export function pathToCorrectCasing(value) {
 
 	const uppercased = parts.map((part, index) => {
 		part = part.replace(/^_+/, '');
+		part = part.replace(/^[[(]+([^[\]()]+)[\])]+$/, '$1');
 		if (index === 0 && (lastPart === 'hooks' || lastPart === 'meta')) return part;
-		part = part.replace(/^\[(.*)\]$/, '$1');
 		return part.charAt(0).toUpperCase() + part.slice(1);
 	});
 	return uppercased.join('');
