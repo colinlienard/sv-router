@@ -247,7 +247,8 @@ export function onGlobalClick(event) {
 	if (
 		anchor.hasAttribute('target') ||
 		anchor.hasAttribute('download') ||
-		!anchor.hasAttribute('href')
+		!anchor.hasAttribute('href') ||
+		anchor.getAttribute('href')?.startsWith('#')
 	)
 		return;
 
