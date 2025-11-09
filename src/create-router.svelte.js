@@ -26,7 +26,17 @@ export const base = {
 /** @type {{ value: import('svelte').Component[] }} */
 export let componentTree = $state({ value: [] });
 
-export let location = $state(updatedLocation());
+export let location = $state({ pathname: '/', search: '', state: null, hash: '' });
+
+if (BROWSER) {
+	queueMicrotask(() => {
+		const updated = updatedLocation();
+		location.pathname = updated.pathname;
+		location.search = updated.search;
+		location.state = updated.state;
+		location.hash = updated.hash;
+	});
+}
 
 /** @type {{ value: Record<string, string> }} */
 let params = $state({ value: {} });
