@@ -18,7 +18,7 @@ const META_FILENAME_REGEX = /(?<=[/.]|^)(meta)(\.svelte)?\.(js|ts)$/; // meta.js
 
 /**
  * @param {string} routesPath
- * @param {{ allLazy?: boolean; js?: boolean }} [options]
+ * @param {{ allLazy?: boolean; js?: boolean; ignore?: RegExp[] }} [options]
  * @returns {string}
  */
 export function generateRouterCode(routesPath, options) {
@@ -26,29 +26,31 @@ export function generateRouterCode(routesPath, options) {
 	if (!fs.existsSync(absoluteRoutesPath)) {
 		throw new Error(`Routes directory not found at \`${routesPath}\``);
 	}
-	const fileTree = buildFileTree(absoluteRoutesPath);
+	const fileTree = buildFileTree(absoluteRoutesPath, options?.ignore ?? []);
 	const routeMap = createRouteMap(fileTree);
 	return createRouterCode(routeMap, path.posix.join('..', routesPath), options);
 }
 
 /**
  * @param {string} routesPath
+ * @param {RegExp[]} ignores
  * @returns {FileTree}
  */
-export function buildFileTree(routesPath) {
+export function buildFileTree(routesPath, ignores) {
 	const entries = fs.readdirSync(routesPath);
 	/** @type {FileTree} */
 	const tree = [];
 	for (const entry of entries) {
 		const stat = fs.lstatSync(path.join(routesPath, entry));
 		if (stat.isDirectory()) {
-			tree.push({ name: entry, tree: buildFileTree(path.join(routesPath, entry)) });
+			tree.push({ name: entry, tree: buildFileTree(path.join(routesPath, entry), ignores) });
 			continue;
 		}
 		if (
-			!entry.endsWith('.svelte') &&
-			!HOOKS_FILENAME_REGEX.test(entry) &&
-			!META_FILENAME_REGEX.test(entry)
+			(!entry.endsWith('.svelte') &&
+				!HOOKS_FILENAME_REGEX.test(entry) &&
+				!META_FILENAME_REGEX.test(entry)) ||
+			ignores.some((ignore) => ignore.test(entry))
 		) {
 			continue;
 		}
