@@ -1,5 +1,13 @@
 # sv-router
 
+## 0.10.5
+
+### Patch Changes
+
+- f1c1c71: Fix initialization for Bun
+- 3956ebb: Fix anchor id scroll
+- cf4ced0: Support history state as object
+
 ## 0.10.4
 
 ### Patch Changes
