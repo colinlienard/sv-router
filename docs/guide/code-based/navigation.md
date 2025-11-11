@@ -51,10 +51,12 @@ navigate('/post/:slug', {
 	},
 	replace: true,
 	search: { q: 'hello' },
-	state: '{ from: "home" }',
+	state: { from: 'home', userId: 123 },
 	hash: 'first-section',
 });
 ```
+
+The `state` option accepts any value (string, object, etc.) and is stored using the browser's [History API](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState). This allows you to pass complex data between routes without exposing it in the URL.
 
 The `navigate` function also supports traversing through browser history, similar to the native [History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API):
 

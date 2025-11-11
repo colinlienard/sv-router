@@ -48,7 +48,7 @@ Programmatically navigate to a route.
 - `options` - (Optional) Navigation options
   - `replace` - Replace current history entry instead of pushing
   - `search` - Query string
-  - `state` - History state to save
+  - `state` - History state to save (can be any value: string, object, array, etc.)
   - `hash` - URL hash fragment
   - `scrollToTop` - Scroll behavior (`"auto" | "instant" | "smooth" | false`)
   - `viewTransition` - Enable view transition (`boolean`)
@@ -89,7 +89,7 @@ An object containing information about the current route.
 - `getParams(pathname: string)` - Strict parameters from the current route
 - `pathname` - Current path
 - `search` - Query string portion of the URL
-- `state` - History state
+- `state` - History state (can be any value)
 - `hash` - Hash fragment of the URL
 
 ### `isActiveLink`
@@ -142,6 +142,6 @@ All hook functions receive a context object with the following properties:
 - `pathname` - The current pathname
 - `replace` - Whether this is a replace navigation (optional)
 - `search` - The query string (optional)
-- `state` - The history state (optional)
+- `state` - The history state (optional, can be any value)
 - `hash` - The URL hash fragment (optional)
 - `meta` - The meta data

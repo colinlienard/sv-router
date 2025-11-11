@@ -189,6 +189,46 @@ describe('router', () => {
 			expect(route.meta).toEqual({ title: 'Metadata Page' });
 		});
 	});
+
+	it('should support object state in navigation', async () => {
+		const { navigate } = await import('./App.test.svelte');
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+
+		// Navigate with an object state
+		const testState = { userId: 123, timestamp: Date.now(), nested: { value: 'test' } };
+		navigate('/about', { state: testState });
+
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+
+		// Verify state is preserved as an object
+		expect(route.state).toEqual(testState);
+		expect(typeof route.state).toBe('object');
+	});
+
+	it('should support string state in navigation for backwards compatibility', async () => {
+		const { navigate } = await import('./App.test.svelte');
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+
+		// Navigate with a string state
+		const testState = 'simple-string-state';
+		navigate('/about', { state: testState });
+
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+
+		// Verify state is preserved as a string
+		expect(route.state).toBe(testState);
+		expect(typeof route.state).toBe('string');
+	});
 });
 
 describe('router (hash-based)', () => {
