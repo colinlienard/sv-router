@@ -271,10 +271,20 @@ export function onGlobalClick(event) {
 
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
+
+	let parsedState;
+	if (state) {
+		try {
+			parsedState = JSON.parse(state);
+		} catch {
+			parsedState = state;
+		}
+	}
+
 	onNavigate(path, {
 		replace: replace === '' || replace === 'true',
 		search: url.search,
-		state,
+		state: parsedState,
 		hash,
 		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
 		viewTransition: viewTransition === '' || viewTransition === 'true',

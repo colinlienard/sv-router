@@ -241,14 +241,14 @@ export type HooksContext = {
 	pathname: string;
 	replace?: boolean;
 	search: Record<string, string | number | boolean>;
-	state?: string;
+	state?: unknown;
 };
 
 export type NavigateOptions =
 	| {
 			replace?: boolean;
 			search?: Search;
-			state?: string;
+			state?: unknown;
 			hash?: string;
 			scrollToTop?: ScrollBehavior | false;
 			viewTransition?: boolean;
