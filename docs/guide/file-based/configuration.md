@@ -61,7 +61,6 @@ And don't forget to also add the ignore option in your `postinstall` script:
 "postinstall": "sv-router --ignore '[A-Z].*\\.svelte$'" // You can have multiple ones separated by commas
 ```
 
-
 ### `js`
 
 | Type      | Default          | Required |
