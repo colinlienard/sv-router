@@ -20,7 +20,7 @@ export type RouterOptions = {
 	 */
 	path?: string;
 	/**
-	 * Regex expressions of files to ignore when generating routes.
+	 * Regular expressions for files to ignore when generating routes.
 	 *
 	 * @default empty array
 	 */

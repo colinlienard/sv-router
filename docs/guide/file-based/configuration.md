@@ -41,6 +41,27 @@ Apply the same options to the CLI in your `postinstall` script:
 
 When set to `true`, all routes will be lazy loaded by default.
 
+### `ignore`
+
+| Type       | Default       | Required |
+| ---------- | ------------- | -------- |
+| `RegExp[]` | <pre>[]</pre> | No       |
+
+An array of regular expressions for files to ignore when generating routes.
+
+For example, if you want to have Svelte components in your routes directory but don't want them to become routes, you can ignore files that start with a capital letter:
+
+```ts
+router({ ignore: [/[A-Z].*\.svelte$/] )}
+```
+
+And don't forget to also add the ignore option in your `postinstall` script:
+
+```json
+"postinstall": "sv-router --ignore '[A-Z].*\\.svelte$'" // You can have multiple ones separated by commas
+```
+
+
 ### `js`
 
 | Type      | Default          | Required |
