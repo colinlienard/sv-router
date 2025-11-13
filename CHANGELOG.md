@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.11.0
+
+### Minor Changes
+
+- 4a145b0: added option to ignore files in file based route generation
+
 ## 0.10.5
 
 ### Patch Changes
