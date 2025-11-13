@@ -1,22 +1,24 @@
 /**
  * @type {{
  * 	allLazy: boolean;
- * 	routesInJs: boolean;
- * 	routesPath: string;
+ * 	ignore: RegExp[];
+ * 	readonly genCodeAlias: string;
  * 	readonly genCodeDirPath: string;
  * 	readonly routerPath: string;
  * 	readonly tsconfigPath: string;
- * 	readonly genCodeAlias: string;
+ * 	routesInJs: boolean;
+ * 	routesPath: string;
  * }}
  */
 export const genConfig = {
 	allLazy: false,
-	routesInJs: false,
-	routesPath: 'src/routes',
+	genCodeAlias: 'sv-router/generated',
 	genCodeDirPath: '.router',
+	ignore: [],
 	get routerPath() {
 		return '.router/router.' + (this.routesInJs ? 'js' : 'ts');
 	},
+	routesInJs: false,
+	routesPath: 'src/routes',
 	tsconfigPath: '.router/tsconfig.json',
-	genCodeAlias: 'sv-router/generated',
 };

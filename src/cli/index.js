@@ -27,4 +27,7 @@ if (jsArg) genConfig.routesInJs = true;
 const pathArg = arg('path');
 if (pathArg) genConfig.routesPath = pathArg;
 
+const ignoreArg = arg('ignore');
+if (ignoreArg) genConfig.ignore = ignoreArg.split(',').map((ignore) => new RegExp(ignore, 'gu'));
+
 writeRouterCode();

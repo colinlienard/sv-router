@@ -19,6 +19,12 @@ export type RouterOptions = {
 	 * @default 'src/routes'
 	 */
 	path?: string;
+	/**
+	 * Regular expressions for files to ignore when generating routes.
+	 *
+	 * @default empty array
+	 */
+	ignore?: RegExp[];
 };
 
 export const router: (options?: RouterOptions) => Plugin;

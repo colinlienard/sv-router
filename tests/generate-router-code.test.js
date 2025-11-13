@@ -77,7 +77,7 @@ export const { p, navigate, isActive, preload, route } = createRouter(routes);
 describe('buildFileTree', () => {
 	it('should get the file tree (flat)', () => {
 		mockFlatMode();
-		const result = buildFileTree('a/fake/path');
+		const result = buildFileTree('a/fake/path', []);
 		expect(result).toEqual([
 			'[...notfound].lazy.svelte',
 			'about.svelte',
@@ -90,13 +90,50 @@ describe('buildFileTree', () => {
 		]);
 	});
 
+	it('should get the file tree with ignores (flat)', () => {
+		mockFlatMode();
+		const result = buildFileTree('a/fake/path', [/index[.]svelte/, /about[.]svelte/u]);
+		expect(result).toEqual([
+			'[...notfound].lazy.svelte',
+			'posts.[id].lazy.svelte',
+			'posts.index.lazy.svelte',
+			'posts.static.svelte',
+			'posts.(nolayout).svelte',
+			'posts.comments.[id].lazy.svelte',
+		]);
+	});
+
 	it('should get the file tree (tree)', () => {
 		mockTreeMode();
-		const result = buildFileTree('a/fake/path');
+		const result = buildFileTree('a/fake/path', []);
 		expect(result).toEqual([
 			'[...notfound].lazy.svelte',
 			'about.svelte',
 			'index.svelte',
+			{
+				name: 'posts',
+				tree: [
+					'[id].lazy.svelte',
+					'layout.svelte',
+					'index.lazy.svelte',
+					'static.svelte',
+					'(nolayout).svelte',
+					'hooks.ts',
+					'meta.svelte.ts',
+					{
+						name: 'comments',
+						tree: ['[id].lazy.svelte', 'hooks.svelte.ts', 'meta.ts'],
+					},
+				],
+			},
+		]);
+	});
+
+	it('should get the file tree with ignores (tree)', () => {
+		mockTreeMode();
+		const result = buildFileTree('a/fake/path', [/index[.]svelte/, /about[.]svelte/u]);
+		expect(result).toEqual([
+			'[...notfound].lazy.svelte',
 			{
 				name: 'posts',
 				tree: [
