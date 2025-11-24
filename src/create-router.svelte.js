@@ -134,7 +134,7 @@ function navigate(path, options = {}) {
 
 	path = constructPath(path, options.params);
 	if (base.name === '#') {
-		path = new URL(path.replace('/#', ''), globalThis.location.toString()).hash;
+		path = path.replace('/#', '');
 	} else if (options.hash && !options.hash.startsWith('#')) {
 		options.hash = '#' + options.hash;
 	}
