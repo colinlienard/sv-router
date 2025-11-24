@@ -31,27 +31,37 @@ describe('constructPath (hash-based)', () => {
 
 	it('should return the original path when no params are provided', () => {
 		const result = constructPath('/posts');
-		expect(result).toBe('http://localhost:3000/#/posts');
+		expect(result).toBe('/#/posts');
 	});
 
 	it('should replace a single param in the path', () => {
 		const result = constructPath('/posts/:id', { id: '123' });
-		expect(result).toBe('http://localhost:3000/#/posts/123');
+		expect(result).toBe('/#/posts/123');
 	});
 
 	it('should replace multiple params in the path', () => {
 		const result = constructPath('/posts/:id/comments/:commentId', { id: '123', commentId: '456' });
-		expect(result).toBe('http://localhost:3000/#/posts/123/comments/456');
+		expect(result).toBe('/#/posts/123/comments/456');
 	});
 });
 
 describe('constructUrl', () => {
 	it('should create a path with search and hash', () => {
+		base.name = undefined;
 		const result = constructUrl('/posts', {
 			search: { q: 'test' },
 			hash: 'hash',
 		});
-		expect(result).toBe('http://localhost:3000/#/posts?q=test#hash');
+		expect(result).toBe('/posts?q=test#hash');
+	});
+
+	it('should create a path with search and hash (hash-based)', () => {
+		base.name = '#';
+		const result = constructUrl('/posts', {
+			search: { q: 'test' },
+			hash: 'hash',
+		});
+		expect(result).toBe('/#/posts?q=test#hash');
 	});
 });
 

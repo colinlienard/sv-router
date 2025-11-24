@@ -34,7 +34,7 @@ function compare(compareFn, pathname, params) {
 
 	if (params) {
 		if (base.name === '#') {
-			return compareFn(location.pathname, new URL(constructPath(pathname, params)).hash.slice(1));
+			return compareFn(location.pathname, constructPath(pathname, params).replace('/#', ''));
 		} else {
 			return compareFn(location.pathname, constructPath(pathname, params));
 		}

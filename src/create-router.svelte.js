@@ -134,7 +134,7 @@ function navigate(path, options = {}) {
 
 	path = constructPath(path, options.params);
 	if (base.name === '#') {
-		path = new URL(path).hash;
+		path = path.replace('/#', '');
 	} else if (options.hash && !options.hash.startsWith('#')) {
 		options.hash = '#' + options.hash;
 	}
@@ -200,8 +200,10 @@ export async function onNavigate(path, options = {}) {
 		url.hash = options.hash || '';
 		if (base.name === '#') {
 			url.hash = path;
+		} else if (base.name && !path.startsWith(base.name)) {
+			url.pathname = join(base.name, path);
 		} else {
-			url.pathname = base.name ? join(base.name, path) : path;
+			url.pathname = path;
 		}
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
 		globalThis.history[historyMethod](options.state || {}, '', url.toString());

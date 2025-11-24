@@ -13,11 +13,10 @@ export function constructPath(path, params) {
 	}
 
 	if (base.name === '#') {
-		const url = new URL(globalThis.location.toString());
-		url.hash = path;
-		url.search = '';
-
-		return url.toString();
+		if (path === '/') {
+			return '/#/';
+		}
+		return join('#', path);
 	}
 
 	return path;
