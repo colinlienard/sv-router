@@ -3,7 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { beforeEach, vi } from 'vitest';
 import { base } from '../../src/create-router.svelte.js';
 import { searchParams } from '../../src/search-params.svelte.js';
-import App, { isActive, onPreloadMock, route } from './App.test.svelte';
+import App, { isActive, navigate, onPreloadMock, route } from './App.test.svelte';
 
 window.scrollTo = vi.fn();
 
@@ -37,6 +37,18 @@ describe('router', () => {
 		await userEvent.click(screen.getByText('About'));
 		expect(location.pathname).toBe('/about');
 		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+	});
+
+	it('should navigate to another route programmatically', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		navigate('/about');
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
 			expect(screen.getByText('About Us')).toBeInTheDocument();
 		});
 	});
@@ -222,6 +234,18 @@ describe('router (hash-based)', () => {
 		await userEvent.click(screen.getByText('About'));
 		expect(location.hash).toBe('#/about');
 		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+	});
+
+	it('should navigate to another route programmatically', async () => {
+		render(App, { base: '#' });
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		navigate('/about');
+		await waitFor(() => {
+			expect(location.hash).toBe('#/about');
 			expect(screen.getByText('About Us')).toBeInTheDocument();
 		});
 	});
