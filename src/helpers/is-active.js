@@ -7,8 +7,7 @@ import { constructPath, join } from './utils.js';
  * @returns {boolean}
  */
 export function isActive(pathname, params) {
-	const p = base.name && base.name !== '#' ? join(base.name, pathname) : pathname;
-	return compare((a, b) => a === b, p, params);
+	return compare((a, b) => a === b, pathname, params);
 }
 
 /**
@@ -17,8 +16,7 @@ export function isActive(pathname, params) {
  * @returns {boolean}
  */
 isActive.startsWith = (pathname, params) => {
-	const p = base.name && base.name !== '#' ? join(base.name, pathname) : pathname;
-	return compare((a, b) => a.startsWith(b), p, params);
+	return compare((a, b) => a.startsWith(b), pathname, params);
 };
 
 /**
