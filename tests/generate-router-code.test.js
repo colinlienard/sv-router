@@ -267,6 +267,39 @@ describe('createRouteMap', () => {
 		});
 	});
 
+	it('should use nested meta file in route group instead of parent meta', () => {
+		const result = createRouteMap([
+			{
+				name: '_admin',
+				tree: [
+					'index.svelte',
+					'meta.ts',
+					'layout.svelte',
+					'hooks.ts',
+					{
+						name: 'users',
+						tree: ['index.svelte', 'meta.ts'],
+					},
+				],
+			},
+		]);
+
+		expect(result).toEqual({
+			'/': {
+				'/': '_admin/index.svelte',
+				layout: '_admin/layout.svelte',
+				hooks: '_admin/hooks.ts',
+				meta: '_admin/meta.ts',
+			},
+			'/users': {
+				'/': '_admin/users/index.svelte',
+				layout: '_admin/layout.svelte',
+				hooks: '_admin/hooks.ts',
+				meta: '_admin/users/meta.ts',
+			},
+		});
+	});
+
 	it('should throw on conflict inside route group', () => {
 		const conflictTree = [
 			'index.svelte',

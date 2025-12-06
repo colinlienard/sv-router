@@ -150,6 +150,8 @@ function mergeRouteGroup(result, childMap) {
 			continue;
 		}
 
+		const childMeta = typeof val === 'object' && 'meta' in val ? val.meta : meta;
+
 		/** @type {GeneratedRoutes} */
 		let routeWithGroupFiles = {};
 		if (typeof val === 'string') {
@@ -159,7 +161,7 @@ function mergeRouteGroup(result, childMap) {
 		}
 		if (layout) routeWithGroupFiles.layout = layout;
 		if (hooks) routeWithGroupFiles.hooks = hooks;
-		if (meta) routeWithGroupFiles.meta = meta;
+		if (childMeta) routeWithGroupFiles.meta = childMeta;
 		if (result[key]) {
 			throw new Error(`Route conflict at \`${key}\``);
 		}

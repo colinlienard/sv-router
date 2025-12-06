@@ -264,6 +264,27 @@ describe('matchRoute', () => {
 					requiresAuth: false,
 				});
 			});
+
+			it('should merge parent meta with nested route meta in route groups', () => {
+				const parentMeta = { title: 'Admin', theme: 'dark' };
+				const childMeta = { title: 'Users' };
+				const Users = () => 'Users';
+				const routesWithNestedMeta = /** @type {import('../src/index.d.ts').Routes} */ ({
+					'/': {
+						'/': Home,
+						meta: parentMeta,
+					},
+					'/users': {
+						'/': Users,
+						meta: childMeta,
+					},
+				});
+				const { meta } = matchRoute('/users', routesWithNestedMeta);
+				expect(meta).toEqual({
+					title: 'Users',
+					theme: 'dark',
+				});
+			});
 		}
 
 		it('should fall back to root catch-all route when nested catch-all is not found', () => {

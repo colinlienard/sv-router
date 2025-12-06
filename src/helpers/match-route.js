@@ -45,6 +45,11 @@ export function matchRoute(pathname, routes) {
 	/** @type {RouteMeta} */
 	let meta = {};
 
+	const rootRoute = routes['/'];
+	if (rootRoute && typeof rootRoute === 'object' && 'meta' in rootRoute && rootRoute.meta) {
+		meta = { ...meta, ...rootRoute.meta };
+	}
+
 	let breakFromLayouts = false;
 
 	outer: for (const route of allRoutes) {
