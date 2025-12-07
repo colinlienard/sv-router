@@ -17,6 +17,8 @@ export function constructPath(path, params) {
 			return '/#/';
 		}
 		return join('#', path);
+	} else if (base.name) {
+		return join(base.name, path);
 	}
 
 	return path;
