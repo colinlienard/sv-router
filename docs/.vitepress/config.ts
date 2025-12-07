@@ -89,6 +89,11 @@ export default defineConfig({
 		search: {
 			provider: 'local',
 		},
+		editLink: {
+			pattern: 'https://github.com/colinlienard/sv-router/edit/main/docs/:path',
+			text: 'Edit this page on GitHub',
+		},
+		lastUpdated: {},
 	},
 	sitemap: {
 		hostname: 'https://sv-router.vercel.app',
