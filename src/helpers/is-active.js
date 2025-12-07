@@ -1,5 +1,5 @@
 import { base, location } from '../create-router.svelte.js';
-import { constructPath, join } from './utils.js';
+import { constructPath } from './utils.js';
 
 /**
  * @param {string} pathname
