@@ -1,5 +1,13 @@
 # sv-router
 
+## 0.11.1
+
+### Patch Changes
+
+- d9a8b9a: Concatenate the basename to the path
+- 1ffd81c: Fix meta not being merged correctly
+- b9a38ce: Add basename in anchors href
+
 ## 0.11.0
 
 ### Minor Changes
