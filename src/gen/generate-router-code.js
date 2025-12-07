@@ -5,7 +5,7 @@ import path from 'node:path';
 
 /**
  * @typedef {{
- * 	[key: string]: string | GeneratedRoutes;
+ * 	[key: string]: string | string[] | GeneratedRoutes;
  * }} GeneratedRoutes
  */
 
@@ -144,24 +144,28 @@ function mergeRouteGroup(result, childMap) {
 	const layout = childMap.layout;
 	const hooks = childMap.hooks;
 	const meta = childMap.meta;
+	const hasRootRoute = '/' in childMap;
 
 	for (const [key, val] of Object.entries(childMap)) {
 		if (key === 'layout' || key === 'hooks' || key === 'meta') {
 			continue;
 		}
 
-		const childMeta = typeof val === 'object' && 'meta' in val ? val.meta : meta;
+		const childMeta =
+			typeof val === 'object' && !Array.isArray(val) && 'meta' in val ? val.meta : undefined;
+		const mergedMeta =
+			childMeta && meta && !hasRootRoute ? [childMeta, meta].flat() : childMeta || meta;
 
 		/** @type {GeneratedRoutes} */
 		let routeWithGroupFiles = {};
 		if (typeof val === 'string') {
 			routeWithGroupFiles = { '/': val };
-		} else {
+		} else if (!Array.isArray(val)) {
 			routeWithGroupFiles = { ...val };
 		}
-		if (layout) routeWithGroupFiles.layout = layout;
-		if (hooks) routeWithGroupFiles.hooks = hooks;
-		if (childMeta) routeWithGroupFiles.meta = childMeta;
+		if (layout) routeWithGroupFiles.layout = /** @type {string} */ (layout);
+		if (hooks) routeWithGroupFiles.hooks = /** @type {string} */ (hooks);
+		if (mergedMeta) routeWithGroupFiles.meta = /** @type {string | string[]} */ (mergedMeta);
 		if (result[key]) {
 			throw new Error(`Route conflict at \`${key}\``);
 		}
@@ -188,12 +192,18 @@ export function createRouterCode(routes, routesPath, { allLazy = false, js = fal
 		/** @type {GeneratedRoutes} */
 		const result = {};
 		for (const [key, value] of Object.entries(routes)) {
-			if (typeof value === 'object') {
+			if (typeof value === 'object' && !Array.isArray(value)) {
 				result[key] = handleImports(value, routesPath);
+			} else if (key === 'meta' && Array.isArray(value)) {
+				const varNames = value.map((metaPath) => {
+					const variableName = pathToCorrectCasing(metaPath);
+					importsMap.set(variableName, routesPath + metaPath);
+					return variableName;
+				});
+				result[key] = `{ ...${varNames.toReversed().join(', ...')} }`;
 			} else if (
-				key === 'hooks' ||
-				key === 'meta' ||
-				(!value.endsWith('.lazy.svelte') && !allLazy)
+				typeof value === 'string' &&
+				(key === 'hooks' || key === 'meta' || (!value.endsWith('.lazy.svelte') && !allLazy))
 			) {
 				const variableName = pathToCorrectCasing(value);
 				importsMap.set(variableName, routesPath + value);

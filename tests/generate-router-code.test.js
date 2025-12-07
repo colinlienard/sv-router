@@ -300,6 +300,33 @@ describe('createRouteMap', () => {
 		});
 	});
 
+	it('should merge two meta objects inside a route group but adjacent in route tree', () => {
+		const result = createRouteMap([
+			{
+				name: '_group',
+				tree: [
+					'users.svelte',
+					'meta.ts',
+					{
+						name: 'user',
+						tree: ['index.svelte', 'meta.ts'],
+					},
+				],
+			},
+		]);
+
+		expect(result).toEqual({
+			'/users': {
+				'/': '_group/users.svelte',
+				meta: '_group/meta.ts',
+			},
+			'/user': {
+				'/': '_group/user/index.svelte',
+				meta: ['_group/user/meta.ts', '_group/meta.ts'],
+			},
+		});
+	});
+
 	it('should throw on conflict inside route group', () => {
 		const conflictTree = [
 			'index.svelte',
@@ -417,6 +444,30 @@ export const routes = {
     'meta': groupMeta
   },
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
+};
+export type Routes = typeof routes;
+export const { p, navigate, isActive, preload, route } = createRouter(routes);
+`);
+	});
+
+	it('should generate merged meta spread syntax when meta is an array', () => {
+		const routesWithMetaArray = {
+			'/user': {
+				'/': 'user/index.svelte',
+				meta: ['user/meta.ts', '_group/meta.ts'],
+			},
+		};
+		const result = createRouterCode(routesWithMetaArray, './routes');
+		expect(result).toBe(`import { createRouter } from 'sv-router';
+import UserIndex from './routes/user/index.svelte';
+import userMeta from './routes/user/meta';
+import groupMeta from './routes/_group/meta';
+
+export const routes = {
+  '/user': {
+    '/': UserIndex,
+    'meta': { ...groupMeta, ...userMeta }
+  }
 };
 export type Routes = typeof routes;
 export const { p, navigate, isActive, preload, route } = createRouter(routes);

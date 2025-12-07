@@ -21,6 +21,7 @@ const Layout2 = () => 'Layout2';
 /** @type {import('svelte').Component} */
 const NoLayout = () => 'NoLayout';
 /** @type {import('svelte').Component} */
+const Users = () => 'Users';
 const John = () => 'John';
 const Hooks1 = Symbol();
 const Hooks2 = Symbol();
@@ -268,7 +269,6 @@ describe('matchRoute', () => {
 			it('should merge parent meta with nested route meta in route groups', () => {
 				const parentMeta = { title: 'Admin', theme: 'dark' };
 				const childMeta = { title: 'Users' };
-				const Users = () => 'Users';
 				const routesWithNestedMeta = /** @type {import('../src/index.d.ts').Routes} */ ({
 					'/': {
 						'/': Home,
