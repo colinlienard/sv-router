@@ -81,7 +81,7 @@ export function matchRoute(pathname, routes) {
 				);
 				match = /** @type {RouteComponent} */ (routes[resolvedPath]);
 				break outer;
-			} else if (routePart !== pathPart?.toLowerCase()) {
+			} else if (routePart.toLowerCase() !== pathPart?.toLowerCase()) {
 				break;
 			}
 
