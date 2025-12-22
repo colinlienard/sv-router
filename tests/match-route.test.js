@@ -301,6 +301,17 @@ describe('matchRoute', () => {
 			expect(layouts).toEqual([]);
 		});
 
+		it('should not duplicate layout when partial match falls back to catch-all', () => {
+			const routesWithLayout = /** @type {import('../src/index.d.ts').Routes} */ ({
+				'*': PageNotFound,
+				'/foo': Home,
+				layout: Layout1,
+			});
+			const { match, layouts } = matchRoute('/foo/baz', routesWithLayout);
+			expect(match).toEqual(PageNotFound);
+			expect(layouts).toEqual([Layout1]);
+		});
+
 		it('should not match any route', () => {
 			delete routes['(*rest)'];
 			const { match } = matchRoute('/notfound', routes);
