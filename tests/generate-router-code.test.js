@@ -159,7 +159,7 @@ describe('createRouteMap', () => {
 		const result = createRouteMap([
 			'[...notfound].lazy.svelte',
 			'about.svelte',
-			'index.svelte',
+			'(index).svelte',
 			'posts.[id].svelte',
 			'posts.index.lazy.svelte',
 			'posts.static.svelte',
@@ -171,7 +171,7 @@ describe('createRouteMap', () => {
 		]);
 		expect(result).toEqual({
 			'*notfound': '[...notfound].lazy.svelte',
-			'/': 'index.svelte',
+			'/()': '(index).svelte',
 			'/about': 'about.svelte',
 			'/posts/:id': 'posts.[id].svelte',
 			'/posts': 'posts.index.lazy.svelte',
@@ -186,7 +186,7 @@ describe('createRouteMap', () => {
 
 	it('should generate routes (tree)', () => {
 		const result = createRouteMap([
-			'index.svelte',
+			'(index).svelte',
 			'about.svelte',
 			{
 				name: 'posts',
@@ -208,7 +208,7 @@ describe('createRouteMap', () => {
 			'[...notfound].lazy.svelte',
 		]);
 		expect(result).toEqual({
-			'/': 'index.svelte',
+			'/()': '(index).svelte',
 			'/about': 'about.svelte',
 			'/posts': {
 				'/': 'posts/index.lazy.svelte',
