@@ -93,6 +93,10 @@ export function matchRoute(pathname, routes) {
 				routes[/** @type {keyof Routes} */ ('/' + routeParts.join('/'))]
 			);
 
+			if (typeof routeMatch === 'function' && routeParts.length !== pathParts.length) {
+				continue;
+			}
+
 			if (!breakFromLayouts && 'layout' in routes && routes.layout) {
 				layouts.push(routes.layout);
 			}

@@ -287,8 +287,8 @@ describe('router (hash-based)', () => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
 		await userEvent.click(screen.getByText('Lazy'));
-		expect(location.hash).toBe('#/lazy');
 		await waitFor(() => {
+			expect(location.hash).toBe('#/lazy');
 			expect(screen.getByText('Lazy Page')).toBeInTheDocument();
 		});
 	});
