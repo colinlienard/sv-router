@@ -142,8 +142,10 @@ describe('matchRoute', () => {
 		});
 
 		it('should match a simple route with a different casing', () => {
-			const { match } = matchRoute('/Posts', routes);
-			expect(match).toEqual(Posts);
+			const { match: match1 } = matchRoute('/Posts', routes);
+			const { match: match2 } = matchRoute('/posts', { '/Posts': Posts });
+			expect(match1).toEqual(Posts);
+			expect(match2).toEqual(Posts);
 		});
 
 		it('should match a nested route', () => {
