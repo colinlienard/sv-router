@@ -31,6 +31,9 @@ The CLI automatically reads options from your Vite config, so you only need to d
 }
 ```
 
+> [!NOTE]
+> CLI arguments override all Vite config options.
+
 ## Options
 
 ### `allLazy`

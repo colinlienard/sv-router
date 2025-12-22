@@ -29,11 +29,11 @@ function parseViteConfig() {
 }
 
 /**
- * @param {'js' | 'ts'} extention
+ * @param {'js' | 'ts'} extension
  * @returns {string | undefined}
  */
-function readViteConfig(extention) {
-	const vitePath = path.join(process.cwd(), 'vite.config.' + extention);
+function readViteConfig(extension) {
+	const vitePath = path.join(process.cwd(), 'vite.config.' + extension);
 	if (existsSync(vitePath)) {
 		return readFileSync(vitePath, 'utf8');
 	}
@@ -44,7 +44,7 @@ function readViteConfig(extention) {
  * @returns {Record<string, any> | undefined}
  */
 function extractRouterConfig(viteConfig) {
-	const regex = /router\(\s*(\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})\s*\)/;
+	const regex = /router\(\s*([^)]+)\)/;
 	const match = viteConfig.match(regex);
 	if (!match) return;
 	try {
