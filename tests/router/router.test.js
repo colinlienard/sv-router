@@ -178,7 +178,9 @@ describe('router', () => {
 			expect(screen.getByText('Lazy')).toBeInTheDocument();
 		});
 		await userEvent.hover(screen.getByText('Lazy'));
-		expect(onPreloadMock).toHaveBeenCalled();
+		await waitFor(() => {
+			expect(onPreloadMock).toHaveBeenCalled();
+		});
 	});
 
 	it('should navigate to a lazy route', async () => {
@@ -187,8 +189,8 @@ describe('router', () => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
 		await userEvent.click(screen.getByText('Lazy'));
-		expect(location.pathname).toBe('/lazy');
 		await waitFor(() => {
+			expect(location.pathname).toBe('/lazy');
 			expect(screen.getByText('Lazy Page')).toBeInTheDocument();
 		});
 	});

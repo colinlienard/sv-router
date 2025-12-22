@@ -21,7 +21,7 @@ export default defineConfig({
 });
 ```
 
-Apply the same options to the CLI in your `postinstall` script:
+The CLI automatically reads options from your Vite config, so you only need to define them once. If you're not using Vite or the config can't be read, pass the options directly to the CLI:
 
 ```json [package.json]
 {
@@ -30,6 +30,9 @@ Apply the same options to the CLI in your `postinstall` script:
 	}
 }
 ```
+
+> [!NOTE]
+> CLI arguments override all Vite config options.
 
 ## Options
 
@@ -55,7 +58,7 @@ For example, if you want to have Svelte components in your routes directory but 
 router({ ignore: [/[A-Z].*\.svelte$/] )}
 ```
 
-And don't forget to also add the ignore option in your `postinstall` script:
+Similarly for the `postinstall` script:
 
 ```json
 "postinstall": "sv-router --ignore '[A-Z].*\\.svelte$'" // You can have multiple ones separated by commas

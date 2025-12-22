@@ -40,13 +40,13 @@ export function writeRouterCode() {
 		const written = writeFileIfDifferent(genConfig.routerPath, routerCode);
 
 		if (written) {
-			console.log('✅️ Routes generated');
+			console.log('❇️ Routes generated');
 		} else {
 			console.log('✅️ Routes already up to date');
 		}
 	} catch (error) {
 		console.error(
-			'Error during routes generation:',
+			'⚠️ Error during routes generation:',
 			error instanceof Error ? error.message : String(error),
 		);
 	}
