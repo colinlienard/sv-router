@@ -10,6 +10,7 @@ import path from 'node:path';
  */
 
 const FILENAME_REGEX = /(?<=[/.]|^)\(?([\w-]+)\)?(\.lazy)?\.svelte$/; // any.svelte, any.lazy.svelte, (any).svelte
+const INDEX_FILENAME_REGEX = /(?<=[/.]|^)\(?index\)?(\.lazy)?\.svelte$/; // index.svelte, index.lazy.svelte, (index).svelte
 const PARAM_FILENAME_REGEX = /(?<=[/.]|^)\(?\[([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte, ([any]).svelte
 const CATCH_ALL_FILENAME_REGEX = /(?<=[/.]|^)\(?\[\.\.\.([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
 const OUT_OF_LAYOUT_FILENAME_REGEX = /(?<=[/.]|^)\(\[\.?\.?\.?([\w-]+)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte
@@ -81,8 +82,9 @@ export function createRouteMap(fileTree, prefix = '') {
 				continue;
 			}
 
-			if (entry.endsWith('index.svelte') || entry.endsWith('index.lazy.svelte')) {
-				const indexEntry = entry.replace(/\.?index(\.lazy)?\.svelte/, '');
+			if (INDEX_FILENAME_REGEX.test(entry)) {
+				const replacement = /\.?\(index\)(\.lazy)?\.svelte/.test(entry) ? '()' : '';
+				const indexEntry = entry.replace(/\.?\(?index\)?(\.lazy)?\.svelte/, replacement);
 				result['/' + (indexEntry ? filePathToRoute(indexEntry) : '')] = prefix + entry;
 				continue;
 			}
