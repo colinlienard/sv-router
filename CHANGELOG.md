@@ -1,5 +1,17 @@
 # sv-router
 
+## 0.12.0
+
+### Minor Changes
+
+- 71581bf: Read router plugin options from Vite config
+
+### Patch Changes
+
+- c627421: Fix route matching casing
+- 5205aa8: Fix break out of layout not working for index
+- 7dcfae8: Fix extraneous layout with catch-all
+
 ## 0.11.1
 
 ### Patch Changes
