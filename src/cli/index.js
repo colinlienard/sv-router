@@ -23,8 +23,8 @@ function parseViteConfig() {
 	if (!routerConfig) return;
 	console.log('ℹ️ Using router plugin options from Vite config');
 	if (routerConfig.allLazy) genConfig.allLazy = routerConfig.allLazy;
-	if (routerConfig.routesInJs) genConfig.routesInJs = routerConfig.routesInJs;
-	if (routerConfig.routesPath) genConfig.routesPath = routerConfig.routesPath;
+	if (routerConfig.js) genConfig.routesInJs = routerConfig.js;
+	if (routerConfig.path) genConfig.routesPath = routerConfig.path;
 	if (routerConfig.ignore) genConfig.ignore = routerConfig.ignore;
 }
 
@@ -41,7 +41,7 @@ function readViteConfig(extension) {
 
 /**
  * @param {string} viteConfig
- * @returns {Record<string, any> | undefined}
+ * @returns {import('../vite-plugin/index.d.ts').RouterOptions | undefined}
  */
 function extractRouterConfig(viteConfig) {
 	const regex = /router\(\s*([^)]+)\)/;
