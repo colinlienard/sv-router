@@ -64,11 +64,11 @@ export function matchRoute(pathname, routes) {
 
 			const pathPart = pathParts[index];
 			if (routePart.startsWith(':')) {
-				params[routePart.slice(1)] = pathPart;
+				params[routePart.slice(1)] = decodeURIComponent(pathPart);
 			} else if (routePart.startsWith('*')) {
 				const param = routePart.slice(1);
 				if (param) {
-					params[param] = pathParts.slice(index).join('/');
+					params[param] = pathParts.slice(index).map(decodeURIComponent).join('/');
 				}
 				if (breakFromLayouts) {
 					routePart = `(${routePart})`;
