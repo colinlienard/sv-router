@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { beforeEach, vi } from 'vitest';
-import { base } from '../../src/create-router.svelte.js';
+import { base, blockNavigation } from '../../src/create-router.svelte.js';
 import { searchParams } from '../../src/search-params.svelte.js';
 import App, { isActive, navigate, onPreloadMock, route } from './App.test.svelte';
 
@@ -292,6 +292,87 @@ describe('router (hash-based)', () => {
 		await waitFor(() => {
 			expect(location.hash).toBe('#/lazy');
 			expect(screen.getByText('Lazy Page')).toBeInTheDocument();
+		});
+	});
+});
+
+describe('blockNavigation', () => {
+	beforeEach(() => {
+		location.pathname = '/';
+		location.search = '';
+		base.name = undefined;
+	});
+
+	it('should block link navigation when callback returns false', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		blockNavigation(() => false);
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/');
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+	});
+
+	it('should block programmatic navigation when callback returns false', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		blockNavigation(() => false);
+		navigate('/about');
+		await waitFor(() => {
+			expect(location.pathname).toBe('/');
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+	});
+
+	it('should allow navigation when callback returns true', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		blockNavigation(() => true);
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+	});
+
+	it('should clear blocker after allowing navigation', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		blockNavigation(() => true);
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('Home'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/');
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+	});
+
+	it('should block popstate navigation when callback returns false', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+		});
+		blockNavigation(() => false);
+		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+			expect(screen.getByText('About Us')).toBeInTheDocument();
 		});
 	});
 });

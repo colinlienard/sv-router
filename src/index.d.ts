@@ -29,6 +29,15 @@ export function serializeSearch(search: Search): string | undefined;
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
 
 /**
+ * Block navigation until the callback returns `false`.
+ *
+ * ```js
+ * blockNavigation(() => confirm('Are you sure you want to leave?'));
+ * ```
+ */
+export function blockNavigation(callback: () => boolean): void;
+
+/**
  * The component that will render the current route. You can pass a `base` prop to set the base path
  * that is prepended to every url.
  */
