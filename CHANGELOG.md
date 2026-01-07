@@ -1,5 +1,15 @@
 # sv-router
 
+## 0.13.0
+
+### Minor Changes
+
+- 9e6b6d2: Add navigation blocking
+
+### Patch Changes
+
+- 6be1c44: Decode url encoded params
+
 ## 0.12.0
 
 ### Minor Changes
