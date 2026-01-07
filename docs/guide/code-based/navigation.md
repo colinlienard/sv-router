@@ -68,3 +68,24 @@ navigate(1);
 // Go back two pages
 navigate(-2);
 ```
+
+## Blocking Navigation
+
+You can prevent users from accidentally leaving a page with unsaved changes using the `blockNavigation` function. It takes a callback that returns `true` to allow navigation or `false` to block it:
+
+```svelte
+<script lang="ts">
+	import { blockNavigation } from 'sv-router';
+
+	let hasUnsavedChanges = $state(false);
+
+	blockNavigation(() => {
+		if (!hasUnsavedChanges) return true;
+		return confirm('You have unsaved changes. Leave anyway?');
+	});
+</script>
+```
+
+This blocks all navigation types: link clicks, programmatic navigation, and browser back/forward buttons.
+
+The blocker is automatically cleared after allowing navigation once. To set up a persistent blocker, call `blockNavigation` again.

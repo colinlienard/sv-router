@@ -43,6 +43,9 @@ let params = $state({ value: {} });
 
 let meta = $state({ value: {} });
 
+/** @type {(() => boolean) | null} */
+let navigationBlocker = null;
+
 let navigationIndex = 0;
 let pendingNavigationIndex = 0;
 
@@ -149,6 +152,22 @@ function navigate(path, options = {}) {
 export async function onNavigate(path, options = {}) {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
+	}
+
+	if (navigationBlocker) {
+		if (!navigationBlocker()) {
+			const url = new URL(globalThis.location.toString());
+			url.search = location.search;
+			url.hash = location.hash;
+			if (base.name === '#') {
+				url.hash = location.pathname;
+			} else {
+				url.pathname = location.pathname;
+			}
+			globalThis.history.replaceState($state.snapshot(location.state) || {}, '', url.toString());
+			return;
+		}
+		navigationBlocker = null;
 	}
 
 	navigationIndex++;
@@ -291,4 +310,9 @@ export function onGlobalClick(event) {
 		scrollToTop: scrollToTop === 'false' ? false : /** @type ScrollBehavior */ (scrollToTop),
 		viewTransition: viewTransition === '' || viewTransition === 'true',
 	});
+}
+
+/** @param {() => boolean} callback */
+export function blockNavigation(callback) {
+	navigationBlocker = callback;
 }

@@ -92,6 +92,16 @@ An object containing information about the current route.
 - `state` - History state
 - `hash` - Hash fragment of the URL
 
+### `blockNavigation(callback)`
+
+Blocks navigation until the callback returns `true`.
+
+**Parameters:**
+
+- `callback` - A function that returns `true` to allow navigation or `false` to block it
+
+The blocker is cleared after allowing navigation once.
+
 ### `isActiveLink`
 
 A Svelte action that adds a class to anchors when their `href` matches the current route.
