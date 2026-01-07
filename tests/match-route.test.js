@@ -171,6 +171,18 @@ describe('matchRoute', () => {
 			expect(params).toEqual({ id: 'Bar', commentId: 'baZ' });
 		});
 
+		it('should decode URL-encoded params', () => {
+			const { match, params } = matchRoute('/posts/hello%20world', routes);
+			expect(match).toEqual(DynamicPost);
+			expect(params).toEqual({ id: 'hello world' });
+		});
+
+		it('should decode URL-encoded params with special characters', () => {
+			const { match, params } = matchRoute('/posts/foo%2Fbar/comments/baz%3Fqux', routes);
+			expect(match).toEqual(DynamicPostComment);
+			expect(params).toEqual({ id: 'foo/bar', commentId: 'baz?qux' });
+		});
+
 		it('should match catch-all route', () => {
 			const { match, params, layouts } = matchRoute('/not/found', routes);
 			expect(match).toEqual(PageNotFound);
@@ -178,6 +190,12 @@ describe('matchRoute', () => {
 			if (treeMode) {
 				expect(layouts).toEqual([]);
 			}
+		});
+
+		it('should decode URL-encoded params in catch-all routes', () => {
+			const { match, params } = matchRoute('/not%20found/path%2Fwith%2Fslashes', routes);
+			expect(match).toEqual(PageNotFound);
+			expect(params).toEqual({ rest: 'not found/path/with/slashes' });
 		});
 
 		it('should match catch-all nested route', () => {
