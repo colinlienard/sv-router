@@ -207,7 +207,7 @@ export async function onNavigate(path, options = {}) {
 	}
 	if (
 		navigationIndex !== currentNavigationIndex ||
-		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)
+		(fromBeforeLoadHook && pendingNavigationIndex !== currentNavigationIndex)
 	) {
 		return;
 	}
