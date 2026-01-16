@@ -2,22 +2,22 @@
 
 ## On Links
 
-When building navigation menus, you often need to highlight the currently active route. The `isActiveLink` action simplifies this process.
+When building navigation menus, you often need to highlight the currently active route. The `isActiveLink` attachment simplifies this process.
 
-When applied to an anchor tag, this action automatically adds a CSS class when the link's href matches the current route. By default, it adds the class `is-active`, but you can customize this:
+When applied to an anchor tag, this attachment automatically adds a CSS class when the link's href matches the current route. By default, it adds the class `is-active`, but you can customize this:
 
 ```svelte
 <script lang="ts">
 	import { isActiveLink } from 'sv-router';
 </script>
 
-<a href={p('/about')} use:isActiveLink>About</a>
+<a href={p('/about')} {@attach isActiveLink()}>About</a>
 
 <!-- With custom class name -->
-<a href={p('/about')} use:isActiveLink={{ className: 'custom-class' }}>
+<a href={p('/about')} {@attach isActiveLink({ className: 'custom-class' })}>
 
 <!-- Active when the route starts with '/about' -->
-<a href={p('/about')} use:isActiveLink={{ startsWith: true }}>
+<a href={p('/about')} {@attach isActiveLink({ startsWith: true })}>
 ```
 
 > [!NOTE]
@@ -25,10 +25,10 @@ When applied to an anchor tag, this action automatically adds a CSS class when t
 >
 > ```svelte
 > <!-- Space-separated classes -->
-> <a use:isActiveLink={{ className: 'active highlighted' }}>
+> <a {@attach isActiveLink({ className: 'active highlighted' })}>
 >
 > <!-- Using clsx for conditional classes -->
-> <a use:isActiveLink={{ className: clsx('active', isSpecial && 'special') }}>
+> <a {@attach isActiveLink({ className: clsx('active', isSpecial && 'special') })}>
 > ```
 
 ## Programmatically

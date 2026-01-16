@@ -1,4 +1,4 @@
-export { isActiveLink } from './actions.svelte.js';
+export { isActiveLink, isActiveLinkAction } from './attachments.svelte.js';
 export { blockNavigation, createRouter } from './create-router.svelte.js';
 export { serializeSearch } from './helpers/utils.js';
 export { Navigation } from './navigation.js';
