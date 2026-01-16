@@ -104,7 +104,7 @@ The blocker is cleared after allowing navigation once.
 
 ### `isActiveLink`
 
-A Svelte action that adds a class to anchors when their `href` matches the current route.
+A Svelte attachment that adds a class to anchors when their `href` matches the current route.
 
 **Parameters:**
 

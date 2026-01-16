@@ -1,13 +1,27 @@
 import type { Component, Snippet } from 'svelte';
 import type { Action } from 'svelte/action';
+import type { Attachment } from 'svelte/attachments';
 
 /**
- * A Svelte action that will add a class to the anchor if its `href` matches the current route. It
- * can have an optional `className` parameter to specify the class to add, otherwise it will default
- * to `is-active`.
+ * @deprecated Use the `isActiveLink` attachment instead.
+ *
+ *   A Svelte action that will add a class to the anchor if its `href` matches the current route. It
+ *   can have an optional `className` parameter to specify the class to add, otherwise it will
+ *   default to `is-active`, and an optional `startsWith` parameter.
+ *
+ *   ```svelte
+ *   <a href={p('/about')} use:isActiveLink={{ className: 'active-link' }}>
+ * ```
+ */
+export const isActiveLinkAction: IsActiveLinkAction;
+
+/**
+ * A Svelte attachment that will add a class to the anchor if its `href` matches the current route.
+ * It can have an optional `className` parameter to specify the class to add, otherwise it will
+ * default to `is-active`, and an optional `startsWith` parameter.
  *
  * ```svelte
- * <a href={p('/about')} use:isActiveLink={{ className: 'active-link' }}>
+ * <a href={p('/about')} {@attach isActiveLink({ className: 'active-link' })}>
  * ```
  */
 export const isActiveLink: IsActiveLink;
@@ -92,7 +106,12 @@ export type Routes = {
 	meta?: RouteMeta;
 };
 
-export type IsActiveLink = Action<
+export type IsActiveLink = (options?: {
+	className?: string;
+	startsWith?: boolean;
+}) => Attachment<HTMLAnchorElement>;
+
+export type IsActiveLinkAction = Action<
 	HTMLAnchorElement,
 	| {
 			className?: string;

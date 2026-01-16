@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { isActiveLink } from '../../src/actions.svelte.js';
+	import { isActiveLink } from '../../src/attachments.svelte.js';
 
 	type Props = {
 		children: Snippet | string;
@@ -12,4 +12,4 @@
 	let { children, href, ...options }: Props = $props();
 </script>
 
-<a {href} use:isActiveLink={options}>{children}</a>
+<a {href} {@attach isActiveLink(options)}>{children}</a>
