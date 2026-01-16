@@ -3,7 +3,7 @@ import type { Action } from 'svelte/action';
 import type { Attachment } from 'svelte/attachments';
 
 /**
- * @deprecated Use the `isActiveLink` attachment instead.
+ * @deprecated Use the `isActiveLink` [attachment](https://svelte.dev/docs/svelte/@attach) instead.
  *
  *   A Svelte action that will add a class to the anchor if its `href` matches the current route. It
  *   can have an optional `className` parameter to specify the class to add, otherwise it will

@@ -28,7 +28,7 @@ When applied to an anchor tag, this attachment automatically adds a CSS class wh
 > <a {@attach isActiveLink({ className: 'active highlighted' })}>
 >
 > <!-- Using clsx for conditional classes -->
-> <a {@attach isActiveLink({ className: clsx('active', isSpecial && 'special')}} )>
+> <a {@attach isActiveLink({ className: clsx('active', isSpecial && 'special') })}>
 > ```
 
 ## Programmatically
