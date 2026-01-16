@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.14.0
+
+### Minor Changes
+
+- 1ec2656: Move from actions to attachments
+
 ## 0.13.0
 
 ### Minor Changes
