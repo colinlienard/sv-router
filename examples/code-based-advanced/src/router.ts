@@ -5,7 +5,7 @@ import AMoreNestedRoute from './routes/AMoreNestedRoute.svelte';
 import Home from './routes/Home.svelte';
 import StaticPost from './routes/StaticPost.svelte';
 
-export const { p, navigate, isActive, preload, route } = createRouter({
+export const { p, navigate, redirect, isActive, preload, route } = createRouter({
 	'/': Home,
 	'/about': About,
 	'/a/more/nested/route': AMoreNestedRoute,
@@ -42,7 +42,7 @@ export const { p, navigate, isActive, preload, route } = createRouter({
 		hooks: {
 			async beforeLoad() {
 				await new Promise((r) => setTimeout(r, 1000));
-				throw navigate('/');
+				throw redirect('/');
 			},
 		},
 	},

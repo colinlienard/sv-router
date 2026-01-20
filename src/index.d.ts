@@ -1,6 +1,7 @@
 import type { Component, Snippet } from 'svelte';
 import type { Action } from 'svelte/action';
 import type { Attachment } from 'svelte/attachments';
+import type { Redirect } from './redirect.js';
 
 /**
  * @deprecated Use the `isActiveLink` [attachment](https://svelte.dev/docs/svelte/@attach) instead.
@@ -80,12 +81,12 @@ export type Hooks = {
 	 * A function that will be called before the route is loaded. If it returns a promise, the route
 	 * will wait for it to resolve before loading.
 	 *
-	 * You can throw a `navigate` call to redirect to another route.
+	 * You can throw a `redirect` call to redirect to another route.
 	 *
 	 * ```js
 	 * async beforeLoad({ pathname }) {
 	 *   await ...
-	 *   throw navigate('/home');
+	 *   throw redirect('/home');
 	 * }
 	 * ```
 	 */
@@ -134,7 +135,7 @@ export type IsActiveLinkAction = Action<
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RouteMeta {}
 
-export class Navigation extends Error {
+export class Redirect extends Error {
 	constructor(target: string);
 }
 
@@ -156,6 +157,8 @@ export type RouterApi<T extends Routes> = {
 	/**
 	 * Navigate programmatically to a route.
 	 *
+	 * For redirecting see {@link redirect}
+	 *
 	 * ```js
 	 * navigate('/users');
 	 * // With parameters
@@ -171,9 +174,24 @@ export type RouterApi<T extends Routes> = {
 	 *
 	 * @param route The route to navigate to.
 	 * @param options The navigation options.
-	 * @returns {@link Navigation} For use with `throw navigate(...)` inside hooks.
 	 */
-	navigate<U extends Path<T>>(...args: NavigateArgs<U>): Navigation;
+	navigate<U extends Path<T>>(...args: NavigateArgs<U>): Promise<void>;
+
+	/**
+	 * Throw the result of this function inside a `beforeLoad` hook to redirect the navigation to a
+	 * different route.
+	 *
+	 * ```js
+	 * async beforeLoad({ pathname }) {
+	 *   await ...
+	 *   throw redirect('/home');
+	 * }
+	 * ```
+	 *
+	 * @param route The route to redirect to.
+	 * @param options The navigation options.
+	 */
+	redirect<U extends Path<T>>(...args: RedirectArgs<U>): Redirect;
 
 	/**
 	 * Will return `true` if the given path is active.
@@ -304,11 +322,12 @@ export type SearchParams = Omit<
 	values(): (string | number | boolean)[];
 };
 
-type NavigateArgs<T extends string> =
-	| (PathParams<T> extends never
-			? [T] | [T, NavigateOptions]
-			: [T, NavigateOptions & { params: PathParams<T> }])
-	| [number];
+type RedirectArgs<T extends string> =
+	PathParams<T> extends never
+		? [T] | [T, NavigateOptions]
+		: [T, NavigateOptions & { params: PathParams<T> }];
+
+type NavigateArgs<T extends string> = RedirectArgs<T> | [number];
 
 type StripNonRoutes<T extends Routes> = {
 	[K in keyof T as K extends `*${string}`

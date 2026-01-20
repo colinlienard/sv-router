@@ -8,7 +8,7 @@
 
 	export const onPreloadMock = vi.fn();
 
-	export const { p, navigate, isActive, preload, route } = createRouter({
+	export const { p, navigate, redirect, isActive, preload, route } = createRouter({
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
 		'/about': createRawSnippet(() => ({ render: () => '<h1>About Us</h1>' })),
 		'/user/:id': UserPage,
@@ -20,7 +20,7 @@
 			'/': createRawSnippet(() => ({ render: () => '<h1>Protected Page</h1>' })),
 			hooks: {
 				beforeLoad() {
-					throw navigate('/');
+					throw redirect('/');
 				},
 			},
 		},
@@ -29,7 +29,7 @@
 			hooks: {
 				async beforeLoad() {
 					await new Promise((resolve) => setTimeout(resolve, 100));
-					throw navigate('/');
+					throw redirect('/');
 				},
 			},
 		},
