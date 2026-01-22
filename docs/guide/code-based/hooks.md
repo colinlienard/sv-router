@@ -46,7 +46,7 @@ hooks: {
 	async beforeLoad() {
 		const user = await someAsyncFunction();
 		if (!user.admin) {
-			throw navigate('/login');
+			throw redirect('/login');
 		}
 	},
 };
@@ -58,7 +58,7 @@ All hooks receive a context object with information about the current navigation
 hooks: {
 	beforeLoad({ pathname, search, hash, state, replace, meta }) {
    if (!admin && pathname !== "/") {
-         throw navigate("/");
+         throw redirect("/");
        }
 	},
 };

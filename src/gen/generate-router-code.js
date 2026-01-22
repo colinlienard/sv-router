@@ -234,7 +234,7 @@ export function createRouterCode(routes, routesPath, { allLazy = false, js = fal
 		'',
 		`export const routes = ${stringifiedRoutes};`,
 		...(js ? [] : ['export type Routes = typeof routes;']),
-		'export const { p, navigate, isActive, preload, route } = createRouter(routes);',
+		'export const { p, navigate, redirect, isActive, preload, route } = createRouter(routes);',
 		'',
 	].join('\n');
 }

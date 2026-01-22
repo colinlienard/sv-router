@@ -31,7 +31,7 @@ export const routes = {
   '/posts/comments/:id': () => import('../a/fake/path/posts.comments.[id].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, redirect, isActive, preload, route } = createRouter(routes);
 `);
 	});
 
@@ -69,7 +69,7 @@ export const routes = {
   }
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, redirect, isActive, preload, route } = createRouter(routes);
 `);
 	});
 });
@@ -407,7 +407,7 @@ export const routes = {
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, redirect, isActive, preload, route } = createRouter(routes);
 `);
 	});
 
@@ -446,7 +446,7 @@ export const routes = {
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, redirect, isActive, preload, route } = createRouter(routes);
 `);
 	});
 
@@ -470,7 +470,7 @@ export const routes = {
   }
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, redirect, isActive, preload, route } = createRouter(routes);
 `);
 	});
 
@@ -482,7 +482,7 @@ import Index from './routes/index.svelte';
 export const routes = {
   '/': Index
 };
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, redirect, isActive, preload, route } = createRouter(routes);
 `);
 	});
 });

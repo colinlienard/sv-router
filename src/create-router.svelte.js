@@ -12,7 +12,7 @@ import {
 	stripBase,
 	updatedLocation,
 } from './helpers/utils.js';
-import { Navigation } from './navigation.js';
+import { Redirect } from './redirect.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
 /** @type {import('./index.d.ts').Routes} */
@@ -45,9 +45,6 @@ let meta = $state({ value: {} });
 
 /** @type {(() => boolean) | null} */
 let navigationBlocker = null;
-
-let navigationIndex = 0;
-let pendingNavigationIndex = 0;
 
 /** @param {string | undefined} basename */
 export function init(basename) {
@@ -89,6 +86,7 @@ export function createRouter(r) {
 	return {
 		p: constructUrl,
 		navigate,
+		redirect,
 		isActive,
 		async preload(pathname) {
 			await preload(routes, pathname);
@@ -129,21 +127,38 @@ export function createRouter(r) {
  * 	search?: import('./index.d.ts').Search;
  * }} options
  */
-function navigate(path, options = {}) {
+async function navigate(path, options = {}) {
 	if (typeof path === 'number') {
 		globalThis.history.go(path);
-		return new Navigation(`History entry: ${path}`);
+		return;
 	}
-
 	path = constructPath(path, options.params);
 	if (base.name === '#') {
 		path = path.replace('/#', '');
 	} else if (options.hash && !options.hash.startsWith('#')) {
 		options.hash = '#' + options.hash;
 	}
-	onNavigate(path, options);
-	return new Navigation(`${path}${serializeSearch(options?.search ?? '')}${options?.hash ?? ''}`);
+	await onNavigate(path, options);
 }
+
+/**
+ * @param {string} path
+ * @param {import('./index.d.ts').NavigateOptions & {
+ * 	params?: Record<string, string>;
+ * 	search?: import('./index.d.ts').Search;
+ * }} options
+ */
+function redirect(path, options = {}) {
+	path = constructPath(path, options.params);
+	if (base.name === '#') {
+		path = path.replace('/#', '');
+	} else if (options.hash && !options.hash.startsWith('#')) {
+		options.hash = '#' + options.hash;
+	}
+	return new Redirect(path, options);
+}
+
+let navigationAbortController = new AbortController();
 
 /**
  * @param {string} [path]
@@ -153,6 +168,11 @@ export async function onNavigate(path, options = {}) {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
+
+	navigationAbortController.abort();
+	navigationAbortController = new AbortController();
+
+	const { signal } = navigationAbortController;
 
 	if (navigationBlocker) {
 		if (!navigationBlocker()) {
@@ -170,31 +190,59 @@ export async function onNavigate(path, options = {}) {
 		navigationBlocker = null;
 	}
 
-	navigationIndex++;
-	const currentNavigationIndex = navigationIndex;
+	let hooks;
+	let hooksContext;
+	let layouts;
+	let match;
+	let newMeta;
+	let newParams;
+	while (
+		match === undefined ||
+		layouts === undefined ||
+		newParams == undefined ||
+		hooks === undefined ||
+		hooksContext === undefined ||
+		newMeta === undefined
+	) {
+		const matchPath = getMatchPath(path);
+		const matched = matchRoute(matchPath, routes);
 
-	const matchPath = getMatchPath(path);
-	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
+		const search = parseSearch(options.search);
+		const currentHooksContext = { pathname: matchPath, meta: matched.meta, ...options, search };
 
-	const search = parseSearch(options.search);
-	const hooksContext = { pathname: matchPath, meta: newMeta, ...options, search };
-
-	let errorHooks = [];
-	for (const hook of hooks) {
-		try {
-			const { beforeLoad } = hook;
-			errorHooks.push(hook);
-			pendingNavigationIndex = currentNavigationIndex;
-			await beforeLoad?.(hooksContext);
-		} catch (error) {
-			for (const { onError } of errorHooks) {
-				void onError?.(error, hooksContext);
+		let redirected = false;
+		let errorHooks = [];
+		for (const hook of matched.hooks) {
+			try {
+				const { beforeLoad } = hook;
+				errorHooks.push(hook);
+				await beforeLoad?.(currentHooksContext);
+			} catch (error) {
+				if (signal.aborted) {
+					return;
+				}
+				for (const { onError } of errorHooks) {
+					void onError?.(error, currentHooksContext);
+				}
+				if (error instanceof Redirect) {
+					path = error.target;
+					options = error.options;
+					redirected = true;
+					break;
+				}
+				return;
 			}
-			return;
+		}
+
+		if (!redirected) {
+			hooks = matched.hooks;
+			hooksContext = currentHooksContext;
+			layouts = matched.layouts;
+			match = matched.match;
+			newMeta = matched.meta;
+			newParams = matched.params;
 		}
 	}
-
-	const fromBeforeLoadHook = new Error().stack?.includes('beforeLoad');
 
 	let routeComponents;
 	try {
@@ -205,10 +253,8 @@ export async function onNavigate(path, options = {}) {
 		}
 		throw error;
 	}
-	if (
-		navigationIndex !== currentNavigationIndex ||
-		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)
-	) {
+
+	if (signal.aborted) {
 		return;
 	}
 

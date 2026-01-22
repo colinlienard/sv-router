@@ -46,7 +46,7 @@ describe('router', () => {
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
-		navigate('/about');
+		await navigate('/about');
 		await waitFor(() => {
 			expect(location.pathname).toBe('/about');
 			expect(screen.getByText('About Us')).toBeInTheDocument();
@@ -245,7 +245,7 @@ describe('router (hash-based)', () => {
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
-		navigate('/about');
+		await navigate('/about');
 		await waitFor(() => {
 			expect(location.hash).toBe('#/about');
 			expect(screen.getByText('About Us')).toBeInTheDocument();
@@ -322,7 +322,7 @@ describe('blockNavigation', () => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
 		blockNavigation(() => false);
-		navigate('/about');
+		await navigate('/about');
 		await waitFor(() => {
 			expect(location.pathname).toBe('/');
 			expect(screen.getByText('Welcome')).toBeInTheDocument();

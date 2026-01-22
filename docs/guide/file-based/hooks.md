@@ -51,7 +51,7 @@ You can `throw` within a `beforeLoad` hook to prevent route loading. For redirec
 async function beforeLoad() {
 	const user = await someAsyncFunction();
 	if (!user.admin) {
-		throw navigate('/login');
+		throw redirect('/login');
 	}
 }
 ```
@@ -61,7 +61,7 @@ All hooks receive a context object with information about the current navigation
 ```ts
 function beforeLoad({ pathname, search, hash, state, replace, meta }) {
 	if (!admin && pathname !== '/') {
-		throw navigate('/');
+		throw redirect('/');
 	}
 }
 ```
