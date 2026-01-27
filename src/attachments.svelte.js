@@ -1,5 +1,4 @@
 import { base, location } from './create-router.svelte.js';
-import { join } from './helpers/utils.js';
 
 /** @type {import('./index.d.ts').IsActiveLink} */
 export function isActiveLink({ className = 'is-active', startsWith = false } = {}) {
@@ -14,9 +13,6 @@ export function isActiveLink({ className = 'is-active', startsWith = false } = {
 				pathname = new URL(node.href).hash.slice(1);
 			} else {
 				pathname = new URL(node.href).pathname;
-				if (base.name) {
-					pathname = join(base.name, pathname);
-				}
 			}
 			const tokens = className.split(' ').filter(Boolean) ?? [];
 			if (startsWith ? location.pathname.startsWith(pathname) : location.pathname === pathname) {
@@ -40,9 +36,6 @@ export function isActiveLinkAction(node, { className = 'is-active', startsWith =
 			pathname = new URL(node.href).hash.slice(1);
 		} else {
 			pathname = new URL(node.href).pathname;
-			if (base.name) {
-				pathname = join(base.name, pathname);
-			}
 		}
 		const tokens = className.split(' ').filter(Boolean) ?? [];
 		if (startsWith ? location.pathname.startsWith(pathname) : location.pathname === pathname) {
