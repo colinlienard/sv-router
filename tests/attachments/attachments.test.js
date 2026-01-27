@@ -30,11 +30,26 @@ describe('isActiveLink', () => {
 		expect(screen.getByText('About').classList.contains('is-active')).toBe(false);
 	});
 
-	it('should work with a basename', () => {
+	it('should match with a basename', () => {
 		location.pathname = '/my-app/about';
 		base.name = '/my-app';
 		render(Attachments, { children: 'About', href: '/about' });
 		expect(screen.getByText('About').classList.contains('is-active')).toBe(true);
+	});
+
+	it('should match with a basename and a simple route', () => {
+		location.pathname = '/my-app';
+		base.name = '/my-app';
+		render(Attachments, { children: 'About', href: '/' });
+		expect(screen.getByText('About').classList.contains('is-active')).toBe(true);
+		base.name = undefined;
+	});
+
+	it('should not match a different route with a basename', () => {
+		location.pathname = '/my-app/team';
+		base.name = '/my-app';
+		render(Attachments, { children: 'About', href: '/about' });
+		expect(screen.getByText('About').classList.contains('is-active')).toBe(false);
 		base.name = undefined;
 	});
 

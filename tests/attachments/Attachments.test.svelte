@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { isActiveLink } from '../../src/attachments.svelte.js';
+	import { constructPath } from '../../src/helpers/utils.js';
 
 	type Props = {
 		children: Snippet | string;
@@ -12,4 +13,5 @@
 	let { children, href, ...options }: Props = $props();
 </script>
 
-<a {href} {@attach isActiveLink(options)}>{children}</a>
+<!-- Like `p(href)` -->
+<a href={constructPath(href)} {@attach isActiveLink(options)}>{children}</a>

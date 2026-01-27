@@ -27,7 +27,8 @@ isActive.startsWith = (pathname, params) => {
  */
 function compare(compareFn, pathname, params) {
 	if (!pathname.includes(':')) {
-		return compareFn(location.pathname, pathname);
+		const target = base.name && base.name !== '#' ? constructPath(pathname) : pathname;
+		return compareFn(location.pathname, target);
 	}
 
 	if (params) {

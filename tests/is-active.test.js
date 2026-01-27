@@ -46,10 +46,22 @@ describe('isActive', () => {
 		expect(isActive('/post/:id', { id: '123' })).toBe(false);
 	});
 
-	it('should work with a basename', () => {
+	it('should match with a basename', () => {
 		base.name = '/my-app';
 		location.pathname = '/my-app/post/123';
 		expect(isActive('/post/:id', { id: '123' })).toBe(true);
+	});
+
+	it('should match with a basename and a simple route', () => {
+		base.name = '/dashboard';
+		location.pathname = '/dashboard';
+		expect(isActive('/')).toBe(true);
+	});
+
+	it('should not match a different route with a basename', () => {
+		base.name = '/dashboard';
+		location.pathname = '/dashboard/about';
+		expect(isActive('/')).toBe(false);
 	});
 });
 
@@ -146,10 +158,16 @@ describe('isActive.startsWith', () => {
 		expect(isActive.startsWith('/hello/:id', { id: 'world' })).toBe(false);
 	});
 
-	it('should work with a basename', () => {
+	it('should match with a basename', () => {
 		base.name = '/my-app';
 		location.pathname = '/my-app/post/123/foo';
 		expect(isActive.startsWith('/post/:id', { id: '123' })).toBe(true);
+	});
+
+	it('should match with a basename and a simple route', () => {
+		base.name = '/dashboard';
+		location.pathname = '/dashboard/about';
+		expect(isActive.startsWith('/')).toBe(true);
 	});
 });
 
