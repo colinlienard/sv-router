@@ -173,7 +173,7 @@ export type RouterApi<T extends Routes> = {
 	 * @param options The navigation options.
 	 * @returns {@link Navigation} For use with `throw navigate(...)` inside hooks.
 	 */
-	navigate<U extends Path<T>>(...args: NavigateArgs<U>): Navigation;
+	navigate<U extends Path<T>>(...args: NavigateArgs<U>): Promise<Navigation>;
 
 	/**
 	 * Will return `true` if the given path is active.
