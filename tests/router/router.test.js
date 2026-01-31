@@ -72,7 +72,7 @@ describe('router', () => {
 		});
 	});
 
-	it('should work with a dynamic route', async () => {
+	it('should match with a dynamic route', async () => {
 		location.pathname = '/user/123';
 		render(App);
 		await waitFor(() => {
@@ -252,7 +252,7 @@ describe('router (hash-based)', () => {
 		});
 	});
 
-	it('should work with a dynamic route', async () => {
+	it('should match with a dynamic route', async () => {
 		location.hash = '#/user/123';
 		render(App, { base: '#' });
 		await waitFor(() => {
