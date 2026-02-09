@@ -259,6 +259,67 @@ describe('matchRoute', () => {
 				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)']);
 			});
 
+			it('should break out of layouts with deeply nested routes', () => {
+				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
+					'/parent': {
+						'/mid': {
+							'/(slug)': NoLayout,
+						},
+						layout: Layout1,
+					},
+				});
+				const { match, layouts } = matchRoute('/parent/mid/slug', deepRoutes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([]);
+			});
+
+			it('should break out of all layouts with multiple nested layouts', () => {
+				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
+					'/parent': {
+						'/child': {
+							'/(slug)': NoLayout,
+							layout: Layout2,
+						},
+						layout: Layout1,
+					},
+				});
+				const { match, layouts } = matchRoute('/parent/child/slug', deepRoutes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([]);
+			});
+
+			it('should break out of layouts with deeply nested param routes', () => {
+				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
+					'/parent': {
+						'/mid': {
+							'/(:id)': NoLayout,
+						},
+						layout: Layout1,
+					},
+				});
+				const { match, layouts, params } = matchRoute('/parent/mid/42', deepRoutes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([]);
+				expect(params).toEqual({ id: '42' });
+			});
+
+			it('should break out of layouts at four levels of nesting', () => {
+				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
+					'/a': {
+						'/b': {
+							'/c': {
+								'/(leaf)': NoLayout,
+								layout: Layout2,
+							},
+						},
+						layout: Layout1,
+					},
+				});
+				const { match, layouts } = matchRoute('/a/b/c/leaf', deepRoutes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([]);
+			});
+
 			it('should match one hook', () => {
 				const { hooks } = matchRoute('/posts', routes);
 				expect(hooks).toEqual([Hooks1]);
