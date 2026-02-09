@@ -38,7 +38,7 @@ Constructs a path with type-safe parameter substitution.
 
 #### `navigate(path, options?)`
 
-Programmatically navigate to a route.
+Programmatically navigate to a route. Returns a promise that resolves once the navigation is complete, including any redirects triggered by `beforeLoad` hooks and lazy-loaded route components.
 
 **Parameters:**
 
@@ -53,6 +53,8 @@ Programmatically navigate to a route.
   - `scrollToTop` - Scroll behavior (`"auto" | "instant" | "smooth" | false`)
   - `viewTransition` - Enable view transition (`boolean`)
   - `params` - Parameters to substitute in the path
+
+**Returns:** `Promise<Navigation>` - Resolves when the full navigation (including redirects and code splitting) is complete
 
 #### `isActive(path, params?)`
 

@@ -50,6 +50,9 @@ let navigationBlocker = null;
 let currentNavigationController = null;
 let pendingController = /** @type {AbortController | null} */ (null);
 
+/** @type {Promise<void | null> | null} */
+let currentNavigationPromise = null;
+
 /** @param {string | undefined} basename */
 export function init(basename) {
 	if (basename) {
@@ -142,7 +145,9 @@ async function navigate(path, options = {}) {
 	} else if (options.hash && !options.hash.startsWith('#')) {
 		options.hash = '#' + options.hash;
 	}
-	await onNavigate(path, options);
+	const promise = onNavigate(path, options);
+	currentNavigationPromise = promise;
+	await promise;
 	return new Navigation(`${path}${serializeSearch(options?.search ?? '')}${options?.hash ?? ''}`);
 }
 
@@ -187,20 +192,20 @@ export async function onNavigate(path, options = {}) {
 
 	let errorHooks = [];
 	for (const hook of hooks) {
-		if (signal.aborted) return;
+		if (signal.aborted) return currentNavigationPromise;
 		try {
 			const { beforeLoad } = hook;
 			errorHooks.push(hook);
 			pendingController = currentNavigationController;
 			await beforeLoad?.(hooksContext);
-			pendingController = null;
 		} catch (error) {
-			pendingController = null;
-			if (signal.aborted) return;
+			if (signal.aborted) return currentNavigationPromise;
 			for (const { onError } of errorHooks) {
 				void onError?.(error, hooksContext);
 			}
 			return;
+		} finally {
+			pendingController = null;
 		}
 	}
 
@@ -213,7 +218,7 @@ export async function onNavigate(path, options = {}) {
 		}
 		throw error;
 	}
-	if (signal.aborted) return;
+	if (signal.aborted) return currentNavigationPromise;
 
 	if (path) {
 		const search = serializeSearch(options.search);

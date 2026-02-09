@@ -139,6 +139,16 @@ describe('router', () => {
 		expect(location.pathname).toBe('/');
 	});
 
+	it('should await the full redirect chain when navigate triggers a redirect', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/protected');
+		expect(location.pathname).toBe('/');
+		expect(screen.getByText('Welcome')).toBeInTheDocument();
+	});
+
 	it('should navigate to the latest route even after navigate in before load', async () => {
 		render(App);
 		await userEvent.click(screen.getByText('Slow Protected'));

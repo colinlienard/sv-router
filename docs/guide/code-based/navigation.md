@@ -56,6 +56,13 @@ navigate('/post/:slug', {
 });
 ```
 
+The `navigate` function returns a promise that resolves once the navigation is complete, including any redirects triggered by `beforeLoad` hooks and lazy-loaded route components. You can `await` it when you need to perform actions after the navigation has fully settled:
+
+```ts
+await navigate('/dashboard');
+// The navigation is complete, including any redirects or code splitting
+```
+
 The `navigate` function also supports traversing through browser history, similar to the native [History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API):
 
 ```ts
