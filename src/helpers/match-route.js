@@ -71,7 +71,6 @@ export function matchRoute(pathname, routes) {
 					params[param] = pathParts.slice(index).map(decodeURIComponent).join('/');
 				}
 				if (breakFromLayouts) {
-					routePart = `(${routePart})`;
 					layouts = [];
 				} else if ('layout' in routes && routes.layout) {
 					layouts.push(routes.layout);

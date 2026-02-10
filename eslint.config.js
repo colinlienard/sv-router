@@ -21,7 +21,7 @@ export default [
 		},
 	},
 	{
-		files: ['**/*.svelte'],
+		files: ['**/*.svelte', '**/*.svelte.js'],
 		languageOptions: {
 			parserOptions: {
 				parser: ts.parser,
@@ -64,7 +64,7 @@ export default [
 			'@typescript-eslint/no-explicit-any': 'off',
 			'@typescript-eslint/no-unused-vars': [
 				'error',
-				{ ignoreRestSiblings: true, varsIgnorePattern: 'test_.*', argsIgnorePattern: '_' },
+				{ ignoreRestSiblings: true, varsIgnorePattern: '^_', argsIgnorePattern: '_' },
 			],
 			'no-console': ['warn', { allow: ['warn'] }],
 			'svelte/prefer-svelte-reactivity': 'off',
