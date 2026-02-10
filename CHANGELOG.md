@@ -1,5 +1,30 @@
 # sv-router
 
+## 0.14.0
+
+### Minor Changes
+
+- 1ec2656: Move from actions to attachments
+
+  **Breaking**: If you were using the `isActiveLink` action, it is now an attachment and you should use it like this:
+
+  ```svelte
+  <!-- Before -->
+  <a href={p('/about')} use:isActiveLink>About</a>
+
+  <!-- Attachment -->
+  <a href={p('/about')} {@attach isActiveLink()}>About</a>
+
+  <!-- Or if you want to stay with an action -->
+  <a href={p('/about')} use:isActiveLinkAction>About</a>
+  ```
+
+### Patch Changes
+
+- c748977: Fix breaking from layouts with more than 2 levels deep
+- 9c65b78: Fix isActive and isActiveLink not working correctly when base is set
+- 08e72ee: Use abort controller to cancel navigation
+
 ## 0.13.0
 
 ### Minor Changes
