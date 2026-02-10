@@ -126,6 +126,7 @@ export function matchRoute(pathname, routes) {
 				meta = { ...meta, ...result.meta };
 				if (result.breakFromLayouts) {
 					layouts = [];
+					breakFromLayouts = true;
 				} else {
 					layouts.push(...result.layouts);
 				}
