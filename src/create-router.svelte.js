@@ -46,8 +46,12 @@ let meta = $state({ value: {} });
 /** @type {(() => boolean) | null} */
 let navigationBlocker = null;
 
-let navigationIndex = 0;
-let pendingNavigationIndex = 0;
+/** @type {AbortController | null} */
+let currentNavigationController = null;
+let pendingController = /** @type {AbortController | null} */ (null);
+
+/** @type {Promise<void | null> | null} */
+let currentNavigationPromise = null;
 
 /** @param {string | undefined} basename */
 export function init(basename) {
@@ -129,7 +133,7 @@ export function createRouter(r) {
  * 	search?: import('./index.d.ts').Search;
  * }} options
  */
-function navigate(path, options = {}) {
+async function navigate(path, options = {}) {
 	if (typeof path === 'number') {
 		globalThis.history.go(path);
 		return new Navigation(`History entry: ${path}`);
@@ -141,7 +145,9 @@ function navigate(path, options = {}) {
 	} else if (options.hash && !options.hash.startsWith('#')) {
 		options.hash = '#' + options.hash;
 	}
-	onNavigate(path, options);
+	const promise = onNavigate(path, options);
+	currentNavigationPromise = promise;
+	await promise;
 	return new Navigation(`${path}${serializeSearch(options?.search ?? '')}${options?.hash ?? ''}`);
 }
 
@@ -170,8 +176,13 @@ export async function onNavigate(path, options = {}) {
 		navigationBlocker = null;
 	}
 
-	navigationIndex++;
-	const currentNavigationIndex = navigationIndex;
+	if (pendingController && pendingController !== currentNavigationController) {
+		return;
+	}
+
+	currentNavigationController?.abort();
+	currentNavigationController = new AbortController();
+	const { signal } = currentNavigationController;
 
 	const matchPath = getMatchPath(path);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
@@ -181,20 +192,22 @@ export async function onNavigate(path, options = {}) {
 
 	let errorHooks = [];
 	for (const hook of hooks) {
+		if (signal.aborted) return currentNavigationPromise;
 		try {
 			const { beforeLoad } = hook;
 			errorHooks.push(hook);
-			pendingNavigationIndex = currentNavigationIndex;
+			pendingController = currentNavigationController;
 			await beforeLoad?.(hooksContext);
 		} catch (error) {
+			if (signal.aborted) return currentNavigationPromise;
 			for (const { onError } of errorHooks) {
 				void onError?.(error, hooksContext);
 			}
 			return;
+		} finally {
+			pendingController = null;
 		}
 	}
-
-	const fromBeforeLoadHook = new Error().stack?.includes('beforeLoad');
 
 	let routeComponents;
 	try {
@@ -205,12 +218,7 @@ export async function onNavigate(path, options = {}) {
 		}
 		throw error;
 	}
-	if (
-		navigationIndex !== currentNavigationIndex ||
-		(fromBeforeLoadHook && pendingNavigationIndex + 1 !== currentNavigationIndex)
-	) {
-		return;
-	}
+	if (signal.aborted) return currentNavigationPromise;
 
 	if (path) {
 		const search = serializeSearch(options.search);
