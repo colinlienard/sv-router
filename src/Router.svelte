@@ -1,6 +1,12 @@
 <script>
 	import { on } from 'svelte/events';
-	import { componentTree, init, onGlobalClick, onNavigate } from './create-router.svelte.js';
+	import {
+		componentTree,
+		init,
+		onBeforeUnload,
+		onGlobalClick,
+		onNavigate,
+	} from './create-router.svelte.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
 
 	/** @type {{ base?: string }} */
@@ -11,12 +17,16 @@
 	onNavigate();
 
 	$effect(() => {
-		const off1 = on(globalThis, 'popstate', () => onNavigate());
-		const off2 = on(globalThis, 'click', onGlobalClick);
+		const cleanup = [
+			on(globalThis, 'popstate', () => onNavigate()),
+			on(globalThis, 'beforeunload', onBeforeUnload),
+			on(globalThis, 'click', onGlobalClick),
+		];
 
 		return () => {
-			off1();
-			off2();
+			for (const clean of cleanup) {
+				clean();
+			}
 		};
 	});
 </script>

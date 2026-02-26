@@ -1,4 +1,5 @@
 import { BROWSER, DEV } from 'esm-env';
+import { SvelteMap } from 'svelte/reactivity';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
@@ -43,8 +44,13 @@ let params = $state({ value: {} });
 
 let meta = $state({ value: {} });
 
-/** @type {(() => boolean) | null} */
-let navigationBlocker = null;
+/**
+ * @type {SvelteMap<
+ * 	string,
+ * 	(() => boolean) | { beforeUnload(): boolean; onNavigate(): Promise<boolean> }
+ * >}
+ */
+const navigationBlockers = new SvelteMap();
 
 /** @type {AbortController | null} */
 let currentNavigationController = null;
@@ -151,6 +157,16 @@ async function navigate(path, options = {}) {
 	return new Navigation(`${path}${serializeSearch(options?.search ?? '')}${options?.hash ?? ''}`);
 }
 
+/** @param {BeforeUnloadEvent} event */
+export function onBeforeUnload(event) {
+	for (const blocker of navigationBlockers.values()) {
+		const shouldNavigate = typeof blocker === 'object' ? blocker.beforeUnload : blocker;
+		if (!shouldNavigate()) {
+			event.preventDefault();
+		}
+	}
+}
+
 /**
  * @param {string} [path]
  * @param {import('./index.d.ts').NavigateOptions} options
@@ -160,20 +176,25 @@ export async function onNavigate(path, options = {}) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
 
-	if (navigationBlocker) {
-		if (!navigationBlocker()) {
-			const url = new URL(globalThis.location.toString());
-			url.search = location.search;
-			url.hash = location.hash;
-			if (base.name === '#') {
-				url.hash = location.pathname;
-			} else {
-				url.pathname = location.pathname;
-			}
-			globalThis.history.replaceState($state.snapshot(location.state) || {}, '', url.toString());
-			return;
+	if (navigationBlockers.size > 0) {
+		const originalUrl = globalThis.location.toString();
+		const originalState = history.state;
+		const url = new URL(originalUrl);
+		url.search = location.search;
+		url.hash = location.hash;
+		if (base.name === '#') {
+			url.hash = location.pathname;
+		} else {
+			url.pathname = location.pathname;
 		}
-		navigationBlocker = null;
+		globalThis.history.pushState($state.snapshot(location.state) || {}, '', url.toString());
+		for (const blocker of navigationBlockers.values()) {
+			const shouldNavigate = typeof blocker === 'object' ? blocker.onNavigate : blocker;
+			if (!(await shouldNavigate())) {
+				return;
+			}
+		}
+		globalThis.history.pushState(originalState || {}, '', originalUrl);
 	}
 
 	if (pendingController && pendingController !== currentNavigationController) {
@@ -320,7 +341,15 @@ export function onGlobalClick(event) {
 	});
 }
 
-/** @param {() => boolean} callback */
+/**
+ * @param {(() => boolean) | { beforeUnload(): boolean; onNavigate(): Promise<boolean> }} callback
+ * @returns {() => void}
+ */
 export function blockNavigation(callback) {
-	navigationBlocker = callback;
+	const id = crypto.randomUUID();
+	navigationBlockers.set(id, callback);
+	function clear() {
+		navigationBlockers.delete(id);
+	}
+	return clear;
 }
