@@ -43,13 +43,32 @@ export function serializeSearch(search: Search): string | undefined;
 export function createRouter<T extends Routes>(r: T): RouterApi<T>;
 
 /**
- * Block navigation until the callback returns `false`.
+ * Blocks navigation as long as the callback returns `false`.
+ *
+ * Returns a function that clears the navigation block.
  *
  * ```js
- * blockNavigation(() => confirm('Are you sure you want to leave?'));
+ * $effect(() => blockNavigation(() => confirm('Are you sure you want to leave?')));
+ * ```
+ *
+ * If you depend on some asynchronous work, you will have to decide how to handle blocking for
+ * navigation and site unloading separately (navigation can be blocked asynchronously, site
+ * unloading cannot).
+ *
+ * ```js
+ * blockNavigation({
+ * 	beforeUnload() {
+ * 		return false;
+ * 	},
+ * 	async onNavigate() {
+ * 		return await askInModal();
+ * 	},
+ * });
  * ```
  */
-export function blockNavigation(callback: () => boolean): void;
+export function blockNavigation(
+	callback: (() => boolean) | { beforeUnload(): boolean; onNavigate(): Promise<boolean> },
+): () => void;
 
 /**
  * The component that will render the current route. You can pass a `base` prop to set the base path
