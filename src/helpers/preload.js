@@ -157,6 +157,7 @@ export function preloadOnHover(routes) {
 
 			switch (link.dataset.preload) {
 				case '':
+				case 'true':
 				case 'hover': {
 					link.addEventListener('mouseenter', function callback() {
 						link.removeEventListener('mouseenter', callback);
