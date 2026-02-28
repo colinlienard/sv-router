@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.14.1
+
+### Patch Changes
+
+- e369e51: Support data-preload on svelte component
+
 ## 0.14.0
 
 ### Minor Changes
