@@ -56,26 +56,26 @@
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/svelte": "^5.3.1",
 		"@testing-library/user-event": "^14.6.1",
-		"@types/node": "^24.10.13",
-		"eslint": "^10.0.0",
+		"@types/node": "^24.11.0",
+		"eslint": "^10.0.2",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
 		"eslint-plugin-svelte": "^3.15.0",
 		"eslint-plugin-unicorn": "^63.0.0",
-		"globals": "^17.3.0",
-		"happy-dom": "^20.6.0",
+		"globals": "^17.4.0",
+		"happy-dom": "^20.7.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-jsdoc": "^1.8.0",
-		"prettier-plugin-svelte": "^3.4.1",
-		"svelte-check": "^4.3.6",
+		"prettier-plugin-svelte": "^3.5.0",
+		"svelte-check": "^4.4.4",
 		"type-testing": "^0.2.0",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.55.0",
+		"typescript-eslint": "^8.56.1",
 		"vite": "^7.3.1",
 		"vitest": "^4.0.18"
 	},
 	"peerDependencies": {
 		"svelte": "^5"
 	},
-	"packageManager": "pnpm@10.29.2"
+	"packageManager": "pnpm@10.30.3"
 }
