@@ -27,7 +27,7 @@
 		"build": "ncc build src/index.js -m"
 	},
 	"dependencies": {
-		"@clack/prompts": "^1.0.0",
+		"@clack/prompts": "^1.0.1",
 		"execa": "^9.6.1"
 	},
 	"devDependencies": {
