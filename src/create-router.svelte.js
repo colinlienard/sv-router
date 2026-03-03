@@ -1,5 +1,4 @@
 import { BROWSER, DEV } from 'esm-env';
-import { SvelteMap } from 'svelte/reactivity';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
@@ -45,12 +44,12 @@ let params = $state({ value: {} });
 let meta = $state({ value: {} });
 
 /**
- * @type {SvelteMap<
- * 	string,
- * 	(() => boolean) | { beforeUnload(): boolean; onNavigate(): Promise<boolean> }
+ * @type {Map<
+ * 	number,
+ * 	(() => boolean) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }
  * >}
  */
-const navigationBlockers = new SvelteMap();
+const navigationBlockers = new Map();
 
 /** @type {AbortController | null} */
 let currentNavigationController = null;
@@ -160,7 +159,8 @@ async function navigate(path, options = {}) {
 /** @param {BeforeUnloadEvent} event */
 export function onBeforeUnload(event) {
 	for (const blocker of navigationBlockers.values()) {
-		const shouldNavigate = typeof blocker === 'object' ? blocker.beforeUnload : blocker;
+		const shouldNavigate =
+			typeof blocker === 'object' ? (blocker.beforeUnload ?? (() => true)) : blocker;
 		if (!shouldNavigate()) {
 			event.preventDefault();
 		}
@@ -341,15 +341,15 @@ export function onGlobalClick(event) {
 	});
 }
 
+let navigationBlockId = 0;
 /**
- * @param {(() => boolean) | { beforeUnload(): boolean; onNavigate(): Promise<boolean> }} callback
+ * @param {(() => boolean) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }} callback
  * @returns {() => void}
  */
 export function blockNavigation(callback) {
-	const id = crypto.randomUUID();
+	const id = navigationBlockId++;
 	navigationBlockers.set(id, callback);
-	function clear() {
+	return () => {
 		navigationBlockers.delete(id);
-	}
-	return clear;
+	};
 }
