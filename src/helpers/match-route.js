@@ -63,6 +63,8 @@ export function matchRoute(pathname, routes) {
 			}
 
 			const pathPart = pathParts[index];
+			const isLayoutGroup = routePart === '' && typeof routes['/'] !== 'function';
+
 			if (routePart.startsWith(':')) {
 				params[routePart.slice(1)] = decodeURIComponent(pathPart);
 			} else if (routePart.startsWith('*')) {
@@ -80,7 +82,7 @@ export function matchRoute(pathname, routes) {
 				);
 				match = /** @type {RouteComponent} */ (routes[resolvedPath]);
 				break outer;
-			} else if (routePart.toLowerCase() !== pathPart?.toLowerCase()) {
+			} else if (routePart.toLowerCase() !== pathPart?.toLowerCase() && !isLayoutGroup) {
 				break;
 			}
 
@@ -116,7 +118,7 @@ export function matchRoute(pathname, routes) {
 				continue;
 			}
 
-			const nestedPathname = '/' + pathParts.slice(index + 1).join('/');
+			const nestedPathname = isLayoutGroup ? pathname : '/' + pathParts.slice(index + 1).join('/');
 			const result = matchRoute(nestedPathname, routeMatch);
 			if (result.match) {
 				match = result.match;

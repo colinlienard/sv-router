@@ -324,6 +324,10 @@ type StripNonRoutes<T extends Routes> = {
 						: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
 };
 
+type NormalizeSlashes<T extends string> = T extends `${infer A}//${infer B}`
+	? NormalizeSlashes<`${A}/${B}`>
+	: T;
+
 type RecursiveKeys<
 	T extends Routes,
 	Prefix extends string = '',
@@ -333,10 +337,10 @@ type RecursiveKeys<
 		? T[K] extends Routes
 			? RecursiveKeys<
 					T[K],
-					`${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`,
+					NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`>,
 					AnyParam
 				>
-			: `${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`
+			: NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`>
 		: never;
 }[keyof T];
 

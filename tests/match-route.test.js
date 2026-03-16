@@ -401,6 +401,33 @@ describe('matchRoute', () => {
 	});
 });
 
+describe('matchRoute with root layout group', () => {
+	const routes = /** @type {import('../src/index.d.ts').Routes} */ ({
+		'/': {
+			'/': Home,
+			'/users': Users,
+			layout: Layout1,
+		},
+	});
+
+	it('should match root path through "/" layout group', () => {
+		const { match, layouts } = matchRoute('/', routes);
+		expect(match).toEqual(Home);
+		expect(layouts).toEqual([Layout1]);
+	});
+
+	it('should match nested path through "/" layout group', () => {
+		const { match, layouts } = matchRoute('/users', routes);
+		expect(match).toEqual(Users);
+		expect(layouts).toEqual([Layout1]);
+	});
+
+	it('should not match unknown paths', () => {
+		const { match } = matchRoute('/unknown', routes);
+		expect(match).toBeUndefined();
+	});
+});
+
 describe('sortRoutes', () => {
 	it('should sort routes', () => {
 		const result = sortRoutes(['/:id', '*rest', '/foo', '', '/']);
