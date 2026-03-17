@@ -6,10 +6,8 @@ import Home from './routes/Home.svelte';
 import StaticPost from './routes/StaticPost.svelte';
 
 export const { p, navigate, isActive, preload, route } = createRouter({
-	'/': {
-		'/': Home,
-		'/about': About,
-	},
+	'/': Home,
+	'/about': About,
 	'/a/more/nested/route': AMoreNestedRoute,
 	'/posts': {
 		'/': () => import('./routes/Posts.svelte'),
