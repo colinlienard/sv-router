@@ -52,7 +52,7 @@
 	"devDependencies": {
 		"@changesets/cli": "^2.30.0",
 		"@eslint/js": "^10.0.1",
-		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/svelte": "^5.3.1",
 		"@testing-library/user-event": "^14.6.1",
@@ -71,7 +71,7 @@
 		"type-testing": "^0.2.0",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.57.1",
-		"vite": "^7.3.1",
+		"vite": "^8.0.0",
 		"vitest": "^4.1.0"
 	},
 	"peerDependencies": {
