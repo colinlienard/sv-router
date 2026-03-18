@@ -69,8 +69,8 @@ export function matchRoute(pathname, routes) {
 }
 
 /**
- * Try to match a single route key against the path.
- * Returns null if the route doesn't match.
+ * Try to match a single route key against the path. Returns null if the route doesn't match.
+ *
  * @param {string} route
  * @param {string[]} pathParts
  * @param {string} pathname
@@ -111,9 +111,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 			if (!breakFromLayouts && 'layout' in routes && routes.layout) {
 				layouts.push(routes.layout);
 			}
-			const resolvedPath = /** @type {keyof Routes} */ (
-				(index ? '/' : '') + routeParts.join('/')
-			);
+			const resolvedPath = /** @type {keyof Routes} */ ((index ? '/' : '') + routeParts.join('/'));
 			return {
 				result: {
 					match: /** @type {RouteComponent} */ (routes[resolvedPath]),
@@ -155,9 +153,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 		}
 
 		// Nested routes — recurse
-		const nestedPathname = isLayoutGroup
-			? pathname
-			: '/' + pathParts.slice(index + 1).join('/');
+		const nestedPathname = isLayoutGroup ? pathname : '/' + pathParts.slice(index + 1).join('/');
 		const nested = matchRoute(nestedPathname, routeMatch);
 		if (!nested.match) return null;
 
@@ -172,6 +168,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 
 /**
  * Collect layouts, hooks, and meta from the current route level.
+ *
  * @param {Routes} routes
  * @param {boolean} breakFromLayouts
  * @param {RouteMeta} baseMeta
@@ -199,6 +196,7 @@ function collectContext(routes, breakFromLayouts, baseMeta) {
 
 /**
  * Merge current level context with a nested match result.
+ *
  * @param {{ layouts: LayoutComponent[]; hooks: Hooks[]; meta: RouteMeta }} context
  * @param {MatchResult} nested
  * @param {Record<string, string>} params

@@ -208,10 +208,7 @@ describe('matchRoute', () => {
 			expect(matchRoute('/', routes).layouts).toEqual([]);
 			expect(matchRoute('/posts', routes).layouts).toEqual([Layout1]);
 			expect(matchRoute('/posts/static', routes).layouts).toEqual([Layout1]);
-			expect(matchRoute('/posts/bar/comments/baz', routes).layouts).toEqual([
-				Layout1,
-				Layout2,
-			]);
+			expect(matchRoute('/posts/bar/comments/baz', routes).layouts).toEqual([Layout1, Layout2]);
 		});
 
 		it('should match catch-all routes with layout', () => {
