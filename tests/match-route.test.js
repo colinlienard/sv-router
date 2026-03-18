@@ -428,6 +428,37 @@ describe('matchRoute with root layout group', () => {
 	});
 });
 
+describe('matchRoute with catch-all in layout group', () => {
+	it('should prefer specific route outside layout group over catch-all inside', () => {
+		const routes = /** @type {import('../src/index.d.ts').Routes} */ ({
+			'/': {
+				'/': Home,
+				'/about': Users,
+				'*notfound': PageNotFound,
+				layout: Layout1,
+			},
+			'/a/more/nested/route': John,
+		});
+		const { match, layouts } = matchRoute('/a/more/nested/route', routes);
+		expect(match).toEqual(John);
+		expect(layouts).toEqual([]);
+	});
+
+	it('should still match catch-all when no specific route exists', () => {
+		const routes = /** @type {import('../src/index.d.ts').Routes} */ ({
+			'/': {
+				'/': Home,
+				'*notfound': PageNotFound,
+				layout: Layout1,
+			},
+			'/a/more/nested/route': John,
+		});
+		const { match, layouts } = matchRoute('/unknown', routes);
+		expect(match).toEqual(PageNotFound);
+		expect(layouts).toEqual([Layout1]);
+	});
+});
+
 describe('sortRoutes', () => {
 	it('should sort routes', () => {
 		const result = sortRoutes(['/:id', '*rest', '/foo', '', '/']);

@@ -20,6 +20,7 @@
  * 	meta: RouteMeta;
  * 	params: Record<string, string>;
  * 	breakFromLayouts: boolean;
+ * 	isCatchAll: boolean;
  * }}
  */
 export function matchRoute(pathname, routes) {
@@ -51,6 +52,20 @@ export function matchRoute(pathname, routes) {
 	}
 
 	let breakFromLayouts = false;
+	let isCatchAll = false;
+
+	/**
+	 * @type {{
+	 * 			match: RouteComponent;
+	 * 			layouts: LayoutComponent[];
+	 * 			hooks: Hooks[];
+	 * 			meta: RouteMeta;
+	 * 			params: Record<string, string>;
+	 * 			breakFromLayouts: boolean;
+	 * 	  }
+	 * 	| undefined}
+	 */
+	let catchAllFallback;
 
 	outer: for (const route of allRoutes) {
 		const routeParts = route.split('/');
@@ -81,6 +96,7 @@ export function matchRoute(pathname, routes) {
 					(index ? '/' : '') + routeParts.join('/')
 				);
 				match = /** @type {RouteComponent} */ (routes[resolvedPath]);
+				isCatchAll = true;
 				break outer;
 			} else if (routePart.toLowerCase() !== pathPart?.toLowerCase() && !isLayoutGroup) {
 				break;
@@ -121,10 +137,22 @@ export function matchRoute(pathname, routes) {
 			const nestedPathname = isLayoutGroup ? pathname : '/' + pathParts.slice(index + 1).join('/');
 			const result = matchRoute(nestedPathname, routeMatch);
 			if (result.match) {
+				if (isLayoutGroup && result.isCatchAll) {
+					catchAllFallback = {
+						match: result.match,
+						params: { ...params, ...result.params },
+						hooks: [...hooks, ...result.hooks],
+						meta: { ...meta, ...result.meta },
+						breakFromLayouts: result.breakFromLayouts,
+						layouts: result.breakFromLayouts ? [] : [...layouts, ...result.layouts],
+					};
+					continue;
+				}
 				match = result.match;
 				params = { ...params, ...result.params };
 				hooks.push(...result.hooks);
 				meta = { ...meta, ...result.meta };
+				isCatchAll = result.isCatchAll;
 				if (result.breakFromLayouts) {
 					layouts = [];
 					breakFromLayouts = true;
@@ -138,7 +166,17 @@ export function matchRoute(pathname, routes) {
 		}
 	}
 
-	return { match, layouts, hooks, params, meta, breakFromLayouts };
+	if (!match && catchAllFallback) {
+		match = catchAllFallback.match;
+		params = catchAllFallback.params;
+		hooks = catchAllFallback.hooks;
+		meta = catchAllFallback.meta;
+		layouts = catchAllFallback.layouts;
+		breakFromLayouts = catchAllFallback.breakFromLayouts;
+		isCatchAll = true;
+	}
+
+	return { match, layouts, hooks, params, meta, breakFromLayouts, isCatchAll };
 }
 
 /**
