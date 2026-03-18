@@ -26,11 +26,14 @@ const John = () => 'John';
 const Hooks1 = Symbol();
 const Hooks2 = Symbol();
 
+/** @param {Record<string, unknown>} obj */
+const r = (obj) => /** @type {import('../src/index.d.ts').Routes} */ (/** @type {unknown} */ (obj));
+
 describe('matchRoute', () => {
 	describe.each([
 		{
 			mode: 'flat',
-			routes: {
+			routes: r({
 				'/': Home,
 				'/posts': Posts,
 				'/posts/static': StaticPost,
@@ -39,11 +42,11 @@ describe('matchRoute', () => {
 				'/users/john': John,
 				'/users/*': UserNotFound,
 				'*rest': PageNotFound,
-			},
+			}),
 		},
 		{
 			mode: 'flat unordered',
-			routes: {
+			routes: r({
 				'/posts/:id/comments/:commentId': DynamicPostComment,
 				'/posts': Posts,
 				'/users/*': UserNotFound,
@@ -52,11 +55,11 @@ describe('matchRoute', () => {
 				'/posts/:id': DynamicPost,
 				'/': Home,
 				'/users/john': John,
-			},
+			}),
 		},
 		{
 			mode: 'tree',
-			routes: {
+			routes: r({
 				'/': Home,
 				'/posts': {
 					'/': Posts,
@@ -65,20 +68,10 @@ describe('matchRoute', () => {
 						'/': DynamicPost,
 						'/comments': {
 							'/:commentId': DynamicPostComment,
-							meta: {
-								public: false,
-								section: 'comments',
-							},
 						},
 						layout: Layout2,
-						hooks: Hooks2,
 					},
 					layout: Layout1,
-					hooks: Hooks1,
-					meta: {
-						public: true,
-						requiresAuth: false,
-					},
 				},
 				'/users': {
 					john: John,
@@ -86,31 +79,21 @@ describe('matchRoute', () => {
 					layout: Layout1,
 				},
 				'*rest': PageNotFound,
-			},
+			}),
 		},
 		{
 			mode: 'tree unordered',
-			routes: {
+			routes: r({
 				'*rest': PageNotFound,
 				'/posts': {
-					meta: {
-						public: true,
-						requiresAuth: false,
-					},
 					'/:id': {
 						'/comments': {
-							meta: {
-								public: false,
-								section: 'comments',
-							},
 							'/:commentId': DynamicPostComment,
 						},
 						'/': DynamicPost,
-						hooks: Hooks2,
 						layout: Layout2,
 					},
 					'/': Posts,
-					hooks: Hooks1,
 					'/static': StaticPost,
 					layout: Layout1,
 				},
@@ -120,10 +103,9 @@ describe('matchRoute', () => {
 					john: John,
 				},
 				'/': Home,
-			},
+			}),
 		},
-	])('$mode paths', ({ mode, routes: r }) => {
-		const routes = /** @type {import('../src/index.d.ts').Routes} */ (/** @type {unknown} */ (r));
+	])('$mode paths', ({ mode, routes }) => {
 		const treeMode = mode.startsWith('tree');
 
 		it('should match the root route', () => {
@@ -143,7 +125,7 @@ describe('matchRoute', () => {
 
 		it('should match a simple route with a different casing', () => {
 			const { match: match1 } = matchRoute('/Posts', routes);
-			const { match: match2 } = matchRoute('/posts', { '/Posts': Posts });
+			const { match: match2 } = matchRoute('/posts', r({ '/Posts': Posts }));
 			expect(match1).toEqual(Posts);
 			expect(match2).toEqual(Posts);
 		});
@@ -206,256 +188,287 @@ describe('matchRoute', () => {
 				expect(layouts).toEqual([Layout1]);
 			}
 		});
+	});
 
-		if (treeMode) {
-			it('should match routes with layout', () => {
-				const { layouts: layouts1 } = matchRoute('/', routes);
-				const { layouts: layouts2 } = matchRoute('/posts', routes);
-				const { layouts: layouts3 } = matchRoute('/posts/static', routes);
-				const { layouts: layouts4 } = matchRoute('/posts/bar/comments/baz', routes);
-				expect(layouts1).toEqual([]);
-				expect(layouts2).toEqual([Layout1]);
-				expect(layouts3).toEqual([Layout1]);
-				expect(layouts4).toEqual([Layout1, Layout2]);
+	describe('layouts', () => {
+		it('should match routes with layout', () => {
+			const routes = r({
+				'/': Home,
+				'/posts': {
+					'/': Posts,
+					'/static': StaticPost,
+					'/:id': {
+						'/': DynamicPost,
+						'/comments': { '/:commentId': DynamicPostComment },
+						layout: Layout2,
+					},
+					layout: Layout1,
+				},
 			});
+			expect(matchRoute('/', routes).layouts).toEqual([]);
+			expect(matchRoute('/posts', routes).layouts).toEqual([Layout1]);
+			expect(matchRoute('/posts/static', routes).layouts).toEqual([Layout1]);
+			expect(matchRoute('/posts/bar/comments/baz', routes).layouts).toEqual([
+				Layout1,
+				Layout2,
+			]);
+		});
 
-			it('should match catch-all routes with layout', () => {
-				const { match, layouts } = matchRoute('/users', routes);
-				expect(match).toEqual(UserNotFound);
-				expect(layouts).toEqual([Layout1]);
+		it('should match catch-all routes with layout', () => {
+			const routes = r({
+				'/users': { '*': UserNotFound, layout: Layout1 },
 			});
+			const { match, layouts } = matchRoute('/users', routes);
+			expect(match).toEqual(UserNotFound);
+			expect(layouts).toEqual([Layout1]);
+		});
 
-			it('should also find root layout', () => {
-				routes['layout'] = Layout1;
-				const { layouts } = matchRoute('/', routes);
-				expect(layouts).toEqual([Layout1]);
+		it('should find root layout', () => {
+			const routes = r({ '/': Home, layout: Layout1 });
+			const { layouts } = matchRoute('/', routes);
+			expect(layouts).toEqual([Layout1]);
+		});
+
+		it('should break out of layouts', () => {
+			const routes = r({
+				'/': Home,
+				'/(nolayout)': NoLayout,
+				layout: Layout1,
 			});
+			const { match, layouts } = matchRoute('/nolayout', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+		});
 
-			it('should break out of layouts', () => {
-				routes['/(nolayout)'] = NoLayout;
-				const { match, layouts } = matchRoute('/nolayout', routes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
-				delete routes['/(nolayout)'];
+		it('should break out of layouts with a param', () => {
+			const routes = r({
+				'/users': { '/(:foo)': NoLayout, layout: Layout1 },
 			});
+			const { match, layouts, params } = matchRoute('/users/nolayout', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+			expect(params).toEqual({ foo: 'nolayout' });
+		});
 
-			it('should break out of layouts with a param', () => {
-				/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(:foo)'] = NoLayout;
-				const { match, layouts, params } = matchRoute('/users/nolayout', routes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
-				expect(params).toEqual({ foo: 'nolayout' });
-				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['/(:foo)']);
+		it('should break out of layouts with catch-all', () => {
+			const routes = r({
+				'/users': { '(*foo)': UserNotFound, layout: Layout1 },
 			});
+			const { match, layouts, params } = matchRoute('/users/nolayout', routes);
+			expect(match).toEqual(UserNotFound);
+			expect(layouts).toEqual([]);
+			expect(params).toEqual({ foo: 'nolayout' });
+		});
 
-			it('should break out of layouts with catch-all', () => {
-				/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)'] =
-					UserNotFound;
-				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['*']);
-				const { match, layouts, params } = matchRoute('/users/nolayout', routes);
-				expect(match).toEqual(UserNotFound);
-				expect(layouts).toEqual([]);
-				expect(params).toEqual({ foo: 'nolayout' });
-				delete (/** @type {import('../src/index.d.ts').Routes} */ (routes['/users'])['(*foo)']);
+		it('should break out of layouts with deeply nested routes', () => {
+			const routes = r({
+				'/parent': {
+					'/mid': { '/(slug)': NoLayout },
+					layout: Layout1,
+				},
 			});
+			const { match, layouts } = matchRoute('/parent/mid/slug', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+		});
 
-			it('should break out of layouts with deeply nested routes', () => {
-				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
-					'/parent': {
-						'/mid': {
-							'/(slug)': NoLayout,
+		it('should break out of all layouts with multiple nested layouts', () => {
+			const routes = r({
+				'/parent': {
+					'/child': { '/(slug)': NoLayout, layout: Layout2 },
+					layout: Layout1,
+				},
+			});
+			const { match, layouts } = matchRoute('/parent/child/slug', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+		});
+
+		it('should break out of layouts with deeply nested param routes', () => {
+			const routes = r({
+				'/parent': {
+					'/mid': { '/(:id)': NoLayout },
+					layout: Layout1,
+				},
+			});
+			const { match, layouts, params } = matchRoute('/parent/mid/42', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+			expect(params).toEqual({ id: '42' });
+		});
+
+		it('should break out of layouts at four levels of nesting', () => {
+			const routes = r({
+				'/a': {
+					'/b': {
+						'/c': { '/(leaf)': NoLayout, layout: Layout2 },
+					},
+					layout: Layout1,
+				},
+			});
+			const { match, layouts } = matchRoute('/a/b/c/leaf', routes);
+			expect(match).toEqual(NoLayout);
+			expect(layouts).toEqual([]);
+		});
+	});
+
+	describe('hooks', () => {
+		it('should match one hook', () => {
+			const routes = r({
+				'/posts': { '/': Posts, hooks: Hooks1 },
+			});
+			const { hooks } = matchRoute('/posts', routes);
+			expect(hooks).toEqual([Hooks1]);
+		});
+
+		it('should match multiple hooks', () => {
+			const routes = r({
+				'/posts': {
+					'/:id': {
+						'/comments': { '/:commentId': DynamicPostComment },
+						hooks: Hooks2,
+					},
+					hooks: Hooks1,
+				},
+			});
+			const { hooks } = matchRoute('/posts/bar/comments/baz', routes);
+			expect(hooks).toEqual([Hooks1, Hooks2]);
+		});
+	});
+
+	describe('meta', () => {
+		it('should match a route with a meta property', () => {
+			const routes = r({
+				'/posts': {
+					'/': Posts,
+					meta: { public: true, requiresAuth: false },
+				},
+			});
+			const { meta } = matchRoute('/posts', routes);
+			expect(meta).toEqual({ public: true, requiresAuth: false });
+		});
+
+		it('should merge two routes metadata', () => {
+			const routes = r({
+				'/posts': {
+					'/:id': {
+						'/comments': {
+							'/:commentId': DynamicPostComment,
+							meta: { public: false, section: 'comments' },
 						},
-						layout: Layout1,
 					},
-				});
-				const { match, layouts } = matchRoute('/parent/mid/slug', deepRoutes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
+					meta: { public: true, requiresAuth: false },
+				},
 			});
+			const { meta } = matchRoute('/posts/bar/comments/baz', routes);
+			expect(meta).toEqual({ public: false, section: 'comments', requiresAuth: false });
+		});
 
-			it('should break out of all layouts with multiple nested layouts', () => {
-				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
-					'/parent': {
-						'/child': {
-							'/(slug)': NoLayout,
-							layout: Layout2,
-						},
-						layout: Layout1,
-					},
-				});
-				const { match, layouts } = matchRoute('/parent/child/slug', deepRoutes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
+		it('should merge parent meta with nested route meta in route groups', () => {
+			const routes = r({
+				'/': { '/': Home, meta: { title: 'Admin', theme: 'dark' } },
+				'/users': { '/': Users, meta: { title: 'Users' } },
 			});
+			const { meta } = matchRoute('/users', routes);
+			expect(meta).toEqual({ title: 'Users', theme: 'dark' });
+		});
+	});
 
-			it('should break out of layouts with deeply nested param routes', () => {
-				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
-					'/parent': {
-						'/mid': {
-							'/(:id)': NoLayout,
-						},
-						layout: Layout1,
-					},
-				});
-				const { match, layouts, params } = matchRoute('/parent/mid/42', deepRoutes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
-				expect(params).toEqual({ id: '42' });
+	describe('catch-all fallback', () => {
+		it('should fall back to root catch-all when nested catch-all is not found', () => {
+			const routes = r({
+				'/users': { john: John, layout: Layout1 },
+				'*rest': PageNotFound,
 			});
-
-			it('should break out of layouts at four levels of nesting', () => {
-				const deepRoutes = /** @type {import('../src/index.d.ts').Routes} */ ({
-					'/a': {
-						'/b': {
-							'/c': {
-								'/(leaf)': NoLayout,
-								layout: Layout2,
-							},
-						},
-						layout: Layout1,
-					},
-				});
-				const { match, layouts } = matchRoute('/a/b/c/leaf', deepRoutes);
-				expect(match).toEqual(NoLayout);
-				expect(layouts).toEqual([]);
-			});
-
-			it('should match one hook', () => {
-				const { hooks } = matchRoute('/posts', routes);
-				expect(hooks).toEqual([Hooks1]);
-			});
-
-			it('should match multiple hooks', () => {
-				const { hooks } = matchRoute('/posts/bar/comments/baz', routes);
-				expect(hooks).toEqual([Hooks1, Hooks2]);
-			});
-
-			it('should match a route with a meta property', () => {
-				const { meta } = matchRoute('/posts', routes);
-				expect(meta).toEqual({
-					public: true,
-					requiresAuth: false,
-				});
-			});
-
-			it('should merge two routes metadata', () => {
-				const { meta } = matchRoute('/posts/bar/comments/baz', routes);
-				expect(meta).toEqual({
-					public: false,
-					section: 'comments',
-					requiresAuth: false,
-				});
-			});
-
-			it('should merge parent meta with nested route meta in route groups', () => {
-				const parentMeta = { title: 'Admin', theme: 'dark' };
-				const childMeta = { title: 'Users' };
-				const routesWithNestedMeta = /** @type {import('../src/index.d.ts').Routes} */ ({
-					'/': {
-						'/': Home,
-						meta: parentMeta,
-					},
-					'/users': {
-						'/': Users,
-						meta: childMeta,
-					},
-				});
-				const { meta } = matchRoute('/users', routesWithNestedMeta);
-				expect(meta).toEqual({
-					title: 'Users',
-					theme: 'dark',
-				});
-			});
-		}
-
-		it('should fall back to root catch-all route when nested catch-all is not found', () => {
-			delete routes['/users/*'];
 			const { match } = matchRoute('/users/notfound', routes);
 			expect(match).toEqual(PageNotFound);
 		});
 
 		it('should break out of layouts when falling back to root catch-all', () => {
-			delete routes['*rest'];
-			routes['(*rest)'] = PageNotFound;
+			const routes = r({
+				'/users': { john: John, layout: Layout1 },
+				'(*rest)': PageNotFound,
+			});
 			const { match, layouts } = matchRoute('/users/notfound', routes);
 			expect(match).toEqual(PageNotFound);
 			expect(layouts).toEqual([]);
 		});
 
 		it('should not duplicate layout when partial match falls back to catch-all', () => {
-			const routesWithLayout = /** @type {import('../src/index.d.ts').Routes} */ ({
+			const routes = r({
 				'*': PageNotFound,
 				'/foo': Home,
 				layout: Layout1,
 			});
-			const { match, layouts } = matchRoute('/foo/baz', routesWithLayout);
+			const { match, layouts } = matchRoute('/foo/baz', routes);
 			expect(match).toEqual(PageNotFound);
 			expect(layouts).toEqual([Layout1]);
 		});
 
-		it('should not match any route', () => {
-			delete routes['(*rest)'];
+		it('should not match any route when no catch-all exists', () => {
+			const routes = r({ '/': Home, '/posts': Posts });
 			const { match } = matchRoute('/notfound', routes);
 			expect(match).toBeUndefined();
 		});
 	});
-});
 
-describe('matchRoute with root layout group', () => {
-	const routes = /** @type {import('../src/index.d.ts').Routes} */ ({
-		'/': {
-			'/': Home,
-			'/users': Users,
-			layout: Layout1,
-		},
-	});
-
-	it('should match root path through "/" layout group', () => {
-		const { match, layouts } = matchRoute('/', routes);
-		expect(match).toEqual(Home);
-		expect(layouts).toEqual([Layout1]);
-	});
-
-	it('should match nested path through "/" layout group', () => {
-		const { match, layouts } = matchRoute('/users', routes);
-		expect(match).toEqual(Users);
-		expect(layouts).toEqual([Layout1]);
-	});
-
-	it('should not match unknown paths', () => {
-		const { match } = matchRoute('/unknown', routes);
-		expect(match).toBeUndefined();
-	});
-});
-
-describe('matchRoute with catch-all in layout group', () => {
-	it('should prefer specific route outside layout group over catch-all inside', () => {
-		const routes = /** @type {import('../src/index.d.ts').Routes} */ ({
-			'/': {
-				'/': Home,
-				'/about': Users,
-				'*notfound': PageNotFound,
-				layout: Layout1,
-			},
-			'/a/more/nested/route': John,
+	describe('layout groups', () => {
+		it('should match root path through "/" layout group', () => {
+			const routes = r({
+				'/': { '/': Home, '/users': Users, layout: Layout1 },
+			});
+			const { match, layouts } = matchRoute('/', routes);
+			expect(match).toEqual(Home);
+			expect(layouts).toEqual([Layout1]);
 		});
-		const { match, layouts } = matchRoute('/a/more/nested/route', routes);
-		expect(match).toEqual(John);
-		expect(layouts).toEqual([]);
+
+		it('should match nested path through "/" layout group', () => {
+			const routes = r({
+				'/': { '/': Home, '/users': Users, layout: Layout1 },
+			});
+			const { match, layouts } = matchRoute('/users', routes);
+			expect(match).toEqual(Users);
+			expect(layouts).toEqual([Layout1]);
+		});
+
+		it('should not match unknown paths', () => {
+			const routes = r({
+				'/': { '/': Home, '/users': Users, layout: Layout1 },
+			});
+			const { match } = matchRoute('/unknown', routes);
+			expect(match).toBeUndefined();
+		});
 	});
 
-	it('should still match catch-all when no specific route exists', () => {
-		const routes = /** @type {import('../src/index.d.ts').Routes} */ ({
-			'/': {
-				'/': Home,
-				'*notfound': PageNotFound,
-				layout: Layout1,
-			},
-			'/a/more/nested/route': John,
+	describe('catch-all in layout group', () => {
+		it('should prefer specific route outside layout group over catch-all inside', () => {
+			const routes = r({
+				'/': {
+					'/': Home,
+					'/about': Users,
+					'*notfound': PageNotFound,
+					layout: Layout1,
+				},
+				'/a/more/nested/route': John,
+			});
+			const { match, layouts } = matchRoute('/a/more/nested/route', routes);
+			expect(match).toEqual(John);
+			expect(layouts).toEqual([]);
 		});
-		const { match, layouts } = matchRoute('/unknown', routes);
-		expect(match).toEqual(PageNotFound);
-		expect(layouts).toEqual([Layout1]);
+
+		it('should still match catch-all when no specific route exists', () => {
+			const routes = r({
+				'/': {
+					'/': Home,
+					'*notfound': PageNotFound,
+					layout: Layout1,
+				},
+				'/a/more/nested/route': John,
+			});
+			const { match, layouts } = matchRoute('/unknown', routes);
+			expect(match).toEqual(PageNotFound);
+			expect(layouts).toEqual([Layout1]);
+		});
 	});
 });
 
