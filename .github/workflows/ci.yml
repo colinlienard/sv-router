@@ -68,17 +68,9 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Test with coverage
+      - name: Test
         run: pnpm test:coverage
-      - name: Commit coverage report
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          git add coverage/coverage-summary.json
-          if git diff --cached --quiet; then
-            echo "Coverage unchanged, skipping commit."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore: update coverage report"
-            git push
-          fi
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

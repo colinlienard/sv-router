@@ -11,8 +11,8 @@ export default defineConfig({
 		coverage: {
 			provider: 'v8',
 			include: ['src/**'],
-			exclude: ['src/cli/**', 'src/vite-plugin/**', 'src/**/*.d.ts'],
-			reporter: ['text', 'json-summary'],
+			exclude: ['src/cli/**', 'src/vite-plugin/**'],
+			reporter: ['text', 'json'],
 		},
 	},
 });

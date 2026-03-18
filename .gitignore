@@ -9,7 +9,6 @@ lerna-debug.log*
 
 node_modules
 coverage/*
-!coverage/coverage-summary.json
 dist
 dist-ssr
 *.local

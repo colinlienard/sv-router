@@ -54,6 +54,7 @@ describe('searchParams', () => {
 	});
 
 	it('should iterate with forEach', () => {
+		/** @type {[string, string][]} */
 		const entries = [];
 		searchParams.forEach((value, key) => {
 			entries.push([key, value]);
