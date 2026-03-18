@@ -69,8 +69,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Test
-        run: pnpm test:coverage
+        run: ${{ (github.ref == 'refs/heads/main' && github.event_name == 'push') && 'pnpm test:coverage' || 'pnpm test' }}
       - name: Upload results to Codecov
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

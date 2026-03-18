@@ -6,7 +6,7 @@
 
 [![npm](https://badgen.net/npm/v/sv-router)](https://www.npmjs.com/package/sv-router)
 [![install size](https://packagephobia.com/badge?p=sv-router)](https://packagephobia.com/result?p=sv-router)
-![coverage](https://badgen.net/codecov/github/colinlienard/sv-router)
+[![codecov](https://codecov.io/github/colinlienard/sv-router/graph/badge.svg?token=C9RBSEFO9S)](https://codecov.io/github/colinlienard/sv-router)
 
 A feature-rich yet intuitive routing library for Svelte single-page apps.
 
