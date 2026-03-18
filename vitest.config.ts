@@ -8,5 +8,11 @@ export default defineConfig({
 		environment: 'happy-dom',
 		globals: true,
 		setupFiles: ['./tests/vitest-setup.js'],
+		coverage: {
+			provider: 'v8',
+			include: ['src/**'],
+			exclude: ['src/cli/**', 'src/vite-plugin/**', 'src/**/*.d.ts'],
+			reporter: ['text', 'json-summary'],
+		},
 	},
 });

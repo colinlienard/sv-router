@@ -52,4 +52,38 @@ describe('searchParams', () => {
 	it('should get all values of a search param', () => {
 		expect(searchParams.getAll('number')).toEqual([42]);
 	});
+
+	it('should iterate with forEach', () => {
+		const entries = [];
+		searchParams.forEach((value, key) => {
+			entries.push([key, value]);
+		});
+		expect(entries).toEqual([
+			['key', 'value'],
+			['number', '42'],
+			['boolean', 'true'],
+		]);
+	});
+
+	it('should return keys', () => {
+		expect([...searchParams.keys()]).toEqual(['key', 'number', 'boolean']);
+	});
+
+	it('should sort params', () => {
+		searchParams.sort();
+		expect(globalThis.location.search).toBe('?boolean=true&key=value&number=42');
+	});
+
+	it('should return toString', () => {
+		expect(searchParams.toString()).toBe('boolean=true&key=value&number=42');
+	});
+
+	it('should return size', () => {
+		expect(searchParams.size).toBe(3);
+	});
+
+	it('should be iterable with Symbol.iterator', () => {
+		const entries = [...searchParams];
+		expect(entries.length).toBe(3);
+	});
 });

@@ -306,6 +306,124 @@ describe('router (hash-based)', () => {
 	});
 });
 
+describe('router (navigation options)', () => {
+	beforeEach(() => {
+		location.pathname = '/';
+		location.search = '';
+		base.name = undefined;
+	});
+
+	it('should navigate with history.go when passing a number', async () => {
+		const goSpy = vi.spyOn(globalThis.history, 'go');
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate(-1);
+		expect(goSpy).toHaveBeenCalledWith(-1);
+		goSpy.mockRestore();
+	});
+
+	it('should navigate with a hash option', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/about', { hash: 'section' });
+		expect(location.pathname).toBe('/about');
+		expect(location.hash).toBe('#section');
+	});
+
+	it('should navigate with replace option', async () => {
+		const replaceStateSpy = vi.spyOn(globalThis.history, 'replaceState');
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/about', { replace: true });
+		expect(replaceStateSpy).toHaveBeenCalled();
+		replaceStateSpy.mockRestore();
+	});
+
+	it('should navigate with state', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/about', { state: { foo: 'bar' } });
+		expect(route.state).toEqual({ foo: 'bar' });
+	});
+
+	it('should not navigate on anchor with download attribute', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const link = document.createElement('a');
+		link.href = '/about';
+		link.download = '';
+		link.textContent = 'Download';
+		document.body.append(link);
+		await userEvent.click(link);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		link.remove();
+	});
+
+	it('should not navigate on anchor with hash-only href', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const link = document.createElement('a');
+		link.setAttribute('href', '#section');
+		link.textContent = 'Hash Link';
+		document.body.append(link);
+		await userEvent.click(link);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		link.remove();
+	});
+
+	it('should navigate with data-state on link', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const link = document.createElement('a');
+		link.href = '/about';
+		link.textContent = 'Stateful';
+		link.dataset.state = JSON.stringify({ custom: true });
+		document.body.append(link);
+		await userEvent.click(link);
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+		expect(route.state).toEqual({ custom: true });
+		link.remove();
+	});
+
+	it('should handle non-JSON data-state as a string', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const link = document.createElement('a');
+		link.href = '/about';
+		link.textContent = 'String State';
+		link.dataset.state = 'plain-string';
+		document.body.append(link);
+		await userEvent.click(link);
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+		expect(route.state).toBe('plain-string');
+		link.remove();
+	});
+});
+
 describe('blockNavigation', () => {
 	beforeEach(() => {
 		location.pathname = '/';
