@@ -220,6 +220,22 @@ describe('matchRoute', () => {
 			expect(layouts).toEqual([Layout1]);
 		});
 
+		it('should collect hooks and meta for catch-all routes', () => {
+			const routes = r({
+				'/users': {
+					'*': UserNotFound,
+					layout: Layout1,
+					hooks: Hooks1,
+					meta: { section: 'users' },
+				},
+			});
+			const { match, layouts, hooks, meta } = matchRoute('/users/unknown', routes);
+			expect(match).toEqual(UserNotFound);
+			expect(layouts).toEqual([Layout1]);
+			expect(hooks).toEqual([Hooks1]);
+			expect(meta).toEqual({ section: 'users' });
+		});
+
 		it('should find root layout', () => {
 			const routes = r({ '/': Home, layout: Layout1 });
 			const { layouts } = matchRoute('/', routes);

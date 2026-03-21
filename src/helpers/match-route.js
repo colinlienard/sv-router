@@ -106,19 +106,13 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 			if (param) {
 				params[param] = pathParts.slice(index).map(decodeURIComponent).join('/');
 			}
-			/** @type {LayoutComponent[]} */
-			const layouts = [];
-			if (!breakFromLayouts && 'layout' in routes && routes.layout) {
-				layouts.push(routes.layout);
-			}
+			const context = collectContext(routes, breakFromLayouts, baseMeta);
 			const resolvedPath = /** @type {keyof Routes} */ ((index ? '/' : '') + routeParts.join('/'));
 			return {
 				result: {
 					match: /** @type {RouteComponent} */ (routes[resolvedPath]),
-					layouts,
-					hooks: [],
+					...context,
 					params,
-					meta: baseMeta,
 					breakFromLayouts,
 					isCatchAll: true,
 				},
