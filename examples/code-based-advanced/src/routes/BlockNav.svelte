@@ -75,7 +75,9 @@
 {/if}
 
 <p>Status: {blocked ? 'Navigation was blocked' : 'Ready'}</p>
-<p>Current mode: <strong>{mode}</strong></p>
+<p>
+	Current mode: <strong>{mode}</strong>
+</p>
 
 <h2>Test navigation</h2>
 <ul>

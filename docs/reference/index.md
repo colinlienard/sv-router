@@ -104,7 +104,7 @@ Blocks navigation as long as the callback returns `false`.
   - A function `() => boolean | Promise<boolean>` that returns `true` to allow navigation or `false` to block it. Can be async.
   - An object with:
     - `beforeUnload?()` - (Optional) Synchronous function called on tab close/refresh. Returns `false` to prevent unloading. If not provided, tab close is not blocked.
-    - `onNavigate()` - Async function called on in-app navigation. Returns a `Promise<boolean>`, `true` to allow, `false` to block.
+    - `onNavigate()` - Function called on in-app navigation. Returns `boolean | Promise<boolean>`, `true` to allow, `false` to block. Can be async.
 
 **Returns:** A cleanup function that removes the blocker.
 

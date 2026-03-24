@@ -57,24 +57,26 @@ export function createRouter<T extends Routes>(r: T): RouterApi<T>;
  * $effect(() => blockNavigation(async () => await showConfirmModal()));
  * ```
  *
- * If you also need to block tab close, use the object form to handle blocking for
- * navigation and site unloading separately (site unloading cannot be blocked asynchronously):
+ * If you also need to block tab close, use the object form to handle blocking for navigation and
+ * site unloading separately (site unloading cannot be blocked asynchronously):
  *
  * ```js
- * $effect(() => blockNavigation({
- * 	beforeUnload() {
- * 		return false;
- * 	},
- * 	async onNavigate() {
- * 		return await askInModal();
- * 	},
- * }));
+ * $effect(() =>
+ * 	blockNavigation({
+ * 		beforeUnload() {
+ * 			return false;
+ * 		},
+ * 		async onNavigate() {
+ * 			return await askInModal();
+ * 		},
+ * 	}),
+ * );
  * ```
  */
 export function blockNavigation(
 	callback:
 		| (() => boolean | Promise<boolean>)
-		| { beforeUnload?(): boolean; onNavigate(): Promise<boolean> },
+		| { beforeUnload?(): boolean; onNavigate(): boolean | Promise<boolean> },
 ): () => void;
 
 /**

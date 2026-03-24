@@ -86,10 +86,12 @@ You can prevent users from accidentally leaving a page with unsaved changes usin
 
 	let hasUnsavedChanges = $state(false);
 
-	$effect(() => blockNavigation(() => {
-		if (!hasUnsavedChanges) return true;
-		return confirm('You have unsaved changes. Leave anyway?');
-	}));
+	$effect(() =>
+		blockNavigation(() => {
+			if (!hasUnsavedChanges) return true;
+			return confirm('You have unsaved changes. Leave anyway?');
+		}),
+	);
 </script>
 ```
 
@@ -105,9 +107,11 @@ If you need to perform asynchronous work before deciding whether to allow naviga
 <script lang="ts">
 	import { blockNavigation } from 'sv-router';
 
-	$effect(() => blockNavigation(async () => {
-		return await showConfirmModal();
-	}));
+	$effect(() =>
+		blockNavigation(async () => {
+			return await showConfirmModal();
+		}),
+	);
 </script>
 ```
 
@@ -119,14 +123,16 @@ To also prevent the user from closing or refreshing the tab, use the object form
 <script lang="ts">
 	import { blockNavigation } from 'sv-router';
 
-	$effect(() => blockNavigation({
-		beforeUnload() {
-			return false; // prevents tab close
-		},
-		async onNavigate() {
-			return await showConfirmModal();
-		},
-	}));
+	$effect(() =>
+		blockNavigation({
+			beforeUnload() {
+				return false; // prevents tab close
+			},
+			async onNavigate() {
+				return await showConfirmModal();
+			},
+		}),
+	);
 </script>
 ```
 

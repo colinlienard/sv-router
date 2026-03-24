@@ -46,7 +46,8 @@ let meta = $state({ value: {} });
 /**
  * @type {Map<
  * 	number,
- * 	(() => boolean | Promise<boolean>) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }
+ * 	| (() => boolean | Promise<boolean>)
+ * 	| { beforeUnload?(): boolean; onNavigate(): boolean | Promise<boolean> }
  * >}
  */
 const navigationBlockers = new Map();
@@ -159,9 +160,8 @@ async function navigate(path, options = {}) {
 /** @param {BeforeUnloadEvent} event */
 export function onBeforeUnload(event) {
 	for (const blocker of navigationBlockers.values()) {
-		const shouldNavigate =
-			typeof blocker === 'object' ? (blocker.beforeUnload ?? (() => true)) : blocker;
-		if (!shouldNavigate()) {
+		if (typeof blocker !== 'object' || !blocker.beforeUnload) continue;
+		if (!blocker.beforeUnload()) {
 			event.preventDefault();
 		}
 	}
@@ -193,6 +193,9 @@ export async function onNavigate(path, options = {}) {
 		for (const blocker of navigationBlockers.values()) {
 			const shouldNavigate = typeof blocker === 'object' ? blocker.onNavigate : blocker;
 			if (!(await shouldNavigate())) {
+				if (!path) {
+					globalThis.history.replaceState(originalState || {}, '', originalUrl);
+				}
 				return;
 			}
 		}
@@ -347,7 +350,8 @@ export function onGlobalClick(event) {
 
 let navigationBlockId = 0;
 /**
- * @param {(() => boolean | Promise<boolean>) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }} callback
+ * @param {(() => boolean | Promise<boolean>)
+ * 	| { beforeUnload?(): boolean; onNavigate(): boolean | Promise<boolean> }} callback
  * @returns {() => void}
  */
 export function blockNavigation(callback) {

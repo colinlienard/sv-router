@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { beforeEach, vi } from 'vitest';
-import { base, blockNavigation } from '../../src/create-router.svelte.js';
+import { base, blockNavigation, onBeforeUnload } from '../../src/create-router.svelte.js';
 import { searchParams } from '../../src/search-params.svelte.js';
 import App, { isActive, navigate, onPreloadMock, route } from './App.test.svelte';
 
@@ -637,6 +637,56 @@ describe('blockNavigation', () => {
 			expect(location.pathname).toBe('/about');
 			expect(screen.getByText('About Us')).toBeInTheDocument();
 		});
+		clear();
+	});
+
+	it('should call event.preventDefault when object blocker beforeUnload returns false', () => {
+		const clear = blockNavigation({
+			beforeUnload() {
+				return false;
+			},
+			onNavigate() {
+				return true;
+			},
+		});
+		const event = new Event('beforeunload');
+		event.preventDefault = vi.fn();
+		onBeforeUnload(/** @type {BeforeUnloadEvent} */ (event));
+		expect(event.preventDefault).toHaveBeenCalled();
+		clear();
+	});
+
+	it('should not call event.preventDefault when object blocker beforeUnload returns true', () => {
+		const clear = blockNavigation({
+			beforeUnload() {
+				return true;
+			},
+			onNavigate() {
+				return true;
+			},
+		});
+		const event = new Event('beforeunload');
+		event.preventDefault = vi.fn();
+		onBeforeUnload(/** @type {BeforeUnloadEvent} */ (event));
+		expect(event.preventDefault).not.toHaveBeenCalled();
+		clear();
+	});
+
+	it('should ignore function-form blockers in onBeforeUnload', () => {
+		const clear = blockNavigation(() => false);
+		const event = new Event('beforeunload');
+		event.preventDefault = vi.fn();
+		onBeforeUnload(/** @type {BeforeUnloadEvent} */ (event));
+		expect(event.preventDefault).not.toHaveBeenCalled();
+		clear();
+	});
+
+	it('should ignore async function-form blockers in onBeforeUnload', () => {
+		const clear = blockNavigation(async () => false);
+		const event = new Event('beforeunload');
+		event.preventDefault = vi.fn();
+		onBeforeUnload(/** @type {BeforeUnloadEvent} */ (event));
+		expect(event.preventDefault).not.toHaveBeenCalled();
 		clear();
 	});
 });
