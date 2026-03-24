@@ -96,13 +96,20 @@ An object containing information about the current route.
 
 ### `blockNavigation(callback)`
 
-Blocks navigation until the callback returns `true`.
+Blocks navigation as long as the callback returns `false`.
 
 **Parameters:**
 
-- `callback` - A function that returns `true` to allow navigation or `false` to block it
+- `callback` - Either:
+  - A function `() => boolean | Promise<boolean>` that returns `true` to allow navigation or `false` to block it. Can be async.
+  - An object with:
+    - `beforeUnload?()` - (Optional) Synchronous function called on tab close/refresh. Returns `false` to prevent unloading. If not provided, tab close is not blocked.
+    - `onNavigate()` - Async function called on in-app navigation. Returns a `Promise<boolean>`, `true` to allow, `false` to block.
 
-The blocker is cleared after allowing navigation once.
+**Returns:** A cleanup function that removes the blocker.
+
+> [!NOTE]
+> Multiple blockers can be registered simultaneously. Navigation is blocked if any blocker returns `false`.
 
 ### `isActiveLink`
 

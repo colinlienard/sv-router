@@ -461,7 +461,43 @@ describe('blockNavigation', () => {
 		clear2();
 	});
 
-	it('should block link navigation when callback returns false after promise resolves', async () => {
+	it('should block link navigation when async callback returns false', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const clear = blockNavigation(async () => {
+			return await new Promise((resolve) => {
+				setTimeout(() => resolve(false), 250);
+			});
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/');
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		clear();
+	});
+
+	it('should allow link navigation when async callback returns true', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const clear = blockNavigation(async () => {
+			return await new Promise((resolve) => {
+				setTimeout(() => resolve(true), 250);
+			});
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+		clear();
+	});
+
+	it('should block link navigation when object callback returns false after promise resolves', async () => {
 		render(App);
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
@@ -551,21 +587,38 @@ describe('blockNavigation', () => {
 		clear();
 	});
 
-	it('should clear blocker after allowing navigation', async () => {
+	it('should unblock navigation after cleanup function is called', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const clear = blockNavigation(() => false);
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/');
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		clear();
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+	});
+
+	it('should not add extra history entries on programmatic navigation with blockers', async () => {
 		render(App);
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
 		const clear = blockNavigation(() => true);
-		await userEvent.click(screen.getByText('About'));
+		const before = history.length;
+		navigate('/about');
 		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
 			expect(screen.getByText('About Us')).toBeInTheDocument();
 		});
-		await userEvent.click(screen.getByText('Home'));
-		await waitFor(() => {
-			expect(location.pathname).toBe('/');
-			expect(screen.getByText('Welcome')).toBeInTheDocument();
-		});
+		expect(history.length).toBe(before + 1);
 		clear();
 	});
 

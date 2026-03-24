@@ -51,23 +51,30 @@ export function createRouter<T extends Routes>(r: T): RouterApi<T>;
  * $effect(() => blockNavigation(() => confirm('Are you sure you want to leave?')));
  * ```
  *
- * If you depend on some asynchronous work, you will have to decide how to handle blocking for
- * navigation and site unloading separately (navigation can be blocked asynchronously, site
- * unloading cannot).
+ * The callback can also be async:
  *
  * ```js
- * blockNavigation({
+ * $effect(() => blockNavigation(async () => await showConfirmModal()));
+ * ```
+ *
+ * If you also need to block tab close, use the object form to handle blocking for
+ * navigation and site unloading separately (site unloading cannot be blocked asynchronously):
+ *
+ * ```js
+ * $effect(() => blockNavigation({
  * 	beforeUnload() {
  * 		return false;
  * 	},
  * 	async onNavigate() {
  * 		return await askInModal();
  * 	},
- * });
+ * }));
  * ```
  */
 export function blockNavigation(
-	callback: (() => boolean) | { beforeUnload(): boolean; onNavigate(): Promise<boolean> },
+	callback:
+		| (() => boolean | Promise<boolean>)
+		| { beforeUnload?(): boolean; onNavigate(): Promise<boolean> },
 ): () => void;
 
 /**

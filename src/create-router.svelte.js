@@ -46,7 +46,7 @@ let meta = $state({ value: {} });
 /**
  * @type {Map<
  * 	number,
- * 	(() => boolean) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }
+ * 	(() => boolean | Promise<boolean>) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }
  * >}
  */
 const navigationBlockers = new Map();
@@ -179,22 +179,26 @@ export async function onNavigate(path, options = {}) {
 	if (navigationBlockers.size > 0) {
 		const originalUrl = globalThis.location.toString();
 		const originalState = history.state;
-		const url = new URL(originalUrl);
-		url.search = location.search;
-		url.hash = location.hash;
-		if (base.name === '#') {
-			url.hash = location.pathname;
-		} else {
-			url.pathname = location.pathname;
+		if (!path) {
+			const url = new URL(originalUrl);
+			url.search = location.search;
+			url.hash = location.hash;
+			if (base.name === '#') {
+				url.hash = location.pathname;
+			} else {
+				url.pathname = location.pathname;
+			}
+			globalThis.history.pushState($state.snapshot(location.state) || {}, '', url.toString());
 		}
-		globalThis.history.pushState($state.snapshot(location.state) || {}, '', url.toString());
 		for (const blocker of navigationBlockers.values()) {
 			const shouldNavigate = typeof blocker === 'object' ? blocker.onNavigate : blocker;
 			if (!(await shouldNavigate())) {
 				return;
 			}
 		}
-		globalThis.history.pushState(originalState || {}, '', originalUrl);
+		if (!path) {
+			globalThis.history.replaceState(originalState || {}, '', originalUrl);
+		}
 	}
 
 	if (pendingController && pendingController !== currentNavigationController) {
@@ -343,7 +347,7 @@ export function onGlobalClick(event) {
 
 let navigationBlockId = 0;
 /**
- * @param {(() => boolean) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }} callback
+ * @param {(() => boolean | Promise<boolean>) | { beforeUnload?(): boolean; onNavigate(): Promise<boolean> }} callback
  * @returns {() => void}
  */
 export function blockNavigation(callback) {
