@@ -103,6 +103,14 @@ export function stripBase(pathname) {
 	return pathname;
 }
 
+/** @param {any} state */
+function getUserState(state) {
+	if (state && '_userState' in state) {
+		return state._userState;
+	}
+	return state;
+}
+
 export function updatedLocation() {
 	const pathname =
 		base.name === '#' ? globalThis.location.hash.slice(1) : globalThis.location.pathname;
@@ -110,7 +118,7 @@ export function updatedLocation() {
 	return {
 		pathname,
 		search: globalThis.location.search,
-		state: history.state,
+		state: getUserState(history.state),
 		hash,
 	};
 }

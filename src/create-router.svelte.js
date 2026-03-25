@@ -52,6 +52,9 @@ let meta = $state({ value: {} });
  */
 const navigationBlockers = new Map();
 
+let historyIndex = 0;
+let skipNextPopstate = false;
+
 /** @type {AbortController | null} */
 let currentNavigationController = null;
 let pendingController = /** @type {AbortController | null} */ (null);
@@ -67,15 +70,32 @@ export function init(basename) {
 			base.name = '#';
 			if (!globalThis.location.href.includes('#')) {
 				url.hash = '/';
-				history.replaceState(history.state || {}, '', url.toString());
+				history.replaceState(
+					{ _routerIndex: historyIndex, _userState: history.state ?? null },
+					'',
+					url.toString(),
+				);
 			}
 		} else {
 			base.name = (basename.startsWith('/') ? '' : '/') + basename;
 			if (!url.pathname.startsWith(base.name)) {
 				url.pathname = join(base.name, url.pathname);
-				history.replaceState(history.state || {}, '', url.toString());
+				history.replaceState(
+					{ _routerIndex: historyIndex, _userState: history.state ?? null },
+					'',
+					url.toString(),
+				);
 			}
 		}
+	}
+	if (history.state?._routerIndex === undefined) {
+		history.replaceState(
+			{ _routerIndex: historyIndex, _userState: history.state ?? null },
+			'',
+			globalThis.location.href,
+		);
+	} else {
+		historyIndex = history.state._routerIndex;
 	}
 	Object.assign(location, updatedLocation());
 }
@@ -176,31 +196,25 @@ export async function onNavigate(path, options = {}) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
 
+	if (!path && skipNextPopstate) {
+		skipNextPopstate = false;
+		return;
+	}
+
 	if (navigationBlockers.size > 0) {
-		const originalUrl = globalThis.location.toString();
-		const originalState = history.state;
-		if (!path) {
-			const url = new URL(originalUrl);
-			url.search = location.search;
-			url.hash = location.hash;
-			if (base.name === '#') {
-				url.hash = location.pathname;
-			} else {
-				url.pathname = location.pathname;
-			}
-			globalThis.history.pushState($state.snapshot(location.state) || {}, '', url.toString());
-		}
+		const popstateDelta = path ? 0 : historyIndex - (history.state?._routerIndex ?? 0);
 		for (const blocker of navigationBlockers.values()) {
 			const shouldNavigate = typeof blocker === 'object' ? blocker.onNavigate : blocker;
 			if (!(await shouldNavigate())) {
-				if (!path) {
-					globalThis.history.replaceState(originalState || {}, '', originalUrl);
+				if (!path && popstateDelta !== 0) {
+					skipNextPopstate = true;
+					history.go(popstateDelta);
 				}
 				return;
 			}
 		}
 		if (!path) {
-			globalThis.history.replaceState(originalState || {}, '', originalUrl);
+			historyIndex = history.state?._routerIndex ?? historyIndex;
 		}
 	}
 
@@ -261,7 +275,12 @@ export async function onNavigate(path, options = {}) {
 			url.pathname = path;
 		}
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
-		globalThis.history[historyMethod](options.state || {}, '', url.toString());
+		if (historyMethod === 'pushState') historyIndex++;
+		globalThis.history[historyMethod](
+			{ _routerIndex: historyIndex, _userState: options.state ?? null },
+			'',
+			url.toString(),
+		);
 		syncSearchParams(search);
 	} else {
 		syncSearchParams(globalThis.location.search);

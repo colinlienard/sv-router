@@ -640,6 +640,47 @@ describe('blockNavigation', () => {
 		clear();
 	});
 
+	it('should not corrupt history when blocking popstate back navigation', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+		});
+		const lengthBefore = history.length;
+		const clear = blockNavigation(() => false);
+		history.back();
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+		expect(history.length).toBe(lengthBefore);
+		clear();
+	});
+
+	it('should allow popstate navigation after blocker returns true', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+		});
+		const clear = blockNavigation(() => true);
+		// Simulate back navigation: change URL and dispatch popstate with previous index
+		const prevIndex = (history.state?._routerIndex ?? 1) - 1;
+		history.replaceState({ _routerIndex: prevIndex, _userState: null }, '', '/');
+		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/');
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		clear();
+	});
+
 	it('should call event.preventDefault when object blocker beforeUnload returns false', () => {
 		const clear = blockNavigation({
 			beforeUnload() {
