@@ -37,7 +37,6 @@ export const { p, navigate, isActive, preload, route } = createRouter({
 			section: 'Posts',
 		},
 	},
-	'/block-nav': () => import('./routes/BlockNav.svelte'),
 	'/unauthorized': {
 		'/': () => import('./routes/Unauthorized.svelte'),
 		hooks: {
