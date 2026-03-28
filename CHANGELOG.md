@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.15.0
+
+### Minor Changes
+
+- 71a8a3e: allow promise in blockNavigation, push state when navigation is blocked so history doesn't get lost, handle beforeunload, support multiple navigation blockers
+
 ## 0.14.1
 
 ### Patch Changes
