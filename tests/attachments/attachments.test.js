@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/svelte';
+import { isActiveLink } from '../../src/attachments.svelte.js';
 import { base, location } from '../../src/create-router.svelte.js';
 import Attachments from './Attachments.test.svelte';
 
@@ -74,5 +75,13 @@ describe('isActiveLink', () => {
 		location.pathname = '/about/team';
 		render(Attachments, { children: 'About', href: '/about', startsWith: true });
 		expect(screen.getByText('About').classList.contains('is-active')).toBe(true);
+	});
+
+	it('should throw when used on a non-anchor element', () => {
+		const attachment = isActiveLink();
+		const div = document.createElement('div');
+		expect(() => attachment(/** @type {any} */ (div))).toThrow(
+			'isActiveLink can only be used on <a> elements',
+		);
 	});
 });

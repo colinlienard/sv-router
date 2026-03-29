@@ -2,46 +2,38 @@ import { base } from '../src/create-router.svelte.js';
 import {
 	constructPath,
 	constructUrl,
+	isLazyImport,
 	join,
 	parseSearch,
 	serializeSearch,
+	stripBase,
 } from '../src/helpers/utils.js';
 
-describe('constructPath', () => {
-	it('should return the original path when no params are provided', () => {
-		const result = constructPath('/posts');
-		expect(result).toBe('/posts');
-	});
-
-	it('should replace a single param in the path', () => {
-		const result = constructPath('/posts/:id', { id: '123' });
-		expect(result).toBe('/posts/123');
-	});
-
-	it('should replace multiple params in the path', () => {
-		const result = constructPath('/posts/:id/comments/:commentId', { id: '123', commentId: '456' });
-		expect(result).toBe('/posts/123/comments/456');
-	});
-});
-
-describe('constructPath (hash-based)', () => {
+describe.each([
+	{ mode: 'pathname', baseName: undefined, prefix: '' },
+	{ mode: 'hash-based', baseName: '#', prefix: '/#' },
+])('constructPath ($mode)', ({ baseName, prefix }) => {
 	beforeEach(() => {
-		base.name = '#';
+		base.name = baseName;
+	});
+
+	afterEach(() => {
+		base.name = undefined;
 	});
 
 	it('should return the original path when no params are provided', () => {
 		const result = constructPath('/posts');
-		expect(result).toBe('/#/posts');
+		expect(result).toBe(`${prefix}/posts`);
 	});
 
 	it('should replace a single param in the path', () => {
 		const result = constructPath('/posts/:id', { id: '123' });
-		expect(result).toBe('/#/posts/123');
+		expect(result).toBe(`${prefix}/posts/123`);
 	});
 
 	it('should replace multiple params in the path', () => {
 		const result = constructPath('/posts/:id/comments/:commentId', { id: '123', commentId: '456' });
-		expect(result).toBe('/#/posts/123/comments/456');
+		expect(result).toBe(`${prefix}/posts/123/comments/456`);
 	});
 });
 
@@ -103,5 +95,61 @@ describe('parseSearch', () => {
 	it('should transform a query string into an object', () => {
 		const result = parseSearch('?q=test&page=2&ok=true');
 		expect(result).toEqual({ q: 'test', page: 2, ok: true });
+	});
+
+	it('should return the object as-is when input is an object', () => {
+		const input = { q: 'test', page: 2 };
+		const result = parseSearch(input);
+		expect(result).toBe(input);
+	});
+
+	it('should return an empty object for falsy values', () => {
+		expect(parseSearch()).toEqual({});
+		expect(parseSearch('')).toEqual({});
+	});
+});
+
+describe('stripBase', () => {
+	afterEach(() => {
+		base.name = undefined;
+	});
+
+	it('should strip the base name from the pathname', () => {
+		base.name = '/my-app';
+		expect(stripBase('/my-app/about')).toBe('/about');
+	});
+
+	it('should return / when pathname equals the base name', () => {
+		base.name = '/my-app';
+		expect(stripBase('/my-app')).toBe('/');
+	});
+
+	it('should return the pathname unchanged when no base name is set', () => {
+		expect(stripBase('/about')).toBe('/about');
+	});
+
+	it('should return the pathname unchanged when it does not start with base', () => {
+		base.name = '/my-app';
+		expect(stripBase('/other/path')).toBe('/other/path');
+	});
+});
+
+const lazyImport = () => import('../src/helpers/utils.js');
+const nonLazyFunction = () => 'hello';
+
+describe('isLazyImport', () => {
+	it('should detect a dynamic import function', () => {
+		expect(isLazyImport(lazyImport)).toBe(true);
+	});
+
+	it('should not detect a regular function', () => {
+		expect(isLazyImport(nonLazyFunction)).toBe(false);
+	});
+
+	it('should not detect non-function values', () => {
+		expect(isLazyImport('string')).toBe(false);
+		expect(isLazyImport(42)).toBe(false);
+		expect(isLazyImport(null)).toBe(false);
+		expect(isLazyImport({})).toBe(false);
 	});
 });

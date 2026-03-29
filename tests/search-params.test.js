@@ -1,4 +1,6 @@
+import { vi } from 'vitest';
 import { searchParams } from '../src/index.js';
+import { syncSearchParams } from '../src/search-params.svelte.js';
 
 describe('searchParams', () => {
 	it('should add a search param in the url', () => {
@@ -86,5 +88,79 @@ describe('searchParams', () => {
 	it('should be iterable with Symbol.iterator', () => {
 		const entries = [...searchParams];
 		expect(entries.length).toBe(3);
+	});
+
+	it('should return null for a non-existent key', () => {
+		expect(searchParams.get('nonexistent')).toBe(null);
+	});
+
+	it('should delete all values for a key when no value is specified', () => {
+		searchParams.append('multi', 'a');
+		searchParams.append('multi', 'b');
+		expect(searchParams.getAll('multi')).toEqual(['a', 'b']);
+		searchParams.delete('multi');
+		expect(searchParams.has('multi')).toBe(false);
+	});
+
+	it('should use replaceState when replace option is true', () => {
+		const replaceStateSpy = vi.spyOn(globalThis.history, 'replaceState');
+		searchParams.set('replaceTest', 'val', { replace: true });
+		expect(replaceStateSpy).toHaveBeenCalled();
+		replaceStateSpy.mockRestore();
+		searchParams.delete('replaceTest');
+	});
+
+	it('should use pushState by default', () => {
+		const pushStateSpy = vi.spyOn(globalThis.history, 'pushState');
+		searchParams.set('pushTest', 'val');
+		expect(pushStateSpy).toHaveBeenCalled();
+		pushStateSpy.mockRestore();
+		searchParams.delete('pushTest');
+	});
+});
+
+describe('syncSearchParams', () => {
+	beforeEach(() => {
+		for (const key of searchParams.keys()) {
+			searchParams.delete(key);
+		}
+	});
+
+	it('should add new params from the search string', () => {
+		syncSearchParams('foo=bar&baz=qux');
+		expect(searchParams.get('foo')).toBe('bar');
+		expect(searchParams.get('baz')).toBe('qux');
+	});
+
+	it('should remove params not present in the new search string', () => {
+		searchParams.set('old', 'value');
+		searchParams.set('stale', 'data');
+		syncSearchParams('new=value');
+		expect(searchParams.has('old')).toBe(false);
+		expect(searchParams.has('stale')).toBe(false);
+		expect(searchParams.get('new')).toBe('value');
+	});
+
+	it('should update existing params to new values', () => {
+		searchParams.set('key', 'old');
+		syncSearchParams('key=new');
+		expect(searchParams.get('key')).toBe('new');
+	});
+
+	it('should not modify params when search string matches current state', () => {
+		searchParams.set('a', '1');
+		const spy = vi.spyOn(URLSearchParams.prototype, 'set');
+		syncSearchParams('a=1');
+		expect(spy).not.toHaveBeenCalled();
+		spy.mockRestore();
+	});
+
+	it('should clear all params when syncing with empty string', () => {
+		searchParams.set('x', '1');
+		searchParams.set('y', '2');
+		syncSearchParams('');
+		expect(searchParams.has('x')).toBe(false);
+		expect(searchParams.has('y')).toBe(false);
+		expect(searchParams.size).toBe(0);
 	});
 });

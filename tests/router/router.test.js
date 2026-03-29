@@ -3,7 +3,14 @@ import { userEvent } from '@testing-library/user-event';
 import { beforeEach, vi } from 'vitest';
 import { base, blockNavigation, onBeforeUnload } from '../../src/create-router.svelte.js';
 import { searchParams } from '../../src/search-params.svelte.js';
-import App, { isActive, navigate, onPreloadMock, route } from './App.test.svelte';
+import App, {
+	afterLoadMock,
+	isActive,
+	navigate,
+	onErrorMock,
+	onPreloadMock,
+	route,
+} from './App.test.svelte';
 
 window.scrollTo = vi.fn();
 
@@ -213,6 +220,43 @@ describe('router', () => {
 			expect(route.meta).toEqual({ title: 'Metadata Page' });
 		});
 	});
+
+	it('should call onError when beforeLoad throws a non-Navigation error', async () => {
+		onErrorMock.mockClear();
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/error-hook');
+		expect(onErrorMock).toHaveBeenCalledWith(
+			expect.objectContaining({ message: 'Hook failed' }),
+			expect.objectContaining({ pathname: '/error-hook' }),
+		);
+		expect(screen.getByText('Welcome')).toBeInTheDocument();
+	});
+
+	it('should throw when calling getParams with a non-matching path', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		expect(() => route.getParams('/about')).toThrow('does not match the current route');
+	});
+
+	it('should call afterLoad hook after navigation', async () => {
+		afterLoadMock.mockClear();
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('After Load'));
+		await waitFor(() => {
+			expect(screen.getByText('After Load Page')).toBeInTheDocument();
+		});
+		expect(afterLoadMock).toHaveBeenCalledWith(
+			expect.objectContaining({ pathname: '/after-load' }),
+		);
+	});
 });
 
 describe('router (hash-based)', () => {
@@ -303,6 +347,16 @@ describe('router (hash-based)', () => {
 			expect(location.hash).toBe('#/lazy');
 			expect(screen.getByText('Lazy Page')).toBeInTheDocument();
 		});
+	});
+
+	it('should strip /#  from path in hash mode navigate', async () => {
+		render(App, { base: '#' });
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/about');
+		expect(location.hash).toBe('#/about');
+		expect(location.hash).not.toContain('/#');
 	});
 });
 
@@ -403,6 +457,16 @@ describe('router (navigation options)', () => {
 		});
 		expect(route.state).toEqual({ custom: true });
 		link.remove();
+	});
+
+	it('should not scroll to top when scrollToTop is false', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		/** @type {ReturnType<typeof vi.fn>} */ (window.scrollTo).mockClear();
+		await navigate('/about', { scrollToTop: false });
+		expect(window.scrollTo).not.toHaveBeenCalled();
 	});
 
 	it('should handle non-JSON data-state as a string', async () => {
@@ -728,6 +792,33 @@ describe('blockNavigation', () => {
 		event.preventDefault = vi.fn();
 		onBeforeUnload(/** @type {BeforeUnloadEvent} */ (event));
 		expect(event.preventDefault).not.toHaveBeenCalled();
+		clear();
+	});
+
+	it('should block popstate forward navigation when callback returns false', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+		});
+		// Go back first
+		const prevIndex = (history.state?._routerIndex ?? 1) - 1;
+		history.replaceState({ _routerIndex: prevIndex, _userState: null }, '', '/');
+		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/');
+		});
+		// Now block forward navigation
+		const clear = blockNavigation(() => false);
+		const nextIndex = (history.state?._routerIndex ?? 0) + 1;
+		history.replaceState({ _routerIndex: nextIndex, _userState: null }, '', '/about');
+		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
 		clear();
 	});
 });

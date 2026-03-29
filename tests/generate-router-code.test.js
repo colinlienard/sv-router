@@ -598,14 +598,11 @@ describe('pathToCorrectCasing', () => {
 		const result2 = pathToCorrectCasing('posts.[...notfound].svelte');
 		expect(result2).toBe('PostsNotfound');
 
-		const result3 = pathToCorrectCasing('posts.[...notfound].svelte');
-		expect(result3).toBe('PostsNotfound');
+		const result3 = pathToCorrectCasing('posts.hooks.ts');
+		expect(result3).toBe('postsHooks');
 
-		const result4 = pathToCorrectCasing('posts.hooks.ts');
-		expect(result4).toBe('postsHooks');
-
-		const result5 = pathToCorrectCasing('posts.meta.ts');
-		expect(result5).toBe('postsMeta');
+		const result4 = pathToCorrectCasing('posts.meta.ts');
+		expect(result4).toBe('postsMeta');
 	});
 });
 

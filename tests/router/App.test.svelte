@@ -7,6 +7,8 @@
 	import UserPage from './UserPage.test.svelte';
 
 	export const onPreloadMock = vi.fn();
+	export const onErrorMock = vi.fn();
+	export const afterLoadMock = vi.fn();
 
 	export const { p, navigate, isActive, preload, route } = createRouter({
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
@@ -36,6 +38,19 @@
 		'/lazy': {
 			'/': () => import('./Lazy.test.svelte'),
 			hooks: { onPreload: onPreloadMock },
+		},
+		'/error-hook': {
+			'/': createRawSnippet(() => ({ render: () => '<h1>Error Hook Page</h1>' })),
+			hooks: {
+				beforeLoad() {
+					throw new Error('Hook failed');
+				},
+				onError: onErrorMock,
+			},
+		},
+		'/after-load': {
+			'/': createRawSnippet(() => ({ render: () => '<h1>After Load Page</h1>' })),
+			hooks: { afterLoad: afterLoadMock },
 		},
 		'*': createRawSnippet(() => ({ render: () => '<h1>404</h1>' })),
 		layout: Layout,

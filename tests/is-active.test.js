@@ -1,9 +1,12 @@
 import { base, location } from '../src/create-router.svelte.js';
 import { isActive } from '../src/helpers/is-active.js';
 
-describe('isActive', () => {
+describe.each([
+	{ mode: 'pathname', baseName: undefined },
+	{ mode: 'hash-based', baseName: '#' },
+])('isActive ($mode)', ({ baseName }) => {
 	beforeEach(() => {
-		base.name = undefined;
+		base.name = baseName;
 	});
 
 	it('should match a simple route', () => {
@@ -44,6 +47,12 @@ describe('isActive', () => {
 	it('should not match a route with params', () => {
 		location.pathname = '/post';
 		expect(isActive('/post/:id', { id: '123' })).toBe(false);
+	});
+});
+
+describe('isActive (pathname-only)', () => {
+	beforeEach(() => {
+		base.name = undefined;
 	});
 
 	it('should match with a basename', () => {
@@ -65,55 +74,12 @@ describe('isActive', () => {
 	});
 });
 
-describe('isActive (hash-based)', () => {
+describe.each([
+	{ mode: 'pathname', baseName: undefined },
+	{ mode: 'hash-based', baseName: '#' },
+])('isActive.startsWith ($mode)', ({ baseName }) => {
 	beforeEach(() => {
-		base.name = '#';
-	});
-
-	it('should match a simple route', () => {
-		location.pathname = '/about';
-		expect(isActive('/about')).toBe(true);
-	});
-
-	it('should match a route with a param', () => {
-		location.pathname = '/post/123';
-		expect(isActive('/post/:id', { id: '123' })).toBe(true);
-	});
-
-	it('should match a route with any param', () => {
-		location.pathname = '/post/123';
-		expect(isActive('/post/:id')).toBe(true);
-	});
-
-	it('should match a route with params', () => {
-		location.pathname = '/post/123/comments/456';
-		expect(isActive('/post/:id/comments/:commentId', { id: '123', commentId: '456' })).toBe(true);
-	});
-
-	it('should match a route with any params', () => {
-		location.pathname = '/post/123/comments/456';
-		expect(isActive('/post/:id/comments/:commentId')).toBe(true);
-	});
-
-	it('should not match a simple route', () => {
-		location.pathname = '/foo';
-		expect(isActive('/about')).toBe(false);
-	});
-
-	it('should not match a route with any param', () => {
-		location.pathname = '/post';
-		expect(isActive('/post/:id')).toBe(false);
-	});
-
-	it('should not match a route with params', () => {
-		location.pathname = '/post';
-		expect(isActive('/post/:id', { id: '123' })).toBe(false);
-	});
-});
-
-describe('isActive.startsWith', () => {
-	beforeEach(() => {
-		base.name = undefined;
+		base.name = baseName;
 	});
 
 	it('should match a simple route', () => {
@@ -156,6 +122,12 @@ describe('isActive.startsWith', () => {
 	it('should not match a route with params', () => {
 		location.pathname = '/foo/bar';
 		expect(isActive.startsWith('/hello/:id', { id: 'world' })).toBe(false);
+	});
+});
+
+describe('isActive.startsWith (pathname-only)', () => {
+	beforeEach(() => {
+		base.name = undefined;
 	});
 
 	it('should match with a basename', () => {
@@ -168,53 +140,5 @@ describe('isActive.startsWith', () => {
 		base.name = '/dashboard';
 		location.pathname = '/dashboard/about';
 		expect(isActive.startsWith('/')).toBe(true);
-	});
-});
-
-describe('isActive.startsWith (hash-based)', () => {
-	beforeEach(() => {
-		base.name = '#';
-	});
-
-	it('should match a simple route', () => {
-		location.pathname = '/about/me';
-		expect(isActive.startsWith('/about')).toBe(true);
-	});
-
-	it('should match a route with a param', () => {
-		location.pathname = '/post/123/foo';
-		expect(isActive.startsWith('/post/:id', { id: '123' })).toBe(true);
-	});
-
-	it('should match a route with any param', () => {
-		location.pathname = '/post/123/foo';
-		expect(isActive.startsWith('/post/:id')).toBe(true);
-	});
-
-	it('should match a route with params', () => {
-		location.pathname = '/post/123/comments/456/foo';
-		expect(
-			isActive.startsWith('/post/:id/comments/:commentId', { id: '123', commentId: '456' }),
-		).toBe(true);
-	});
-
-	it('should match a route with any params', () => {
-		location.pathname = '/post/123/comments/456/foo';
-		expect(isActive.startsWith('/post/:id/comments/:commentId')).toBe(true);
-	});
-
-	it('should not match a simple route', () => {
-		location.pathname = '/foo';
-		expect(isActive.startsWith('/hello')).toBe(false);
-	});
-
-	it('should not match a route with any param', () => {
-		location.pathname = '/foo/bar';
-		expect(isActive.startsWith('/hello/:id')).toBe(false);
-	});
-
-	it('should not match a route with params', () => {
-		location.pathname = '/foo/bar';
-		expect(isActive.startsWith('/hello/:id', { id: 'world' })).toBe(false);
 	});
 });

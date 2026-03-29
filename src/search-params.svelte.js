@@ -66,7 +66,8 @@ export function syncSearchParams(search) {
 	for (const [key, value] of newSearch) {
 		searchParams.set(key, value);
 	}
-	for (const key of searchParams.keys()) {
+	// eslint-disable-next-line unicorn/no-useless-spread
+	for (const key of [...searchParams.keys()]) {
 		if (!newSearch.has(key)) {
 			searchParams.delete(key);
 		}
