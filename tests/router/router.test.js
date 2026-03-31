@@ -731,3 +731,60 @@ describe('blockNavigation', () => {
 		clear();
 	});
 });
+
+describe('router (dynamic routes)', () => {
+	beforeEach(() => {
+		location.pathname = '/';
+		location.search = '';
+		base.name = undefined;
+	});
+
+	it('should navigate to a dynamically added route and fall back when removed', async () => {
+		const {
+			default: DynamicApp,
+			navigate: nav,
+			setYoloRoute,
+		} = await import('./DynamicRoutes.test.svelte');
+
+		render(DynamicApp);
+		await waitFor(() => {
+			expect(screen.getByText('Not Found')).toBeInTheDocument();
+		});
+
+		// Navigate to /foo — should work since it's in the initial routes
+		await nav('/foo');
+		await waitFor(() => {
+			expect(screen.getByText('Foo Page')).toBeInTheDocument();
+		});
+
+		// /yolo is not defined yet — should show catch-all
+		await nav('/yolo');
+		await waitFor(() => {
+			expect(screen.getByText('Not Found')).toBeInTheDocument();
+		});
+
+		// Dynamically add /yolo
+		setYoloRoute(true);
+		await nav('/yolo');
+		await waitFor(() => {
+			expect(screen.getByText('Yolo Page')).toBeInTheDocument();
+		});
+
+		// Navigate away and back to confirm it still works
+		await nav('/bar');
+		await waitFor(() => {
+			expect(screen.getByText('Bar Page')).toBeInTheDocument();
+		});
+		await nav('/yolo');
+		await waitFor(() => {
+			expect(screen.getByText('Yolo Page')).toBeInTheDocument();
+		});
+
+		// Dynamically remove /yolo
+		setYoloRoute(false);
+		await nav('/yolo');
+		await waitFor(() => {
+			expect(screen.getByText('Not Found')).toBeInTheDocument();
+		});
+	});
+});
