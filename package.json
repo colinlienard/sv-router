@@ -61,7 +61,7 @@
 		"@vitest/coverage-v8": "^4.1.0",
 		"eslint": "^10.0.3",
 		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-simple-import-sort": "^12.1.1",
+		"eslint-plugin-simple-import-sort": "^13.0.0",
 		"eslint-plugin-svelte": "^3.15.2",
 		"eslint-plugin-unicorn": "^64.0.0",
 		"globals": "^17.4.0",
