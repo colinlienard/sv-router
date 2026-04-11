@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import { genConfig } from './config.js';
 import { generateRouterCode } from './generate-router-code.js';
 
@@ -10,14 +11,18 @@ export function writeRouterCode() {
 		}
 
 		// Write `.router/tsconfig.json` file
+		const tsMajor = getTypeScriptMajorVersion();
+		const useBaseUrl = tsMajor === undefined || tsMajor < 6;
+		let alias = genConfig.routerPath;
+		if (!useBaseUrl) {
+			alias = alias.replace(genConfig.genCodeDirPath, '.');
+		}
 		const tsConfig = {
 			compilerOptions: {
 				module: 'preserve',
 				moduleResolution: 'bundler',
-				baseUrl: '..',
-				paths: {
-					[genConfig.genCodeAlias]: [genConfig.routerPath],
-				},
+				...(useBaseUrl ? { baseUrl: '..' } : {}),
+				paths: { [genConfig.genCodeAlias]: [alias] },
 			},
 			include: [
 				'../src/**/*.js',
@@ -60,5 +65,16 @@ function writeFileIfDifferent(filePath, content) {
 	if (!fs.existsSync(filePath) || fs.readFileSync(filePath, 'utf8') !== content) {
 		fs.writeFileSync(filePath, content);
 		return true;
+	}
+}
+
+function getTypeScriptMajorVersion() {
+	try {
+		const require = createRequire(process.cwd() + '/package.json');
+		const tsPackagePath = require.resolve('typescript/package.json');
+		const tsPackage = JSON.parse(fs.readFileSync(tsPackagePath, 'utf8'));
+		return Number(tsPackage.version.split('.')[0]);
+	} catch {
+		return;
 	}
 }
