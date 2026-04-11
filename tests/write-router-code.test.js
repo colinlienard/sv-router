@@ -14,9 +14,7 @@ vi.mock('../src/gen/generate-router-code.js', () => ({
 	generateRouterCode: () => 'generated code',
 }));
 
-/**
- * @param {string | undefined} version
- */
+/** @param {string | undefined} [version] */
 function mockTypeScriptVersion(version) {
 	if (version) {
 		const resolve = vi.fn().mockReturnValue('/fake/node_modules/typescript/package.json');
@@ -37,12 +35,12 @@ function mockTypeScriptVersion(version) {
 	}
 }
 
-/** @returns {Record<string, unknown>} */
+/** @returns {{ compilerOptions: Record<string, unknown> }} */
 function getWrittenTsConfig() {
 	const call = writeFileSync.mock.calls.find(
 		(/** @type {string[]} */ c) => c[0] === '.router/tsconfig.json',
 	);
-	return JSON.parse(call[1]);
+	return JSON.parse(call?.[1]);
 }
 
 describe('writeRouterCode', () => {
@@ -51,7 +49,7 @@ describe('writeRouterCode', () => {
 		existsSync.mockReturnValue(false);
 	});
 
-	it('should include baseUrl for TypeScript < 6', () => {
+	it('should include baseUrl for typescript < 6', () => {
 		mockTypeScriptVersion('5.7.2');
 		writeRouterCode();
 
@@ -62,7 +60,7 @@ describe('writeRouterCode', () => {
 		});
 	});
 
-	it('should not include baseUrl for TypeScript >= 6', () => {
+	it('should not include baseUrl for typescript >= 6', () => {
 		mockTypeScriptVersion('6.0.0');
 		writeRouterCode();
 
@@ -73,7 +71,7 @@ describe('writeRouterCode', () => {
 		});
 	});
 
-	it('should include baseUrl when TypeScript is not installed', () => {
+	it('should include baseUrl when typescript is not installed', () => {
 		mockTypeScriptVersion();
 		writeRouterCode();
 
@@ -84,7 +82,7 @@ describe('writeRouterCode', () => {
 		});
 	});
 
-	it('should not include baseUrl for TypeScript prerelease >= 6', () => {
+	it('should not include baseUrl for typescript prerelease >= 6', () => {
 		mockTypeScriptVersion('6.0.0-beta.1');
 		writeRouterCode();
 
