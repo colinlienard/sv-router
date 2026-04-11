@@ -3,19 +3,6 @@ import type { Action } from 'svelte/action';
 import type { Attachment } from 'svelte/attachments';
 
 /**
- * @deprecated Use the `isActiveLink` [attachment](https://svelte.dev/docs/svelte/@attach) instead.
- *
- *   A Svelte action that will add a class to the anchor if its `href` matches the current route. It
- *   can have an optional `className` parameter to specify the class to add, otherwise it will
- *   default to `is-active`, and an optional `startsWith` parameter.
- *
- *   ```svelte
- *   <a href={p('/about')} use:isActiveLink={{ className: 'active-link' }}>
- * ```
- */
-export const isActiveLinkAction: IsActiveLinkAction;
-
-/**
  * A Svelte attachment that will add a class to the anchor if its `href` matches the current route.
  * It can have an optional `className` parameter to specify the class to add, otherwise it will
  * default to `is-active`, and an optional `startsWith` parameter.
