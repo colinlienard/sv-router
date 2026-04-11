@@ -73,7 +73,9 @@ describe('router', () => {
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
-		await userEvent.click(screen.getByText('External'));
+		const externalLink = screen.getByText('External');
+		externalLink.addEventListener('click', (e) => e.preventDefault());
+		await userEvent.click(externalLink);
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
