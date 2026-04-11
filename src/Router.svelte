@@ -12,6 +12,7 @@
 	/** @type {{ base?: string }} */
 	let { base: basename } = $props();
 
+	// svelte-ignore state_referenced_locally
 	init(basename);
 
 	onNavigate();

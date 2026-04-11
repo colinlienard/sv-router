@@ -132,7 +132,7 @@ describe('syncSearchParams', () => {
 		expect(searchParams.get('baz')).toBe('qux');
 	});
 
-	it.skip('should remove params not present in the new search string', () => {
+	it('should remove params not present in the new search string', () => {
 		searchParams.set('old', 'value');
 		searchParams.set('stale', 'data');
 		syncSearchParams('new=value');
@@ -155,7 +155,7 @@ describe('syncSearchParams', () => {
 		spy.mockRestore();
 	});
 
-	it.skip('should clear all params when syncing with empty string', () => {
+	it('should clear all params when syncing with empty string', () => {
 		searchParams.set('x', '1');
 		searchParams.set('y', '2');
 		syncSearchParams('');
