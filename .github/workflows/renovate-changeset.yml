@@ -1,0 +1,37 @@
+name: Renovate Changeset
+
+on:
+  pull_request:
+    paths:
+      - 'create/templates/**/package.json'
+
+jobs:
+  changeset:
+    if: github.actor == 'renovate[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create changeset
+        run: |
+          CHANGESET_ID=$(head -c 8 /dev/urandom | xxd -p)
+          cat > ".changeset/renovate-${CHANGESET_ID}.md" << 'EOF'
+          ---
+          'create-sv-router': patch
+          ---
+
+          Update template dependencies
+          EOF
+
+      - name: Commit changeset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .changeset/
+          git commit -m "chore: add changeset for template dependencies"
+          git push
