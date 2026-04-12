@@ -1,5 +1,11 @@
 # create-sv-router
 
+## 0.2.1
+
+### Patch Changes
+
+- f85c186: Update template dependencies
+
 ## 0.2.0
 
 ### Minor Changes
