@@ -165,8 +165,14 @@ function mergeRouteGroup(result, childMap) {
 		} else if (!Array.isArray(val)) {
 			routeWithGroupFiles = { ...val };
 		}
-		if (layout) routeWithGroupFiles.layout = /** @type {string} */ (layout);
-		if (hooks) routeWithGroupFiles.hooks = /** @type {string} */ (hooks);
+		if (layout) {
+			if (routeWithGroupFiles.layout) {
+				routeWithGroupFiles = { '/': routeWithGroupFiles, layout: layout };
+			} else {
+				routeWithGroupFiles.layout = layout;
+			}
+		}
+		if (hooks) routeWithGroupFiles.hooks = hooks;
 		if (mergedMeta) routeWithGroupFiles.meta = /** @type {string | string[]} */ (mergedMeta);
 		if (result[key]) {
 			throw new Error(`Route conflict at \`${key}\``);

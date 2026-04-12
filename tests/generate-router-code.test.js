@@ -327,6 +327,33 @@ describe('createRouteMap', () => {
 		});
 	});
 
+	it('should preserve nested layout inside route group', () => {
+		const result = createRouteMap([
+			'index.svelte',
+			{
+				name: '_authed',
+				tree: [
+					'layout.svelte',
+					{
+						name: 'chats',
+						tree: ['index.svelte', 'layout.svelte'],
+					},
+				],
+			},
+		]);
+
+		expect(result).toEqual({
+			'/': 'index.svelte',
+			'/chats': {
+				'/': {
+					'/': '_authed/chats/index.svelte',
+					layout: '_authed/chats/layout.svelte',
+				},
+				layout: '_authed/layout.svelte',
+			},
+		});
+	});
+
 	it('should throw on conflict inside route group', () => {
 		const conflictTree = [
 			'index.svelte',
