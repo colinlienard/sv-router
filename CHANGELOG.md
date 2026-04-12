@@ -1,5 +1,17 @@
 # sv-router
 
+## 0.16.0
+
+### Minor Changes
+
+- a9a2354: Delete deprecated isActiveLinkAction
+- 83155ce: Remove deprecated `baseUrl` from generated tsconfig for typescript 6+
+
+### Patch Changes
+
+- 139ea93: Fix nested layouts in route group
+- cc9d8c2: Fix search params syncing
+
 ## 0.15.0
 
 ### Minor Changes
