@@ -1,3 +1,8 @@
+---
+title: Tips
+description: Tips for managing the document head, handling errors, and deploying an sv-router SPA to popular hosting platforms.
+---
+
 # Tips
 
 ## Head Management

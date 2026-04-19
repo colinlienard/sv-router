@@ -1,3 +1,8 @@
+---
+title: Route Groups
+description: Organize file-based routes with underscore-prefixed folders that are excluded from the URL, ideal for applying different layouts.
+---
+
 # Route Groups
 
 Route groups allow you to organize route files together without affecting the actual URL path by prefixing the folder name with an underscore. This is useful for grouping related routes under a shared layout or structure while keeping the URL clean.

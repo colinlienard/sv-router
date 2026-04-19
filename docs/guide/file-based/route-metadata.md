@@ -1,3 +1,8 @@
+---
+title: Route Metadata (File-based)
+description: Attach arbitrary metadata to file-based routes via a meta.ts file, with parent values merged down the route tree.
+---
+
 # Route Metadata
 
 You can attach arbitrary data to routes using the `meta` property. This is useful for authentication guards, UI configuration, analytics tracking, and more.

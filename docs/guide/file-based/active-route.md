@@ -1,3 +1,8 @@
+---
+title: Active Route (File-based)
+description: Highlight active links with the isActiveLink attachment or check whether a file-based route is active programmatically with isActive.
+---
+
 # Active Route
 
 ## On Links

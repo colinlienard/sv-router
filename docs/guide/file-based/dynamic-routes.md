@@ -1,3 +1,8 @@
+---
+title: Dynamic Routes (File-based)
+description: Create dynamic file-based routes with [param] filename syntax and access their parameters through route.params and route.getParams.
+---
+
 # Dynamic Routes
 
 To create dynamic routes that match variable segments, surround the segment name with square brackets. This allows that segment to match any value.

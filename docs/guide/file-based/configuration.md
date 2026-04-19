@@ -1,4 +1,6 @@
 ---
+title: Configuration (File-based)
+description: Configure the sv-router Vite plugin and CLI with options like allLazy, ignore, js, and path.
 outline: [2, 3]
 ---
 

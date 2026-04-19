@@ -1,3 +1,8 @@
+---
+title: Basename (Code-based)
+description: Configure a basename to deploy your app under a subpath, or switch to hash-based routing for file:// URLs.
+---
+
 # Basename
 
 If your app doesn't live at the root of a domain (for example, it's hosted at `example.com/my-app` instead of just `example.com`), you need to specify a basename. This tells the router to prepend this path segment to all route URLs.

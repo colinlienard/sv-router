@@ -1,3 +1,8 @@
+---
+title: Catch-All Routes (File-based)
+description: Handle unmatched URLs in file-based routing with the [...param] spread filename syntax.
+---
+
 # Catch-All Routes
 
 To handle any unmatched routes, define a catch-all route using the spread syntax:

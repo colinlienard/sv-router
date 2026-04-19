@@ -1,3 +1,8 @@
+---
+title: Getting Started
+description: Install sv-router in a new or existing Svelte 5 project and choose between code-based and file-based routing.
+---
+
 # Getting Started
 
 ## Start a New Project

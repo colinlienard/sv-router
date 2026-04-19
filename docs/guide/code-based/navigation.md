@@ -1,3 +1,8 @@
+---
+title: Navigation (Code-based)
+description: Navigate between code-based routes with links, the p() helper, the navigate() function, and block navigation to prevent lost changes.
+---
+
 # Navigation
 
 ## Links

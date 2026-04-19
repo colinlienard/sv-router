@@ -1,3 +1,8 @@
+---
+title: Preloading (File-based)
+description: Preload lazy file-based routes on hover, viewport entry, or pointer prediction, or programmatically via preload().
+---
+
 # Preloading
 
 Preloading loads the next page in the background while users interact with the current page. This technique can reduce perceived loading times when users navigate to the preloaded page.

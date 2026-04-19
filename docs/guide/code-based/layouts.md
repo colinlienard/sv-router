@@ -1,3 +1,8 @@
+---
+title: Layouts (Code-based)
+description: Wrap code-based routes with shared layout components, and selectively opt out of a parent layout using parentheses syntax.
+---
+
 # Layouts
 
 Define a wrapping component for routes at the same level or below using layouts:

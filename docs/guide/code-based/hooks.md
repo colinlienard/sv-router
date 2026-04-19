@@ -1,3 +1,8 @@
+---
+title: Hooks (Code-based)
+description: Attach beforeLoad, afterLoad, onPreload, and onError hooks to code-based routes for guards, data loading, and error handling.
+---
+
 # Hooks
 
 When defining routes, you can attach specialized hooks that execute before or after route activation.

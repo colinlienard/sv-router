@@ -1,3 +1,8 @@
+---
+title: View Transitions (Code-based)
+description: Enable the View Transitions API during code-based navigation and customize animation effects with CSS.
+---
+
 # View Transitions
 
 You can enable view transitions by passing the `viewTransition` option to the `navigate` function:

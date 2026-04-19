@@ -1,3 +1,8 @@
+---
+title: Route Metadata (Code-based)
+description: Attach arbitrary metadata to code-based routes for authentication guards, UI configuration, or analytics tracking.
+---
+
 # Route Metadata
 
 You can attach arbitrary data to routes using the `meta` property. This is useful for authentication guards, UI configuration, analytics tracking, and more.

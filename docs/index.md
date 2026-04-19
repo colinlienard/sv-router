@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: sv-router
-  text: Modern Svelte Routing
-  tagline: A feature-rich yet intuitive routing library for Svelte single-page apps.
+  text: Type-safe routing for Svelte SPAs
+  tagline: Flexible, ergonomic, and complete Svelte 5 router
   image:
     src: /logo.svg
     width: 100%
@@ -23,14 +23,26 @@ hero:
 features:
   - icon: 🔒
     title: Typesafe navigation
-    details: Get autocomplete and type checking for your routes.
+    details: Catch broken links before you ship.
   - icon: 🗂️
     title: File-based routing (optional)
-    details: Enjoy the DX of a meta-framework-like approach.
-  - icon: 🌿
-    title: Nested routes
-    details: Create complex layouts with ease.
-  - icon: 🚀
-    title: Made for Svelte 5
-    details: True Svelte 5 implementation with the latest features.
+    details: DX of a meta-framework-like approach.
+  - icon: 🪶
+    title: Lightweight
+    details: < 5kB gzipped.
+  - icon: ⚡
+    title: Performance
+    details: Built-in code splitting and preloading.
+  - icon: 🔍
+    title: Reactive search params
+    details: For simpler state management in the URL.
+  # - icon: 🌿
+  #   title: Nested routes
+  #   details: Share layouts across pages.
+  # - icon: 🛡️
+  #   title: Hooks
+  #   details: For navigation guards, data loading, or analytics tracking.
+  - icon: #️⃣
+    title: Hash-based routing
+    details: Works inside Electron/Tauri.
 ---

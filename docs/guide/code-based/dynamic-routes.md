@@ -1,3 +1,8 @@
+---
+title: Dynamic Routes (Code-based)
+description: Create dynamic code-based routes with colon-prefixed segments and access their parameters through route.params and route.getParams.
+---
+
 # Dynamic Routes
 
 To create dynamic routes that match variable segments, prefix a route segment with a colon `:`. This allows that segment to match any value.

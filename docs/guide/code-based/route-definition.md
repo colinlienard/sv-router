@@ -1,3 +1,8 @@
+---
+title: Route Definition (Code-based)
+description: Define code-based routes with createRouter using flat mode, tree mode, or both combined in the same configuration.
+---
+
 # Route Definition
 
 All routes are defined in a single configuration object passed to `createRouter`, which returns methods and properties you'll use throughout your application for navigation and route management:

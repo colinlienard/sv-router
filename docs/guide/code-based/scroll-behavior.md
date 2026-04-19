@@ -1,3 +1,8 @@
+---
+title: Scroll Behavior (Code-based)
+description: Control scroll-to-top behavior on navigation and customize scroll restoration across history changes.
+---
+
 # Scroll Behavior
 
 ## Scroll To Top

@@ -1,3 +1,8 @@
+---
+title: Manual Setup (File-based)
+description: Set up file-based routing with the sv-router Vite plugin or CLI, including TypeScript configuration and generated routes.
+---
+
 # Manual Setup
 
 > [!NOTE]

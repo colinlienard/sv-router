@@ -1,3 +1,8 @@
+---
+title: Route Definition (File-based)
+description: Define file-based routes by placing .svelte files in the routes directory, using flat or tree organization.
+---
+
 # Route Definition
 
 In file-based routing, you create routes by placing `.svelte` files in the `routes` directory. Each file automatically becomes a route based on its filename and location.

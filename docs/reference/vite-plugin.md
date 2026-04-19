@@ -1,4 +1,6 @@
 ---
+title: Vite Plugin Reference
+description: API reference for the sv-router Vite plugin that generates file-based route definitions from your file system.
 outline: [2, 4]
 ---
 

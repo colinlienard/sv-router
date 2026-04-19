@@ -1,3 +1,8 @@
+---
+title: Layouts (File-based)
+description: Wrap file-based routes with shared layout.svelte components, and opt out of parent layouts using parentheses syntax.
+---
+
 # Layouts
 
 Define a wrapping component for routes at the same level or below using layouts:

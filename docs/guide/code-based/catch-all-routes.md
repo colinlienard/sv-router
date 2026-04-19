@@ -1,3 +1,8 @@
+---
+title: Catch-All Routes (Code-based)
+description: Handle unmatched URLs in code-based routing with the `*` symbol, optionally named to expose the unmatched segment.
+---
+
 # Catch-All Routes
 
 To handle any unmatched routes, define a catch-all route using the `*` symbol:

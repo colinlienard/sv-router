@@ -1,3 +1,8 @@
+---
+title: Search Params (File-based)
+description: Read and update URL search parameters reactively with the searchParams object, which automatically syncs with the browser URL.
+---
+
 # Search Params
 
 sv-router provides a convenient way to access and manipulate URL search parameters. The `searchParam` object extends [`SvelteURLSearchParams`](https://svelte.dev/docs/svelte/svelte-reactivity#SvelteURLSearchParams) from Svelte's reactivity API.

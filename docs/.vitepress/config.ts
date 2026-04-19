@@ -2,8 +2,8 @@ import { defineConfig } from 'vitepress';
 import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
 
 export default defineConfig({
-	title: 'sv-router | Modern Svelte Routing',
-	description: 'A feature-rich yet intuitive routing library for Svelte single-page apps.',
+	title: 'sv-router | Type-safe routing for Svelte SPAs',
+	description: 'Flexible, ergonomic, and complete Svelte 5 router',
 	head: [['link', { rel: 'icon', href: '/logo.svg' }]],
 	cleanUrls: true,
 	themeConfig: {
@@ -115,6 +115,12 @@ export default defineConfig({
 	},
 	vite: {
 		plugins: [groupIconVitePlugin()],
+	},
+	transformPageData(pageData) {
+		const slug = pageData.relativePath.replace(/(index)?\.md$/, '');
+		const canonicalUrl = `https://sv-router.vercel.app/${slug}`;
+		pageData.frontmatter.head ??= [];
+		pageData.frontmatter.head.push(['link', { rel: 'canonical', href: canonicalUrl }]);
 	},
 });
 

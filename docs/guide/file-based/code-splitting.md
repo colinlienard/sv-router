@@ -1,3 +1,8 @@
+---
+title: Code Splitting (File-based)
+description: Reduce initial bundle size by suffixing route files with .lazy.svelte, or enable lazy loading globally with the allLazy option.
+---
+
 # Code Splitting
 
 Code splitting divides your application into multiple bundles that load on demand or in parallel. This technique reduces initial load times, though you might choose to omit it for frequently accessed pages like your home page.

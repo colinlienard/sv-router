@@ -1,3 +1,8 @@
+---
+title: Why sv-router?
+description: Why choose sv-router — type-safe navigation, nested routes, hooks, preloading, and reactive search params, built for Svelte 5 SPAs.
+---
+
 # Why sv-router?
 
 sv-router is a feature-rich yet intuitive routing library for Svelte SPAs. It provides powerful routing capabilities while maintaining simplicity.

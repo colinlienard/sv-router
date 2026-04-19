@@ -1,3 +1,8 @@
+---
+title: Hooks (File-based)
+description: Attach beforeLoad, afterLoad, onPreload, and onError hooks to file-based routes by creating a hooks.ts file.
+---
+
 # Hooks
 
 When defining routes, you can attach specialized hooks that execute before or after route activation.

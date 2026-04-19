@@ -1,4 +1,6 @@
 ---
+title: API Reference
+description: Full API reference for sv-router — createRouter, navigate, p, isActive, route, searchParams, blockNavigation, hooks, and more.
 outline: [2, 4]
 ---
 

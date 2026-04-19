@@ -1,3 +1,8 @@
+---
+title: Manual Setup (Code-based)
+description: Manually set up code-based routing in a Svelte project — define routes with createRouter and render them with the Router component.
+---
+
 # Manual Setup
 
 > [!NOTE]

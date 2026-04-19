@@ -1,3 +1,8 @@
+---
+title: Code Splitting (Code-based)
+description: Reduce initial bundle size by lazy-loading code-based routes with dynamic import() calls.
+---
+
 # Code Splitting
 
 Code splitting divides your application into multiple bundles that load on demand or in parallel. This technique reduces initial load times, though you might choose to omit it for frequently accessed pages like your home page.
