@@ -4,7 +4,18 @@ import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-i
 export default defineConfig({
 	title: 'sv-router | Type-safe routing for Svelte SPAs',
 	description: 'Flexible, ergonomic, and complete Svelte 5 router',
-	head: [['link', { rel: 'icon', href: '/logo.svg' }]],
+	head: [
+		['link', { rel: 'icon', href: '/logo.svg' }],
+		['meta', { name: 'twitter:site', content: '@colinlienard' }],
+		['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+		['meta', { name: 'twitter:image', content: 'https://sv-router.vercel.app/og-image.png' }],
+		['meta', { property: 'og:image', content: 'https://sv-router.vercel.app/og-image.png' }],
+		['meta', { property: 'og:image:width', content: '1200' }],
+		['meta', { property: 'og:image:height', content: '630' }],
+		['meta', { property: 'og:image:type', content: 'image/png' }],
+		['meta', { property: 'og:site_name', content: 'sv-router' }],
+		['meta', { property: 'og:type', content: 'website' }],
+	],
 	cleanUrls: true,
 	themeConfig: {
 		logo: '/logo.svg',
@@ -120,7 +131,14 @@ export default defineConfig({
 		const slug = pageData.relativePath.replace(/(index)?\.md$/, '');
 		const canonicalUrl = `https://sv-router.vercel.app/${slug}`;
 		pageData.frontmatter.head ??= [];
-		pageData.frontmatter.head.push(['link', { rel: 'canonical', href: canonicalUrl }]);
+		pageData.frontmatter.head.push(
+			['link', { rel: 'canonical', href: canonicalUrl }],
+			['meta', { property: 'og:url', content: canonicalUrl }],
+			['meta', { property: 'og:title', content: pageData.title }],
+			['meta', { property: 'og:description', content: pageData.description }],
+			['meta', { name: 'twitter:title', content: pageData.title }],
+			['meta', { name: 'twitter:description', content: pageData.description }],
+		);
 	},
 });
 

@@ -1,5 +1,7 @@
 ---
 layout: home
+title: 'sv-router | Type-safe routing for Svelte SPAs'
+description: 'Flexible, ergonomic, and complete Svelte 5 router'
 
 hero:
   name: sv-router
@@ -11,38 +13,38 @@ hero:
     height: 100%
   actions:
     - theme: brand
-      text: Get Started
-      link: /guide/getting-started
-    - theme: alt
       text: Why sv-router?
       link: /guide/why
+    - theme: alt
+      text: Get Started
+      link: /guide/getting-started
     - theme: alt
       text: GitHub
       link: https://github.com/colinlienard/sv-router
 
 features:
-  - icon: 🔒
-    title: Typesafe navigation
+  - icon: '🔒'
+    title: Type-safe navigation
     details: Catch broken links before you ship.
-  - icon: 🗂️
+  - icon: '🗂️'
     title: File-based routing (optional)
     details: DX of a meta-framework-like approach.
-  - icon: 🪶
+  - icon: '🪶'
     title: Lightweight
     details: < 5kB gzipped.
-  - icon: ⚡
+  - icon: '⚡'
     title: Performance
     details: Built-in code splitting and preloading.
-  - icon: 🔍
+  - icon: '🔍'
     title: Reactive search params
     details: For simpler state management in the URL.
-  # - icon: 🌿
+  # - icon: '🌿'
   #   title: Nested routes
   #   details: Share layouts across pages.
-  # - icon: 🛡️
+  # - icon: '🛡️'
   #   title: Hooks
   #   details: For navigation guards, data loading, or analytics tracking.
-  - icon: #️⃣
+  - icon: '#️⃣'
     title: Hash-based routing
     details: Works inside Electron/Tauri.
 ---
