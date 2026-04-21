@@ -128,7 +128,7 @@ export default defineConfig({
 		plugins: [groupIconVitePlugin()],
 	},
 	transformPageData(pageData) {
-		const slug = pageData.relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '');
+		const slug = pageData.relativePath.replace(/(index)?\.md$/, '').replace(/\/$/, '');
 		const canonicalUrl = `https://sv-router.vercel.app/${slug}`;
 		pageData.frontmatter.head ??= [];
 		pageData.frontmatter.head.push(
