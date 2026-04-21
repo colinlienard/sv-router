@@ -28,7 +28,7 @@ The community has tried to fill that gap, but most Svelte SPA routers are no lon
 sv-router is the router I wished existed for Svelte SPAs, inspired by TanStack Router and adapted to Svelte 5's idioms.
 
 - **Type-safe navigation:** Paths, params, and search are validated at compile time, so broken links are caught before you ship.
-- **Code-based _or_ file-based routing:** Pick whichever fits your project. Code-based keeps everything explicit in one place; file-based gives you a meta-framework-style structure when you prefer that.
+- **Code-based _or_ file-based routing:** Pick whichever fits your project. Code-based keeps everything explicit in one place; file-based gives you a meta-framework-style structure.
 - **Batteries included:** Nested layouts, hooks for guards and data loading, preloading strategies, reactive search params, and hash-based routing for Electron/Tauri.
 - **Lightweight:** Under 5 kB gzipped.
 - **Svelte 5 native:** Built on runes from day one.

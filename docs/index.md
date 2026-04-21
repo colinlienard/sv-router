@@ -13,11 +13,11 @@ hero:
     height: 100%
   actions:
     - theme: brand
-      text: Why sv-router?
-      link: /guide/why
-    - theme: alt
       text: Get Started
       link: /guide/getting-started
+    - theme: alt
+      text: Why sv-router?
+      link: /guide/why
     - theme: alt
       text: GitHub
       link: https://github.com/colinlienard/sv-router
@@ -38,12 +38,6 @@ features:
   - icon: '🔍'
     title: Reactive search params
     details: For simpler state management in the URL.
-  # - icon: '🌿'
-  #   title: Nested routes
-  #   details: Share layouts across pages.
-  # - icon: '🛡️'
-  #   title: Hooks
-  #   details: For navigation guards, data loading, or analytics tracking.
   - icon: '#️⃣'
     title: Hash-based routing
     details: Works inside Electron/Tauri.
