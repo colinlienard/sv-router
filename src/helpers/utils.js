@@ -151,7 +151,7 @@ export function serializeSearch(value) {
 
 /**
  * @param {import('../index.d.ts').Search} [value]
- * @returns {Record<string, string | number | boolean>}
+ * @returns {Record<string, string | number | boolean | (string | number | boolean)[]>}
  */
 export function parseSearch(value) {
 	if (!value) {
@@ -160,9 +160,17 @@ export function parseSearch(value) {
 
 	if (typeof value === 'string') {
 		const searchParams = new URLSearchParams(value);
-		return Object.fromEntries(
-			[...searchParams.entries()].map(([key, value]) => [key, parseSearchValue(value)]),
-		);
+		/** @type {Record<string, string | number | boolean | (string | number | boolean)[]>} */
+		const object = {};
+		for (const key of searchParams.keys()) {
+			const values = searchParams.getAll(key).map(parseSearchValue);
+			if (values.length > 1) {
+				object[key] = values;
+			} else {
+				object[key] = values[0];
+			}
+		}
+		return object;
 	}
 
 	return value;

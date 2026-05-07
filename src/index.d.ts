@@ -234,7 +234,7 @@ export type RouterApi<T extends Routes> = {
 		/** The reactive pathname of the URL. */
 		pathname: (Path<T, true> & {}) | (string & {});
 		/** The reactive query string part of the URL. */
-		search: Record<string, string | number | boolean>;
+		search: Record<string, string | number | boolean | (string | number | boolean)[]>;
 		/** The reactive history state that can be passed to the `navigate` function. */
 		state: unknown;
 		/** The reactive hash part of the URL. */
@@ -276,14 +276,16 @@ export type AllParams<TRoutes extends Routes> = Partial<
 	Record<ExtractParams<RemoveParenthesis<RecursiveKeys<TRoutes>>>, string>
 >;
 
-export type Search = string | Record<string, string | number | boolean>;
+export type Search =
+	| string
+	| Record<string, string | number | boolean | (string | number | boolean)[]>;
 
 export type HooksContext = {
 	hash?: string;
 	meta: RouteMeta;
 	pathname: string;
 	replace?: boolean;
-	search: Record<string, string | number | boolean>;
+	search: Record<string, string | number | boolean | (string | number | boolean)[]>;
 	state?: unknown;
 };
 
