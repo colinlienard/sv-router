@@ -3,5 +3,5 @@ packages:
   - create
   - docs
   - examples/*
-onlyBuiltDependencies:
-  - esbuild
+allowBuilds:
+  esbuild: true
