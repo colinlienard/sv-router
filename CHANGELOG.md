@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.16.1
+
+### Patch Changes
+
+- cbc92e8: Add `toURLSearchParams` to make `searchParams` more easily usable in URLSearchParams APIs
+- 8406e97: Fix empty search and hash in hooks context on page load
+
 ## 0.16.0
 
 ### Minor Changes
