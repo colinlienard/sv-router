@@ -316,6 +316,7 @@ export type SearchParams = Omit<
 	getAll(name: string): (string | number | boolean)[];
 	set(name: string, value: string | number | boolean, options?: { replace?: boolean }): void;
 	sort(options?: { replace?: boolean }): void;
+	toURLSearchParams(): URLSearchParams;
 	values(): (string | number | boolean)[];
 };
 

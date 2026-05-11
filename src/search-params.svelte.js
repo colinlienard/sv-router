@@ -47,6 +47,9 @@ const shell = {
 	values() {
 		return [...searchParams.values()].map(parseSearchValue);
 	},
+	toURLSearchParams() {
+		return new URLSearchParams(searchParams);
+	},
 	get size() {
 		return searchParams.size;
 	},
