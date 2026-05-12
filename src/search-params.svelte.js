@@ -66,8 +66,11 @@ export function syncSearchParams(search) {
 		return;
 	}
 	const newSearch = new URLSearchParams(search);
-	for (const [key, value] of newSearch) {
-		searchParams.set(key, value);
+	for (const key of newSearch.keys()) {
+		searchParams.delete(key);
+		for (const value of newSearch.getAll(key)) {
+			searchParams.append(key, value);
+		}
 	}
 	// eslint-disable-next-line unicorn/no-useless-spread
 	for (const key of [...searchParams.keys()]) {
