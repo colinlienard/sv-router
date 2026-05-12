@@ -3,19 +3,23 @@
 	"version": "0.16.1",
 	"description": "Type-safe routing for Svelte SPAs",
 	"keywords": [
-		"svelte",
 		"router",
-		"spa"
+		"spa",
+		"svelte"
 	],
 	"homepage": "https://github.com/colinlienard/sv-router",
 	"bugs": {
 		"url": "https://github.com/colinlienard/sv-router/issues"
 	},
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/colinlienard/sv-router.git"
 	},
-	"license": "MIT",
+	"bin": "./src/cli/index.js",
+	"files": [
+		"src"
+	],
 	"type": "module",
 	"exports": {
 		".": {
@@ -28,10 +32,6 @@
 			"types": "./src/vite-plugin/index.d.ts"
 		}
 	},
-	"bin": "./src/cli/index.js",
-	"files": [
-		"src"
-	],
 	"scripts": {
 		"create:dev": "pnpm --filter create-sv-router dev",
 		"create:build": "pnpm --filter create-sv-router build",
@@ -43,8 +43,8 @@
 		"check": "svelte-check && pnpm -r check",
 		"lint": "eslint . --max-warnings 0",
 		"lint:fix": "eslint . --fix",
-		"format": "prettier . --check",
-		"format:fix": "prettier . --write",
+		"format": "oxfmt --check",
+		"format:fix": "oxfmt",
 		"changeset": "changeset"
 	},
 	"dependencies": {
@@ -66,9 +66,7 @@
 		"eslint-plugin-unicorn": "^64.0.0",
 		"globals": "^17.6.0",
 		"happy-dom": "^20.9.0",
-		"prettier": "^3.8.3",
-		"prettier-plugin-jsdoc": "^1.8.0",
-		"prettier-plugin-svelte": "^3.5.1",
+		"oxfmt": "^0.49.0",
 		"svelte-check": "^4.4.8",
 		"type-testing": "^0.2.0",
 		"typescript": "^6.0.3",
