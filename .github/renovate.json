@@ -3,6 +3,7 @@
 	"extends": ["config:recommended", "group:allNonMajor"],
 	"rangeStrategy": "bump",
 	"gitIgnoredAuthors": ["github-actions[bot]@users.noreply.github.com"],
+	"minimumReleaseAge": "1 day",
 	"packageRules": [
 		{
 			"matchFileNames": ["package.json"],
