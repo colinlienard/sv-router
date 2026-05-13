@@ -3,25 +3,25 @@
 	"version": "0.2.1",
 	"description": "Type-safe routing for Svelte SPAs",
 	"keywords": [
-		"svelte",
 		"router",
-		"spa"
+		"spa",
+		"svelte"
 	],
 	"homepage": "https://github.com/colinlienard/sv-router",
 	"bugs": {
 		"url": "https://github.com/colinlienard/sv-router/issues"
 	},
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/colinlienard/sv-router.git"
 	},
-	"license": "MIT",
-	"type": "module",
 	"bin": "./dist/index.js",
 	"files": [
 		"dist",
 		"templates"
 	],
+	"type": "module",
 	"scripts": {
 		"dev": "node src",
 		"build": "ncc build src/index.js -m"
