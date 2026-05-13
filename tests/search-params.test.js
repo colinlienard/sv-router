@@ -141,10 +141,16 @@ describe('syncSearchParams', () => {
 		expect(searchParams.get('new')).toBe('value');
 	});
 
-	it('should update existing params to new values', () => {
+	it('should update existing params to new value', () => {
 		searchParams.set('key', 'old');
 		syncSearchParams('key=new');
 		expect(searchParams.get('key')).toBe('new');
+	});
+
+	it('should update existing params to new values', () => {
+		searchParams.set('key', 'old');
+		syncSearchParams('key=new&key=new2');
+		expect(searchParams.getAll('key')).toStrictEqual(['new', 'new2']);
 	});
 
 	it('should not modify params when search string matches current state', () => {
