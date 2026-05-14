@@ -16,6 +16,7 @@
 	<a href={p('/lazy')} data-preload>Lazy</a>
 	<a href={p('/after-load')}>After Load</a>
 	<a href="https://example.com" target="_blank">External</a>
+	<a href="/outside-base">Outside Base</a>
 </nav>
 
 {@render children()}

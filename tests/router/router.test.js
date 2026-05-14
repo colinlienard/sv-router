@@ -132,6 +132,15 @@ describe('router', () => {
 		});
 	});
 
+	it('should not intercept links outside the base path', async () => {
+		render(App, { base: 'my-app' });
+		await waitFor(() => expect(screen.getByText('Welcome')).toBeInTheDocument());
+		const outsideLink = screen.getByText('Outside Base');
+		expect(outsideLink.closest('a')).toHaveAttribute('href', '/outside-base');
+		await userEvent.click(outsideLink);
+		expect(location.pathname).toBe('/outside-base');
+	});
+
 	it('should scroll to top after navigation', async () => {
 		render(App);
 		window.scrollY = 100;
