@@ -6,5 +6,5 @@
 	"htmlWhitespaceSensitivity": "ignore",
 	"svelte": true,
 	"jsdoc": true,
-	"ignorePatterns": [".router", "build", "dist"]
+	"ignorePatterns": [".router", "build", "dist", ".changeset"]
 }
