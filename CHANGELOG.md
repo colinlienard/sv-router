@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.16.2
+
+### Patch Changes
+
+- 18093d8: Fix syncSearchParams discarding array values
+- 6d7ea95: Don't intercept link clicks outside the base path
+
 ## 0.16.1
 
 ### Patch Changes
