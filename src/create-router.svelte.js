@@ -345,6 +345,8 @@ export function onGlobalClick(event) {
 	const path = base.name === '#' ? url.hash : url.pathname;
 	const hash = base.name === '#' ? undefined : url.hash;
 
+	if (base.name && base.name !== '#' && !path.startsWith(base.name)) return;
+
 	event.preventDefault();
 	const { replace, state, scrollToTop, viewTransition } = anchor.dataset;
 
