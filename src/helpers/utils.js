@@ -68,7 +68,7 @@ function resolveRouteComponent(input) {
 
 /**
  * @param {unknown} input
- * @returns {input is import("../index.d.ts").LazyRouteComponent}
+ * @returns {input is import('../index.d.ts').LazyRouteComponent}
  */
 export function isLazyImport(input) {
 	return (
