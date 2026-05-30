@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.16.3
+
+### Patch Changes
+
+- 4093ef5: Populate `beforeLoad`'s `search`, `hash`, and `state` from the current URL on browser navigation
+
 ## 0.16.2
 
 ### Patch Changes
