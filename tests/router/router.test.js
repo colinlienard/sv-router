@@ -257,6 +257,32 @@ describe('router', () => {
 		);
 	});
 
+	it('should pass current search, hash, and state to beforeLoad on popstate navigation', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+
+		beforeLoadMock.mockClear();
+		location.pathname = '/initial-load';
+		location.search = '?foo=bar&n=1';
+		location.hash = '#section';
+		history.replaceState({ user: 'data' }, '', location.href);
+		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+
+		await waitFor(() => {
+			expect(screen.getByText('Initial Load Page')).toBeInTheDocument();
+		});
+		expect(beforeLoadMock).toHaveBeenCalledWith(
+			expect.objectContaining({
+				pathname: '/initial-load',
+				search: { foo: 'bar', n: 1 },
+				hash: '#section',
+				state: { user: 'data' },
+			}),
+		);
+	});
+
 	it('should call onError when beforeLoad throws a non-Navigation error', async () => {
 		onErrorMock.mockClear();
 		render(App);

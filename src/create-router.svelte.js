@@ -229,8 +229,9 @@ export async function onNavigate(path, options = {}) {
 	const matchPath = getMatchPath(path);
 	const { match, layouts, hooks, meta: newMeta, params: newParams } = matchRoute(matchPath, routes);
 
-	const search = parseSearch(options.search);
-	const hooksContext = { pathname: matchPath, meta: newMeta, ...options, search };
+	const navContext = path ? options : { ...options, ...updatedLocation() };
+	const search = parseSearch(navContext.search);
+	const hooksContext = { ...navContext, pathname: matchPath, meta: newMeta, search };
 
 	let errorHooks = [];
 	for (const hook of hooks) {
