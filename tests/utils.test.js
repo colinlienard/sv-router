@@ -35,6 +35,11 @@ describe.each([
 		const result = constructPath('/posts/:id/comments/:commentId', { id: '123', commentId: '456' });
 		expect(result).toBe(`${prefix}/posts/123/comments/456`);
 	});
+
+	it('should encode route params', () => {
+		const result = constructPath('/posts/:id', { id: "foo/bar?a=b" });
+		expect(result).toBe(`${prefix}/posts/foo%2Fbar%3Fa%3Db`);
+	});
 });
 
 describe('constructUrl', () => {
