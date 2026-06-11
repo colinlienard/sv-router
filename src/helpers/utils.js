@@ -8,7 +8,7 @@ import { base } from '../create-router.svelte.js';
 export function constructPath(path, params) {
 	if (params) {
 		for (const key in params) {
-			path = path.replace(`:${key}`, String(params[key]));
+			path = path.replace(`:${key}`, encodeURIComponent(params[key]));
 		}
 	}
 
