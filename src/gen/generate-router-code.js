@@ -149,7 +149,7 @@ function mergeRouteGroup(result, childMap) {
 	const hasRootRoute = '/' in childMap;
 
 	for (const [key, val] of Object.entries(childMap)) {
-		if (key === 'layout' || key === 'hooks' || key === 'meta') {
+		if (['layout', 'hooks', 'meta'].includes(key)) {
 			continue;
 		}
 

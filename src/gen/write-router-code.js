@@ -73,7 +73,7 @@ function getTypeScriptMajorVersion() {
 		const require = createRequire(process.cwd() + '/package.json');
 		const tsPackagePath = require.resolve('typescript/package.json');
 		const tsPackage = JSON.parse(fs.readFileSync(tsPackagePath, 'utf8'));
-		return Number(tsPackage.version.split('.')[0]);
+		return Number(tsPackage.version.split('.', 1)[0]);
 	} catch {
 		return;
 	}
