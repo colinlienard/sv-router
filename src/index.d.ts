@@ -26,8 +26,19 @@ export function serializeSearch(search: Search): string | undefined;
  *   ...
  * });
  * ```
+ *
+ * A base path can be provided as an option:
+ *
+ * ```js
+ * export const { p, ... } = createRouter({ ... }, { base: 'my-app' });
+ * ```
  */
-export function createRouter<T extends Routes>(r: T): RouterApi<T>;
+export function createRouter<T extends Routes>(r: T, options?: CreateRouterOptions): RouterApi<T>;
+
+export type CreateRouterOptions = {
+	/** The base path that is prepended to every URL. Use `'#'` to enable hash-based routing. */
+	base?: string;
+};
 
 /**
  * Blocks navigation as long as the callback returns `false`.
@@ -66,11 +77,16 @@ export function blockNavigation(
 		| { beforeUnload?(): boolean; onNavigate(): boolean | Promise<boolean> },
 ): () => void;
 
-/**
- * The component that will render the current route. You can pass a `base` prop to set the base path
- * that is prepended to every url.
- */
-export const Router: Component<{ base?: string }>;
+/** The component that will render the current route. */
+export const Router: Component<{
+	/**
+	 * The base path that is prepended to every URL.
+	 *
+	 * @deprecated Use the `base` option of `createRouter` (or of the Vite plugin for file-based
+	 *   routing) instead.
+	 */
+	base?: string;
+}>;
 
 /**
  * The reactive search params of the URL. It is just a wrapper around `SvelteURLSearchParam` that

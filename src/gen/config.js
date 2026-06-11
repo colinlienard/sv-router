@@ -1,6 +1,7 @@
 /**
  * @type {{
  * 	allLazy: boolean;
+ * 	base: string | undefined;
  * 	ignore: RegExp[];
  * 	readonly genCodeAlias: string;
  * 	readonly genCodeDirPath: string;
@@ -12,6 +13,7 @@
  */
 export const genConfig = {
 	allLazy: false,
+	base: undefined,
 	genCodeAlias: 'sv-router/generated',
 	genCodeDirPath: '.router',
 	ignore: [],

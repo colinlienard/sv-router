@@ -8,6 +8,7 @@ import { writeRouterCode } from '../gen/write-router-code.js';
  */
 export function router(options) {
 	genConfig.allLazy = options?.allLazy || false;
+	genConfig.base = options?.base;
 	genConfig.ignore = options?.ignore || [];
 	genConfig.routesInJs = options?.js || false;
 	genConfig.routesPath = options?.path || 'src/routes';

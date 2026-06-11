@@ -19,7 +19,7 @@ const META_FILENAME_REGEX = /(?<=[/.]|^)(meta)(\.svelte)?\.(js|ts)$/; // meta.js
 
 /**
  * @param {string} routesPath
- * @param {{ allLazy?: boolean; js?: boolean; ignore?: RegExp[] }} [options]
+ * @param {{ allLazy?: boolean; base?: string; js?: boolean; ignore?: RegExp[] }} [options]
  * @returns {string}
  */
 export function generateRouterCode(routesPath, options) {
@@ -185,10 +185,10 @@ function mergeRouteGroup(result, childMap) {
 /**
  * @param {GeneratedRoutes} routes
  * @param {string} routesPath
- * @param {{ allLazy?: boolean; js?: boolean }} [options]
+ * @param {{ allLazy?: boolean; base?: string; js?: boolean }} [options]
  * @returns {string}
  */
-export function createRouterCode(routes, routesPath, { allLazy = false, js = false } = {}) {
+export function createRouterCode(routes, routesPath, { allLazy = false, base, js = false } = {}) {
 	if (!routesPath.endsWith('/')) {
 		routesPath += '/';
 	}
@@ -240,7 +240,9 @@ export function createRouterCode(routes, routesPath, { allLazy = false, js = fal
 		'',
 		`export const routes = ${stringifiedRoutes};`,
 		...(js ? [] : ['export type Routes = typeof routes;']),
-		'export const { p, navigate, isActive, preload, route } = createRouter(routes);',
+		`export const { p, navigate, isActive, preload, route } = createRouter(routes${
+			base === undefined ? '' : `, { base: '${base}' }`
+		});`,
 		'',
 	].join('\n');
 }

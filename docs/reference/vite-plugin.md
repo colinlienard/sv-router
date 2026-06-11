@@ -27,6 +27,7 @@ Configuration options for the router Vite plugin.
 **Properties:**
 
 - `allLazy` - (Optional) If true, make all routes lazy loaded by default. Default: `false`
+- `base` - (Optional) The base path that is prepended to every URL, or `'#'` for hash-based routing
 - `ignore` - (Optional) An array of regular expressions for files to ignore when generating routes. Default: `[]`
 - `js` - (Optional) If true, generates the routes in a .js file instead of a .ts file. Default: `false`
 - `path` - (Optional) The path to the routes folder. Default: `'src/routes'`

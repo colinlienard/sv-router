@@ -8,6 +8,12 @@ export type RouterOptions = {
 	 */
 	allLazy?: boolean;
 	/**
+	 * The base path that is prepended to every URL. Use `'#'` to enable hash-based routing.
+	 *
+	 * @default undefined
+	 */
+	base?: string;
+	/**
 	 * If true, generates the routes in a .js file instead of a .ts file.
 	 *
 	 * @default false

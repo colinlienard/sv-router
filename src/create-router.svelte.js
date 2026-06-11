@@ -62,30 +62,42 @@ let pendingController = /** @type {AbortController | null} */ (null);
 /** @type {Promise<void | null> | null} */
 let currentNavigationPromise = null;
 
+/** @param {string} basename */
+function setBase(basename) {
+	const url = new URL(globalThis.location.toString());
+	if (basename === '#') {
+		base.name = '#';
+		if (!globalThis.location.href.includes('#')) {
+			url.hash = '/';
+			history.replaceState(
+				{ _routerIndex: historyIndex, _userState: history.state ?? null },
+				'',
+				url.toString(),
+			);
+		}
+	} else {
+		base.name = (basename.startsWith('/') ? '' : '/') + basename;
+		if (!url.pathname.startsWith(base.name)) {
+			url.pathname = join(base.name, url.pathname);
+			history.replaceState(
+				{ _routerIndex: historyIndex, _userState: history.state ?? null },
+				'',
+				url.toString(),
+			);
+		}
+	}
+	Object.assign(location, updatedLocation());
+}
+
 /** @param {string | undefined} basename */
 export function init(basename) {
 	if (basename) {
-		const url = new URL(globalThis.location.toString());
-		if (basename === '#') {
-			base.name = '#';
-			if (!globalThis.location.href.includes('#')) {
-				url.hash = '/';
-				history.replaceState(
-					{ _routerIndex: historyIndex, _userState: history.state ?? null },
-					'',
-					url.toString(),
-				);
-			}
-		} else {
-			base.name = (basename.startsWith('/') ? '' : '/') + basename;
-			if (!url.pathname.startsWith(base.name)) {
-				url.pathname = join(base.name, url.pathname);
-				history.replaceState(
-					{ _routerIndex: historyIndex, _userState: history.state ?? null },
-					'',
-					url.toString(),
-				);
-			}
+		if (base.name === undefined) {
+			setBase(basename);
+		} else if (DEV && base.name !== basename && `/${basename}` !== base.name) {
+			console.warn(
+				'sv-router: the `base` prop on `<Router>` is ignored because a base was already set in `createRouter`.',
+			);
 		}
 	}
 	if (history.state?._routerIndex === undefined) {
@@ -103,10 +115,15 @@ export function init(basename) {
 /**
  * @template {import('./index.d.ts').Routes} T
  * @param {T} r
+ * @param {import('./index.d.ts').CreateRouterOptions} [options]
  * @returns {import('./index.d.ts').RouterApi<T>}
  */
-export function createRouter(r) {
+export function createRouter(r, options = {}) {
 	routes = r;
+
+	if (BROWSER && options.base) {
+		setBase(options.base);
+	}
 
 	if (DEV && BROWSER) {
 		import('./helpers/validate-routes.js').then(({ validateRoutes }) => {
