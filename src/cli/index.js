@@ -23,6 +23,7 @@ function parseViteConfig() {
 	if (!routerConfig) return;
 	console.log('ℹ️ Using router plugin options from Vite config');
 	if (routerConfig.allLazy) genConfig.allLazy = routerConfig.allLazy;
+	if (routerConfig.base) genConfig.base = routerConfig.base;
 	if (routerConfig.js) genConfig.routesInJs = routerConfig.js;
 	if (routerConfig.path) genConfig.routesPath = routerConfig.path;
 	if (routerConfig.ignore) genConfig.ignore = routerConfig.ignore;
@@ -57,6 +58,9 @@ function extractRouterConfig(viteConfig) {
 function parseArgs() {
 	const allLazyArg = arg('allLazy');
 	if (allLazyArg) genConfig.allLazy = true;
+
+	const baseArg = arg('base');
+	if (baseArg) genConfig.base = baseArg;
 
 	const jsArg = arg('js');
 	if (jsArg) genConfig.routesInJs = true;

@@ -1,6 +1,6 @@
 ---
 title: Configuration (File-based)
-description: Configure the sv-router Vite plugin and CLI with options like allLazy, ignore, js, and path.
+description: Configure the sv-router Vite plugin and CLI with options like allLazy, base, ignore, js, and path.
 outline: [2, 3]
 ---
 
@@ -45,6 +45,18 @@ The CLI automatically reads options from your Vite config, so you only need to d
 | `boolean` | <pre>false</pre> | No       |
 
 When set to `true`, all routes will be lazy loaded by default.
+
+### `base`
+
+| Type     | Default              | Required |
+| -------- | -------------------- | -------- |
+| `string` | <pre>undefined</pre> | No       |
+
+The base path that is prepended to every URL, or `'#'` for hash-based routing. See [Basename](./basename).
+
+```json
+"postinstall": "sv-router --base my-app"
+```
 
 ### `ignore`
 

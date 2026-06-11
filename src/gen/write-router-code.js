@@ -39,6 +39,7 @@ export function writeRouterCode() {
 		// Write `.router/router.ts` file
 		const routerCode = generateRouterCode(genConfig.routesPath, {
 			allLazy: genConfig.allLazy,
+			base: genConfig.base,
 			js: genConfig.routesInJs,
 			ignore: genConfig.ignore,
 		});

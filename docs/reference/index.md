@@ -8,13 +8,15 @@ outline: [2, 4]
 
 ## Functions
 
-### `createRouter(routes)`
+### `createRouter(routes, options?)`
 
 Sets up a new router instance with the given routes configuration.
 
 **Parameters:**
 
 - `routes` - An object mapping paths to components or nested routes
+- `options` - (Optional) Router options
+  - `base` - The base path that is prepended to every URL, or `'#'` for hash-based routing
 
 **Returns:** A router API object with the following properties:
 

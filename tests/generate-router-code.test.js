@@ -501,6 +501,19 @@ export const { p, navigate, isActive, preload, route } = createRouter(routes);
 `);
 	});
 
+	it('should generate the router code with a base', () => {
+		const result = createRouterCode({ '/': 'index.svelte' }, './routes', { base: 'my-app' });
+		expect(result).toBe(`import { createRouter } from 'sv-router';
+import Index from './routes/index.svelte';
+
+export const routes = {
+  '/': Index
+};
+export type Routes = typeof routes;
+export const { p, navigate, isActive, preload, route } = createRouter(routes, { base: 'my-app' });
+`);
+	});
+
 	it('should generate the router code with no types', () => {
 		const result = createRouterCode({ '/': 'index.svelte' }, './routes', { js: true });
 		expect(result).toBe(`import { createRouter } from 'sv-router';

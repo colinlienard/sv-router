@@ -21,6 +21,7 @@ async function runCli(args = []) {
 	process.argv = ['node', 'index.js', ...args];
 	const { genConfig } = await import('../src/gen/config.js');
 	genConfig.allLazy = false;
+	genConfig.base = undefined;
 	genConfig.routesInJs = false;
 	genConfig.routesPath = 'src/routes';
 	genConfig.ignore = [];
@@ -50,6 +51,11 @@ describe('CLI', () => {
 		it('should set routesPath when --path is passed', async () => {
 			const config = await runCli(['--path', 'custom/routes']);
 			expect(config.routesPath).toBe('custom/routes');
+		});
+
+		it('should set base when --base is passed', async () => {
+			const config = await runCli(['--base', 'my-app']);
+			expect(config.base).toBe('my-app');
 		});
 
 		it('should set ignore when --ignore is passed', async () => {
@@ -115,6 +121,13 @@ describe('CLI', () => {
 			`);
 			const config = await runCli([]);
 			expect(config.allLazy).toBe(false);
+		});
+
+		it('should parse base option from vite config', async () => {
+			existsSync.mockImplementation((p) => p.endsWith('vite.config.ts'));
+			readFileSync.mockReturnValue(`router({ base: 'my-app' })`);
+			const config = await runCli([]);
+			expect(config.base).toBe('my-app');
 		});
 
 		it('should parse ignore option from vite config', async () => {
