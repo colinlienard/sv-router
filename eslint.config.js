@@ -43,6 +43,7 @@ export default [
 			'unicorn/no-array-for-each': 'off',
 			'unicorn/no-array-reduce': 'off',
 			'unicorn/no-null': 'off',
+			'unicorn/no-this-outside-of-class': 'off',
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/prefer-ternary': 'off',
 		},
