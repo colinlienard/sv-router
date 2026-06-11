@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.17.0
+
+### Minor Changes
+
+- 1200b6d: Add a `base` option to `createRouter` and to the Vite plugin (for file-based routing). The `<Router base>` prop still works but is deprecated.
+- c5a770b: Encode route params
+
 ## 0.16.3
 
 ### Patch Changes
