@@ -37,7 +37,7 @@ describe.each([
 	});
 
 	it('should encode route params', () => {
-		const result = constructPath('/posts/:id', { id: "foo/bar?a=b" });
+		const result = constructPath('/posts/:id', { id: 'foo/bar?a=b' });
 		expect(result).toBe(`${prefix}/posts/foo%2Fbar%3Fa%3Db`);
 	});
 });
