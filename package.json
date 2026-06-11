@@ -1,6 +1,6 @@
 {
 	"name": "sv-router",
-	"version": "0.16.3",
+	"version": "0.17.0",
 	"description": "Type-safe routing for Svelte SPAs",
 	"keywords": [
 		"router",
