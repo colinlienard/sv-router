@@ -27,10 +27,10 @@
 		"build": "ncc build src/index.js -m"
 	},
 	"dependencies": {
-		"@clack/prompts": "^1.4.0",
+		"@clack/prompts": "^1.5.1",
 		"execa": "^9.6.1"
 	},
 	"devDependencies": {
-		"@vercel/ncc": "^0.38.4"
+		"@vercel/ncc": "^0.44.0"
 	}
 }
