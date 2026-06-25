@@ -11,7 +11,7 @@
 	export const afterLoadMock = vi.fn();
 	export const beforeLoadMock = vi.fn();
 
-	export const { p, navigate, isActive, preload, route } = createRouter({
+	export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter({
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
 		'/about': createRawSnippet(() => ({ render: () => '<h1>About Us</h1>' })),
 		'/user/:id': UserPage,

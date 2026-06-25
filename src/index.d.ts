@@ -227,6 +227,13 @@ export type RouterApi<T extends Routes> = {
 	 */
 	preload<U extends Path<T>>(path: U): Promise<void>;
 
+	/**
+	 * Resolves the metadata for the given route path by merging meta from all ancestor route levels.
+	 *
+	 * @param path The route to resolve meta for.
+	 */
+	resolveMeta<U extends Path<T>>(path: U): RouteMeta;
+
 	route: {
 		/**
 		 * An object containing the parameters of the current route.
