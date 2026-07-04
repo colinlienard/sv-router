@@ -351,7 +351,8 @@ export function onGlobalClick(event) {
 		mouseEvent.metaKey ||
 		mouseEvent.ctrlKey ||
 		mouseEvent.shiftKey ||
-		mouseEvent.altKey
+		mouseEvent.altKey ||
+		mouseEvent.defaultPrevented
 	)
 		return;
 
