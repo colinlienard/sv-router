@@ -10,6 +10,7 @@ import App, {
 	navigate,
 	onErrorMock,
 	onPreloadMock,
+	resolveMeta,
 	route,
 } from './App.test.svelte';
 
@@ -270,6 +271,14 @@ describe('router', () => {
 			expect(screen.getByText('Metadata Page')).toBeInTheDocument();
 			expect(route.meta).toEqual({ title: 'Metadata Page' });
 		});
+	});
+
+	it('should resolve metadata for a given path', () => {
+		expect(resolveMeta('/metadata')).toEqual({ title: 'Metadata Page' });
+	});
+
+	it('should resolve empty metadata for a route with no meta', () => {
+		expect(resolveMeta('/about')).toEqual({});
 	});
 
 	it('should pass current search, hash, and state to beforeLoad on initial load', async () => {

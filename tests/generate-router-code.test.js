@@ -31,7 +31,7 @@ export const routes = {
   '/posts/comments/:id': () => import('../a/fake/path/posts.comments.[id].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
 `);
 	});
 
@@ -69,7 +69,7 @@ export const routes = {
   }
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
 `);
 	});
 });
@@ -434,7 +434,7 @@ export const routes = {
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
 `);
 	});
 
@@ -473,7 +473,7 @@ export const routes = {
   '*notfound': () => import('./routes/[...notfound].lazy.svelte')
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
 `);
 	});
 
@@ -497,7 +497,7 @@ export const routes = {
   }
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
 `);
 	});
 
@@ -510,7 +510,7 @@ export const routes = {
   '/': Index
 };
 export type Routes = typeof routes;
-export const { p, navigate, isActive, preload, route } = createRouter(routes, { base: 'my-app' });
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes, { base: 'my-app' });
 `);
 	});
 
@@ -522,7 +522,7 @@ import Index from './routes/index.svelte';
 export const routes = {
   '/': Index
 };
-export const { p, navigate, isActive, preload, route } = createRouter(routes);
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
 `);
 	});
 });

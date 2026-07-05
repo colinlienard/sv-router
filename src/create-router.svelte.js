@@ -140,6 +140,9 @@ export function createRouter(r, options = {}) {
 		async preload(pathname) {
 			await preload(routes, pathname);
 		},
+		resolveMeta(pathname) {
+			return matchRoute(pathname, routes).meta;
+		},
 		route: {
 			get params() {
 				return params.value;
