@@ -5,6 +5,7 @@ import {
 	isLazyImport,
 	join,
 	parseSearch,
+	resolveRouteComponents,
 	serializeSearch,
 	stripBase,
 } from '../src/helpers/utils.js';
@@ -156,5 +157,32 @@ describe('isLazyImport', () => {
 		expect(isLazyImport(42)).toBe(false);
 		expect(isLazyImport(null)).toBe(false);
 		expect(isLazyImport({})).toBe(false);
+	});
+});
+
+const dummyComponent = /** @type {any} */ (() => 'component');
+
+describe('resolveRouteComponents', () => {
+	it('should resolve non-lazy components as-is', async () => {
+		await expect(resolveRouteComponents([dummyComponent])).resolves.toEqual([dummyComponent]);
+	});
+
+	it('should reject when a lazy import fails to load', async () => {
+		const failingImport = /** @type {any} */ (
+			Object.assign(
+				() => Promise.reject(new Error('Failed to fetch dynamically imported module')),
+				{ toString: () => "() => import('missing')" },
+			)
+		);
+		await expect(resolveRouteComponents([failingImport])).rejects.toThrow(
+			/dynamically imported module/,
+		);
+	});
+
+	it('should throw a descriptive error when a lazy import resolves to nothing', async () => {
+		const emptyImport = /** @type {any} */ (
+			Object.assign(() => Promise.resolve(), { toString: () => "() => import('missing')" })
+		);
+		await expect(resolveRouteComponents([emptyImport])).rejects.toThrow(/resolved to nothing/);
 	});
 });

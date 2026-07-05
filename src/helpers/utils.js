@@ -58,6 +58,9 @@ export function resolveRouteComponents(input) {
 async function resolveRouteComponent(input) {
 	if (isLazyImport(input)) {
 		const module = await input();
+		if (!module) {
+			throw new Error('Failed to load route component: the lazy import resolved to nothing');
+		}
 		return module.default;
 	}
 	return input;
