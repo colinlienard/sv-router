@@ -12,6 +12,7 @@ import {
 	stripBase,
 	updatedLocation,
 } from './helpers/utils.js';
+import { validateRoutes } from './helpers/validate-routes.js';
 import { Navigation } from './navigation.js';
 import { syncSearchParams } from './search-params.svelte.js';
 
@@ -126,10 +127,7 @@ export function createRouter(r, options = {}) {
 	}
 
 	if (DEV && BROWSER) {
-		// eslint-disable-next-line unicorn/prefer-await
-		import('./helpers/validate-routes.js').then(({ validateRoutes }) => {
-			validateRoutes(routes);
-		});
+		validateRoutes(routes);
 	}
 
 	preloadOnHover(routes);
