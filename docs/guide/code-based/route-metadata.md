@@ -55,6 +55,23 @@ You can access route metadata in your components using the `route` object:
 </script>
 ```
 
+## Resolving Metadata for a Path
+
+The `route` object only exposes the metadata of the _current_ route. To read the merged metadata of any route without navigating to it, use `resolveMeta`:
+
+```ts [menu.ts]
+import { resolveMeta } from '../router';
+
+const items = [
+	{ label: 'Dashboard', path: '/dashboard' },
+	{ label: 'Settings', path: '/dashboard/settings' },
+] as const;
+
+const allowed = items.filter((item) => resolveMeta(item.path).requiresAuth !== true);
+```
+
+Like the `route.meta` getter, `resolveMeta` merges metadata from all ancestor route levels. It returns an empty object for a route that has no metadata.
+
 ## Typing Metadata
 
 By default, metadata is typed as `Record<string, any>`. You can customize this for better type safety:
