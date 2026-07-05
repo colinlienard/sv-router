@@ -34,9 +34,8 @@ function compare(compareFn, pathname, params) {
 	if (params) {
 		if (base.name === '#') {
 			return compareFn(location.pathname, constructPath(pathname, params).replace('/#', ''));
-		} else {
-			return compareFn(location.pathname, constructPath(pathname, params));
 		}
+		return compareFn(location.pathname, constructPath(pathname, params));
 	}
 
 	const pathParts = pathname.split('/').slice(1);
@@ -45,10 +44,10 @@ function compare(compareFn, pathname, params) {
 		return false;
 	}
 	for (const [index, pathPart] of pathParts.entries()) {
-		const routePart = routeParts[index];
 		if (pathPart.startsWith(':')) {
 			continue;
 		}
+		const routePart = routeParts[index];
 		if (pathPart !== routePart) {
 			return false;
 		}

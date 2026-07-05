@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-unsafe-string-replacement */
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -174,7 +175,7 @@ function mergeRouteGroup(result, childMap) {
 		}
 		if (hooks) routeWithGroupFiles.hooks = hooks;
 		if (mergedMeta) routeWithGroupFiles.meta = /** @type {string | string[]} */ (mergedMeta);
-		if (result[key]) {
+		if (Object.hasOwn(result, key)) {
 			throw new Error(`Route conflict at \`${key}\``);
 		}
 
@@ -223,7 +224,7 @@ export function createRouterCode(routes, routesPath, { allLazy = false, base, js
 		return result;
 	})(routes, routesPath);
 
-	const imports = [...importsMap.entries()].map(([key, value]) => {
+	const imports = [...importsMap].map(([key, value]) => {
 		if (value.endsWith('.ts')) {
 			value = value.replace('.ts', '');
 		}

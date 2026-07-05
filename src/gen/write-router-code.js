@@ -12,16 +12,16 @@ export function writeRouterCode() {
 
 		// Write `.router/tsconfig.json` file
 		const tsMajor = getTypeScriptMajorVersion();
-		const useBaseUrl = tsMajor === undefined || tsMajor < 6;
+		const isBaseUrl = tsMajor === undefined || tsMajor < 6;
 		let alias = genConfig.routerPath;
-		if (!useBaseUrl) {
+		if (!isBaseUrl) {
 			alias = alias.replace(genConfig.genCodeDirPath, '.');
 		}
 		const tsConfig = {
 			compilerOptions: {
 				module: 'preserve',
 				moduleResolution: 'bundler',
-				...(useBaseUrl ? { baseUrl: '..' } : {}),
+				...(isBaseUrl && { baseUrl: '..' }),
 				paths: { [genConfig.genCodeAlias]: [alias] },
 			},
 			include: [
@@ -63,10 +63,12 @@ export function writeRouterCode() {
  * @param {string} content
  */
 function writeFileIfDifferent(filePath, content) {
-	if (!fs.existsSync(filePath) || fs.readFileSync(filePath, 'utf8') !== content) {
-		fs.writeFileSync(filePath, content);
-		return true;
+	if (fs.existsSync(filePath) && fs.readFileSync(filePath, 'utf8') === content) {
+		return;
 	}
+
+	fs.writeFileSync(filePath, content);
+	return true;
 }
 
 function getTypeScriptMajorVersion() {

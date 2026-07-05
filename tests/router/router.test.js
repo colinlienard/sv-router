@@ -314,7 +314,7 @@ describe('router', () => {
 		location.search = '?foo=bar&n=1';
 		location.hash = '#section';
 		history.replaceState({ user: 'data' }, '', location.href);
-		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		dispatchEvent(new PopStateEvent('popstate'));
 
 		await waitFor(() => {
 			expect(screen.getByText('Initial Load Page')).toBeInTheDocument();
@@ -478,7 +478,7 @@ describe('router (navigation options)', () => {
 	});
 
 	it('should navigate with history.go when passing a number', async () => {
-		const goSpy = vi.spyOn(globalThis.history, 'go');
+		const goSpy = vi.spyOn(history, 'go');
 		render(App);
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
@@ -499,7 +499,7 @@ describe('router (navigation options)', () => {
 	});
 
 	it('should navigate with replace option', async () => {
-		const replaceStateSpy = vi.spyOn(globalThis.history, 'replaceState');
+		const replaceStateSpy = vi.spyOn(history, 'replaceState');
 		render(App);
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
@@ -808,7 +808,7 @@ describe('blockNavigation', () => {
 			expect(location.pathname).toBe('/about');
 		});
 		const clear = blockNavigation(() => false);
-		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		dispatchEvent(new PopStateEvent('popstate'));
 		await waitFor(() => {
 			expect(location.pathname).toBe('/about');
 			expect(screen.getByText('About Us')).toBeInTheDocument();
@@ -849,7 +849,7 @@ describe('blockNavigation', () => {
 		// Simulate back navigation: change URL and dispatch popstate with previous index
 		const prevIndex = (history.state?._routerIndex ?? 1) - 1;
 		history.replaceState({ _routerIndex: prevIndex, _userState: null }, '', '/');
-		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		dispatchEvent(new PopStateEvent('popstate'));
 		await waitFor(() => {
 			expect(location.pathname).toBe('/');
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
@@ -919,7 +919,7 @@ describe('blockNavigation', () => {
 		// Go back first
 		const prevIndex = (history.state?._routerIndex ?? 1) - 1;
 		history.replaceState({ _routerIndex: prevIndex, _userState: null }, '', '/');
-		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		dispatchEvent(new PopStateEvent('popstate'));
 		await waitFor(() => {
 			expect(location.pathname).toBe('/');
 		});
@@ -927,7 +927,7 @@ describe('blockNavigation', () => {
 		const clear = blockNavigation(() => false);
 		const nextIndex = (history.state?._routerIndex ?? 0) + 1;
 		history.replaceState({ _routerIndex: nextIndex, _userState: null }, '', '/about');
-		globalThis.dispatchEvent(new PopStateEvent('popstate'));
+		dispatchEvent(new PopStateEvent('popstate'));
 		await waitFor(() => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});

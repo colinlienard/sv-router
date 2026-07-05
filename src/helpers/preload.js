@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-break-in-nested-loop */
 import { matchRoute } from './match-route.js';
 import { parseSearch, resolveRouteComponents, stripBase } from './utils.js';
 
@@ -139,10 +140,12 @@ export function preloadOnHover(routes) {
 
 	const intersectionObserver = new IntersectionObserver((entries) => {
 		for (const entry of entries) {
-			if (entry.isIntersecting) {
-				intersectionObserver.unobserve(entry.target);
-				anchorPreload(/** @type {HTMLAnchorElement} */ (entry.target));
+			if (!entry.isIntersecting) {
+				continue;
 			}
+
+			intersectionObserver.unobserve(entry.target);
+			anchorPreload(/** @type {HTMLAnchorElement} */ (entry.target));
 		}
 	});
 
