@@ -1,5 +1,5 @@
 ---
-"sv-router": patch
+"sv-router": minor
 ---
 
-feat: add resolve meta function
+Add resolve meta function
