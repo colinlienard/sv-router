@@ -345,6 +345,17 @@ function getMatchPath(path) {
 
 /** @param {Event} event */
 export function onGlobalClick(event) {
+	const mouseEvent = /** @type {MouseEvent} */ (event);
+	if (
+		mouseEvent.button !== 0 ||
+		mouseEvent.metaKey ||
+		mouseEvent.ctrlKey ||
+		mouseEvent.shiftKey ||
+		mouseEvent.altKey ||
+		mouseEvent.defaultPrevented
+	)
+		return;
+
 	const anchor = /** @type {HTMLElement} */ (event.target).closest('a');
 	if (!anchor) return;
 

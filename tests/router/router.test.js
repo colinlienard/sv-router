@@ -51,6 +51,43 @@ describe('router', () => {
 		});
 	});
 
+	it('should not intercept a click with a modifier key held', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const link = screen.getByText('About');
+		for (const modifier of ['metaKey', 'ctrlKey', 'shiftKey', 'altKey']) {
+			const event = new MouseEvent('click', { bubbles: true, cancelable: true, [modifier]: true });
+			link.dispatchEvent(event);
+			expect(event.defaultPrevented).toBe(false);
+		}
+		expect(screen.getByText('Welcome')).toBeInTheDocument();
+	});
+
+	it('should not intercept a non-primary mouse button click', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const link = screen.getByText('About');
+		const event = new MouseEvent('click', { bubbles: true, cancelable: true, button: 1 });
+		link.dispatchEvent(event);
+		expect(event.defaultPrevented).toBe(false);
+		expect(screen.getByText('Welcome')).toBeInTheDocument();
+	});
+
+	it('should not intercept a click whose default was already prevented', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const link = screen.getByText('About');
+		link.addEventListener('click', (event) => event.preventDefault());
+		await userEvent.click(link);
+		expect(screen.getByText('Welcome')).toBeInTheDocument();
+	});
+
 	it('should navigate to another route programmatically', async () => {
 		render(App);
 		await waitFor(() => {
