@@ -53,7 +53,7 @@ let meta = $state({ value: {} });
 const navigationBlockers = new Map();
 
 let historyIndex = 0;
-let skipNextPopstate = false;
+let isSkipNextPopstate = false;
 
 /** @type {AbortController | null} */
 let currentNavigationController = null;
@@ -72,7 +72,7 @@ function setBase(basename) {
 			history.replaceState(
 				{ _routerIndex: historyIndex, _userState: history.state ?? null },
 				'',
-				url.toString(),
+				url.href,
 			);
 		}
 	} else {
@@ -82,7 +82,7 @@ function setBase(basename) {
 			history.replaceState(
 				{ _routerIndex: historyIndex, _userState: history.state ?? null },
 				'',
-				url.toString(),
+				url.href,
 			);
 		}
 	}
@@ -126,6 +126,7 @@ export function createRouter(r, options = {}) {
 	}
 
 	if (DEV && BROWSER) {
+		// eslint-disable-next-line unicorn/prefer-await
 		import('./helpers/validate-routes.js').then(({ validateRoutes }) => {
 			validateRoutes(routes);
 		});
@@ -181,7 +182,7 @@ export function createRouter(r, options = {}) {
  */
 async function navigate(path, options = {}) {
 	if (typeof path === 'number') {
-		globalThis.history.go(path);
+		history.go(path);
 		return new Navigation(`History entry: ${path}`);
 	}
 
@@ -216,8 +217,8 @@ export async function onNavigate(path, options = {}) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
 
-	if (!path && skipNextPopstate) {
-		skipNextPopstate = false;
+	if (!path && isSkipNextPopstate) {
+		isSkipNextPopstate = false;
 		return;
 	}
 
@@ -227,7 +228,7 @@ export async function onNavigate(path, options = {}) {
 			const shouldNavigate = typeof blocker === 'object' ? blocker.onNavigate : blocker;
 			if (!(await shouldNavigate())) {
 				if (!path && popstateDelta !== 0) {
-					skipNextPopstate = true;
+					isSkipNextPopstate = true;
 					history.go(popstateDelta);
 				}
 				return;
@@ -297,10 +298,10 @@ export async function onNavigate(path, options = {}) {
 		}
 		const historyMethod = options.replace ? 'replaceState' : 'pushState';
 		if (historyMethod === 'pushState') historyIndex++;
-		globalThis.history[historyMethod](
+		history[historyMethod](
 			{ _routerIndex: historyIndex, _userState: options.state ?? null },
 			'',
-			url.toString(),
+			url.href,
 		);
 		syncSearchParams(search);
 	} else {

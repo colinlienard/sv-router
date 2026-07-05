@@ -31,6 +31,7 @@ export default [
 	eslintPluginUnicorn.configs['recommended'],
 	{
 		rules: {
+			'unicorn/consistent-boolean-name': 'off',
 			'unicorn/error-message': 'off',
 			'unicorn/filename-case': [
 				'error',
@@ -39,12 +40,16 @@ export default [
 					ignore: [/^(.*)\.svelte$/],
 				},
 			],
+			'unicorn/name-replacements': 'off',
 			'unicorn/no-array-callback-reference': 'off',
 			'unicorn/no-array-for-each': 'off',
 			'unicorn/no-array-reduce': 'off',
+			'unicorn/no-for-each': 'off',
 			'unicorn/no-null': 'off',
 			'unicorn/no-this-outside-of-class': 'off',
+			'unicorn/no-top-level-assignment-in-function': 'off',
 			'unicorn/prevent-abbreviations': 'off',
+			'unicorn/prefer-iterator-to-array': 'off',
 			'unicorn/prefer-ternary': 'off',
 		},
 	},
@@ -69,6 +74,12 @@ export default [
 			],
 			'no-console': ['warn', { allow: ['warn'] }],
 			'svelte/prefer-svelte-reactivity': 'off',
+		},
+	},
+	{
+		files: ['tests/**'],
+		rules: {
+			'unicorn/no-global-object-property-assignment': 'off',
 		},
 	},
 	prettier,

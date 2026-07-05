@@ -1,7 +1,7 @@
 import { SvelteURLSearchParams } from 'svelte/reactivity';
 import { parseSearchValue } from './helpers/utils.js';
 
-let searchParams = new SvelteURLSearchParams(globalThis.location.search);
+let searchParams = new SvelteURLSearchParams(location.search);
 
 /** @type {import('./index.js').SearchParams} */
 const shell = {
@@ -38,6 +38,7 @@ const shell = {
 		updateUrlSearchParams(options);
 	},
 	sort(options) {
+		// eslint-disable-next-line unicorn/require-array-sort-compare
 		searchParams.sort();
 		updateUrlSearchParams(options);
 	},
@@ -82,7 +83,7 @@ export function syncSearchParams(search) {
 
 /** @param {{ replace?: boolean }} [options] */
 function updateUrlSearchParams(options) {
-	const url = new URL(globalThis.location.toString());
+	const url = new URL(location.toString());
 	url.search = searchParams.toString();
-	globalThis.history[options?.replace ? 'replaceState' : 'pushState']({}, '', url);
+	history[options?.replace ? 'replaceState' : 'pushState']({}, '', url);
 }

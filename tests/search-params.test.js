@@ -5,7 +5,7 @@ import { syncSearchParams } from '../src/search-params.svelte.js';
 describe('searchParams', () => {
 	it('should add a search param in the url', () => {
 		searchParams.append('key', 'value');
-		expect(globalThis.location.search).toBe('?key=value');
+		expect(location.search).toBe('?key=value');
 	});
 
 	it('should get a search param from the url', () => {
@@ -14,7 +14,7 @@ describe('searchParams', () => {
 
 	it('should set a search param from the url', () => {
 		searchParams.set('key', 'value2');
-		expect(globalThis.location.search).toBe('?key=value2');
+		expect(location.search).toBe('?key=value2');
 	});
 
 	it('should check if a search param exists in the url', () => {
@@ -23,14 +23,14 @@ describe('searchParams', () => {
 
 	it('should delete a search param in the url', () => {
 		searchParams.delete('key');
-		expect(globalThis.location.search).toBe('');
+		expect(location.search).toBe('');
 	});
 
 	it('should add search params of different types in the url', () => {
 		searchParams.append('key', 'value');
 		searchParams.append('number', 42);
 		searchParams.append('boolean', true);
-		expect(globalThis.location.search).toBe('?key=value&number=42&boolean=true');
+		expect(location.search).toBe('?key=value&number=42&boolean=true');
 	});
 
 	it('should get search params of different types from the url', () => {
@@ -73,8 +73,9 @@ describe('searchParams', () => {
 	});
 
 	it('should sort params', () => {
+		// eslint-disable-next-line unicorn/require-array-sort-compare
 		searchParams.sort();
-		expect(globalThis.location.search).toBe('?boolean=true&key=value&number=42');
+		expect(location.search).toBe('?boolean=true&key=value&number=42');
 	});
 
 	it('should return toString', () => {
@@ -103,7 +104,7 @@ describe('searchParams', () => {
 	});
 
 	it('should use replaceState when replace option is true', () => {
-		const replaceStateSpy = vi.spyOn(globalThis.history, 'replaceState');
+		const replaceStateSpy = vi.spyOn(history, 'replaceState');
 		searchParams.set('replaceTest', 'val', { replace: true });
 		expect(replaceStateSpy).toHaveBeenCalled();
 		replaceStateSpy.mockRestore();
@@ -111,7 +112,7 @@ describe('searchParams', () => {
 	});
 
 	it('should use pushState by default', () => {
-		const pushStateSpy = vi.spyOn(globalThis.history, 'pushState');
+		const pushStateSpy = vi.spyOn(history, 'pushState');
 		searchParams.set('pushTest', 'val');
 		expect(pushStateSpy).toHaveBeenCalled();
 		pushStateSpy.mockRestore();

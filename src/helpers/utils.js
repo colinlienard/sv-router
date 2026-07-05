@@ -8,7 +8,7 @@ import { base } from '../create-router.svelte.js';
 export function constructPath(path, params) {
 	if (params) {
 		for (const key in params) {
-			path = path.replace(`:${key}`, encodeURIComponent(params[key]));
+			path = path.replace(`:${key}`, () => encodeURIComponent(params[key]));
 		}
 	}
 
@@ -17,7 +17,8 @@ export function constructPath(path, params) {
 			return '/#/';
 		}
 		return join('#', path);
-	} else if (base.name) {
+	}
+	if (base.name) {
 		return join(base.name, path);
 	}
 
@@ -54,16 +55,12 @@ export function resolveRouteComponents(input) {
  * @param {import('../index.d.ts').RouteComponent} input
  * @returns {Promise<import('svelte').Component>}
  */
-function resolveRouteComponent(input) {
-	return new Promise((resolve) => {
-		if (isLazyImport(input)) {
-			Promise.resolve(input()).then((module) => {
-				resolve(module.default);
-			});
-		} else {
-			resolve(input);
-		}
-	});
+async function resolveRouteComponent(input) {
+	if (isLazyImport(input)) {
+		const module = await input();
+		return module.default;
+	}
+	return input;
 }
 
 /**
@@ -112,12 +109,11 @@ export function getUserState(state) {
 }
 
 export function updatedLocation() {
-	const pathname =
-		base.name === '#' ? globalThis.location.hash.slice(1) : globalThis.location.pathname;
-	const hash = base.name === '#' ? '' : globalThis.location.hash;
+	const pathname = base.name === '#' ? location.hash.slice(1) : location.pathname;
+	const hash = base.name === '#' ? '' : location.hash;
 	return {
 		pathname,
-		search: globalThis.location.search,
+		search: location.search,
 		state: getUserState(history.state),
 		hash,
 	};
@@ -161,7 +157,7 @@ export function parseSearch(value) {
 	if (typeof value === 'string') {
 		const searchParams = new URLSearchParams(value);
 		return Object.fromEntries(
-			[...searchParams.entries()].map(([key, value]) => [key, parseSearchValue(value)]),
+			[...searchParams].map(([key, value]) => [key, parseSearchValue(value)]),
 		);
 	}
 

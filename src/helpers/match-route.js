@@ -84,11 +84,9 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 
 	/** @type {Record<string, string>} */
 	const params = {};
-	/** @type {boolean} */
-	let breakFromLayouts;
 
 	for (let [index, routePart] of routeParts.entries()) {
-		breakFromLayouts = routePart.startsWith('(') && routePart.endsWith(')');
+		const breakFromLayouts = routePart.startsWith('(') && routePart.endsWith(')');
 		if (breakFromLayouts) {
 			routePart = routePart.slice(1, -1);
 		}

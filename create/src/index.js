@@ -11,10 +11,12 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 function checkCancel(value) {
-	if (p.isCancel(value)) {
-		p.cancel('Operation cancelled.');
-		process.exit(0);
+	if (!p.isCancel(value)) {
+		return;
 	}
+
+	p.cancel('Operation cancelled.');
+	process.exit(0);
 }
 
 p.intro(`create-sv-router`);
@@ -100,8 +102,8 @@ const commands = [
 	...(pkgManager ? [] : ['npm install']),
 	(pkgManager || 'npm') + ' run dev',
 ].map((command, index) => {
-	const stepNumber = `\u001B[94m${index + 1}.\u001B[0m`;
-	const commandText = `\u001B[37m${command}\u001B[0m`;
+	const stepNumber = `\u{1B}[94m${index + 1}.\u{1B}[0m`;
+	const commandText = `\u{1B}[37m${command}\u{1B}[0m`;
 	return `${stepNumber} ${commandText}`;
 });
 console.log([...commands, ''].join('\n'));
