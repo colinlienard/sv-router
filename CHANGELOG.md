@@ -1,5 +1,17 @@
 # sv-router
 
+## 0.18.0
+
+### Minor Changes
+
+- 05e8068: Add resolve meta function
+
+### Patch Changes
+
+- af09d7d: Don't intercept modifier, non-primary, or prevented clicks
+- fb406f3: Throw a descriptive error when a lazy route import resolves to nothing (e.g. after a `vite:preloadError` is prevented via `event.preventDefault()`) instead of a cryptic `Cannot read properties of undefined (reading 'default')`
+- d948572: Avoid dynamic import for dev route validation
+
 ## 0.17.0
 
 ### Minor Changes
