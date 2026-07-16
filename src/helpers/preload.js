@@ -49,7 +49,7 @@ export function preloadOnHover(routes) {
 	/** @type {ReturnType<typeof setTimeout> | null} */
 	let throttleTimer = null;
 	function pointerMoveListener(/** @type {PointerEvent} */ event) {
-		if (!event.getPredictedEvents || throttleTimer) return;
+		if (throttleTimer || !event.getPredictedEvents) return;
 		throttleTimer = setTimeout(() => {
 			throttleTimer = null;
 		}, PREDICT_TIMEOUT);

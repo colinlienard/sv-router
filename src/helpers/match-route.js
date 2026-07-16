@@ -118,7 +118,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 			};
 		}
 		// Static segment mismatch
-		else if (routePart.toLowerCase() !== pathPart?.toLowerCase() && !isLayoutGroup) {
+		else if (!isLayoutGroup && routePart.toLowerCase() !== pathPart?.toLowerCase()) {
 			return null;
 		}
 

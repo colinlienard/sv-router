@@ -212,7 +212,7 @@ export function createRouterCode(routes, routesPath, { allLazy = false, base, js
 				result[key] = `{ ...${varNames.toReversed().join(', ...')} }`;
 			} else if (
 				typeof value === 'string' &&
-				(key === 'hooks' || key === 'meta' || (!value.endsWith('.lazy.svelte') && !allLazy))
+				(key === 'hooks' || key === 'meta' || (!allLazy && !value.endsWith('.lazy.svelte')))
 			) {
 				const variableName = pathToCorrectCasing(value);
 				importsMap.set(variableName, routesPath + value);
