@@ -33,6 +33,9 @@
 			"types": "./src/vite-plugin/index.d.ts"
 		}
 	},
+	"publishConfig": {
+		"provenance": true
+	},
 	"scripts": {
 		"create:dev": "pnpm --filter create-sv-router dev",
 		"create:build": "pnpm --filter create-sv-router build",
