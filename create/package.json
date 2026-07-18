@@ -28,7 +28,7 @@
 	},
 	"dependencies": {
 		"@clack/prompts": "^1.7.0",
-		"execa": "^9.6.1"
+		"execa": "^10.0.0"
 	},
 	"devDependencies": {
 		"@vercel/ncc": "^0.44.1"
