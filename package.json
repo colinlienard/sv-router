@@ -58,7 +58,7 @@
 		"@changesets/cli": "^2.31.0",
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
-		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/jest-dom": "^7.0.0",
 		"@testing-library/svelte": "^5.4.2",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/node": "^24.13.2",
