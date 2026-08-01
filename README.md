@@ -21,7 +21,7 @@ Flexible, ergonomic, and complete Svelte 5 router.
 
 - 🔒 **Type-safe navigation**: Catch broken links before you ship.
 - 🗂️ **File-based routing (optional)**: DX of a meta-framework-like approach.
-- 🪶 **Lightweight**: < 5kB gzipped.
+- 🪶 **Lightweight**: ~ 5kB gzipped.
 - ⚡ **Performance**: Built-in code splitting and preloading.
 - 🔍 **Reactive search params**: For simpler state management in the URL.
 - 🌿 **Nested routes**: Share layouts across pages.

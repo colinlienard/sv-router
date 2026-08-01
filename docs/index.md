@@ -31,7 +31,7 @@ features:
     details: DX of a meta-framework-like approach.
   - icon: '🪶'
     title: Lightweight
-    details: < 5kB gzipped.
+    details: ~ 5kB gzipped.
   - icon: '⚡'
     title: Performance
     details: Built-in code splitting and preloading.
