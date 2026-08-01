@@ -72,6 +72,12 @@ describe('isActive (pathname-only)', () => {
 		location.pathname = '/dashboard/about';
 		expect(isActive('/')).toBe(false);
 	});
+
+	it('should match with a basename and any param', () => {
+		base.name = '/my-app';
+		location.pathname = '/my-app/post/123';
+		expect(isActive('/post/:id')).toBe(true);
+	});
 });
 
 describe.each([
@@ -140,5 +146,11 @@ describe('isActive.startsWith (pathname-only)', () => {
 		base.name = '/dashboard';
 		location.pathname = '/dashboard/about';
 		expect(isActive.startsWith('/')).toBe(true);
+	});
+
+	it('should match with a basename and any param', () => {
+		base.name = '/my-app';
+		location.pathname = '/my-app/post/123/foo';
+		expect(isActive.startsWith('/post/:id')).toBe(true);
 	});
 });

@@ -1,5 +1,5 @@
 import { base, location } from '../create-router.svelte.js';
-import { constructPath } from './utils.js';
+import { constructPath, stripBase } from './utils.js';
 
 /**
  * @param {string} pathname
@@ -39,7 +39,7 @@ function compare(compareFn, pathname, params) {
 	}
 
 	const pathParts = pathname.split('/').slice(1);
-	let routeParts = location.pathname.split('/').slice(1);
+	let routeParts = stripBase(location.pathname).split('/').slice(1);
 	if (pathParts.length > routeParts.length) {
 		return false;
 	}
