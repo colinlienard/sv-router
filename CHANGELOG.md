@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.18.1
+
+### Patch Changes
+
+- f371f11: Fix isActive not matching dynamic routes when a base is set
+
 ## 0.18.0
 
 ### Minor Changes
