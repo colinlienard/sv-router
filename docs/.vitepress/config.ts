@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
+import llmstxt from 'vitepress-plugin-llms';
 
 export default defineConfig({
 	title: 'sv-router | Type-safe routing for Svelte SPAs',
@@ -95,7 +96,7 @@ export default defineConfig({
 		],
 		footer: {
 			message: 'Released under the MIT License.',
-			copyright: 'Copyright © 2025 Colin Lienard',
+			copyright: `Copyright © ${new Date().getFullYear()} Colin Lienard`,
 		},
 		search: {
 			provider: 'local',
@@ -125,7 +126,7 @@ export default defineConfig({
 		},
 	},
 	vite: {
-		plugins: [groupIconVitePlugin()],
+		plugins: [groupIconVitePlugin(), llmstxt() as any],
 	},
 	transformPageData(pageData) {
 		const slug = pageData.relativePath.replace(/(index)?\.md$/, '').replace(/\/$/, '');
