@@ -11,7 +11,7 @@
 
 Flexible, ergonomic, and complete Svelte 5 router.
 
-[Documentation](https://sv-router.vercel.app/) • [Getting Started](https://sv-router.vercel.app/guide/getting-started) • [Reference](https://sv-router.vercel.app/reference)
+[Documentation](https://sv-router.dev/) • [Getting Started](https://sv-router.dev/guide/getting-started) • [Reference](https://sv-router.dev/reference)
 
 </div>
 

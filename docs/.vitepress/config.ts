@@ -9,8 +9,8 @@ export default defineConfig({
 		['link', { rel: 'icon', href: '/logo.svg' }],
 		['meta', { name: 'twitter:site', content: '@colinlienard' }],
 		['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-		['meta', { name: 'twitter:image', content: 'https://sv-router.vercel.app/og-image.png' }],
-		['meta', { property: 'og:image', content: 'https://sv-router.vercel.app/og-image.png' }],
+		['meta', { name: 'twitter:image', content: 'https://sv-router.dev/og-image.png' }],
+		['meta', { property: 'og:image', content: 'https://sv-router.dev/og-image.png' }],
 		['meta', { property: 'og:image:width', content: '1200' }],
 		['meta', { property: 'og:image:height', content: '630' }],
 		['meta', { property: 'og:image:type', content: 'image/png' }],
@@ -108,7 +108,7 @@ export default defineConfig({
 		lastUpdated: {},
 	},
 	sitemap: {
-		hostname: 'https://sv-router.vercel.app',
+		hostname: 'https://sv-router.dev',
 	},
 	markdown: {
 		config(md) {
@@ -130,7 +130,7 @@ export default defineConfig({
 	},
 	transformPageData(pageData) {
 		const slug = pageData.relativePath.replace(/(index)?\.md$/, '').replace(/\/$/, '');
-		const canonicalUrl = `https://sv-router.vercel.app/${slug}`;
+		const canonicalUrl = `https://sv-router.dev/${slug}`;
 		pageData.frontmatter.head ??= [];
 		pageData.frontmatter.head.push(
 			['link', { rel: 'canonical', href: canonicalUrl }],

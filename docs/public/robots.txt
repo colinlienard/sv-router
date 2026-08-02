@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sv-router.vercel.app/sitemap.xml
+Sitemap: https://sv-router.dev/sitemap.xml
