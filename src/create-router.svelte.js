@@ -220,20 +220,20 @@ export async function onNavigate(path, options = {}) {
 		return;
 	}
 
+	const popstateDelta = path ? 0 : historyIndex - (history.state?._routerIndex ?? 0);
+	function revertPopstate() {
+		if (path || popstateDelta === 0) return;
+		isSkipNextPopstate = true;
+		history.go(popstateDelta);
+	}
+
 	if (navigationBlockers.size > 0) {
-		const popstateDelta = path ? 0 : historyIndex - (history.state?._routerIndex ?? 0);
 		for (const blocker of navigationBlockers.values()) {
 			const shouldNavigate = typeof blocker === 'object' ? blocker.onNavigate : blocker;
 			if (!(await shouldNavigate())) {
-				if (!path && popstateDelta !== 0) {
-					isSkipNextPopstate = true;
-					history.go(popstateDelta);
-				}
+				revertPopstate();
 				return;
 			}
-		}
-		if (!path) {
-			historyIndex = history.state?._routerIndex ?? historyIndex;
 		}
 	}
 
@@ -259,7 +259,11 @@ export async function onNavigate(path, options = {}) {
 			const { beforeLoad } = hook;
 			errorHooks.push(hook);
 			pendingController = currentNavigationController;
-			await beforeLoad?.(hooksContext);
+			if ((await beforeLoad?.(hooksContext)) === false) {
+				if (signal.aborted) return currentNavigationPromise;
+				revertPopstate();
+				return;
+			}
 		} catch (error) {
 			if (signal.aborted) return currentNavigationPromise;
 			for (const { onError } of errorHooks) {
@@ -269,6 +273,10 @@ export async function onNavigate(path, options = {}) {
 		} finally {
 			pendingController = null;
 		}
+	}
+
+	if (!path) {
+		historyIndex = history.state?._routerIndex ?? historyIndex;
 	}
 
 	let routeComponents;

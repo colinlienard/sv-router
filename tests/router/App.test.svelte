@@ -10,6 +10,8 @@
 	export const onErrorMock = vi.fn();
 	export const afterLoadMock = vi.fn();
 	export const beforeLoadMock = vi.fn();
+	export const cancelLoadMock = vi.fn(() => false);
+	export const cancelledAfterLoadMock = vi.fn();
 
 	export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter({
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
@@ -56,6 +58,10 @@
 		'/initial-load': {
 			'/': createRawSnippet(() => ({ render: () => '<h1>Initial Load Page</h1>' })),
 			hooks: { beforeLoad: beforeLoadMock },
+		},
+		'/cancelled': {
+			'/': createRawSnippet(() => ({ render: () => '<h1>Cancelled Page</h1>' })),
+			hooks: { beforeLoad: cancelLoadMock, afterLoad: cancelledAfterLoadMock },
 		},
 		'*': createRawSnippet(() => ({ render: () => '<h1>404</h1>' })),
 		layout: Layout,
