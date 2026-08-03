@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.19.0
+
+### Minor Changes
+
+- d03946d: Cancel a navigation in beforeLoad
+
 ## 0.18.1
 
 ### Patch Changes
