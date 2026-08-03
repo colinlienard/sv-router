@@ -28,6 +28,34 @@ routes
 
 :::
 
+A dynamic segment can also be prefixed with static text, which is useful for routes like `/@username`:
+
+::: code-group
+
+```sh [Flat mode]
+routes
+└── @[username].svelte                 ➜ /@john
+```
+
+```sh [Tree mode]
+routes
+└── @[username]
+   └── index.svelte                    ➜ /@john
+```
+
+:::
+
+Such a route only matches if the static prefix is present: the URL `/@john` matches with `username` set to `'john'`, while `/john` does not.
+
+When several routes can match the same URL, the most specific one wins:
+
+```sh
+routes
+├── @me.svelte                         ➜ /@me
+├── @[username].svelte                 ➜ /@john
+└── [slug].svelte                      ➜ /john
+```
+
 You can access these dynamic segments in your components in two different ways:
 
 - **Strict:** `route.getParams` is a function that requires a pathname to be passed as an argument. It will throw an error if the pathname does not match the current route.

@@ -22,6 +22,7 @@ type TestRoutes = {
 		};
 		layout: RouteComponent;
 	};
+	'/@:username': RouteComponent;
 	'*rest': RouteComponent;
 };
 
@@ -37,7 +38,8 @@ type test_path_expected_0 =
 	| '/posts/static'
 	| '/posts/nolayout'
 	| `/posts/:id`
-	| `/posts/:id/:commentId`;
+	| `/posts/:id/:commentId`
+	| '/@:username';
 
 type test_path_1 = Expect<Equal<test_path_result_1, test_path_expected_1>>;
 type test_path_result_1 = Path<TestRoutes, true>;
@@ -49,7 +51,8 @@ type test_path_expected_1 =
 	| '/posts/static'
 	| '/posts/nolayout'
 	| `/posts/${string}`
-	| `/posts/${string}/${string}`;
+	| `/posts/${string}/${string}`
+	| `/${string}`;
 
 // PathParams
 
@@ -73,6 +76,10 @@ type test_path_params_4 = Expect<Equal<test_path_params_result_4, test_path_para
 type test_path_params_result_4 = PathParams<'(*rest)'>;
 type test_path_params_expected_4 = Record<'rest', string>;
 
+type test_path_params_5 = Expect<Equal<test_path_params_result_5, test_path_params_expected_5>>;
+type test_path_params_result_5 = PathParams<'/@:username'>;
+type test_path_params_expected_5 = Record<'username', string>;
+
 // ConstructPathArgs
 
 type test_construct_path_0 = Expect<
@@ -93,7 +100,7 @@ type test_construct_path_expected_2 = ['/posts'] | ['/about/:id', Record<'id', s
 
 type test_all_params = Expect<Equal<test_all_params_result, test_all_params_expected>>;
 type test_all_params_result = AllParams<TestRoutes>;
-type test_all_params_expected = Partial<Record<'id' | 'commentId' | 'rest', string>>;
+type test_all_params_expected = Partial<Record<'id' | 'commentId' | 'username' | 'rest', string>>;
 
 // IsActiveArgs
 

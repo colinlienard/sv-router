@@ -29,6 +29,23 @@ Multiple dynamic segments can be included in a single route:
 
 :::
 
+A dynamic segment can also be combined with static text, which is useful for routes like `/@username`:
+
+```ts
+'/@:username': Profile,
+'/posts/:id.json': PostJson,
+```
+
+Such a route only matches if the static parts are present: the URL `/@john` matches `/@:username` with `username` set to `'john'`, while `/john` does not.
+
+When several routes can match the same URL, the most specific one wins. Given these routes, the URL `/@me` renders `Me`, `/@john` renders `Profile`, and `/john` renders `Slug`:
+
+```ts
+'/@me': Me,             // static
+'/@:username': Profile, // static text + param
+'/:slug': Slug,         // param only
+```
+
 You can access these dynamic segments in your components in two different ways:
 
 - **Strict:** `route.getParams` is a function that requires a pathname to be passed as an argument. It will throw an error if the pathname does not match the current route.

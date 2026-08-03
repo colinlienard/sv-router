@@ -230,6 +230,36 @@ describe('createRouteMap', () => {
 		});
 	});
 
+	it('should generate routes with a static prefix before the param (flat)', () => {
+		const result = createRouteMap([
+			'@[username].svelte',
+			'users.@[username].lazy.svelte',
+			'users.(@[nolayout]).svelte',
+		]);
+		expect(result).toEqual({
+			'/@:username': '@[username].svelte',
+			'/users/@:username': 'users.@[username].lazy.svelte',
+			'/users/(@:nolayout)': 'users.(@[nolayout]).svelte',
+		});
+	});
+
+	it('should generate routes with a static prefix before the param (tree)', () => {
+		const result = createRouteMap([
+			'index.svelte',
+			{
+				name: '@[username]',
+				tree: ['index.svelte', 'posts.svelte'],
+			},
+		]);
+		expect(result).toEqual({
+			'/': 'index.svelte',
+			'/@:username': {
+				'/': '@[username]/index.svelte',
+				'/posts': '@[username]/posts.svelte',
+			},
+		});
+	});
+
 	it('should generate dynamic folder route (tree)', () => {
 		const result = createRouteMap([
 			'index.svelte',
@@ -501,6 +531,24 @@ export const { p, navigate, isActive, preload, resolveMeta, route } = createRout
 `);
 	});
 
+	it('should generate unique import names for files with the same casing', () => {
+		const result = createRouterCode(
+			{ '/:username': '[username].svelte', '/@:username': '@[username].svelte' },
+			'./routes',
+		);
+		expect(result).toBe(`import { createRouter } from 'sv-router';
+import Username from './routes/[username].svelte';
+import Username2 from './routes/@[username].svelte';
+
+export const routes = {
+  '/:username': Username,
+  '/@:username': Username2
+};
+export type Routes = typeof routes;
+export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
+`);
+	});
+
 	it('should generate the router code with a base', () => {
 		const result = createRouterCode({ '/': 'index.svelte' }, './routes', { base: 'my-app' });
 		expect(result).toBe(`import { createRouter } from 'sv-router';
@@ -629,6 +677,20 @@ describe('pathToCorrectCasing', () => {
 
 		const result3 = pathToCorrectCasing('([post])/meta.ts');
 		expect(result3).toBe('postMeta');
+	});
+
+	it('should handle paths with a static prefix before the param', () => {
+		const result1 = pathToCorrectCasing('@[username].svelte');
+		expect(result1).toBe('Username');
+
+		const result2 = pathToCorrectCasing('users/user-[id].svelte');
+		expect(result2).toBe('UsersUserId');
+
+		const result3 = pathToCorrectCasing('@[username]/index.svelte');
+		expect(result3).toBe('UsernameIndex');
+
+		const result4 = pathToCorrectCasing('(@[username]).svelte');
+		expect(result4).toBe('Username');
 	});
 
 	it('should handle flat paths', () => {

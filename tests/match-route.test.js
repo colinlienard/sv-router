@@ -483,11 +483,100 @@ describe('matchRoute', () => {
 			expect(layouts).toEqual([Layout1]);
 		});
 	});
+
+	describe('partially dynamic segments', () => {
+		it('should match a segment with a static prefix', () => {
+			const routes = r({ '/@:username': Users });
+			const { match, params } = matchRoute('/@john', routes);
+			expect(match).toEqual(Users);
+			expect(params).toEqual({ username: 'john' });
+		});
+
+		it('should not match when the static prefix is missing', () => {
+			const routes = r({ '/@:username': Users });
+			expect(matchRoute('/john', routes).match).toBeUndefined();
+		});
+
+		it('should not match when the dynamic part is empty', () => {
+			const routes = r({ '/@:username': Users });
+			expect(matchRoute('/@', routes).match).toBeUndefined();
+		});
+
+		it('should match a segment with a static suffix', () => {
+			const routes = r({ '/:id.json': DynamicPost });
+			const { match, params } = matchRoute('/123.json', routes);
+			expect(match).toEqual(DynamicPost);
+			expect(params).toEqual({ id: '123' });
+		});
+
+		it('should still treat a dash as part of the param name', () => {
+			const routes = r({ '/:post-id': DynamicPost });
+			expect(matchRoute('/123', routes).params).toEqual({ 'post-id': '123' });
+		});
+
+		it('should match several params in a single segment', () => {
+			const routes = r({ '/:id@:username': Users });
+			const { match, params } = matchRoute('/123@john', routes);
+			expect(match).toEqual(Users);
+			expect(params).toEqual({ id: '123', username: 'john' });
+		});
+
+		it('should decode the params', () => {
+			const routes = r({ '/@:username': Users });
+			expect(matchRoute('/@john%20doe', routes).params).toEqual({ username: 'john doe' });
+		});
+
+		it('should match nested routes', () => {
+			const routes = r({
+				'/@:username': { '/': Users, '/posts': Posts, layout: Layout1 },
+			});
+			const { match, params, layouts } = matchRoute('/@john/posts', routes);
+			expect(match).toEqual(Posts);
+			expect(params).toEqual({ username: 'john' });
+			expect(layouts).toEqual([Layout1]);
+		});
+
+		it('should break out of layouts', () => {
+			const routes = r({ '/(@:username)': NoLayout, layout: Layout1 });
+			const { match, params, layouts } = matchRoute('/@john', routes);
+			expect(match).toEqual(NoLayout);
+			expect(params).toEqual({ username: 'john' });
+			expect(layouts).toEqual([]);
+		});
+
+		it('should be matched before a fully dynamic segment', () => {
+			const routes = r({ '/:id': DynamicPost, '/@:username': Users });
+			expect(matchRoute('/@john', routes).match).toEqual(Users);
+			expect(matchRoute('/john', routes).match).toEqual(DynamicPost);
+		});
+
+		it('should be matched after a static segment', () => {
+			const routes = r({ '/@:username': Users, '/@me': John });
+			expect(matchRoute('/@me', routes).match).toEqual(John);
+			expect(matchRoute('/@john', routes).match).toEqual(Users);
+		});
+
+		it('should not treat regex characters as a pattern', () => {
+			const routes = r({ '/(:username': Users });
+			expect(matchRoute('/(john', routes).params).toEqual({ username: 'john' });
+			expect(matchRoute('/xjohn', routes).match).toBeUndefined();
+		});
+	});
 });
 
 describe('sortRoutes', () => {
 	it('should sort routes', () => {
 		const result = sortRoutes(['/:id', '*rest', '/foo', '', '/']);
 		expect(result).toEqual(['', '/', '/foo', '/:id', '*rest']);
+	});
+
+	it('should sort partially dynamic routes between static and dynamic ones', () => {
+		const result = sortRoutes(['/:id', '*rest', '/@:username', '/foo']);
+		expect(result).toEqual(['/foo', '/@:username', '/:id', '*rest']);
+	});
+
+	it('should sort by segment specificity', () => {
+		const result = sortRoutes(['/:a/:b', '/foo/:b', '/@:a/:b', '/foo/bar']);
+		expect(result).toEqual(['/foo/bar', '/foo/:b', '/@:a/:b', '/:a/:b']);
 	});
 });
