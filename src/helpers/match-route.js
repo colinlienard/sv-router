@@ -20,6 +20,12 @@
  * }} MatchResult
  */
 
+/** A segment that is only made of a param, e.g. `:username` */
+const DYNAMIC_SEGMENT_REGEX = /^:[\w-]+$/;
+
+/** Every param of a segment, e.g. `username` in `@:username` */
+const PARAMS_REGEX = /:([\w-]+)/g;
+
 /**
  * @param {string} pathname
  * @param {Routes} routes
@@ -95,7 +101,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 		const isLayoutGroup = routePart === '' && typeof routes['/'] !== 'function';
 
 		// Dynamic segment
-		if (routePart.startsWith(':')) {
+		if (isDynamicSegment(routePart)) {
 			params[routePart.slice(1)] = decodeURIComponent(pathPart);
 		}
 		// Catch-all segment
@@ -116,6 +122,12 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 				},
 				fallback: false,
 			};
+		}
+		// Partially dynamic segment (e.g. `@:username`)
+		else if (routePart.includes(':')) {
+			const segmentParams = matchPartialSegment(routePart, pathPart);
+			if (!segmentParams) return null;
+			Object.assign(params, segmentParams);
 		}
 		// Static segment mismatch
 		else if (!isLayoutGroup && routePart.toLowerCase() !== pathPart?.toLowerCase()) {
@@ -156,6 +168,52 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 	}
 
 	return null;
+}
+
+/**
+ * Whether the segment is only made of a param, e.g. `:username`.
+ *
+ * @param {string} segment
+ * @returns {boolean}
+ */
+export function isDynamicSegment(segment) {
+	return DYNAMIC_SEGMENT_REGEX.test(segment);
+}
+
+/**
+ * Match a route segment that mixes static text and dynamic params (e.g. `@:username`) against a
+ * path segment. Returns the extracted params, or `null` if it does not match.
+ *
+ * @param {string} routePart
+ * @param {string | undefined} pathPart
+ * @returns {Record<string, string> | null}
+ */
+export function matchPartialSegment(routePart, pathPart) {
+	if (pathPart === undefined) return null;
+
+	/** @type {string[]} */
+	const names = [];
+	let pattern = '';
+	let lastIndex = 0;
+	for (const match of routePart.matchAll(PARAMS_REGEX)) {
+		pattern += escapeRegExp(routePart.slice(lastIndex, match.index)) + '([^/]+?)';
+		names.push(match[1]);
+		lastIndex = match.index + match[0].length;
+	}
+	pattern += escapeRegExp(routePart.slice(lastIndex));
+
+	const matched = new RegExp(`^${pattern}$`, 'i').exec(pathPart);
+	if (!matched) return null;
+
+	return Object.fromEntries(names.map((name, i) => [name, decodeURIComponent(matched[i + 1])]));
+}
+
+/**
+ * @param {string} value
+ * @returns {string}
+ */
+function escapeRegExp(value) {
+	return value.replaceAll(/[$()*+.?[\\\]^{|}]/g, String.raw`\$&`);
 }
 
 /**
@@ -213,16 +271,32 @@ function mergeWithNested(context, nested, params, breakFromLayouts) {
  * @returns {string[]}
  */
 export function sortRoutes(routes) {
-	return routes.toSorted((a, b) => getRoutePriority(a) - getRoutePriority(b));
+	return routes.toSorted((a, b) => {
+		const priorityA = getRoutePriority(a);
+		const priorityB = getRoutePriority(b);
+		if (priorityA === priorityB) return 0;
+		return priorityA < priorityB ? -1 : 1;
+	});
 }
 
 /**
+ * Build a comparable priority made of one digit per segment, so that the most specific routes are
+ * matched first: static < partially dynamic < dynamic < catch-all.
+ *
  * @param {string} route
- * @returns {number}
+ * @returns {string}
  */
 function getRoutePriority(route) {
-	if (route === '' || route === '/') return 1;
-	if (route.includes('*')) return 4;
-	if (route.includes(':')) return 3;
-	return 2;
+	if (route === '' || route === '/') return '0';
+	return route
+		.split('/')
+		.filter(Boolean)
+		.map((segment) => {
+			segment = segment.replace(/^\((.*)\)$/, '$1');
+			if (segment.startsWith('*')) return '4';
+			if (isDynamicSegment(segment)) return '3';
+			if (segment.includes(':')) return '2';
+			return '1';
+		})
+		.join('');
 }

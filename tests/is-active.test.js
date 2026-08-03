@@ -48,6 +48,22 @@ describe.each([
 		location.pathname = '/post';
 		expect(isActive('/post/:id', { id: '123' })).toBe(false);
 	});
+
+	it('should match a partially dynamic route with a param', () => {
+		location.pathname = '/@john';
+		expect(isActive('/@:username', { username: 'john' })).toBe(true);
+	});
+
+	it('should match a partially dynamic route with any param', () => {
+		location.pathname = '/@john';
+		expect(isActive('/@:username')).toBe(true);
+	});
+
+	it('should not match a partially dynamic route with a different static part', () => {
+		location.pathname = '/john';
+		expect(isActive('/@:username')).toBe(false);
+		expect(isActive('/@:username', { username: 'john' })).toBe(false);
+	});
 });
 
 describe('isActive (pathname-only)', () => {

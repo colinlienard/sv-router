@@ -140,6 +140,23 @@ describe('router', () => {
 		expect(route.params).toEqual({ id: '456' });
 	});
 
+	it('should match with a partially dynamic route', async () => {
+		location.pathname = '/@john';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Profile page john')).toBeInTheDocument();
+		});
+		expect(route.params).toEqual({ username: 'john' });
+		expect(isActive('/@:username')).toBe(true);
+
+		await userEvent.click(screen.getByText('Profile jane'));
+		expect(location.pathname).toBe('/@jane');
+		await waitFor(() => {
+			expect(screen.getByText('Profile page jane')).toBeInTheDocument();
+		});
+		expect(route.params).toEqual({ username: 'jane' });
+	});
+
 	it('should show active page', async () => {
 		render(App);
 		await waitFor(() => {
