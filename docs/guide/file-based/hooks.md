@@ -70,3 +70,13 @@ function beforeLoad({ pathname, search, hash, state, replace, meta }) {
 	}
 }
 ```
+
+Returning `false` from `beforeLoad` cancels the navigation without redirecting, so the current route stays displayed and the URL is left untouched:
+
+```ts
+function beforeLoad({ meta }) {
+	if (meta.requiresAuth && !user) {
+		return false; // Stay on the current route
+	}
+}
+```

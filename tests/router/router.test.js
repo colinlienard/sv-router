@@ -6,6 +6,8 @@ import { searchParams } from '../../src/search-params.svelte.js';
 import App, {
 	afterLoadMock,
 	beforeLoadMock,
+	cancelledAfterLoadMock,
+	cancelLoadMock,
 	isActive,
 	navigate,
 	onErrorMock,
@@ -196,6 +198,43 @@ describe('router', () => {
 			await userEvent.click(screen.getByText('Protected'));
 		});
 		expect(location.pathname).toBe('/');
+	});
+
+	it('should cancel the navigation when beforeLoad returns false', async () => {
+		cancelLoadMock.mockClear();
+		cancelledAfterLoadMock.mockClear();
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('Cancelled'));
+		expect(cancelLoadMock).toHaveBeenCalled();
+		expect(location.pathname).toBe('/');
+		expect(screen.getByText('Welcome')).toBeInTheDocument();
+		expect(cancelledAfterLoadMock).not.toHaveBeenCalled();
+	});
+
+	it('should cancel a programmatic navigation when beforeLoad returns false', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/cancelled');
+		expect(location.pathname).toBe('/');
+		expect(screen.getByText('Welcome')).toBeInTheDocument();
+	});
+
+	it('should not cancel the navigation when beforeLoad returns true', async () => {
+		cancelLoadMock.mockReturnValueOnce(/** @type {any} */ (true));
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('Cancelled'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/cancelled');
+			expect(screen.getByText('Cancelled Page')).toBeInTheDocument();
+		});
 	});
 
 	it('should await the full redirect chain when navigate triggers a redirect', async () => {
@@ -932,6 +971,28 @@ describe('blockNavigation', () => {
 			expect(screen.getByText('Welcome')).toBeInTheDocument();
 		});
 		clear();
+	});
+
+	it('should restore the previous entry when beforeLoad cancels a popstate navigation', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await userEvent.click(screen.getByText('About'));
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+		});
+		const goSpy = vi.spyOn(history, 'go').mockImplementation(() => {});
+		const prevIndex = (history.state?._routerIndex ?? 1) - 1;
+		history.replaceState({ _routerIndex: prevIndex, _userState: null }, '', '/cancelled');
+		dispatchEvent(new PopStateEvent('popstate'));
+		await waitFor(() => {
+			expect(goSpy).toHaveBeenCalledWith(1);
+		});
+		expect(screen.getByText('About Us')).toBeInTheDocument();
+		history.replaceState({ _routerIndex: prevIndex + 1, _userState: null }, '', '/about');
+		dispatchEvent(new PopStateEvent('popstate'));
+		goSpy.mockRestore();
 	});
 });
 

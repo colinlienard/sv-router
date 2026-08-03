@@ -119,8 +119,18 @@ export type Hooks = {
 	 *   throw navigate('/home');
 	 * }
 	 * ```
+	 *
+	 * Returning `false` cancels the navigation and stays on the current route.
+	 *
+	 * ```js
+	 * beforeLoad({ meta }) {
+	 *   if (meta.requiresAuth && !user) {
+	 *     return false;
+	 *   }
+	 * }
+	 * ```
 	 */
-	beforeLoad?(context: HooksContext): void | Promise<void>;
+	beforeLoad?(context: HooksContext): void | boolean | Promise<void | boolean>;
 	/** A function that will be called after the route is loaded. */
 	afterLoad?(context: HooksContext): void | Promise<void>;
 	/** A function that will be called when the route is preloaded. */
