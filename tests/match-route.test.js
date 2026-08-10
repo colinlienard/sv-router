@@ -500,25 +500,12 @@ describe('matchRoute', () => {
 		it('should not match when the dynamic part is empty', () => {
 			const routes = r({ '/@:username': Users });
 			expect(matchRoute('/@', routes).match).toBeUndefined();
-		});
-
-		it('should match a segment with a static suffix', () => {
-			const routes = r({ '/:id.json': DynamicPost });
-			const { match, params } = matchRoute('/123.json', routes);
-			expect(match).toEqual(DynamicPost);
-			expect(params).toEqual({ id: '123' });
+			expect(matchRoute('/', r({ '/:id': DynamicPost })).match).toBeUndefined();
 		});
 
 		it('should still treat a dash as part of the param name', () => {
 			const routes = r({ '/:post-id': DynamicPost });
 			expect(matchRoute('/123', routes).params).toEqual({ 'post-id': '123' });
-		});
-
-		it('should match several params in a single segment', () => {
-			const routes = r({ '/:id@:username': Users });
-			const { match, params } = matchRoute('/123@john', routes);
-			expect(match).toEqual(Users);
-			expect(params).toEqual({ id: '123', username: 'john' });
 		});
 
 		it('should decode the params', () => {
@@ -556,6 +543,11 @@ describe('matchRoute', () => {
 			expect(matchRoute('/@john', routes).match).toEqual(Users);
 		});
 
+		it('should match the static part case-insensitively, like static segments', () => {
+			const routes = r({ '/user-:id': DynamicPost });
+			expect(matchRoute('/USER-123', routes).params).toEqual({ id: '123' });
+		});
+
 		it('should not treat regex characters as a pattern', () => {
 			const routes = r({ '/(:username': Users });
 			expect(matchRoute('/(john', routes).params).toEqual({ username: 'john' });
@@ -578,5 +570,10 @@ describe('sortRoutes', () => {
 	it('should sort by segment specificity', () => {
 		const result = sortRoutes(['/:a/:b', '/foo/:b', '/@:a/:b', '/foo/bar']);
 		expect(result).toEqual(['/foo/bar', '/foo/:b', '/@:a/:b', '/:a/:b']);
+	});
+
+	it('should sort a nested catch-all after the static segments that precede it', () => {
+		const result = sortRoutes(['/:id', '/posts/*rest', '*rest']);
+		expect(result).toEqual(['/posts/*rest', '/:id', '*rest']);
 	});
 });

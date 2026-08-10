@@ -3,12 +3,14 @@ import Layout from './Layout.svelte';
 import About from './routes/About.svelte';
 import AMoreNestedRoute from './routes/AMoreNestedRoute.svelte';
 import Home from './routes/Home.svelte';
+import Profile from './routes/Profile.svelte';
 import StaticPost from './routes/StaticPost.svelte';
 
 export const { p, navigate, isActive, preload, route } = createRouter({
 	'/': Home,
 	'/about': About,
 	'/a/more/nested/route': AMoreNestedRoute,
+	'/@:username': Profile,
 	'/posts': {
 		'/': () => import('./routes/Posts.svelte'),
 		'/static': StaticPost,

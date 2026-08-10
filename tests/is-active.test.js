@@ -64,6 +64,11 @@ describe.each([
 		expect(isActive('/@:username')).toBe(false);
 		expect(isActive('/@:username', { username: 'john' })).toBe(false);
 	});
+
+	it('should match the static part case-sensitively, like static segments', () => {
+		location.pathname = '/USER-123';
+		expect(isActive('/user-:id')).toBe(false);
+	});
 });
 
 describe('isActive (pathname-only)', () => {

@@ -1,3 +1,5 @@
+import { isDynamicSegment } from './match-route.js';
+
 /** @param {import('../index.d.ts').Routes} routes */
 export function validateRoutes(routes) {
 	const paths = getRoutePaths(routes);
@@ -9,7 +11,7 @@ export function validateRoutes(routes) {
 				p !== '/' &&
 				!p.endsWith('*') &&
 				p.startsWith(parentPath === '' ? '/:' : parentPath) &&
-				p.match(/:[^/]*$/g), // Match dynamic paths without slashes after the colon
+				isLastSegmentDynamic(p),
 		);
 		if (dynamicPath) {
 			console.warn(
@@ -17,6 +19,15 @@ export function validateRoutes(routes) {
 			);
 		}
 	}
+}
+
+/**
+ * @param {string} path
+ * @returns {boolean}
+ */
+function isLastSegmentDynamic(path) {
+	const lastSegment = path.slice(path.lastIndexOf('/') + 1).replace(/^\((.*)\)$/, '$1');
+	return isDynamicSegment(lastSegment);
 }
 
 /**

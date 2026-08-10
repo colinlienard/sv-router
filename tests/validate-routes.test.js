@@ -34,6 +34,19 @@ describe('validateRoutes', () => {
 		);
 	});
 
+	it('should not raise a warning for a partially dynamic route', () => {
+		validateRoutes({
+			'/': component,
+			'/@:username': component,
+			'/posts': {
+				'*': component,
+				'/@:username': component,
+			},
+			'*': component,
+		});
+		expect(consoleSpy).not.toHaveBeenCalled();
+	});
+
 	it.each([
 		{
 			'/': component,

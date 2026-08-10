@@ -29,14 +29,13 @@ Multiple dynamic segments can be included in a single route:
 
 :::
 
-A dynamic segment can also be combined with static text, which is useful for routes like `/@username`:
+A dynamic segment can also be prefixed with static text, which is useful for routes like `/@username`:
 
 ```ts
 '/@:username': Profile,
-'/posts/:id.json': PostJson,
 ```
 
-Such a route only matches if the static parts are present: the URL `/@john` matches `/@:username` with `username` set to `'john'`, while `/john` does not.
+Such a route only matches if the static prefix is present: the URL `/@john` matches `/@:username` with `username` set to `'john'`, while `/john` does not.
 
 When several routes can match the same URL, the most specific one wins. Given these routes, the URL `/@me` renders `Me`, `/@john` renders `Profile`, and `/john` renders `Slug`:
 

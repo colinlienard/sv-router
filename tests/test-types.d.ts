@@ -2,6 +2,7 @@ import type { Equal, Expect } from 'type-testing';
 import type {
 	AllParams,
 	ConstructPathArgs,
+	ConstructUrlOptions,
 	IsActiveArgs,
 	Path,
 	PathParams,
@@ -52,7 +53,7 @@ type test_path_expected_1 =
 	| '/posts/nolayout'
 	| `/posts/${string}`
 	| `/posts/${string}/${string}`
-	| `/${string}`;
+	| `/@${string}`;
 
 // PathParams
 
@@ -86,15 +87,25 @@ type test_construct_path_0 = Expect<
 	Equal<test_construct_path_result_0, test_construct_path_expected_0>
 >;
 type test_construct_path_result_0 = ConstructPathArgs<'/posts/:id/:commentId'>;
-type test_construct_path_expected_0 = ['/posts/:id/:commentId', Record<'id' | 'commentId', string>];
+type test_construct_path_expected_0 = [
+	'/posts/:id/:commentId',
+	ConstructUrlOptions & { params: Record<'id' | 'commentId', string> },
+];
 
 type test_construct_path_1 = Expect<
 	Equal<test_construct_path_result_1, test_construct_path_expected_1>
 >;
 type test_construct_path_result_1 = ConstructPathArgs<'/posts'>;
-type test_construct_path_expected_1 = ['/posts'];
+type test_construct_path_expected_1 = ['/posts'] | ['/posts', ConstructUrlOptions];
+
+type test_construct_path_2 = Expect<
+	Equal<test_construct_path_result_2, test_construct_path_expected_2>
+>;
 type test_construct_path_result_2 = ConstructPathArgs<'/posts' | '/about/:id'>;
-type test_construct_path_expected_2 = ['/posts'] | ['/about/:id', Record<'id', string>];
+type test_construct_path_expected_2 =
+	| ['/posts']
+	| ['/posts', ConstructUrlOptions]
+	| ['/about/:id', ConstructUrlOptions & { params: Record<'id', string> }];
 
 // AllParams
 

@@ -23,9 +23,6 @@
 /** A segment that is only made of a param, e.g. `:username` */
 const DYNAMIC_SEGMENT_REGEX = /^:[\w-]+$/;
 
-/** Every param of a segment, e.g. `username` in `@:username` */
-const PARAMS_REGEX = /:([\w-]+)/g;
-
 /**
  * @param {string} pathname
  * @param {Routes} routes
@@ -100,12 +97,8 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 		const pathPart = pathParts[index];
 		const isLayoutGroup = routePart === '' && typeof routes['/'] !== 'function';
 
-		// Dynamic segment
-		if (isDynamicSegment(routePart)) {
-			params[routePart.slice(1)] = decodeURIComponent(pathPart);
-		}
 		// Catch-all segment
-		else if (routePart.startsWith('*')) {
+		if (routePart.startsWith('*')) {
 			const param = routePart.slice(1);
 			if (param) {
 				params[param] = pathParts.slice(index).map(decodeURIComponent).join('/');
@@ -123,9 +116,9 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 				fallback: false,
 			};
 		}
-		// Partially dynamic segment (e.g. `@:username`)
-		else if (routePart.includes(':')) {
-			const segmentParams = matchPartialSegment(routePart, pathPart);
+
+		if (routePart.includes(':')) {
+			const segmentParams = matchDynamicSegment(routePart, pathPart);
 			if (!segmentParams) return null;
 			Object.assign(params, segmentParams);
 		}
@@ -181,31 +174,20 @@ export function isDynamicSegment(segment) {
 }
 
 /**
- * Match a route segment that mixes static text and dynamic params (e.g. `@:username`) against a
- * path segment. Returns the extracted params, or `null` if it does not match.
- *
  * @param {string} routePart
  * @param {string | undefined} pathPart
+ * @param {boolean} [ignoreCase]
  * @returns {Record<string, string> | null}
  */
-export function matchPartialSegment(routePart, pathPart) {
+export function matchDynamicSegment(routePart, pathPart, ignoreCase = true) {
 	if (pathPart === undefined) return null;
 
-	/** @type {string[]} */
-	const names = [];
-	let pattern = '';
-	let lastIndex = 0;
-	for (const match of routePart.matchAll(PARAMS_REGEX)) {
-		pattern += escapeRegExp(routePart.slice(lastIndex, match.index)) + '([^/]+?)';
-		names.push(match[1]);
-		lastIndex = match.index + match[0].length;
-	}
-	pattern += escapeRegExp(routePart.slice(lastIndex));
-
-	const matched = new RegExp(`^${pattern}$`, 'i').exec(pathPart);
+	const colonIndex = routePart.indexOf(':');
+	const prefix = escapeRegExp(routePart.slice(0, colonIndex));
+	const matched = new RegExp(`^${prefix}(.+)$`, ignoreCase ? 'i' : '').exec(pathPart);
 	if (!matched) return null;
 
-	return Object.fromEntries(names.map((name, i) => [name, decodeURIComponent(matched[i + 1])]));
+	return { [routePart.slice(colonIndex + 1)]: decodeURIComponent(matched[1]) };
 }
 
 /**
@@ -274,8 +256,7 @@ export function sortRoutes(routes) {
 	return routes.toSorted((a, b) => {
 		const priorityA = getRoutePriority(a);
 		const priorityB = getRoutePriority(b);
-		if (priorityA === priorityB) return 0;
-		return priorityA < priorityB ? -1 : 1;
+		return priorityA < priorityB ? -1 : priorityA > priorityB ? 1 : 0;
 	});
 }
 

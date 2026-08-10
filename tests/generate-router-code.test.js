@@ -243,6 +243,14 @@ describe('createRouteMap', () => {
 		});
 	});
 
+	it('should generate a static route that starts with a non-word character', () => {
+		const result = createRouteMap(['@me.svelte', '@[username].svelte']);
+		expect(result).toEqual({
+			'/@me': '@me.svelte',
+			'/@:username': '@[username].svelte',
+		});
+	});
+
 	it('should generate routes with a static prefix before the param (tree)', () => {
 		const result = createRouteMap([
 			'index.svelte',
@@ -691,6 +699,12 @@ describe('pathToCorrectCasing', () => {
 
 		const result4 = pathToCorrectCasing('(@[username]).svelte');
 		expect(result4).toBe('Username');
+
+		const result5 = pathToCorrectCasing('@me.svelte');
+		expect(result5).toBe('Me');
+
+		const result6 = pathToCorrectCasing('users/@me.svelte');
+		expect(result6).toBe('UsersMe');
 	});
 
 	it('should handle flat paths', () => {

@@ -10,7 +10,7 @@ import path from 'node:path';
  * }} GeneratedRoutes
  */
 
-const FILENAME_REGEX = /(?<=[/.]|^)\(?([\w-]+)\)?(\.lazy)?\.svelte$/; // any.svelte, any.lazy.svelte, (any).svelte
+const FILENAME_REGEX = /(?<=[/.]|^)\(?([^/.[\]()]+)\)?(\.lazy)?\.svelte$/; // any.svelte, any.lazy.svelte, (any).svelte, @any.svelte
 const INDEX_FILENAME_REGEX = /(?<=[/.]|^)\(?index\)?(\.lazy)?\.svelte$/; // index.svelte, index.lazy.svelte, (index).svelte
 const PARAM_FILENAME_REGEX = /(?<=[/.]|^)\(?([^/.[\]()]*)\[([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte, ([any]).svelte, prefix[any].svelte
 const CATCH_ALL_FILENAME_REGEX = /(?<=[/.]|^)\(?\[\.\.\.([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
