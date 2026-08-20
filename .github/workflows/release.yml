@@ -29,9 +29,9 @@ jobs:
         run: pnpm create:build
       - name: Create release pull request or publish to npm
         id: changesets
-        uses: changesets/action@v2.1.0
+        uses: changesets/action@v2
         with:
-          publish: pnpm changeset publish
-          title: 'chore: release'
+          publish-script: pnpm changeset publish
+          pr-title: 'chore: release'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
