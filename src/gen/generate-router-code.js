@@ -10,12 +10,17 @@ import path from 'node:path';
  * }} GeneratedRoutes
  */
 
-const FILENAME_REGEX = /(?<=[/.]|^)\(?([^/.[\]()]+)\)?(\.lazy)?\.svelte$/; // any.svelte, any.lazy.svelte, (any).svelte, @any.svelte
+const SAFE_CHARS = String.raw`[\w\-~@!$&'+,;=]`;
+
+const FILENAME_REGEX = new RegExp(String.raw`(?<=[/.]|^)\(?(${SAFE_CHARS}+)\)?(\.lazy)?\.svelte$`); // any.svelte, any.lazy.svelte, (any).svelte, @any.svelte
 const INDEX_FILENAME_REGEX = /(?<=[/.]|^)\(?index\)?(\.lazy)?\.svelte$/; // index.svelte, index.lazy.svelte, (index).svelte
-const PARAM_FILENAME_REGEX = /(?<=[/.]|^)\(?([^/.[\]()]*)\[([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [any].svelte, [any].lazy.svelte, ([any]).svelte, prefix[any].svelte
+const PARAM_FILENAME_REGEX = new RegExp(
+	String.raw`(?<=[/.]|^)\(?(${SAFE_CHARS}*)\[([\w-]+)\]\)?(\.lazy)?\.svelte$`,
+); // [any].svelte, [any].lazy.svelte, ([any]).svelte, prefix[any].svelte
 const CATCH_ALL_FILENAME_REGEX = /(?<=[/.]|^)\(?\[\.\.\.([\w-]+)\]\)?(\.lazy)?\.svelte$/; // [...any].svelte, [...any].lazy.svelte, ([...any]).svelte
-const OUT_OF_LAYOUT_FILENAME_REGEX =
-	/(?<=[/.]|^)\((?:[^/.[\]()]*)\[\.?\.?\.?([\w-]+)\]\)(\.lazy)?\.svelte$/; // ([any]).svelte, ([...any]).lazy.svelte, (prefix[any]).svelte
+const OUT_OF_LAYOUT_FILENAME_REGEX = new RegExp(
+	String.raw`(?<=[/.]|^)\((?:${SAFE_CHARS}*)\[\.?\.?\.?([\w-]+)\]\)(\.lazy)?\.svelte$`,
+); // ([any]).svelte, ([...any]).lazy.svelte, (prefix[any]).svelte
 const HOOKS_FILENAME_REGEX = /(?<=[/.]|^)(hooks)(\.svelte)?\.(js|ts)$/; // hooks.js, hooks.svelte.js, hooks.ts, hooks.svelte.ts
 const META_FILENAME_REGEX = /(?<=[/.]|^)(meta)(\.svelte)?\.(js|ts)$/; // meta.js, meta.svelte.js, meta.ts, meta.svelte.ts
 
@@ -122,7 +127,10 @@ export function createRouteMap(fileTree, prefix = '') {
 				const childMap = createRouteMap(entry.tree, prefix + entryName + '/');
 				mergeRouteGroup(result, childMap);
 			} else {
-				const paramFolder = entryName.replace(/^([^/[\]]*)\[(.*)\]$/, '$1:$2');
+				const paramFolder = entryName.replace(
+					new RegExp(String.raw`^(${SAFE_CHARS}*)\[(.*)\]$`),
+					'$1:$2',
+				);
 				result['/' + paramFolder] = createRouteMap(entry.tree, prefix + entryName + '/');
 			}
 		}

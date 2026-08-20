@@ -24,6 +24,7 @@ type TestRoutes = {
 		layout: RouteComponent;
 	};
 	'/@:username': RouteComponent;
+	'/(@:handle)': RouteComponent;
 	'*rest': RouteComponent;
 };
 
@@ -40,7 +41,8 @@ type test_path_expected_0 =
 	| '/posts/nolayout'
 	| `/posts/:id`
 	| `/posts/:id/:commentId`
-	| '/@:username';
+	| '/@:username'
+	| '/@:handle';
 
 type test_path_1 = Expect<Equal<test_path_result_1, test_path_expected_1>>;
 type test_path_result_1 = Path<TestRoutes, true>;
@@ -111,7 +113,9 @@ type test_construct_path_expected_2 =
 
 type test_all_params = Expect<Equal<test_all_params_result, test_all_params_expected>>;
 type test_all_params_result = AllParams<TestRoutes>;
-type test_all_params_expected = Partial<Record<'id' | 'commentId' | 'username' | 'rest', string>>;
+type test_all_params_expected = Partial<
+	Record<'id' | 'commentId' | 'username' | 'handle' | 'rest', string>
+>;
 
 // IsActiveArgs
 

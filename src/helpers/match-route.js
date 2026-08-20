@@ -269,12 +269,12 @@ export function sortRoutes(routes) {
  */
 function getRoutePriority(route) {
 	if (route === '' || route === '/') return '0';
+	if (route.includes('*')) return '9';
 	return route
 		.split('/')
 		.filter(Boolean)
 		.map((segment) => {
 			segment = segment.replace(/^\((.*)\)$/, '$1');
-			if (segment.startsWith('*')) return '4';
 			if (isDynamicSegment(segment)) return '3';
 			if (segment.includes(':')) return '2';
 			return '1';

@@ -251,6 +251,14 @@ describe('createRouteMap', () => {
 		});
 	});
 
+	it('should not treat a prefix with non-URL-safe characters as a param prefix', () => {
+		const result = createRouteMap(['my file[id].svelte', '100%[id].svelte']);
+		expect(result).toEqual({
+			'/my file[id]': 'my file[id].svelte',
+			'/100%[id]': '100%[id].svelte',
+		});
+	});
+
 	it('should generate routes with a static prefix before the param (tree)', () => {
 		const result = createRouteMap([
 			'index.svelte',
@@ -705,6 +713,11 @@ describe('pathToCorrectCasing', () => {
 
 		const result6 = pathToCorrectCasing('users/@me.svelte');
 		expect(result6).toBe('UsersMe');
+	});
+
+	it('should reject filenames containing characters that are not URL-safe', () => {
+		expect(() => pathToCorrectCasing('my file.svelte')).toThrow('Invalid filename');
+		expect(() => pathToCorrectCasing('100%.svelte')).toThrow('Invalid filename');
 	});
 
 	it('should handle flat paths', () => {

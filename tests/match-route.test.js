@@ -572,8 +572,8 @@ describe('sortRoutes', () => {
 		expect(result).toEqual(['/foo/bar', '/foo/:b', '/@:a/:b', '/:a/:b']);
 	});
 
-	it('should sort a nested catch-all after the static segments that precede it', () => {
-		const result = sortRoutes(['/:id', '/posts/*rest', '*rest']);
-		expect(result).toEqual(['/posts/*rest', '/:id', '*rest']);
+	it('should sort catch-all routes last, whatever the segments that precede them', () => {
+		const result = sortRoutes(['/posts/*rest', '/:id', '*rest', '/foo']);
+		expect(result).toEqual(['/foo', '/:id', '/posts/*rest', '*rest']);
 	});
 });
