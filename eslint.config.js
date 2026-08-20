@@ -51,6 +51,7 @@ export default [
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/prefer-iterator-to-array': 'off',
 			'unicorn/prefer-ternary': 'off',
+			'unicorn/single-line-block-comment-style': 'off',
 		},
 	},
 	{
