@@ -250,7 +250,13 @@ export async function onNavigate(path, options = {}) {
 
 	const navContext = path ? options : { ...options, ...updatedLocation() };
 	const search = parseSearch(navContext.search);
-	const hooksContext = { ...navContext, pathname: matchPath, meta: newMeta, search };
+	const hooksContext = {
+		...navContext,
+		pathname: matchPath,
+		meta: newMeta,
+		params: newParams,
+		search,
+	};
 
 	let errorHooks = [];
 	for (const hook of hooks) {

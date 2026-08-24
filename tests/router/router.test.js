@@ -12,6 +12,7 @@ import App, {
 	navigate,
 	onErrorMock,
 	onPreloadMock,
+	paramsBeforeLoadMock,
 	resolveMeta,
 	route,
 } from './App.test.svelte';
@@ -365,6 +366,21 @@ describe('router', () => {
 				hash: '#section',
 				state: { user: 'data' },
 			}),
+		);
+	});
+
+	it('should pass the incoming route params to beforeLoad', async () => {
+		paramsBeforeLoadMock.mockClear();
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/hooked/:id', { params: { id: '42' } });
+		await waitFor(() => {
+			expect(screen.getByText('Hooked Page')).toBeInTheDocument();
+		});
+		expect(paramsBeforeLoadMock).toHaveBeenCalledWith(
+			expect.objectContaining({ pathname: '/hooked/42', params: { id: '42' } }),
 		);
 	});
 

@@ -32,7 +32,9 @@ describe('preload', () => {
 	it('should call onPreload hook when preloading a route', async () => {
 		await renderApp();
 		await preload('/lazy');
-		expect(onPreloadMock).toHaveBeenCalled();
+		expect(onPreloadMock).toHaveBeenCalledWith(
+			expect.objectContaining({ pathname: '/lazy', params: {} }),
+		);
 	});
 
 	it('should preload without errors for routes without hooks', async () => {

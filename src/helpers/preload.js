@@ -12,11 +12,12 @@ const PREDICT_TIMEOUT = 50;
  * @param {import('../index.d.ts').NavigateOptions} [options]
  */
 export async function preload(routes, path, options) {
-	const { match, layouts, hooks, meta } = matchRoute(path, routes);
+	const { match, layouts, hooks, meta, params } = matchRoute(path, routes);
 	for (const { onPreload } of hooks) {
 		void onPreload?.({
 			pathname: path,
 			meta,
+			params,
 			...options,
 			search: parseSearch(options?.search),
 		});
