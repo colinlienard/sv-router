@@ -314,6 +314,7 @@ export type Search = string | Record<string, string | number | boolean>;
 export type HooksContext = {
 	hash?: string;
 	meta: RouteMeta;
+	params: Record<string, string>;
 	pathname: string;
 	replace?: boolean;
 	search: Record<string, string | number | boolean>;

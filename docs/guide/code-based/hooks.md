@@ -61,7 +61,7 @@ All hooks receive a context object with information about the current navigation
 
 ```ts
 hooks: {
-	beforeLoad({ pathname, search, hash, state, replace, meta }) {
+	beforeLoad({ pathname, params, search, hash, state, replace, meta }) {
    if (!admin && pathname !== "/") {
          throw navigate("/");
        }
