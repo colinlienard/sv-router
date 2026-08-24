@@ -1,5 +1,12 @@
 # sv-router
 
+## 0.19.0
+
+### Minor Changes
+
+- f235c6d: Expose incoming route params in hooks context
+- d03946d: Cancel a navigation in beforeLoad
+
 ## 0.18.1
 
 ### Patch Changes
