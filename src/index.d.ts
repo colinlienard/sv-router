@@ -394,10 +394,10 @@ type RecursiveKeys<
 		: never;
 }[keyof T];
 
-type ReplaceParamWithString<T extends string> = T extends `/:${string}`
-	? `/${string}`
-	: T extends `/(:${string})`
-		? `/${string}`
+type ReplaceParamWithString<T extends string> = T extends `/(${infer Prefix}:${string})`
+	? `/${Prefix}${string}`
+	: T extends `/${infer Prefix}:${string}`
+		? `/${Prefix}${string}`
 		: T;
 
 type RemoveLastSlash<T extends string> = T extends '/' ? T : T extends `${infer R}/` ? R : T;

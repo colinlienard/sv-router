@@ -1,4 +1,5 @@
 import { base, location } from '../create-router.svelte.js';
+import { matchDynamicSegment } from './match-route.js';
 import { constructPath, stripBase } from './utils.js';
 
 /**
@@ -44,10 +45,13 @@ function compare(compareFn, pathname, params) {
 		return false;
 	}
 	for (const [index, pathPart] of pathParts.entries()) {
-		if (pathPart.startsWith(':')) {
+		const routePart = routeParts[index];
+		if (pathPart.includes(':')) {
+			if (!matchDynamicSegment(pathPart, routePart, false)) {
+				return false;
+			}
 			continue;
 		}
-		const routePart = routeParts[index];
 		if (pathPart !== routePart) {
 			return false;
 		}

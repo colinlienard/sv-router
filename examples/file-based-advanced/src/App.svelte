@@ -8,6 +8,7 @@
 <a href={p('/contact')} {@attach isActiveLink()}>Contact</a>
 <a href={p('/posts')} {@attach isActiveLink({ startsWith: true })} data-preload>Posts</a>
 <a href={p('/a/more/nested/route')} {@attach isActiveLink()}>A more nested route</a>
+<a href={p('/@:username', { params: { username: 'jane' } })} {@attach isActiveLink()}>@jane</a>
 <a href={p('/unauthorized')}>Unauthorized</a>
 <button
 	onclick={() =>

@@ -11,6 +11,7 @@
 	<a href={p('/about')} {@attach isActiveLink()}>About</a>
 	<a href={p('/metadata')}>Metadata</a>
 	<a href={p('/user/:id', { params: { id: '456' } })}>User 456</a>
+	<a href={p('/@:username', { params: { username: 'jane' } })}>Profile jane</a>
 	<a href={p('/protected')}>Protected</a>
 	<a href={p('/slow-protected')}>Slow Protected</a>
 	<a href={p('/lazy')} data-preload>Lazy</a>

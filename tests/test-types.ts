@@ -2,6 +2,7 @@ import type { Equal, Expect } from 'type-testing';
 import type {
 	AllParams,
 	ConstructPathArgs,
+	ConstructUrlOptions,
 	IsActiveArgs,
 	Path,
 	PathParams,
@@ -22,6 +23,8 @@ type TestRoutes = {
 		};
 		layout: RouteComponent;
 	};
+	'/@:username': RouteComponent;
+	'/(@:handle)': RouteComponent;
 	'*rest': RouteComponent;
 };
 
@@ -37,7 +40,9 @@ type test_path_expected_0 =
 	| '/posts/static'
 	| '/posts/nolayout'
 	| `/posts/:id`
-	| `/posts/:id/:commentId`;
+	| `/posts/:id/:commentId`
+	| '/@:username'
+	| '/@:handle';
 
 type test_path_1 = Expect<Equal<test_path_result_1, test_path_expected_1>>;
 type test_path_result_1 = Path<TestRoutes, true>;
@@ -49,7 +54,8 @@ type test_path_expected_1 =
 	| '/posts/static'
 	| '/posts/nolayout'
 	| `/posts/${string}`
-	| `/posts/${string}/${string}`;
+	| `/posts/${string}/${string}`
+	| `/@${string}`;
 
 // PathParams
 
@@ -73,27 +79,43 @@ type test_path_params_4 = Expect<Equal<test_path_params_result_4, test_path_para
 type test_path_params_result_4 = PathParams<'(*rest)'>;
 type test_path_params_expected_4 = Record<'rest', string>;
 
+type test_path_params_5 = Expect<Equal<test_path_params_result_5, test_path_params_expected_5>>;
+type test_path_params_result_5 = PathParams<'/@:username'>;
+type test_path_params_expected_5 = Record<'username', string>;
+
 // ConstructPathArgs
 
 type test_construct_path_0 = Expect<
 	Equal<test_construct_path_result_0, test_construct_path_expected_0>
 >;
 type test_construct_path_result_0 = ConstructPathArgs<'/posts/:id/:commentId'>;
-type test_construct_path_expected_0 = ['/posts/:id/:commentId', Record<'id' | 'commentId', string>];
+type test_construct_path_expected_0 = [
+	'/posts/:id/:commentId',
+	ConstructUrlOptions & { params: Record<'id' | 'commentId', string> },
+];
 
 type test_construct_path_1 = Expect<
 	Equal<test_construct_path_result_1, test_construct_path_expected_1>
 >;
 type test_construct_path_result_1 = ConstructPathArgs<'/posts'>;
-type test_construct_path_expected_1 = ['/posts'];
+type test_construct_path_expected_1 = ['/posts'] | ['/posts', ConstructUrlOptions];
+
+type test_construct_path_2 = Expect<
+	Equal<test_construct_path_result_2, test_construct_path_expected_2>
+>;
 type test_construct_path_result_2 = ConstructPathArgs<'/posts' | '/about/:id'>;
-type test_construct_path_expected_2 = ['/posts'] | ['/about/:id', Record<'id', string>];
+type test_construct_path_expected_2 =
+	| ['/posts']
+	| ['/posts', ConstructUrlOptions]
+	| ['/about/:id', ConstructUrlOptions & { params: Record<'id', string> }];
 
 // AllParams
 
 type test_all_params = Expect<Equal<test_all_params_result, test_all_params_expected>>;
 type test_all_params_result = AllParams<TestRoutes>;
-type test_all_params_expected = Partial<Record<'id' | 'commentId' | 'rest', string>>;
+type test_all_params_expected = Partial<
+	Record<'id' | 'commentId' | 'username' | 'handle' | 'rest', string>
+>;
 
 // IsActiveArgs
 
