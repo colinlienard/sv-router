@@ -1,4 +1,5 @@
 import { base, location } from './create-router.svelte.js';
+import { comparePathParts, toPathParts } from './helpers/utils.js';
 
 /** @type {import('./index.d.ts').IsActiveLink} */
 export function isActiveLink({ className = 'is-active', startsWith = false } = {}) {
@@ -15,7 +16,13 @@ export function isActiveLink({ className = 'is-active', startsWith = false } = {
 				pathname = new URL(node.href).pathname;
 			}
 			const tokens = className.split(' ').filter(Boolean) ?? [];
-			if (startsWith ? location.pathname.startsWith(pathname) : location.pathname === pathname) {
+			// Both sides already include the base, so there is no need to strip it.
+			const isActive = comparePathParts(
+				toPathParts(pathname),
+				toPathParts(location.pathname),
+				startsWith,
+			);
+			if (isActive) {
 				node.classList.add(...tokens);
 			} else {
 				node.classList.remove(...tokens);
