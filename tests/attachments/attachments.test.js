@@ -77,6 +77,24 @@ describe('isActiveLink', () => {
 		expect(screen.getByText('About').classList.contains('is-active')).toBe(true);
 	});
 
+	it('should match a route with a different casing', () => {
+		location.pathname = '/About';
+		render(Attachments, { children: 'About', href: '/about' });
+		expect(screen.getByText('About').classList.contains('is-active')).toBe(true);
+	});
+
+	it('should match the start of a path with a different casing', () => {
+		location.pathname = '/About/Team';
+		render(Attachments, { children: 'About', href: '/about', startsWith: true });
+		expect(screen.getByText('About').classList.contains('is-active')).toBe(true);
+	});
+
+	it('should not match a partial segment', () => {
+		location.pathname = '/aboutus';
+		render(Attachments, { children: 'About', href: '/about', startsWith: true });
+		expect(screen.getByText('About').classList.contains('is-active')).toBe(false);
+	});
+
 	it('should throw when used on a non-anchor element', () => {
 		const attachment = isActiveLink();
 		const div = document.createElement('div');

@@ -1,5 +1,5 @@
-import { base, location } from '../create-router.svelte.js';
-import { constructPath, stripBase } from './utils.js';
+import { location } from '../create-router.svelte.js';
+import { comparePathParts, stripBase, toPathParts } from './utils.js';
 
 /**
  * @param {string} pathname
@@ -7,7 +7,7 @@ import { constructPath, stripBase } from './utils.js';
  * @returns {boolean}
  */
 export function isActive(pathname, params) {
-	return compare((a, b) => a === b, pathname, params);
+	return compare(pathname, false, params);
 }
 
 /**
@@ -16,41 +16,20 @@ export function isActive(pathname, params) {
  * @returns {boolean}
  */
 isActive.startsWith = (pathname, params) => {
-	return compare((a, b) => a.startsWith(b), pathname, params);
+	return compare(pathname, true, params);
 };
 
 /**
- * @param {function(string, string): boolean} compareFn
  * @param {string} pathname
+ * @param {boolean} startsWith
  * @param {Record<string, string>} [params]
  * @returns {boolean}
  */
-function compare(compareFn, pathname, params) {
-	if (!pathname.includes(':')) {
-		const target = base.name && base.name !== '#' ? constructPath(pathname) : pathname;
-		return compareFn(location.pathname, target);
-	}
-
-	if (params) {
-		if (base.name === '#') {
-			return compareFn(location.pathname, constructPath(pathname, params).replace('/#', ''));
-		}
-		return compareFn(location.pathname, constructPath(pathname, params));
-	}
-
-	const pathParts = pathname.split('/').slice(1);
-	let routeParts = stripBase(location.pathname).split('/').slice(1);
-	if (pathParts.length > routeParts.length) {
-		return false;
-	}
-	for (const [index, pathPart] of pathParts.entries()) {
-		if (pathPart.startsWith(':')) {
-			continue;
-		}
-		const routePart = routeParts[index];
-		if (pathPart !== routePart) {
-			return false;
-		}
-	}
-	return true;
+function compare(pathname, startsWith, params) {
+	return comparePathParts(
+		toPathParts(pathname),
+		toPathParts(stripBase(location.pathname)),
+		startsWith,
+		params,
+	);
 }
