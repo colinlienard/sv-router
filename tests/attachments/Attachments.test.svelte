@@ -5,13 +5,14 @@
 
 	type Props = {
 		children: Snippet | string;
-		href: string;
+		href?: string;
+		rawHref?: string;
 		className?: string;
 		startsWith?: boolean;
 	};
 
-	let { children, href, ...options }: Props = $props();
+	let { children, href = '/', rawHref, ...options }: Props = $props();
 </script>
 
 <!-- Like `p(href)` -->
-<a href={constructPath(href)} {@attach isActiveLink(options)}>{children}</a>
+<a href={rawHref ?? constructPath(href)} {@attach isActiveLink(options)}>{children}</a>

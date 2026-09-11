@@ -48,6 +48,36 @@ describe.each([
 		location.pathname = '/post';
 		expect(isActive('/post/:id', { id: '123' })).toBe(false);
 	});
+
+	it('should match a route with a different casing', () => {
+		location.pathname = '/About';
+		expect(isActive('/about')).toBe(true);
+	});
+
+	it('should match a nested route with a different casing', () => {
+		location.pathname = '/Post/Comments';
+		expect(isActive('/post/comments')).toBe(true);
+	});
+
+	it('should match a route with a different casing and a param', () => {
+		location.pathname = '/Post/aBc';
+		expect(isActive('/post/:id', { id: 'aBc' })).toBe(true);
+	});
+
+	it('should not match a param with a different casing', () => {
+		location.pathname = '/post/abc';
+		expect(isActive('/post/:id', { id: 'ABC' })).toBe(false);
+	});
+
+	it('should not match a longer route', () => {
+		location.pathname = '/post/123/comments';
+		expect(isActive('/post/:id')).toBe(false);
+	});
+
+	it('should treat a missing param as any value', () => {
+		location.pathname = '/post/123';
+		expect(isActive('/post/:id', {})).toBe(true);
+	});
 });
 
 describe('isActive (pathname-only)', () => {
@@ -128,6 +158,26 @@ describe.each([
 	it('should not match a route with params', () => {
 		location.pathname = '/foo/bar';
 		expect(isActive.startsWith('/hello/:id', { id: 'world' })).toBe(false);
+	});
+
+	it('should match a route with a different casing', () => {
+		location.pathname = '/About/Me';
+		expect(isActive.startsWith('/about')).toBe(true);
+	});
+
+	it('should match a route with a different casing and a param', () => {
+		location.pathname = '/Post/aBc/foo';
+		expect(isActive.startsWith('/post/:id', { id: 'aBc' })).toBe(true);
+	});
+
+	it('should not match a param with a different casing', () => {
+		location.pathname = '/post/abc/foo';
+		expect(isActive.startsWith('/post/:id', { id: 'ABC' })).toBe(false);
+	});
+
+	it('should not match a partial segment', () => {
+		location.pathname = '/aboutus';
+		expect(isActive.startsWith('/about')).toBe(false);
 	});
 });
 

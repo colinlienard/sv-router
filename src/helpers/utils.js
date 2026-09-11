@@ -94,6 +94,42 @@ export function join(...parts) {
 
 /**
  * @param {string} pathname
+ * @returns {string[]}
+ */
+export function toPathParts(pathname) {
+	return pathname.replace(/\/+$/, '').split('/').slice(1);
+}
+
+/**
+ * @param {string[]} templateParts
+ * @param {string[]} pathParts
+ * @param {boolean} [startsWith]
+ * @param {Record<string, string>} [params]
+ * @returns {boolean}
+ */
+export function comparePathParts(templateParts, pathParts, startsWith, params) {
+	if (
+		startsWith ? pathParts.length < templateParts.length : pathParts.length !== templateParts.length
+	) {
+		return false;
+	}
+
+	for (const [index, templatePart] of templateParts.entries()) {
+		const pathPart = pathParts[index];
+		if (templatePart.startsWith(':')) {
+			const param = params?.[templatePart.slice(1)];
+			if (param !== undefined && encodeURIComponent(param) !== pathPart) {
+				return false;
+			}
+		} else if (templatePart.toLowerCase() !== pathPart.toLowerCase()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * @param {string} pathname
  * @returns {string}
  */
 export function stripBase(pathname) {

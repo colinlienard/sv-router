@@ -406,6 +406,19 @@ describe('router', () => {
 		expect(() => route.getParams('/about')).toThrow('does not match the current route');
 	});
 
+	it('should return params when calling getParams with a parent path', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		await navigate('/post/:id/comments', { params: { id: '123' } });
+		await waitFor(() => {
+			expect(screen.getByText('Post Comments')).toBeInTheDocument();
+		});
+		expect(route.getParams('/post/:id')).toEqual({ id: '123' });
+		expect(route.getParams('/post/:id/comments')).toEqual({ id: '123' });
+	});
+
 	it('should call afterLoad hook after navigation', async () => {
 		afterLoadMock.mockClear();
 		render(App);
