@@ -1,5 +1,16 @@
 # sv-router
 
+## 0.19.0
+
+### Minor Changes
+
+- f235c6d: Expose incoming route params in hooks context
+- d03946d: Cancel a navigation in beforeLoad
+
+### Patch Changes
+
+- 8cd63b8: Make `isActive` and `isActiveLink` case-insensitive on static segments, consistent with route matching
+
 ## 0.18.1
 
 ### Patch Changes
