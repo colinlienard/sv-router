@@ -361,17 +361,19 @@ type NavigateArgs<T extends string> =
 	| [number];
 
 type StripNonRoutes<T extends Routes> = {
-	[K in keyof T as K extends `*${string}`
-		? never
-		: K extends `(*${string})`
+	[
+		K in keyof T as K extends `*${string}`
 			? never
-			: K extends 'layout'
+			: K extends `(*${string})`
 				? never
-				: K extends 'hooks'
+				: K extends 'layout'
 					? never
-					: K extends 'meta'
+					: K extends 'hooks'
 						? never
-						: K]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
+						: K extends 'meta'
+							? never
+							: K
+	]: T[K] extends Routes ? StripNonRoutes<T[K]> : T[K];
 };
 
 type NormalizeSlashes<T extends string> = T extends `${infer A}//${infer B}`
