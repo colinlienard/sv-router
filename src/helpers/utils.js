@@ -93,8 +93,6 @@ export function join(...parts) {
 }
 
 /**
- * Split a pathname into its segments, ignoring leading and trailing slashes.
- *
  * @param {string} pathname
  * @returns {string[]}
  */
@@ -103,15 +101,10 @@ export function toPathParts(pathname) {
 }
 
 /**
- * Compare a route template against the current path, segment by segment.
- *
- * Static segments are compared case-insensitively, to stay consistent with `matchRoute`. Param
- * values remain case-sensitive, as they do when matching a route.
- *
- * @param {string[]} templateParts The segments of the route to check, params included as `:name`.
- * @param {string[]} pathParts The segments of the path to compare against.
- * @param {boolean} [startsWith] Whether the path only needs to start with the route.
- * @param {Record<string, string>} [params] The expected values of the params, if any.
+ * @param {string[]} templateParts
+ * @param {string[]} pathParts
+ * @param {boolean} [startsWith]
+ * @param {Record<string, string>} [params]
  * @returns {boolean}
  */
 export function comparePathParts(templateParts, pathParts, startsWith, params) {
@@ -124,7 +117,8 @@ export function comparePathParts(templateParts, pathParts, startsWith, params) {
 	for (const [index, templatePart] of templateParts.entries()) {
 		const pathPart = pathParts[index];
 		if (templatePart.startsWith(':')) {
-			if (params && encodeURIComponent(params[templatePart.slice(1)]) !== pathPart) {
+			const param = params?.[templatePart.slice(1)];
+			if (param !== undefined && encodeURIComponent(param) !== pathPart) {
 				return false;
 			}
 		} else if (templatePart.toLowerCase() !== pathPart.toLowerCase()) {

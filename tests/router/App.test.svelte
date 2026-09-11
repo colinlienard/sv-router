@@ -18,6 +18,10 @@
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
 		'/about': createRawSnippet(() => ({ render: () => '<h1>About Us</h1>' })),
 		'/user/:id': UserPage,
+		'/post/:id': {
+			'/': createRawSnippet(() => ({ render: () => '<h1>Post Page</h1>' })),
+			'/comments': createRawSnippet(() => ({ render: () => '<h1>Post Comments</h1>' })),
+		},
 		'/metadata': {
 			'/': createRawSnippet(() => ({ render: () => '<h1>Metadata Page</h1>' })),
 			meta: { title: 'Metadata Page' },

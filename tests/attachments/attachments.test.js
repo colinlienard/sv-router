@@ -95,6 +95,14 @@ describe('isActiveLink', () => {
 		expect(screen.getByText('About').classList.contains('is-active')).toBe(false);
 	});
 
+	it('should not match an anchor without a hash in hash-based mode', () => {
+		location.pathname = '/';
+		base.name = '#';
+		render(Attachments, { children: 'About', rawHref: '/about' });
+		expect(screen.getByText('About').classList.contains('is-active')).toBe(false);
+		base.name = undefined;
+	});
+
 	it('should throw when used on a non-anchor element', () => {
 		const attachment = isActiveLink();
 		const div = document.createElement('div');

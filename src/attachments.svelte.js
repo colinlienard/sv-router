@@ -9,19 +9,12 @@ export function isActiveLink({ className = 'is-active', startsWith = false } = {
 		}
 
 		$effect(() => {
-			let pathname;
-			if (base.name === '#') {
-				pathname = new URL(node.href).hash.slice(1);
-			} else {
-				pathname = new URL(node.href).pathname;
-			}
-			const tokens = className.split(' ').filter(Boolean) ?? [];
-			// Both sides already include the base, so there is no need to strip it.
-			const isActive = comparePathParts(
-				toPathParts(pathname),
-				toPathParts(location.pathname),
-				startsWith,
-			);
+			const url = new URL(node.href);
+			const pathname = base.name === '#' ? url.hash.slice(1) : url.pathname;
+			const tokens = className.split(' ').filter(Boolean);
+			const isActive =
+				pathname !== '' &&
+				comparePathParts(toPathParts(pathname), toPathParts(location.pathname), startsWith);
 			if (isActive) {
 				node.classList.add(...tokens);
 			} else {

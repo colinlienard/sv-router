@@ -147,7 +147,7 @@ export function createRouter(r, options = {}) {
 				return params.value;
 			},
 			getParams(pathname) {
-				if (!isActive(pathname)) {
+				if (!isActive.startsWith(pathname)) {
 					throw new Error(`\`${pathname}\` does not match the current route`);
 				}
 				return params.value;

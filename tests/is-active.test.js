@@ -73,6 +73,11 @@ describe.each([
 		location.pathname = '/post/123/comments';
 		expect(isActive('/post/:id')).toBe(false);
 	});
+
+	it('should treat a missing param as any value', () => {
+		location.pathname = '/post/123';
+		expect(isActive('/post/:id', {})).toBe(true);
+	});
 });
 
 describe('isActive (pathname-only)', () => {
