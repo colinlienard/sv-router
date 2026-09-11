@@ -184,7 +184,7 @@ describe('router', () => {
 
 	it('should scroll to top after navigation', async () => {
 		render(App);
-		window.scrollY = 100;
+		/** @type {ReturnType<typeof vi.fn>} */ (window.scrollTo).mockClear();
 		await userEvent.click(screen.getByText('About'));
 		expect(window.scrollTo).toHaveBeenCalledWith({
 			top: 0,
