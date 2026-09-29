@@ -1,4 +1,5 @@
 import { BROWSER, DEV } from 'esm-env';
+import { tick } from 'svelte';
 import { isActive } from './helpers/is-active.js';
 import { matchRoute } from './helpers/match-route.js';
 import { preload, preloadOnHover } from './helpers/preload.js';
@@ -296,6 +297,15 @@ export async function onNavigate(path, options = {}) {
 	}
 	if (signal.aborted) return currentNavigationPromise;
 
+	// Unmount the components the next route does not share before its params land, otherwise they
+	// stay mounted while the next route suspends on async rendering and re-run against its params.
+	const sharedLength = getSharedLength(componentTree.value, routeComponents);
+	if (sharedLength < componentTree.value.length) {
+		componentTree.value = componentTree.value.slice(0, sharedLength);
+		await tick();
+		if (signal.aborted) return currentNavigationPromise;
+	}
+
 	if (path) {
 		const search = serializeSearch(options.search);
 		const url = new URL(globalThis.location.toString());
@@ -338,6 +348,18 @@ export async function onNavigate(path, options = {}) {
 	for (const { afterLoad } of hooks) {
 		void afterLoad?.(hooksContext);
 	}
+}
+
+/**
+ * @param {import('svelte').Component[]} current
+ * @param {import('svelte').Component[]} next
+ */
+function getSharedLength(current, next) {
+	let length = 0;
+	while (length < current.length && current[length] === next[length]) {
+		length++;
+	}
+	return length;
 }
 
 /** @param {string} [path] */

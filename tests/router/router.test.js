@@ -12,9 +12,11 @@ import App, {
 	navigate,
 	onErrorMock,
 	onPreloadMock,
+	outsideState,
 	paramsBeforeLoadMock,
 	resolveMeta,
 	route,
+	userPageParamsMock,
 } from './App.test.svelte';
 
 window.scrollTo = vi.fn();
@@ -139,6 +141,24 @@ describe('router', () => {
 			expect(screen.getByText('User page 456')).toBeInTheDocument();
 		});
 		expect(route.params).toEqual({ id: '456' });
+	});
+
+	it('should not rerun the previous route with the params of a suspending route', async () => {
+		location.pathname = '/user/123';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('User page 123')).toBeInTheDocument();
+		});
+		userPageParamsMock.mockClear();
+
+		const navigation = navigate('/suspending');
+		await new Promise((resolve) => setTimeout(resolve, 10));
+		outsideState.count++;
+		await navigation;
+		await waitFor(() => {
+			expect(screen.getByText('Suspending Page')).toBeInTheDocument();
+		});
+		expect(userPageParamsMock).not.toHaveBeenCalled();
 	});
 
 	it('should show active page', async () => {
