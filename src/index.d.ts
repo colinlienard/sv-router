@@ -384,17 +384,28 @@ type RecursiveKeys<
 	T extends Routes,
 	Prefix extends string = '',
 	AnyParam extends boolean = false,
+	Parents extends string = '',
 > = {
 	[K in keyof T]: K extends string
-		? T[K] extends Routes
-			? RecursiveKeys<
-					T[K],
-					NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`>,
-					AnyParam
-				>
-			: NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<K> : K}`>
+		? RemoveLayoutTarget<K, Parents> extends infer Key extends string
+			? T[K] extends Routes
+				? RecursiveKeys<
+						T[K],
+						NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>,
+						AnyParam,
+						Parents | PathSegments<Key>
+					>
+				: NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>
+			: never
 		: never;
 }[keyof T];
+
+type RemoveLayoutTarget<
+	K extends string,
+	Parents extends string,
+> = K extends `${infer Route}@${infer Target}` ? (Target extends Parents ? Route : K) : K;
+
+type PathSegments<T extends string> = T extends `${infer A}/${infer B}` ? A | PathSegments<B> : T;
 
 type ReplaceParamWithString<T extends string> = T extends `/:${string}`
 	? `/${string}`
