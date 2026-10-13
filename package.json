@@ -69,7 +69,7 @@
 		"eslint-plugin-svelte": "^3.23.0",
 		"eslint-plugin-unicorn": "^74.0.0",
 		"globals": "^17.12.0",
-		"happy-dom": "^20.14.3",
+		"happy-dom": "^21.0.1",
 		"oxfmt": "^0.67.0",
 		"svelte-check": "^4.7.6",
 		"type-testing": "^0.2.0",
