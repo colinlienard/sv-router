@@ -1,5 +1,11 @@
 # sv-router
 
+## 0.19.1
+
+### Patch Changes
+
+- 96031bb: fix: unmount the previous route before applying the params of the next one
+
 ## 0.19.0
 
 ### Minor Changes
