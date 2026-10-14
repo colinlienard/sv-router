@@ -230,6 +230,28 @@ describe('createRouteMap', () => {
 		});
 	});
 
+	it('should generate routes with a layout target', () => {
+		const result = createRouteMap([
+			'index@.svelte',
+			'about@posts.svelte',
+			'[id]@[slug].lazy.svelte',
+			'[...rest]@posts.svelte',
+			{ name: '_group', tree: ['layout.svelte', 'settings@.svelte', 'other.svelte'] },
+		]);
+		expect(result).toEqual({
+			'/@': 'index@.svelte',
+			'/about@posts': 'about@posts.svelte',
+			'/:id@:slug': '[id]@[slug].lazy.svelte',
+			'*rest@posts': '[...rest]@posts.svelte',
+			'/settings@': { '/': '_group/settings@.svelte', layout: '_group/layout.svelte' },
+			'/other': { '/': '_group/other.svelte', layout: '_group/layout.svelte' },
+		});
+	});
+
+	it('should not allow a layout target on a layout', () => {
+		expect(() => createRouteMap(['layout@.svelte'])).toThrow('Layout target is not supported');
+	});
+
 	it('should generate dynamic folder route (tree)', () => {
 		const result = createRouteMap([
 			'index.svelte',
@@ -531,6 +553,11 @@ describe('pathToCorrectCasing', () => {
 	it('should handle paths with only one segment', () => {
 		const result = pathToCorrectCasing('about.svelte');
 		expect(result).toBe('About');
+	});
+
+	it('should ignore the layout target', () => {
+		expect(pathToCorrectCasing('about/team@.svelte')).toBe('AboutTeam');
+		expect(pathToCorrectCasing('users/[id]@[slug].lazy.svelte')).toBe('UsersId');
 	});
 
 	it('should convert a path with multiple segments to camelCase', () => {

@@ -17,15 +17,17 @@
  * 	params: Record<string, string>;
  * 	breakFromLayouts: boolean;
  * 	isCatchAll: boolean;
+ * 	keptLevels?: number;
  * }} MatchResult
  */
 
 /**
  * @param {string} pathname
  * @param {Routes} routes
+ * @param {string[][]} [ancestors] Route segments of each level above, from the root
  * @returns {MatchResult}
  */
-export function matchRoute(pathname, routes) {
+export function matchRoute(pathname, routes, ancestors = []) {
 	if (pathname.length > 1 && pathname.endsWith('/')) {
 		pathname = pathname.slice(0, -1);
 	}
@@ -44,7 +46,7 @@ export function matchRoute(pathname, routes) {
 	let catchAllFallback;
 
 	for (const route of sortedRoutes) {
-		const attempt = tryMatch(route, pathParts, pathname, routes, baseMeta);
+		const attempt = tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors);
 		if (!attempt) continue;
 
 		if (attempt.fallback) {
@@ -76,23 +78,41 @@ export function matchRoute(pathname, routes) {
  * @param {string} pathname
  * @param {Routes} routes
  * @param {RouteMeta} baseMeta
+ * @param {string[][]} ancestors
  * @returns {{ result: MatchResult; fallback: boolean } | null}
  */
-function tryMatch(route, pathParts, pathname, routes, baseMeta) {
+function tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors) {
 	const routeParts = route.split('/');
 	if (routeParts[0] === '') routeParts.shift();
 
 	/** @type {Record<string, string>} */
 	const params = {};
+	/** @type {string[]} */
+	const segments = [];
+	/** @type {number | undefined} */
+	let keptLevels;
 
 	for (let [index, routePart] of routeParts.entries()) {
+		const targetIndex = routePart.indexOf('@');
+		if (targetIndex !== -1 && index === routeParts.length - 1) {
+			const target = routePart.slice(targetIndex + 1);
+			const levels = [[''], ...ancestors];
+			const level = levels.findLastIndex((names) => names.includes(target));
+			if (level !== -1) {
+				keptLevels = level;
+				routePart = routePart.slice(0, targetIndex);
+			}
+		}
+
 		const breakFromLayouts = routePart.startsWith('(') && routePart.endsWith(')');
 		if (breakFromLayouts) {
 			routePart = routePart.slice(1, -1);
 		}
 
 		const pathPart = pathParts[index];
-		const isLayoutGroup = routePart === '' && typeof routes['/'] !== 'function';
+		const isLayoutGroup =
+			routePart === '' && typeof routes[/** @type {keyof Routes} */ (route)] !== 'function';
+		if (!isLayoutGroup) segments.push(routePart);
 
 		// Dynamic segment
 		if (routePart.startsWith(':')) {
@@ -104,7 +124,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 			if (param) {
 				params[param] = pathParts.slice(index).map(decodeURIComponent).join('/');
 			}
-			const context = collectContext(routes, breakFromLayouts, baseMeta);
+			const context = collectContext(routes, breakFromLayouts, baseMeta, ancestors, keptLevels);
 			const resolvedPath = /** @type {keyof Routes} */ ((index ? '/' : '') + routeParts.join('/'));
 			return {
 				result: {
@@ -113,6 +133,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 					params,
 					breakFromLayouts,
 					isCatchAll: true,
+					keptLevels,
 				},
 				fallback: false,
 			};
@@ -133,21 +154,36 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
 			return null;
 		}
 
-		const context = collectContext(routes, breakFromLayouts, baseMeta);
+		const context = collectContext(routes, breakFromLayouts, baseMeta, ancestors, keptLevels);
 
 		// Leaf route (component function)
 		if (typeof routeMatch === 'function') {
 			if (routeParts.length !== pathParts.length) return null;
 			return {
-				result: { match: routeMatch, ...context, params, breakFromLayouts, isCatchAll: false },
+				result: {
+					match: routeMatch,
+					...context,
+					params,
+					breakFromLayouts,
+					isCatchAll: false,
+					keptLevels,
+				},
 				fallback: false,
 			};
 		}
 
 		// Nested routes — recurse
 		const nestedPathname = isLayoutGroup ? pathname : '/' + pathParts.slice(index + 1).join('/');
-		const nested = matchRoute(nestedPathname, routeMatch);
+		const nested = matchRoute(nestedPathname, routeMatch, [...ancestors, segments]);
 		if (!nested.match) return null;
+
+		if (keptLevels !== undefined && nested.keptLevels === undefined) {
+			nested.layouts = [];
+			nested.keptLevels = keptLevels;
+		}
+		if (nested.keptLevels !== undefined && nested.keptLevels < ancestors.length) {
+			context.layouts = [];
+		}
 
 		return {
 			result: mergeWithNested(context, nested, params, breakFromLayouts),
@@ -164,16 +200,19 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta) {
  * @param {Routes} routes
  * @param {boolean} breakFromLayouts
  * @param {RouteMeta} baseMeta
+ * @param {string[][]} ancestors
+ * @param {number | undefined} keptLevels
  * @returns {{ layouts: LayoutComponent[]; hooks: Hooks[]; meta: RouteMeta }}
  */
-function collectContext(routes, breakFromLayouts, baseMeta) {
+function collectContext(routes, breakFromLayouts, baseMeta, ancestors, keptLevels) {
 	/** @type {LayoutComponent[]} */
 	const layouts = [];
 	/** @type {Hooks[]} */
 	const hooks = [];
 	let meta = { ...baseMeta };
 
-	if (!breakFromLayouts && 'layout' in routes && routes.layout) {
+	const isLevelKept = keptLevels === undefined || keptLevels >= ancestors.length;
+	if (!breakFromLayouts && isLevelKept && 'layout' in routes && routes.layout) {
 		layouts.push(routes.layout);
 	}
 	if ('hooks' in routes && routes.hooks) {
@@ -205,6 +244,7 @@ function mergeWithNested(context, nested, params, breakFromLayouts) {
 		meta: { ...context.meta, ...nested.meta },
 		breakFromLayouts: shouldBreak || breakFromLayouts,
 		isCatchAll: nested.isCatchAll,
+		keptLevels: nested.keptLevels,
 	};
 }
 
@@ -221,6 +261,7 @@ export function sortRoutes(routes) {
  * @returns {number}
  */
 function getRoutePriority(route) {
+	route = route.replace(/@[^/]*$/, '');
 	if (route === '' || route === '/') return 1;
 	if (route.includes('*')) return 4;
 	if (route.includes(':')) return 3;

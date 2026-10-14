@@ -21,6 +21,8 @@ const Layout2 = () => 'Layout2';
 /** @type {import('svelte').Component} */
 const NoLayout = () => 'NoLayout';
 /** @type {import('svelte').Component} */
+const Layout3 = () => 'Layout3';
+/** @type {import('svelte').Component} */
 const Users = () => 'Users';
 const John = () => 'John';
 const Hooks1 = Symbol();
@@ -322,6 +324,129 @@ describe('matchRoute', () => {
 			const { match, layouts } = matchRoute('/a/b/c/leaf', routes);
 			expect(match).toEqual(NoLayout);
 			expect(layouts).toEqual([]);
+		});
+
+		describe('named layout target', () => {
+			const nested = (/** @type {Record<string, unknown>} */ leaves) =>
+				r({
+					'/a': {
+						'/b': {
+							'/c': { ...leaves, layout: Layout3 },
+							layout: Layout2,
+						},
+						layout: Layout1,
+					},
+					layout: Layout1,
+				});
+
+			it.each([
+				{ target: 'c', expected: [Layout1, Layout1, Layout2, Layout3] },
+				{ target: 'b', expected: [Layout1, Layout1, Layout2] },
+				{ target: 'a', expected: [Layout1, Layout1] },
+				{ target: '', expected: [Layout1] },
+			])('should keep layouts up to `@$target`', ({ target, expected }) => {
+				const routes = nested({ [`/leaf@${target}`]: NoLayout });
+				const { match, layouts } = matchRoute('/a/b/c/leaf', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual(expected);
+			});
+
+			it('should not affect sibling routes', () => {
+				const routes = nested({ '/leaf@a': NoLayout, '/other': Home });
+				expect(matchRoute('/a/b/c/other', routes).layouts).toEqual([
+					Layout1,
+					Layout1,
+					Layout2,
+					Layout3,
+				]);
+			});
+
+			it('should work with an index route', () => {
+				const routes = nested({ '/@b': NoLayout });
+				const { match, layouts } = matchRoute('/a/b/c', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([Layout1, Layout1, Layout2]);
+			});
+
+			it('should work with a param route', () => {
+				const routes = nested({ '/:id@a': NoLayout });
+				const { match, layouts, params } = matchRoute('/a/b/c/42', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([Layout1, Layout1]);
+				expect(params).toEqual({ id: '42' });
+			});
+
+			it('should work with a catch-all route', () => {
+				const routes = nested({ '*rest@b': UserNotFound });
+				const { match, layouts, params } = matchRoute('/a/b/c/x/y', routes);
+				expect(match).toEqual(UserNotFound);
+				expect(layouts).toEqual([Layout1, Layout1, Layout2]);
+				expect(params).toEqual({ rest: 'x/y' });
+			});
+
+			it('should target a param segment', () => {
+				const routes = r({
+					'/users': {
+						'/:id': { '/settings@:id': NoLayout, '/': John, layout: Layout2 },
+						'/': Users,
+						layout: Layout1,
+					},
+				});
+				const { match, layouts, params } = matchRoute('/users/7/settings', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([Layout1, Layout2]);
+				expect(params).toEqual({ id: '7' });
+			});
+
+			it('should drop layout group layouts below the target', () => {
+				const routes = r({
+					'/a': {
+						'/': { '/leaf@a': NoLayout, '/other': Home, layout: Layout2 },
+						layout: Layout1,
+					},
+				});
+				expect(matchRoute('/a/leaf', routes).layouts).toEqual([Layout1]);
+				expect(matchRoute('/a/other', routes).layouts).toEqual([Layout1, Layout2]);
+			});
+
+			it('should not be ranked as a dynamic route when targeting a param', () => {
+				const routes = r({ '/:id': { '/:tab': Home, '/edit@:id': NoLayout, layout: Layout1 } });
+				const { match, layouts, params } = matchRoute('/7/edit', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([Layout1]);
+				expect(params).toEqual({ id: '7' });
+			});
+
+			it('should drop nested layouts when targeting from nested routes', () => {
+				const routes = r({
+					'/a': {
+						'/x@a': { '/': NoLayout, layout: Layout3 },
+						'/y': { '/': Home, layout: Layout3 },
+						layout: Layout2,
+					},
+					layout: Layout1,
+				});
+				expect(matchRoute('/a/x', routes)).toMatchObject({ match: NoLayout });
+				expect(matchRoute('/a/x', routes).layouts).toEqual([Layout1, Layout2]);
+				expect(matchRoute('/a/y', routes).layouts).toEqual([Layout1, Layout2, Layout3]);
+			});
+
+			it('should treat `@` literally when it does not name an ancestor', () => {
+				const routes = nested({ '/leaf@nope': NoLayout });
+				const { match, layouts } = matchRoute('/a/b/c/leaf@nope', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([Layout1, Layout1, Layout2, Layout3]);
+				expect(matchRoute('/a/b/c/leaf', routes).match).toBeUndefined();
+			});
+
+			it('should keep literal `@` routes working', () => {
+				const routes = r({ '/@me': Home, '/users': { '/me@home': Users }, layout: Layout1 });
+				expect(matchRoute('/@me', routes)).toMatchObject({ match: Home, layouts: [Layout1] });
+				expect(matchRoute('/users/me@home', routes)).toMatchObject({
+					match: Users,
+					layouts: [Layout1],
+				});
+			});
 		});
 	});
 

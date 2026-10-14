@@ -67,3 +67,25 @@ This pattern works for all route types, including dynamic segments and catch-all
 ```
 
 This technique allows you to selectively bypass layouts while maintaining your overall route hierarchy.
+
+## Break Out to a Named Layout
+
+To keep some layouts but not all of them, append `@` followed by the name of the segment whose layout should be kept. Every layout below that segment is skipped:
+
+```ts{4-5}
+'/about': {
+	'/work': {
+
+		'/': Work, // Uses RootLayout, AboutLayout and WorkLayout
+		'/clients@about': Clients, // Uses RootLayout and AboutLayout
+		'/archive@': Archive, // Uses RootLayout only
+		layout: WorkLayout,
+	},
+	layout: AboutLayout,
+},
+layout: RootLayout,
+```
+
+A lone `@` keeps only the root layout. This also works with index (`'/@about'`), dynamic (`'/:id@about'`) and catch-all (`'*rest@about'`) routes, and a dynamic segment can be targeted by its name (`'/edit@:id'`).
+
+If the name after `@` is not one of the route's parent segments, the `@` is treated as a regular character of the path (like `'/@me'`).

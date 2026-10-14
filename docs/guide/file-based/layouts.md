@@ -72,3 +72,21 @@ routes
 ```
 
 This technique allows you to selectively bypass layouts while maintaining your overall route hierarchy.
+
+## Break Out to a Named Layout
+
+To keep some layouts but not all of them, append `@` followed by the name of the segment whose layout should be kept. Every layout below that segment is skipped:
+
+```sh{8-9}
+routes
+├── layout.svelte
+└── about
+   ├── layout.svelte
+   └── work
+      ├── index.svelte                 ➜ Uses root, about and work layouts
+      ├── layout.svelte
+      ├── clients@about.svelte         ➜ Uses root and about layouts
+      └── archive@.svelte              ➜ Uses root layout only
+```
+
+A lone `@` keeps only the root layout. This also works with index (`index@about.svelte`), dynamic (`[id]@about.svelte`) and catch-all (`[...rest]@about.svelte`) routes, and a dynamic folder can be targeted by its name (`edit@[id].svelte`). Layouts of [route groups](./route-groups) below the target are skipped too.

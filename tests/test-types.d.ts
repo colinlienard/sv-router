@@ -16,10 +16,16 @@ type TestRoutes = {
 		'/': RouteComponent;
 		'/static': RouteComponent;
 		'/(nolayout)': RouteComponent;
+		'/archive@': RouteComponent;
 		'/:id': {
 			'/': RouteComponent;
 			'/:commentId': RouteComponent;
+			'/edit@:id': RouteComponent;
+			'/@me': RouteComponent;
 		};
+		'/settings@posts': { '/': RouteComponent };
+		'/drafts': { '/@posts': RouteComponent };
+		'/@me': RouteComponent;
 		layout: RouteComponent;
 	};
 	'*rest': RouteComponent;
@@ -36,8 +42,14 @@ type test_path_expected_0 =
 	| '/posts'
 	| '/posts/static'
 	| '/posts/nolayout'
+	| '/posts/archive'
+	| '/posts/drafts'
+	| '/posts/@me'
 	| `/posts/:id`
-	| `/posts/:id/:commentId`;
+	| `/posts/:id/:commentId`
+	| `/posts/:id/edit`
+	| `/posts/:id/@me`
+	| '/posts/settings';
 
 type test_path_1 = Expect<Equal<test_path_result_1, test_path_expected_1>>;
 type test_path_result_1 = Path<TestRoutes, true>;
@@ -48,8 +60,14 @@ type test_path_expected_1 =
 	| '/posts'
 	| '/posts/static'
 	| '/posts/nolayout'
+	| '/posts/archive'
+	| '/posts/drafts'
+	| '/posts/@me'
 	| `/posts/${string}`
-	| `/posts/${string}/${string}`;
+	| `/posts/${string}/${string}`
+	| `/posts/${string}/edit`
+	| `/posts/${string}/@me`
+	| '/posts/settings';
 
 // PathParams
 
