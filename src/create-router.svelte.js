@@ -192,9 +192,7 @@ async function navigate(path, options = {}) {
 	} else if (options.hash && !options.hash.startsWith('#')) {
 		options.hash = '#' + options.hash;
 	}
-	const promise = onNavigate(path, options);
-	currentNavigationPromise = promise;
-	await promise;
+	await onNavigate(path, options);
 	return new Navigation(`${path}${serializeSearch(options?.search ?? '')}${options?.hash ?? ''}`);
 }
 
@@ -212,7 +210,17 @@ export function onBeforeUnload(event) {
  * @param {string} [path]
  * @param {import('./index.d.ts').NavigateOptions} options
  */
-export async function onNavigate(path, options = {}) {
+export function onNavigate(path, options = {}) {
+	const promise = runNavigation(path, options);
+	currentNavigationPromise = promise;
+	return promise;
+}
+
+/**
+ * @param {string} [path]
+ * @param {import('./index.d.ts').NavigateOptions} options
+ */
+async function runNavigation(path, options = {}) {
 	if (!routes) {
 		throw new Error('Router not initialized: `createRouter` was not called.');
 	}
