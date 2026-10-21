@@ -1,5 +1,15 @@
 # sv-router
 
+## 0.20.0
+
+### Minor Changes
+
+- 8b7a150: Break out to a named layout with `@`
+
+### Patch Changes
+
+- 96031bb: fix: unmount the previous route before applying the params of the next one
+
 ## 0.19.0
 
 ### Minor Changes
