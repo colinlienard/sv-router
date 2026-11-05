@@ -8,6 +8,7 @@ import App, {
 	beforeLoadMock,
 	cancelledAfterLoadMock,
 	cancelLoadMock,
+	deferredBeforeLoadMock,
 	isActive,
 	navigate,
 	onErrorMock,
@@ -315,6 +316,40 @@ describe('router', () => {
 		await userEvent.click(screen.getByText('About'));
 		await new Promise((resolve) => setTimeout(resolve, 200));
 		expect(location.pathname).toBe('/about');
+	});
+
+	it('should resolve navigate when a link click supersedes it', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const { promise: beforeLoadGate, resolve: resolveBeforeLoad } = Promise.withResolvers();
+		deferredBeforeLoadMock.mockReturnValueOnce(beforeLoadGate);
+		const navigation = navigate('/deferred');
+		await userEvent.click(screen.getByText('About'));
+		resolveBeforeLoad(true);
+		await expect(navigation).resolves.toBeDefined();
+		await waitFor(() => {
+			expect(location.pathname).toBe('/about');
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+	});
+
+	it('should resolve navigate when a popstate navigation supersedes it', async () => {
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Welcome')).toBeInTheDocument();
+		});
+		const { promise: beforeLoadGate, resolve: resolveBeforeLoad } = Promise.withResolvers();
+		deferredBeforeLoadMock.mockReturnValueOnce(beforeLoadGate);
+		const navigation = navigate('/deferred');
+		history.replaceState(history.state, '', '/about');
+		dispatchEvent(new PopStateEvent('popstate'));
+		resolveBeforeLoad(true);
+		await expect(navigation).resolves.toBeDefined();
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
 	});
 
 	it('should handle search params', async () => {

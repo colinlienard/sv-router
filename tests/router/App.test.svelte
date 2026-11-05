@@ -14,6 +14,7 @@
 	export const cancelLoadMock = vi.fn(() => false);
 	export const cancelledAfterLoadMock = vi.fn();
 	export const paramsBeforeLoadMock = vi.fn();
+	export const deferredBeforeLoadMock = vi.fn();
 	export const userPageParamsMock = vi.fn();
 	export const outsideState = $state({ count: 0 });
 
@@ -45,6 +46,10 @@
 					throw navigate('/');
 				},
 			},
+		},
+		'/deferred': {
+			'/': createRawSnippet(() => ({ render: () => '<h1>Deferred Page</h1>' })),
+			hooks: { beforeLoad: deferredBeforeLoadMock },
 		},
 		'/suspending': Suspending,
 		'/lazy': {
