@@ -409,6 +409,32 @@ describe('matchRoute', () => {
 				expect(matchRoute('/a/other', routes).layouts).toEqual([Layout1, Layout2]);
 			});
 
+			it('should target a named level', () => {
+				const routes = r({
+					'/a': {
+						'/': {
+							'/b': { '/leaf@group': NoLayout, layout: Layout3 },
+							layout: Layout2,
+							name: 'group',
+						},
+						layout: Layout1,
+					},
+				});
+				const { match, layouts } = matchRoute('/a/b/leaf', routes);
+				expect(match).toEqual(NoLayout);
+				expect(layouts).toEqual([Layout1, Layout2]);
+			});
+
+			it('should prefer the deepest level with the target name', () => {
+				const routes = r({
+					'/a': {
+						'/': { '/b': { '/leaf@a': NoLayout, layout: Layout3 }, layout: Layout2, name: 'a' },
+						layout: Layout1,
+					},
+				});
+				expect(matchRoute('/a/b/leaf', routes).layouts).toEqual([Layout1, Layout2]);
+			});
+
 			it('should not be ranked as a dynamic route when targeting a param', () => {
 				const routes = r({ '/:id': { '/:tab': Home, '/edit@:id': NoLayout, layout: Layout1 } });
 				const { match, layouts, params } = matchRoute('/7/edit', routes);

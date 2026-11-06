@@ -33,7 +33,9 @@ export function matchRoute(pathname, routes, ancestors = []) {
 	}
 
 	const pathParts = pathname.split('/').slice(1);
-	const sortedRoutes = sortRoutes(Object.keys(routes));
+	const sortedRoutes = sortRoutes(
+		Object.keys(routes).filter((key) => !['layout', 'hooks', 'meta', 'name'].includes(key)),
+	);
 
 	/** @type {RouteMeta} */
 	let baseMeta = {};
@@ -174,7 +176,9 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors) {
 
 		// Nested routes — recurse
 		const nestedPathname = isLayoutGroup ? pathname : '/' + pathParts.slice(index + 1).join('/');
-		const nested = matchRoute(nestedPathname, routeMatch, [...ancestors, segments]);
+		const { name } = /** @type {Routes} */ (routeMatch);
+		const names = name ? [...segments, name] : segments;
+		const nested = matchRoute(nestedPathname, routeMatch, [...ancestors, names]);
 		if (!nested.match) return null;
 
 		if (keptLevels !== undefined && nested.keptLevels === undefined) {

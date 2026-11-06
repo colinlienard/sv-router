@@ -145,6 +145,8 @@ export type Routes = {
 	layout?: LayoutComponent;
 	hooks?: Hooks;
 	meta?: RouteMeta;
+	/** A name to target this level from a nested route with `@`. */
+	name?: string;
 };
 
 export type IsActiveLink = (options?: {
@@ -386,18 +388,22 @@ type RecursiveKeys<
 	AnyParam extends boolean = false,
 	Parents extends string = '',
 > = {
-	[K in keyof T]: K extends string
-		? RemoveLayoutTarget<K, Parents> extends infer Key extends string
-			? T[K] extends Routes
-				? RecursiveKeys<
-						T[K],
-						NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>,
-						AnyParam,
-						Parents | PathSegments<Key>
-					>
-				: NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>
-			: never
-		: never;
+	[K in keyof T]: K extends 'name'
+		? never
+		: K extends string
+			? RemoveLayoutTarget<K, Parents> extends infer Key extends string
+				? T[K] extends Routes
+					? RecursiveKeys<
+							T[K],
+							NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>,
+							AnyParam,
+							| Parents
+							| PathSegments<Key>
+							| (T[K] extends { name: infer N extends string } ? N : never)
+						>
+					: NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>
+				: never
+			: never;
 }[keyof T];
 
 type RemoveLayoutTarget<
