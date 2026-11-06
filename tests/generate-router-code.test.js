@@ -243,8 +243,69 @@ describe('createRouteMap', () => {
 			'/about@posts': 'about@posts.svelte',
 			'/:id@:slug': '[id]@[slug].lazy.svelte',
 			'*rest@posts': '[...rest]@posts.svelte',
-			'/settings@': { '/': '_group/settings@.svelte', layout: '_group/layout.svelte' },
+			'/settings': { '/@': '_group/settings@.svelte', layout: '_group/layout.svelte' },
 			'/other': { '/': '_group/other.svelte', layout: '_group/layout.svelte' },
+		});
+	});
+
+	it('should name a route group targeted with a layout target', () => {
+		const result = createRouteMap([
+			{
+				name: '_group',
+				tree: [
+					'layout.svelte',
+					'about@_group.svelte',
+					{ name: 'posts', tree: ['index.svelte', 'edit@_group.svelte'] },
+				],
+			},
+			{ name: '_other', tree: ['layout.svelte', 'contact.svelte'] },
+		]);
+		expect(result).toEqual({
+			'/about': {
+				'/@_group': '_group/about@_group.svelte',
+				layout: '_group/layout.svelte',
+				name: '_group',
+			},
+			'/posts': {
+				'/': '_group/posts/index.svelte',
+				'/edit@_group': '_group/posts/edit@_group.svelte',
+				layout: '_group/layout.svelte',
+				name: '_group',
+			},
+			'/contact': { '/': '_other/contact.svelte', layout: '_other/layout.svelte' },
+		});
+	});
+
+	it('should keep the layout of a targeted folder wrapped by a route group', () => {
+		const result = createRouteMap([
+			{
+				name: '_group',
+				tree: [
+					'layout.svelte',
+					{
+						name: 'posts',
+						tree: [
+							'layout.svelte',
+							{ name: '[id]', tree: ['layout.svelte', 'a@posts.svelte', 'b@_group.svelte'] },
+						],
+					},
+				],
+			},
+		]);
+		expect(result).toEqual({
+			'/posts': {
+				'/': {
+					'/:id': {
+						'/a@posts': '_group/posts/[id]/a@posts.svelte',
+						'/b@_group': '_group/posts/[id]/b@_group.svelte',
+						layout: '_group/posts/[id]/layout.svelte',
+					},
+					layout: '_group/posts/layout.svelte',
+					name: 'posts',
+				},
+				layout: '_group/layout.svelte',
+				name: '_group',
+			},
 		});
 	});
 
@@ -546,6 +607,14 @@ export const routes = {
 };
 export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter(routes);
 `);
+	});
+
+	it('should generate the router code with a level name', () => {
+		const routes = { '/a': { '/@_group': 'a.svelte', name: '_group' } };
+		expect(createRouterCode(routes, './routes')).toContain(`'name': '_group' as const`);
+		expect(createRouterCode(routes, './routes', { js: true })).toContain(
+			`'name': /** @type {const} */ ('_group')`,
+		);
 	});
 });
 

@@ -132,7 +132,7 @@ export function createRouteMap(fileTree, prefix = '') {
 
 			if (isRouteGroup) {
 				const childMap = createRouteMap(entry.tree, prefix + entryName + '/');
-				mergeRouteGroup(result, childMap);
+				mergeRouteGroup(result, childMap, entryName);
 			} else {
 				const paramFolder = entryName.replace(/^\[(.*)]$/, ':$1');
 				result['/' + paramFolder] = createRouteMap(entry.tree, prefix + entryName + '/');
@@ -155,15 +155,17 @@ function filePathToRoute(filename) {
 /**
  * @param {GeneratedRoutes} result
  * @param {GeneratedRoutes} childMap
+ * @param {string} groupName
  */
-function mergeRouteGroup(result, childMap) {
+function mergeRouteGroup(result, childMap, groupName) {
 	const layout = childMap.layout;
 	const hooks = childMap.hooks;
 	const meta = childMap.meta;
 	const hasRootRoute = '/' in childMap;
+	const isGroupTargeted = hasLayoutTarget(childMap, groupName);
 
-	for (const [key, val] of Object.entries(childMap)) {
-		if (['layout', 'hooks', 'meta'].includes(key)) {
+	for (let [key, val] of Object.entries(childMap)) {
+		if (['layout', 'hooks', 'meta', 'name'].includes(key)) {
 			continue;
 		}
 
@@ -175,25 +177,44 @@ function mergeRouteGroup(result, childMap) {
 		/** @type {GeneratedRoutes} */
 		let routeWithGroupFiles = {};
 		if (typeof val === 'string') {
-			routeWithGroupFiles = { '/': val };
+			// Move the layout target inside, so that it can see the group
+			const [, route, target = ''] = /^(\/.*?)(@[^/]*)?$/.exec(key) ?? [];
+			if (target) key = route || '/';
+			routeWithGroupFiles = { ['/' + target]: val };
 		} else if (!Array.isArray(val)) {
 			routeWithGroupFiles = { ...val };
-		}
-		if (layout) {
-			if (routeWithGroupFiles.layout) {
-				routeWithGroupFiles = { '/': routeWithGroupFiles, layout: layout };
-			} else {
-				routeWithGroupFiles.layout = layout;
+			const hasOwnLevel = routeWithGroupFiles.layout || routeWithGroupFiles.name;
+			if ((layout && routeWithGroupFiles.layout) || (isGroupTargeted && hasOwnLevel)) {
+				const segment = key.slice(1);
+				if (!routeWithGroupFiles.name && hasLayoutTarget(routeWithGroupFiles, segment)) {
+					routeWithGroupFiles.name = segment;
+				}
+				routeWithGroupFiles = { '/': routeWithGroupFiles };
 			}
 		}
+		if (layout) routeWithGroupFiles.layout = layout;
 		if (hooks) routeWithGroupFiles.hooks = hooks;
 		if (mergedMeta) routeWithGroupFiles.meta = /** @type {string | string[]} */ (mergedMeta);
+		if (isGroupTargeted) routeWithGroupFiles.name = groupName;
 		if (Object.hasOwn(result, key)) {
 			throw new Error(`Route conflict at \`${key}\``);
 		}
 
 		result[key] = routeWithGroupFiles;
 	}
+}
+
+/**
+ * @param {GeneratedRoutes} routes
+ * @param {string} target
+ * @returns {boolean}
+ */
+function hasLayoutTarget(routes, target) {
+	return Object.entries(routes).some(
+		([key, value]) =>
+			key.endsWith('@' + target) ||
+			(typeof value === 'object' && !Array.isArray(value) && hasLayoutTarget(value, target)),
+	);
 }
 
 /**
@@ -223,6 +244,8 @@ export function createRouterCode(routes, routesPath, { allLazy = false, base, js
 					return variableName;
 				});
 				result[key] = `{ ...${varNames.toReversed().join(', ...')} }`;
+			} else if (key === 'name') {
+				result[key] = js ? `/** @type {const} */ ('${value}')` : `'${value}' as const`;
 			} else if (
 				typeof value === 'string' &&
 				(key === 'hooks' || key === 'meta' || (!allLazy && !value.endsWith('.lazy.svelte')))
