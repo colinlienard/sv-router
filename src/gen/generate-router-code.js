@@ -134,7 +134,7 @@ export function createRouteMap(fileTree, prefix = '') {
 				const childMap = createRouteMap(entry.tree, prefix + entryName + '/');
 				mergeRouteGroup(result, childMap);
 			} else {
-				const paramFolder = entryName.replace(/^\[(.*)]$/, ':$1');
+				const paramFolder = entryName.replace(/^(\(?)\[(.*)](\)?)$/, '$1:$2$3');
 				result['/' + paramFolder] = createRouteMap(entry.tree, prefix + entryName + '/');
 			}
 		}
@@ -162,7 +162,7 @@ function mergeRouteGroup(result, childMap) {
 	const meta = childMap.meta;
 	const hasRootRoute = '/' in childMap;
 
-	for (const [key, val] of Object.entries(childMap)) {
+	for (let [key, val] of Object.entries(childMap)) {
 		if (['layout', 'hooks', 'meta'].includes(key)) {
 			continue;
 		}
@@ -171,6 +171,12 @@ function mergeRouteGroup(result, childMap) {
 			typeof val === 'object' && !Array.isArray(val) && 'meta' in val ? val.meta : undefined;
 		const mergedMeta =
 			childMeta && meta && !hasRootRoute ? [childMeta, meta].flat() : childMeta || meta;
+
+		// Keep the reset inside group wrappers, after the group's own layout.
+		if (/\([^/]*\)$/.test(key)) {
+			key = key.replace(/\(([^/]*)\)$/, '$1');
+			val = { '/()': val };
+		}
 
 		/** @type {GeneratedRoutes} */
 		let routeWithGroupFiles = {};
