@@ -68,6 +68,21 @@ This pattern works for all route types, including dynamic segments and catch-all
 
 This technique allows you to selectively bypass layouts while maintaining your overall route hierarchy.
 
+A parenthesized leaf route skips all ancestor layouts. On a nested route object, parentheses reset inheritance while retaining layouts defined inside that object and below it:
+
+```ts
+'/outer': {
+	'/(section)': {
+		'/example': Example, // Uses SectionLayout only
+		layout: SectionLayout,
+	},
+	layout: OuterLayout,
+},
+layout: RootLayout,
+```
+
+The URL remains `/outer/section/example`. This works at any nesting depth; another parenthesized route resets inheritance again. Only layouts are affected: ancestor hooks (including navigation guards) and metadata are still inherited.
+
 ## Break Out to a Named Layout
 
 To keep some layouts but not all of them, append `@` followed by the name of the segment whose layout should be kept. Every layout below that segment is skipped:
