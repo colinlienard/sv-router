@@ -10,6 +10,7 @@ import App, {
 	cancelLoadMock,
 	deferredBeforeLoadMock,
 	isActive,
+	layoutRouteMock,
 	navigate,
 	onErrorMock,
 	onPreloadMock,
@@ -17,6 +18,8 @@ import App, {
 	paramsBeforeLoadMock,
 	resolveMeta,
 	route,
+	routePropMock,
+	routePropReader,
 	userPageParamsMock,
 } from './App.test.svelte';
 
@@ -528,6 +531,65 @@ describe('router', () => {
 		expect(afterLoadMock).toHaveBeenCalledWith(
 			expect.objectContaining({ pathname: '/after-load' }),
 		);
+	});
+
+	it('should pass the route to a route component', async () => {
+		location.pathname = '/route-prop/1';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Route prop 1')).toBeInTheDocument();
+		});
+		expect(routePropMock).toHaveBeenLastCalledWith('/route-prop/1', '1', '/route-prop/1');
+	});
+
+	it('should update the route of a component that stays mounted', async () => {
+		layoutRouteMock.mockClear();
+		location.pathname = '/route-prop/1';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Route prop 1')).toBeInTheDocument();
+		});
+		await navigate('/route-prop/:id', { params: { id: '2' } });
+		await waitFor(() => {
+			expect(screen.getByText('Route prop 2')).toBeInTheDocument();
+		});
+		expect(layoutRouteMock).toHaveBeenLastCalledWith('/route-prop/2');
+	});
+
+	it('should not update a component that is leaving', async () => {
+		location.pathname = '/route-prop/1';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Route prop 1')).toBeInTheDocument();
+		});
+		routePropMock.mockClear();
+		await navigate('/about');
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+		expect(screen.getByText('Route prop 1')).toBeInTheDocument();
+		await waitFor(() => {
+			expect(screen.queryByText('Route prop 1')).not.toBeInTheDocument();
+		});
+		expect(routePropMock).not.toHaveBeenCalled();
+	});
+
+	it('should keep the route of a component that is leaving', async () => {
+		location.pathname = '/route-prop/1';
+		render(App);
+		await waitFor(() => {
+			expect(screen.getByText('Route prop 1')).toBeInTheDocument();
+		});
+		await navigate('/about');
+		await waitFor(() => {
+			expect(screen.getByText('About Us')).toBeInTheDocument();
+		});
+		expect(screen.getByText('Route prop 1')).toBeInTheDocument();
+		expect(route.pathname).toBe('/about');
+		expect(routePropReader.read()).toBe('/route-prop/1 1');
+		await waitFor(() => {
+			expect(screen.queryByText('Route prop 1')).not.toBeInTheDocument();
+		});
 	});
 });
 

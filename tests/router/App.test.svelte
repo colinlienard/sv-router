@@ -4,6 +4,7 @@
 	import { createRouter } from '../../src/create-router.svelte.js';
 	import Router from '../../src/Router.svelte';
 	import Layout from './Layout.test.svelte';
+	import RouteProp from './RouteProp.test.svelte';
 	import Suspending from './Suspending.test.svelte';
 	import UserPage from './UserPage.test.svelte';
 
@@ -16,12 +17,16 @@
 	export const paramsBeforeLoadMock = vi.fn();
 	export const deferredBeforeLoadMock = vi.fn();
 	export const userPageParamsMock = vi.fn();
+	export const routePropMock = vi.fn();
+	export const routePropReader = { read: () => '' };
+	export const layoutRouteMock = vi.fn();
 	export const outsideState = $state({ count: 0 });
 
 	export const { p, navigate, isActive, preload, resolveMeta, route } = createRouter({
 		'/': createRawSnippet(() => ({ render: () => '<h1>Welcome</h1>' })),
 		'/about': createRawSnippet(() => ({ render: () => '<h1>About Us</h1>' })),
 		'/user/:id': UserPage,
+		'/route-prop/:id': RouteProp,
 		'/post/:id': {
 			'/': createRawSnippet(() => ({ render: () => '<h1>Post Page</h1>' })),
 			'/comments': createRawSnippet(() => ({ render: () => '<h1>Post Comments</h1>' })),
