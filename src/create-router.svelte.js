@@ -46,6 +46,11 @@ let params = $state({ value: {} });
 
 let meta = $state({ value: {} });
 
+/** @type {{ value: import('./index.d.ts').RouteSnapshot }} */
+export let routeSnapshot = $state({
+	value: { params: {}, pathname: '/', search: {}, state: null, hash: '', meta: {} },
+});
+
 /**
  * @type {Map<
  * 	number,
@@ -344,6 +349,14 @@ async function runNavigation(path, options = {}) {
 		params.value = newParams;
 		meta.value = newMeta;
 		Object.assign(location, updatedLocation());
+		routeSnapshot.value = {
+			params: newParams,
+			pathname: stripBase(location.pathname),
+			search: parseSearch(location.search),
+			state: location.state,
+			hash: location.hash,
+			meta: newMeta,
+		};
 		return tick();
 	};
 

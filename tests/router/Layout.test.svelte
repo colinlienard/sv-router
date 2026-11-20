@@ -1,9 +1,12 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import { isActiveLink } from '../../src/index.js';
-	import { p } from './App.test.svelte';
+	import { isActiveLink, type LayoutProps } from '../../src/index.js';
+	import { layoutRouteMock, p } from './App.test.svelte';
 
-	let { children }: { children: Snippet } = $props();
+	let { children, route }: LayoutProps = $props();
+
+	$effect.pre(() => {
+		layoutRouteMock(route.pathname);
+	});
 </script>
 
 <nav>
