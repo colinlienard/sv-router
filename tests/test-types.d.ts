@@ -26,12 +26,24 @@ type TestRoutes = {
 		'/settings@posts': { '/': RouteComponent };
 		'/drafts': { '/@posts': RouteComponent };
 		'/@me': RouteComponent;
+		'/group': { '/': { '/x@_group': RouteComponent }; name: '_group' };
 		layout: RouteComponent;
 	};
 	'*rest': RouteComponent;
 };
 
 // Path
+
+type test_grouped_layout_breakout_paths = Expect<
+	Equal<
+		Path<{
+			'/': { '/()': RouteComponent };
+			'/example': { '/()': RouteComponent };
+			'/section': { '/()': { '/child': RouteComponent } };
+		}>,
+		'/' | '/example' | '/section/child'
+	>
+>;
 
 type test_path_0 = Expect<Equal<test_path_result_0, test_path_expected_0>>;
 type test_path_result_0 = Path<TestRoutes>;
@@ -49,7 +61,8 @@ type test_path_expected_0 =
 	| `/posts/:id/:commentId`
 	| `/posts/:id/edit`
 	| `/posts/:id/@me`
-	| '/posts/settings';
+	| '/posts/settings'
+	| '/posts/group/x';
 
 type test_path_1 = Expect<Equal<test_path_result_1, test_path_expected_1>>;
 type test_path_result_1 = Path<TestRoutes, true>;
@@ -67,7 +80,8 @@ type test_path_expected_1 =
 	| `/posts/${string}/${string}`
 	| `/posts/${string}/edit`
 	| `/posts/${string}/@me`
-	| '/posts/settings';
+	| '/posts/settings'
+	| '/posts/group/x';
 
 // PathParams
 

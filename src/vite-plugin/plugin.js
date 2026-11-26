@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { genConfig } from '../gen/config.js';
+import { genConfig, setGenConfig } from '../gen/config.js';
 import { writeRouterCode } from '../gen/write-router-code.js';
 
 /**
@@ -7,14 +7,11 @@ import { writeRouterCode } from '../gen/write-router-code.js';
  * @returns {import('vite').Plugin}
  */
 export function router(options) {
-	genConfig.allLazy = options?.allLazy || false;
-	genConfig.base = options?.base;
-	genConfig.ignore = options?.ignore || [];
-	genConfig.routesInJs = options?.js || false;
-	genConfig.routesPath = options?.path || 'src/routes';
+	setGenConfig(options);
 
 	return {
 		name: 'sv-router',
+		api: { options },
 		config(config) {
 			if (!config.resolve) {
 				config.resolve = {};

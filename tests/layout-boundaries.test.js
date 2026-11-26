@@ -13,6 +13,7 @@ function generateRoutes(tree) {
 	function resolve(routes) {
 		return Object.fromEntries(
 			Object.entries(routes).map(([key, value]) => {
+				if (key === 'name') return [key, value];
 				if (typeof value === 'string') {
 					if (!files.has(value)) {
 						files.set(value, key === 'hooks' || key === 'meta' ? { [value]: true } : () => {});
@@ -135,6 +136,22 @@ describe('generated layout boundaries', () => {
 		expect(result.match).toBe(files.get('outer/_group/([id])/example.svelte'));
 		expect(result.layouts).toEqual([files.get('outer/_group/([id])/layout.svelte')]);
 		expect(result.params).toEqual({ id: '42' });
+	});
+
+	it('supports named group targets alongside layout breakouts', () => {
+		const { routes, files } = generateRoutes(
+			nest(
+				['_group'],
+				[
+					'(standalone).svelte',
+					{ name: 'child', tree: ['layout.svelte', 'example@_group.svelte'] },
+				],
+			),
+		);
+		expect(matchRoute('/standalone', routes).layouts).toEqual([]);
+		const result = matchRoute('/child/example', routes);
+		expect(result.match).toBe(files.get('_group/child/example@_group.svelte'));
+		expect(result.layouts).toEqual([files.get('layout.svelte'), files.get('_group/layout.svelte')]);
 	});
 
 	it('resolves an ordinary catch-all inside route groups without losing layouts', () => {
