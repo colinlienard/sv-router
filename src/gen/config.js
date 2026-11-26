@@ -24,3 +24,12 @@ export const genConfig = {
 	routesPath: 'src/routes',
 	tsconfigPath: '.router/tsconfig.json',
 };
+
+/** @param {import('../vite-plugin/index.d.ts').RouterOptions | undefined} options */
+export function setGenConfig(options) {
+	genConfig.allLazy = options?.allLazy || false;
+	genConfig.base = options?.base;
+	genConfig.ignore = options?.ignore || [];
+	genConfig.routesInJs = options?.js || false;
+	genConfig.routesPath = options?.path || 'src/routes';
+}

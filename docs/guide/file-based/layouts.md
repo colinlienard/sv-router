@@ -73,6 +73,24 @@ routes
 
 This technique allows you to selectively bypass layouts while maintaining your overall route hierarchy.
 
+A parenthesized page skips **all** ancestor layouts, including layouts in [route groups](./route-groups).
+
+You can also wrap a folder name in parentheses to reset layout inheritance for an entire section:
+
+```sh
+routes
+├── layout.svelte                       ➜ Skipped
+└── outer
+   ├── layout.svelte                    ➜ Skipped
+   └── (section)
+      ├── layout.svelte                 ➜ Retained
+      └── example.svelte
+```
+
+The URL is still `/outer/section/example`: unlike a route group, `(section)` contributes a URL segment. Its own layout and layouts below it apply normally, regardless of nesting depth. If it has no layout, descendants start without inherited layouts and can introduce their own.
+
+Another parenthesized folder resets inheritance again. A parenthesized page inside the section skips every ancestor layout, including the section's layout. These resets affect **layouts only**: ancestor hooks (including navigation guards) and metadata are still inherited.
+
 ## Break Out to a Named Layout
 
 To keep some layouts but not all of them, append `@` followed by the name of the segment whose layout should be kept. Every layout below that segment is skipped:
@@ -89,4 +107,4 @@ routes
       └── archive@.svelte              ➜ Uses root layout only
 ```
 
-A lone `@` keeps only the root layout. This also works with index (`index@about.svelte`), dynamic (`[id]@about.svelte`) and catch-all (`[...rest]@about.svelte`) routes, and a dynamic folder can be targeted by its name (`edit@[id].svelte`). Layouts of [route groups](./route-groups) below the target are skipped too.
+A lone `@` keeps only the root layout. This also works with index (`index@about.svelte`), dynamic (`[id]@about.svelte`) and catch-all (`[...rest]@about.svelte`) routes, a dynamic folder can be targeted by its name (`edit@[id].svelte`) and so can a [route group](./route-groups) (`settings@_dashboard.svelte`). Layouts of route groups below the target are skipped too.

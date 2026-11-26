@@ -68,6 +68,21 @@ This pattern works for all route types, including dynamic segments and catch-all
 
 This technique allows you to selectively bypass layouts while maintaining your overall route hierarchy.
 
+A parenthesized leaf route skips all ancestor layouts. On a nested route object, parentheses reset inheritance while retaining layouts defined inside that object and below it:
+
+```ts
+'/outer': {
+	'/(section)': {
+		'/example': Example, // Uses SectionLayout only
+		layout: SectionLayout,
+	},
+	layout: OuterLayout,
+},
+layout: RootLayout,
+```
+
+The URL remains `/outer/section/example`. This works at any nesting depth; another parenthesized route resets inheritance again. Only layouts are affected: ancestor hooks (including navigation guards) and metadata are still inherited.
+
 ## Break Out to a Named Layout
 
 To keep some layouts but not all of them, append `@` followed by the name of the segment whose layout should be kept. Every layout below that segment is skipped:
@@ -86,6 +101,18 @@ To keep some layouts but not all of them, append `@` followed by the name of the
 layout: RootLayout,
 ```
 
-A lone `@` keeps only the root layout. This also works with index (`'/@about'`), dynamic (`'/:id@about'`) and catch-all (`'*rest@about'`) routes, and a dynamic segment can be targeted by its name (`'/edit@:id'`).
+A lone `@` keeps only the root layout. This also works with index (`'/@about'`), dynamic (`'/:id@about'`) and catch-all (`'*rest@about'`) routes, and a dynamic segment can be targeted by its name (`'/edit@:id'`). A layout group can be targeted by giving it a `name`:
 
-If the name after `@` is not one of the route's parent segments, the `@` is treated as a regular character of the path (like `'/@me'`).
+```ts
+'/': {
+	'/settings': {
+		'/billing@dashboard': Billing, // Uses RootLayout and DashboardLayout
+		layout: SettingsLayout,
+	},
+	layout: DashboardLayout,
+	name: 'dashboard',
+},
+layout: RootLayout,
+```
+
+If the name after `@` is not one of the route's parent segments or names, the `@` is treated as a regular character of the path (like `'/@me'`).

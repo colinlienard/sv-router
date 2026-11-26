@@ -7,6 +7,7 @@
 		onBeforeUnload,
 		onGlobalClick,
 		onNavigate,
+		routeSnapshot,
 	} from './create-router.svelte.js';
 	import { getUserState } from './helpers/utils.js';
 	import RecursiveComponentTree from './RecursiveComponentTree.svelte';
@@ -37,4 +38,7 @@
 	});
 </script>
 
-<RecursiveComponentTree tree={componentTree.value}></RecursiveComponentTree>
+{#key componentTree.value[0]}
+	<RecursiveComponentTree tree={componentTree.value} route={routeSnapshot.value}
+	></RecursiveComponentTree>
+{/key}

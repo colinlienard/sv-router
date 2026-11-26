@@ -105,7 +105,50 @@ export type RouteComponent<Props extends BaseProps = any> =
 	| Component<Props>
 	| Snippet<[Props]>
 	| LazyRouteComponent<Props>;
-export type LayoutComponent = RouteComponent<{ children: Snippet }>;
+export type LayoutComponent = RouteComponent<LayoutProps>;
+
+/**
+ * The route a layout or route component is rendered for. Unlike the global `route`, it does not
+ * change to the next route while the component is leaving, e.g. during its out transition.
+ */
+export type RouteSnapshot<TPath extends string = string> = {
+	/** The parameters of the route, e.g. `{ slug: 'hello-world' }` for `/posts/:slug`. */
+	params: string extends TPath
+		? Record<string, string>
+		: Record<ExtractParams<RemoveParenthesis<TPath>>, string>;
+	/** The pathname of the URL. */
+	pathname: string;
+	/** The query string part of the URL. */
+	search: Record<string, string | number | boolean>;
+	/** The history state that can be passed to the `navigate` function. */
+	state: unknown;
+	/** The hash part of the URL. */
+	hash: string;
+	/** Arbitrary metadata associated with the route. */
+	meta: RouteMeta;
+};
+
+/**
+ * The props of a route component.
+ *
+ * ```svelte
+ * <script lang="ts">
+ * 	import type { RouteProps } from 'sv-router';
+ *
+ * 	let { route }: RouteProps<'/posts/:slug'> = $props();
+ * </script>
+ *
+ * <h1>{route.params.slug}</h1>
+ * ```
+ */
+export type RouteProps<TPath extends string = string> = {
+	route: RouteSnapshot<TPath>;
+};
+
+/** The props of a layout component. */
+export type LayoutProps<TPath extends string = string> = RouteProps<TPath> & {
+	children: Snippet;
+};
 export type Hooks = {
 	/**
 	 * A function that will be called before the route is loaded. If it returns a promise, the route
@@ -145,6 +188,8 @@ export type Routes = {
 	layout?: LayoutComponent;
 	hooks?: Hooks;
 	meta?: RouteMeta;
+	/** A name to target this level from a nested route with `@`. */
+	name?: string;
 };
 
 export type IsActiveLink = (options?: {
@@ -277,8 +322,8 @@ export type RouterApi<T extends Routes> = {
 	};
 };
 
-export type Path<T extends Routes, AnyParam extends boolean = false> = RemoveParenthesis<
-	RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>, '', AnyParam>>
+export type Path<T extends Routes, AnyParam extends boolean = false> = RemoveLastSlash<
+	NormalizeSlashes<RemoveParenthesis<RecursiveKeys<StripNonRoutes<T>, '', AnyParam>>>
 >;
 
 export type ConstructPathArgs<TPath extends string> = {
@@ -387,18 +432,22 @@ type RecursiveKeys<
 	AnyParam extends boolean = false,
 	Parents extends string = '',
 > = {
-	[K in keyof T]: K extends string
-		? RemoveLayoutTarget<K, Parents> extends infer Key extends string
-			? T[K] extends Routes
-				? RecursiveKeys<
-						T[K],
-						NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>,
-						AnyParam,
-						Parents | PathSegments<Key>
-					>
-				: NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>
-			: never
-		: never;
+	[K in keyof T]: K extends 'name'
+		? never
+		: K extends string
+			? RemoveLayoutTarget<K, Parents> extends infer Key extends string
+				? T[K] extends Routes
+					? RecursiveKeys<
+							T[K],
+							NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>,
+							AnyParam,
+							| Parents
+							| PathSegments<Key>
+							| (T[K] extends { name: infer N extends string } ? N : never)
+						>
+					: NormalizeSlashes<`${Prefix}${AnyParam extends true ? ReplaceParamWithString<Key> : Key}`>
+				: never
+			: never;
 }[keyof T];
 
 type RemoveLayoutTarget<
