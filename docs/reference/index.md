@@ -147,6 +147,31 @@ A reactive URL search parameters object that updates the URL when changed.
 
 ## Types
 
+### `RouteProps<Path>` and `LayoutProps<Path>`
+
+The props every route and layout component receives. `LayoutProps` adds `children`.
+
+```svelte
+<script lang="ts">
+	import type { RouteProps } from 'sv-router';
+
+	let { route }: RouteProps<'/posts/:slug'> = $props();
+</script>
+
+<h1>{route.params.slug}</h1>
+```
+
+**Properties of `route`:**
+
+- `params` - The parameters of the route, typed from the given path
+- `pathname` - The pathname
+- `search` - The query string
+- `state` - The history state
+- `hash` - The URL hash fragment
+- `meta` - The meta data
+
+Unlike the global `route`, this is the route the component was rendered for: it does not change to the next route while the component is leaving, e.g. during its out transition.
+
 ### `Hooks`
 
 Configuration object for route lifecycle hooks.
