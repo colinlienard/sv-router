@@ -46,7 +46,7 @@ function readViteConfig(extension) {
  */
 function extractRouterConfig(viteConfig) {
 	const regex = /router\(\s*([^)]+)\)/;
-	const match = viteConfig.match(regex);
+	const match = regex.exec(viteConfig);
 	if (!match) return;
 	try {
 		return new Function(`return ${match[1]}`)();

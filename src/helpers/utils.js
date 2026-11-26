@@ -73,7 +73,7 @@ async function resolveRouteComponent(input) {
 export function isLazyImport(input) {
 	return (
 		typeof input === 'function' &&
-		!!/\(\)\s?=>\s?(import|__vite_ssr_dynamic_import__)\(.*\)/.test(String(input))
+		/\(\)\s?=>\s?(import|__vite_ssr_dynamic_import__)\(.*\)/.test(String(input))
 	);
 }
 

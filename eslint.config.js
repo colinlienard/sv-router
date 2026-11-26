@@ -52,6 +52,7 @@ export default [
 			'unicorn/prefer-iterator-to-array': 'off',
 			'unicorn/prefer-ternary': 'off',
 			'unicorn/single-line-block-comment-style': 'off',
+			'unicorn/no-asterisk-prefix-in-documentation-comments': 'off',
 		},
 	},
 	{

@@ -395,9 +395,8 @@ export function onGlobalClick(event) {
 		return;
 
 	const anchor = /** @type {HTMLElement} */ (event.target).closest('a');
-	if (!anchor) return;
-
 	if (
+		!anchor ||
 		anchor.hasAttribute('target') ||
 		anchor.hasAttribute('download') ||
 		!anchor.hasAttribute('href') ||
