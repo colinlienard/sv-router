@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
-import { existsSync, readFileSync } from 'node:fs';
-import path from 'node:path';
-import { genConfig } from '../gen/config.js';
+import { genConfig, setGenConfig } from '../gen/config.js';
 import { writeRouterCode } from '../gen/write-router-code.js';
 
 const args = process.argv.slice(2).flatMap((arg) => arg.split('='));
@@ -11,47 +9,52 @@ const args = process.argv.slice(2).flatMap((arg) => arg.split('='));
 if (args.length > 0) {
 	parseArgs();
 } else {
-	parseViteConfig();
+	await parseViteConfig();
 }
 
 writeRouterCode();
 
-function parseViteConfig() {
-	const viteConfig = readViteConfig('ts') || readViteConfig('js');
-	if (!viteConfig) return;
-	const routerConfig = extractRouterConfig(viteConfig);
-	if (!routerConfig) return;
-	console.log('ℹ️ Using router plugin options from Vite config');
-	if (routerConfig.allLazy) genConfig.allLazy = routerConfig.allLazy;
-	if (routerConfig.base) genConfig.base = routerConfig.base;
-	if (routerConfig.js) genConfig.routesInJs = routerConfig.js;
-	if (routerConfig.path) genConfig.routesPath = routerConfig.path;
-	if (routerConfig.ignore) genConfig.ignore = routerConfig.ignore;
-}
-
-/**
- * @param {'js' | 'ts'} extension
- * @returns {string | undefined}
- */
-function readViteConfig(extension) {
-	const vitePath = path.join(process.cwd(), 'vite.config.' + extension);
-	if (existsSync(vitePath)) {
-		return readFileSync(vitePath, 'utf8');
+async function parseViteConfig() {
+	/** @type {typeof import('vite').loadConfigFromFile} */
+	let loadConfigFromFile;
+	try {
+		({ loadConfigFromFile } = await import('vite'));
+	} catch {
+		return;
+	}
+	try {
+		const config = await loadConfigFromFile(
+			{ command: 'serve', mode: 'development' },
+			undefined,
+			process.cwd(),
+			'silent',
+		);
+		if (!config) return;
+		const plugin = await findRouterPlugin(config.config.plugins);
+		if (!plugin) return;
+		console.log('ℹ️ Using router plugin options from Vite config');
+		setGenConfig(plugin.api.options);
+	} catch (error) {
+		console.warn('⚠️ Error reading Vite config:', error);
 	}
 }
 
 /**
- * @param {string} viteConfig
- * @returns {import('../vite-plugin/index.d.ts').RouterOptions | undefined}
+ * @param {import('vite').PluginOption} option
+ * @returns {Promise<import('vite').Plugin | undefined>}
  */
-function extractRouterConfig(viteConfig) {
-	const regex = /router\(\s*([^)]+)\)/;
-	const match = viteConfig.match(regex);
-	if (!match) return;
-	try {
-		return new Function(`return ${match[1]}`)();
-	} catch (error) {
-		console.error('⚠️ Error parsing router config:', error);
+async function findRouterPlugin(option) {
+	const resolved = await option;
+	if (!resolved) return;
+	if (Array.isArray(resolved)) {
+		for (const item of resolved) {
+			const plugin = await findRouterPlugin(item);
+			if (plugin) return plugin;
+		}
+		return;
+	}
+	if (resolved.name === 'sv-router') {
+		return resolved;
 	}
 }
 
