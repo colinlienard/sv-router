@@ -92,7 +92,7 @@
 </script>
 
 <script lang="ts">
-	let { base } = $props<{ base?: string }>();
+	let { base }: { base?: string } = $props();
 </script>
 
 <Router {base} />
