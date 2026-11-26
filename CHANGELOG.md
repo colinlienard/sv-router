@@ -1,5 +1,20 @@
 # sv-router
 
+## 0.20.0
+
+### Minor Changes
+
+- 5493c64: Support layout breakouts for parenthesized route sections and fix page breakouts inside route groups
+- 4b0acf2: Target a layout group with `@`
+- 8b7a150: Break out to a named layout with `@`
+- 861f82d: feat: pass the route to layout and route components as a `route` prop
+
+### Patch Changes
+
+- e9f8c52: CLI now loads the Vite config with Vite itself instead of parsing it with a regex, so router options defined in variables, `.mts`/`.mjs` configs, or function configs are picked up
+- 96031bb: fix: unmount the previous route before applying the params of the next one
+- b4c377c: fix: resolve `navigate()` instead of rejecting with a promise chaining cycle when a link click or popstate supersedes it
+
 ## 0.19.0
 
 ### Minor Changes
