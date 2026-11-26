@@ -86,6 +86,18 @@ To keep some layouts but not all of them, append `@` followed by the name of the
 layout: RootLayout,
 ```
 
-A lone `@` keeps only the root layout. This also works with index (`'/@about'`), dynamic (`'/:id@about'`) and catch-all (`'*rest@about'`) routes, and a dynamic segment can be targeted by its name (`'/edit@:id'`).
+A lone `@` keeps only the root layout. This also works with index (`'/@about'`), dynamic (`'/:id@about'`) and catch-all (`'*rest@about'`) routes, and a dynamic segment can be targeted by its name (`'/edit@:id'`). A layout group can be targeted by giving it a `name`:
 
-If the name after `@` is not one of the route's parent segments, the `@` is treated as a regular character of the path (like `'/@me'`).
+```ts
+'/': {
+	'/settings': {
+		'/billing@dashboard': Billing, // Uses RootLayout and DashboardLayout
+		layout: SettingsLayout,
+	},
+	layout: DashboardLayout,
+	name: 'dashboard',
+},
+layout: RootLayout,
+```
+
+If the name after `@` is not one of the route's parent segments or names, the `@` is treated as a regular character of the path (like `'/@me'`).

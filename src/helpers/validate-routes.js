@@ -26,7 +26,7 @@ export function validateRoutes(routes) {
 export function getRoutePaths(routes) {
 	const paths = [];
 	for (const [key, value] of Object.entries(routes)) {
-		if (['layout', 'hooks', 'meta'].includes(key)) {
+		if (['layout', 'hooks', 'meta', 'name'].includes(key)) {
 			continue;
 		}
 		if (typeof value === 'object') {

@@ -89,4 +89,4 @@ routes
       └── archive@.svelte              ➜ Uses root layout only
 ```
 
-A lone `@` keeps only the root layout. This also works with index (`index@about.svelte`), dynamic (`[id]@about.svelte`) and catch-all (`[...rest]@about.svelte`) routes, and a dynamic folder can be targeted by its name (`edit@[id].svelte`). Layouts of [route groups](./route-groups) below the target are skipped too.
+A lone `@` keeps only the root layout. This also works with index (`index@about.svelte`), dynamic (`[id]@about.svelte`) and catch-all (`[...rest]@about.svelte`) routes, a dynamic folder can be targeted by its name (`edit@[id].svelte`) and so can a [route group](./route-groups) (`settings@_dashboard.svelte`). Layouts of route groups below the target are skipped too.
