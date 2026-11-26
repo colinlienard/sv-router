@@ -93,6 +93,7 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors) {
 	const segments = [];
 	/** @type {number | undefined} */
 	let keptLevels;
+	let isCatchAll = false;
 
 	for (let [index, routePart] of routeParts.entries()) {
 		const targetIndex = routePart.indexOf('@');
@@ -122,23 +123,11 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors) {
 		}
 		// Catch-all segment
 		else if (routePart.startsWith('*')) {
+			isCatchAll = true;
 			const param = routePart.slice(1);
 			if (param) {
 				params[param] = pathParts.slice(index).map(decodeURIComponent).join('/');
 			}
-			const context = collectContext(routes, breakFromLayouts, baseMeta, ancestors, keptLevels);
-			const resolvedPath = /** @type {keyof Routes} */ ((index ? '/' : '') + routeParts.join('/'));
-			return {
-				result: {
-					match: /** @type {RouteComponent} */ (routes[resolvedPath]),
-					...context,
-					params,
-					breakFromLayouts,
-					isCatchAll: true,
-					keptLevels,
-				},
-				fallback: false,
-			};
 		}
 		// Static segment mismatch
 		else if (!isLayoutGroup && routePart.toLowerCase() !== pathPart?.toLowerCase()) {
@@ -149,10 +138,10 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors) {
 		if (index !== routeParts.length - 1) continue;
 
 		// Last segment — resolve the route value
-		const routeKey = /** @type {keyof Routes} */ ('/' + routeParts.join('/'));
+		const routeKey = /** @type {keyof Routes} */ (route);
 		const routeMatch = /** @type {RouteComponent} */ (routes[routeKey]);
 
-		if (typeof routeMatch === 'function' && routeParts.length !== pathParts.length) {
+		if (!isCatchAll && typeof routeMatch === 'function' && routeParts.length !== pathParts.length) {
 			return null;
 		}
 
@@ -160,14 +149,13 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors) {
 
 		// Leaf route (component function)
 		if (typeof routeMatch === 'function') {
-			if (routeParts.length !== pathParts.length) return null;
 			return {
 				result: {
 					match: routeMatch,
 					...context,
 					params,
 					breakFromLayouts,
-					isCatchAll: false,
+					isCatchAll,
 					keptLevels,
 				},
 				fallback: false,
@@ -175,11 +163,16 @@ function tryMatch(route, pathParts, pathname, routes, baseMeta, ancestors) {
 		}
 
 		// Nested routes — recurse
-		const nestedPathname = isLayoutGroup ? pathname : '/' + pathParts.slice(index + 1).join('/');
+		const nestedPathname = isCatchAll
+			? '/'
+			: isLayoutGroup
+				? pathname
+				: '/' + pathParts.slice(index + 1).join('/');
 		const { name } = /** @type {Routes} */ (routeMatch);
 		const names = name ? [...segments, name] : segments;
 		const nested = matchRoute(nestedPathname, routeMatch, [...ancestors, names]);
 		if (!nested.match) return null;
+		nested.isCatchAll ||= isCatchAll;
 
 		if (keptLevels !== undefined && nested.keptLevels === undefined) {
 			nested.layouts = [];
@@ -242,7 +235,7 @@ function mergeWithNested(context, nested, params, breakFromLayouts) {
 	const shouldBreak = nested.breakFromLayouts;
 	return {
 		match: nested.match,
-		layouts: shouldBreak ? [] : [...context.layouts, ...nested.layouts],
+		layouts: shouldBreak ? nested.layouts : [...context.layouts, ...nested.layouts],
 		hooks: [...context.hooks, ...nested.hooks],
 		params: { ...params, ...nested.params },
 		meta: { ...context.meta, ...nested.meta },

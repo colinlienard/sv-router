@@ -322,8 +322,8 @@ export type RouterApi<T extends Routes> = {
 	};
 };
 
-export type Path<T extends Routes, AnyParam extends boolean = false> = RemoveParenthesis<
-	RemoveLastSlash<RecursiveKeys<StripNonRoutes<T>, '', AnyParam>>
+export type Path<T extends Routes, AnyParam extends boolean = false> = RemoveLastSlash<
+	NormalizeSlashes<RemoveParenthesis<RecursiveKeys<StripNonRoutes<T>, '', AnyParam>>>
 >;
 
 export type ConstructPathArgs<TPath extends string> = {

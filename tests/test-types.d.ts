@@ -34,6 +34,17 @@ type TestRoutes = {
 
 // Path
 
+type test_grouped_layout_breakout_paths = Expect<
+	Equal<
+		Path<{
+			'/': { '/()': RouteComponent };
+			'/example': { '/()': RouteComponent };
+			'/section': { '/()': { '/child': RouteComponent } };
+		}>,
+		'/' | '/example' | '/section/child'
+	>
+>;
+
 type test_path_0 = Expect<Equal<test_path_result_0, test_path_expected_0>>;
 type test_path_result_0 = Path<TestRoutes>;
 type test_path_expected_0 =

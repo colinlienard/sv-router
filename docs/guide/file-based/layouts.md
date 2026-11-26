@@ -73,6 +73,24 @@ routes
 
 This technique allows you to selectively bypass layouts while maintaining your overall route hierarchy.
 
+A parenthesized page skips **all** ancestor layouts, including layouts in [route groups](./route-groups).
+
+You can also wrap a folder name in parentheses to reset layout inheritance for an entire section:
+
+```sh
+routes
+├── layout.svelte                       ➜ Skipped
+└── outer
+   ├── layout.svelte                    ➜ Skipped
+   └── (section)
+      ├── layout.svelte                 ➜ Retained
+      └── example.svelte
+```
+
+The URL is still `/outer/section/example`: unlike a route group, `(section)` contributes a URL segment. Its own layout and layouts below it apply normally, regardless of nesting depth. If it has no layout, descendants start without inherited layouts and can introduce their own.
+
+Another parenthesized folder resets inheritance again. A parenthesized page inside the section skips every ancestor layout, including the section's layout. These resets affect **layouts only**: ancestor hooks (including navigation guards) and metadata are still inherited.
+
 ## Break Out to a Named Layout
 
 To keep some layouts but not all of them, append `@` followed by the name of the segment whose layout should be kept. Every layout below that segment is skipped:
