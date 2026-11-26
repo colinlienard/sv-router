@@ -19,7 +19,7 @@ async function renderApp() {
 	});
 }
 
-/** @param {string} strategy @param {{ href?: string }} [options] */
+/** @param {string} strategy @param {{ href?: string | null }} [options] */
 function createPreloadLink(strategy, { href = '/about' } = {}) {
 	const link = document.createElement('a');
 	if (href) link.href = href;
@@ -171,7 +171,8 @@ describe('preloadOnHover', () => {
 
 	it('should not preload links without href', async () => {
 		await renderApp();
-		const link = createPreloadLink('', { href: undefined });
+		const link = createPreloadLink('', { href: null });
+		expect(link).not.toHaveAttribute('href');
 		await new Promise((resolve) => setTimeout(resolve, 0));
 		link.dispatchEvent(new MouseEvent('mouseenter'));
 		link.remove();

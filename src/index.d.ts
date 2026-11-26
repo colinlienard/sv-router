@@ -389,6 +389,7 @@ export type SearchParams = Omit<
 	'append' | 'delete' | 'entries' | 'get' | 'getAll' | 'set' | 'sort' | 'values'
 > & {
 	append(name: string, value: string | number | boolean, options?: { replace?: boolean }): void;
+	// eslint-disable-next-line unicorn/prefer-options-parameter
 	delete(name: string, value?: string | number | boolean, options?: { replace?: boolean }): void;
 	entries(): [string, string | number | boolean][];
 	get(name: string): string | number | boolean | null;

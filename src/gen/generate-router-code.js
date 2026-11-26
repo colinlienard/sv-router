@@ -184,8 +184,8 @@ function mergeRouteGroup(result, childMap, groupName) {
 		let routeWithGroupFiles = {};
 		if (typeof val === 'string') {
 			// Move the layout target inside, so that it can see the group
-			const [, route, target = ''] = /^(\/.*?)(@[^/]*)?$/.exec(key) ?? [];
-			if (target) key = route || '/';
+			const [, route = '/', target = ''] = /^(\/.*?)(@[^/]*)?$/.exec(key) ?? [];
+			if (target) key = route;
 			routeWithGroupFiles = { ['/' + target]: val };
 		} else if (!Array.isArray(val)) {
 			routeWithGroupFiles = { ...val };
